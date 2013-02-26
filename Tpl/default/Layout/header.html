@@ -1,0 +1,30 @@
+
+<div class="header">
+	<div class="header_in">
+		<div class="logo">
+		<a href="{&WWW}" title="首页">
+		<span><img src="{&STATIC}/Img/logo.jpg" /></span>
+		</a>
+		</div>
+		<div class="menu">
+			<a class="menu_index" href="{&WWW}">首页</a>
+			<a class="menu_board" href="{&WWW}/MsgBoard/msg_index">留言区</a>
+			<a class="menu_guide" href="{&WWW}/Blog/show">新手指南</a>
+		</div>
+		<div class="lr">
+		<present name="_SESSION['UID']">
+		<a href="{&WWW}/User/info" style="text-decoration: underline;" title="个人中心">{$_SESSION['nick']}</a>
+			<present name="_SESSION['active']">
+			<a href="{&WWW}/User/to_active">激活账号</a>
+			</present>
+			<eq name="_SESSION['RID']" value="1">
+			<a href="{&WWW}/SoftRecord/tongji" style="text-decoration: underline;">管理中心</a>
+			</eq>
+		<a href="{&WWW}/User/logout">退出</a>
+		<else />
+			<a href="{&WWW}/User/login">登录</a>
+			<a href="{&WWW}/User/register">注册</a>
+		</present>
+		</div>
+	</div>
+</div>

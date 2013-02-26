@@ -1,0 +1,221 @@
+<script type="text/javascript">document.domain = '{&DOMAIN}';</script>
+<script language="javascript" type="text/javascript" defer="defer" src="{&STATIC}/Js/datepicker/WdatePicker.js"></script>
+<h1 class="center">阡陌发布24小时内新注册用户行为统计</h1>
+
+<script type="text/javascript" src="{&STATIC}/Js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript">
+$(function () {
+    var chart;
+    $(document).ready(function() {
+        chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'container',
+                type: 'area'
+            },
+            title: {
+                text:'{$typeName}'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: [
+							<volist name="pubList" id="pub">
+							'{$pub.ver}'
+							<lt name="i" value="$pubNum">
+							,
+							</lt>
+							</volist>
+							],
+                tickmarkPlacement: 'on',
+                title: {
+                    enabled: false
+                }
+            },
+            yAxis: {
+                title: {
+                    text: '用户数%'
+                },
+                labels: {
+                    formatter: function() {
+                        return this.value;
+                    }
+                }
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                    this.x +': '+ Highcharts.numberFormat(this.percentage, 1) +'% ('+
+                    Highcharts.numberFormat(this.y, 0, ',') +' 个用户)';
+                }
+            },
+            plotOptions: {
+                area: {
+                    stacking: 'percent',
+                    lineColor: '#ffffff',
+                    lineWidth: 1,
+                    marker: {
+                        lineWidth: 1,
+                        lineColor: '#ffffff'
+                    }
+                }
+            },
+            series: [
+   			<in name="type" value="1,2,3,4">   
+             {
+                name: '{$typeName}0',
+                data: [
+					<volist name="pubList" id="pub">
+					<assign name="pubId" value="$pub.id" />
+					<present name="dataMap.$pubId.num0">
+					{$dataMap.$pubId.num0}
+					<else />
+					0
+					</present>
+					<lt name="i" value="$pubNum">
+					,
+					</lt>
+					</volist>
+					]
+            }, {
+                name: '{$typeName}1',
+                data: [
+					<volist name="pubList" id="pub">
+					<assign name="pubId" value="$pub.id" />
+					<present name="dataMap.$pubId.num1">
+					{$dataMap.$pubId.num1}
+					<else />
+					0
+					</present>
+					<lt name="i" value="$pubNum">
+					,
+					</lt>
+					</volist>
+					]
+            }, {
+                name: '{$typeName}2-4',
+                data: [
+					<volist name="pubList" id="pub">
+					<assign name="pubId" value="$pub.id" />
+					<present name="dataMap.$pubId.num2">
+					{$dataMap.$pubId.num2}
+					<else />
+					0
+					</present>
+					<lt name="i" value="$pubNum">
+					,
+					</lt>
+					</volist>
+					]
+            }, {
+                name: '{$typeName}5及以上',
+                data: [
+						<volist name="pubList" id="pub">
+						<assign name="pubId" value="$pub.id" />
+						<present name="dataMap.$pubId.num3">
+						{$dataMap.$pubId.num3}
+						<else />
+						0
+						</present>
+						<lt name="i" value="$pubNum">
+						,
+						</lt>
+						</volist>
+					]
+            }
+			</in>
+   			<in name="type" value="5">   
+            {
+               name: '{$typeName}0',
+               data: [
+					<volist name="pubList" id="pub">
+					<assign name="pubId" value="$pub.id" />
+					<present name="dataMap.$pubId.num0">
+					{$dataMap.$pubId.num0}
+					<else />
+					0
+					</present>
+					<lt name="i" value="$pubNum">
+					,
+					</lt>
+					</volist>
+					]
+           }, {
+               name: '{$typeName}1',
+               data: [
+					<volist name="pubList" id="pub">
+					<assign name="pubId" value="$pub.id" />
+					<present name="dataMap.$pubId.num1">
+					{$dataMap.$pubId.num1}
+					<else />
+					0
+					</present>
+					<lt name="i" value="$pubNum">
+					,
+					</lt>
+					</volist>
+					]
+           }, {
+               name: '{$typeName}2-3',
+               data: [
+					<volist name="pubList" id="pub">
+					<assign name="pubId" value="$pub.id" />
+					<present name="dataMap.$pubId.num2">
+					{$dataMap.$pubId.num2}
+					<else />
+					0
+					</present>
+					<lt name="i" value="$pubNum">
+					,
+					</lt>
+					</volist>
+					]
+           }, {
+               name: '{$typeName}4-5',
+               data: [
+					<volist name="pubList" id="pub">
+					<assign name="pubId" value="$pub.id" />
+					<present name="dataMap.$pubId.num3">
+					{$dataMap.$pubId.num3}
+					<else />
+					0
+					</present>
+					<lt name="i" value="$pubNum">
+					,
+					</lt>
+					</volist>
+					]
+           },{
+               name: '{$typeName}6及以上',
+               data: [
+						<volist name="pubList" id="pub">
+						<assign name="pubId" value="$pub.id" />
+						<present name="dataMap.$pubId.num4">
+						{$dataMap.$pubId.num4}
+						<else />
+						0
+						</present>
+						<lt name="i" value="$pubNum">
+						,
+						</lt>
+						</volist>
+					]
+           }
+			</in>
+			
+            ]
+        });
+    });
+    
+});
+</script>
+
+<script src="{&STATIC}/Js/highcharts/highcharts.js"></script>
+<script src="{&STATIC}/Js/highcharts/modules/exporting.js"></script>
+
+<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+
+
+
+
+

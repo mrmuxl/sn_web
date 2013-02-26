@@ -1,0 +1,18 @@
+{
+"status": <eq name="status" value="1">true<else />false</eq>,
+"desc": "{$desc}",
+"data": [ 
+<present name="olist">
+<volist name="olist" id="org">
+{
+"id": {$org.id},
+"name": {$org.name|json_encode},
+"parent_id":{$org.parent_id}
+}
+<lt name="i" value="$num">
+,
+</lt> 
+</volist>
+</present>
+]
+}

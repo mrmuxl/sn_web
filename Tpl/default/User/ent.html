@@ -1,0 +1,17 @@
+{
+"status": <eq name="status" value="1">true<else />false</eq>,
+"desc": "{$desc}",
+"data": {
+	<present name="user">
+	"user_id":{$user.id},
+	"user_nick":{$user.nick|json_encode},
+	"user_email":"{$user.email}",
+	<present name="ent">
+	"ent_id": {$ent.id},
+	"ent_name":{$ent.ent_name|json_encode},
+	"ent_version":{$ent.version},
+	"ent_master_id":{$ent.ent_master_id}
+	</present>
+	</present>
+}
+}

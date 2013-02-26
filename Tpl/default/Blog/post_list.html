@@ -1,0 +1,162 @@
+<div style="width:1000px;height:225px;overflow:hidden;margin:0 auto;">
+	<div class="fn-left">
+		<a href="javascript:void(0);" class="fv_ojia17inla1" style="cursor:default;">
+			<eq name="userOne.portrait" value="">
+			<img src="{&STATIC}/images/default_avatar.jpg" />
+			<else />
+			<img src="{&IMG}/{$userOne.portrait|getPicUri}/snap_80X80_{$userOne.portrait|getPicName}" />
+			</eq>
+		</a>
+	</div>
+	<layout name="Unit:personal_set_top" cache="0" /> 
+	<div class="fn-clear"></div>
+	<div class="fv_ojia17inr_menu">
+		<present name="is_personal_set">
+			<a href="{&WWW}/Unit/myEffect?type=1&show=mru" class="fv_ojia17inr_menua1 fn-left">
+				<span>我的方案效果图</span>
+			</a>
+			<a href="{&WWW}/Property/myProperty?show=loupan" class="fv_ojia17inr_menua2 fn-left">
+				<span>我的楼盘</span>
+			</a>
+			<a href="#" class="fv_ojia17inr_menua6 fn-left">
+				<span>我的住家文化</span>
+			</a>
+			<a href="{&WWW}/Posts/post_list?show=posts" class="fv_ojia17inr_menua3 fn-left">
+				<span>我的帖子</span>
+			</a>
+			<a href="{&WWW}/i/show?show=person" class="fv_ojia17inr_menua4 fn-left">
+				<span>个人设置</span>
+			</a>
+		<else/>
+			<a href="{&WWW}/Unit/myEffect?nick={$userOne.nick_name|encodeURL}&type=1&show=mru" class="fv_ojia17inr_menua1 fn-left">
+				<span>他的方案效果图</span>
+			</a>
+			<a href="{&WWW}/Property/myProperty?show=loupan&nick={$userOne.nick_name}" class="fv_ojia17inr_menua2 fn-left">
+				<span>他的楼盘</span>
+			</a>
+			<a href="{&WWW}/Posts/post_list?nick={$userOne.nick_name|encodeURL}&show=posts" class="fv_ojia17inr_menua3 fn-left">
+				<span>他的帖子</span>
+			</a>
+		</present>
+		<div class="fn-clear"></div>
+	</div>
+</div>
+<div class="fv_ojia17in">
+	<table>
+		<tr>
+			<td class="fv_ojia17inl">
+				<layout name="Unit:personal_set_left" cache="0" />
+			</td>
+			<td class="fv_ojia17inr">
+				<div class="fv_ojia17inr_list3">                       <!--               我的帖子                                                          -->
+					<div class="fv_ojia17inr_list3_menu">
+						<div class="fv_ojia17inr_list3_menul fn-left">
+							<!-- 
+							<a href="#" class="fv_ojia17inr_list3_menua1 fv_ojia17inr_list3_menua fn-left">
+								好友的帖子
+							</a>
+							 -->
+							<a href="javascript:void(0);" class="fv_ojia17inr_list3_menua2 fv_ojia17inr_list3_menua fn-left" style="cursor:default;">
+								我的帖子
+							</a>
+							<div class="f-clear"></div>
+						</div>
+						<div class="fv_ojia17inr_list3_menur fn-right">
+							<a href="#" title="发表帖子" class="fv_ojia17inr_list3_menua3"></a>
+						</div>
+						<div class="fn-clear"></div>
+					</div>
+					<!-- 
+					<div class="fv_ojia17inr_list3_alla">
+						<div class="fn-left">
+							<a href="#">
+								主题
+							</a> |
+							<a href="#">
+								回复
+							</a> |
+							<a href="#">
+								点评
+							</a> 
+						</div>
+						<div class="fn-right">
+							<a href="#">
+								全部
+							</a> | 
+							<a href="#">
+								已发表
+							</a> | 
+							<a href="#">
+								草稿箱
+							</a> | 
+							<a href="#">
+								已关闭
+							</a> | 
+							<a href="#">
+								待审核
+							</a> | 
+							<a href="#">
+								已忽略
+							</a> | 
+							<a href="#">
+								回收站
+							</a>&nbsp;  
+						</div>
+						<div class="fn-clear"></div>
+					</div>
+					 -->
+					<div class="fv_ojia17inr_list3_list">
+						<table>
+							<COL class="col1">
+							<COL class="col2">
+							<COL class="col3">
+							<COL class="col4">
+							<tr>
+								<th>主题</th><th>版块/群组</th><th>回复/查看</th><th>最后发帖</th>
+							</tr>
+							<volist name="forum_posts" id="fp">
+								<assign name="uid" value="$fp.last_uid" />
+								<tr class="fv_ojia17inr_list3_ltr1">
+									<td>
+										<a href="{&WWW}/Posts/view?tid={$fp.id}">
+											{$fp.title}
+										</a>
+									</td>
+									<td>
+										<a href="{&WWW}/Posts/view_list?fid={$fp.forum_id}" style="color:grey; ">
+											{$fp.forum_name}
+										</a>
+									</td>
+									<td>
+										<a href="javascript:void(0);" class="fv_ojia17in_list3_la1" style="cursor:default;">{$fp.reply_num}</a>/{$fp.view_num}
+									</td>
+									<td>
+										<a href="{&WWW}/Unit/myEffect?nick={$uList.$uid}&show=mru">
+											{$uList.$uid}
+										</a><br />
+										<span>
+											{$fp.last_time}
+										</span>
+									</td>
+								</tr>
+							</volist>
+						</table>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>
+ 
+
+<script>
+	//我的帖子表格行鼠标移上加背景色js
+	$(".fv_ojia17inr_list3_ltr1").hover(
+		function(){
+			$(this).find("td").css("background-color","#f2f2f2");
+		},
+		function(){
+			$(this).find("td").css("background-color","#fff");
+		}
+	);
+</script>

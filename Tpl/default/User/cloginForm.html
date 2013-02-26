@@ -1,0 +1,30 @@
+<!--  
+<form action="/User/clogin" method="post">
+-->
+<form action="/User/clientin" method="post">
+<table class="login right">
+	<tr>
+	<td width="40%">用户名：</td>
+	<td align="left"><input name="email" value="{$email}"  type="text" class="input-len"/></td>
+	</tr>
+	<tr>
+	<td>密&nbsp;&nbsp;码：</td>
+	<td align="left"><input name="password" value="" type="password" class="input-len"/></td>
+	</tr>
+	<present name="email">
+	<tr>
+	<td colspan=2 style="text-align:center; color:red;">用户名或密码错误</td>
+	</tr>
+	</present>
+	<tr>
+	<td>
+		<!-- 
+		<a href="/User/pwd">忘记密码？</a>
+		-->
+	</td>
+	<td align="left"><input type="submit" value="登陆"/> <a href="/User/register">注册</a></td>
+	</tr>
+</table>
+
+</form>
+

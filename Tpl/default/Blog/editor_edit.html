@@ -1,0 +1,116 @@
+<script src="{&STATIC}/Js/kind-editor/kindeditor-min-new.js"></script>
+<script src="{&STATIC}/Js/kind-editor/zh_CN.js"></script>
+<script>
+	var editor;
+	KindEditor.ready(function(K) {
+		editor = K.create('textarea[name="forum_msg"]', {
+			resizeType : 1,
+			allowPreviewEmoticons : false,
+			allowImageUpload : true,
+			items : [ 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+						'removeformat', '|', 'emoticons', 'image', 'link'],
+			uploadJson:'{&WWW}/Blog/forumImgUpload',
+			afterBlur:function(){this.sync();},//同步KindEditor的值到textarea文本框
+			afterCreate:function(){
+				var self=this;
+				KindEditor.ctrl(self.edit.doc, 13, function() {
+				self.sync();
+				$('#forum_form').submit();
+				}); 
+			}
+		});
+		editor.focus();
+	});
+</script>
+<div class="ojia_luntan2">
+		<div class="ojia_luntan2_top">
+			<a href="#" class="ojia_luntan2_top_a1 ojia_luntan2_top_a  fn-left">编辑帖子</a>
+			<div class="fn-clear"></div>
+		</div>
+		<form action="{&WWW}/Blog/update" method="post" onsubmit="return editorCheck();" id="forum_form">
+		<div class="ojia_luntan2_entry">
+			<input type="text" name="title" value="{$posts.title}"  /> 还可输入<span> 80 </span> 个字符
+		</div>
+		<div id="editor_box" class="eMenu" style="display:none;"></div>
+		<div class="ojia_luntan2_entry1">
+			
+			<textarea id="bbcode_text" name="forum_msg" style="width:800px;height:432px;">{$posts.content}</textarea>
+		</div>
+		<!--  
+		<a href="#" class="ojia_luntan2_entry1_a1 fn-left">回帖奖励</a>
+		<a href="#" class="ojia_luntan2_entry1_a2 fn-left">抢楼</a>
+		<a href="#" class="ojia_luntan2_entry1_a3 fn-left">设置主题标题</a>
+		-->
+		<div class="fn-clear"></div>
+		<div class="ojia_luntan2_entry2">
+			<input type="hidden" name="tid" value="{$posts.tid}" />
+			<input type="submit" name="" value="保存帖子" class="ojia_luntan2_entry2_a1 fn-left" />
+			<span style="color:#999999;">ctrl+Enter快速保存</span>
+			<!-- 
+			<a href="#" class="ojia_luntan2_entry2_a2 fn-left">保存草稿</a>
+			<a href="#" class="ojia_luntan2_entry2_a3 fn-right">本版积分规则</a>
+			-->
+		</div>
+		</form>
+	</div>
+
+
+<script type="text/javascript">
+ /*  $(document).ready(function(){
+	$("#bbcode_editor").bbcode({tag_bold:true,tag_italic:true,tag_underline:true,tag_link:true,tag_image:true,button_image:true});
+  }); */
+
+
+  function editorCheck(){
+		var comment=$("textarea[name=forum_msg]").val();
+		var n=(comment.split('<img')).length-1;
+		if(n>10){
+			$('.error').show();
+			return false;
+		}
+		if(""==$.trim(comment)){
+			alert("不能发表空信息！");
+			return false;
+		}
+		return true;
+	}
+  
+/* function ajaxFileUpload()
+{
+	$.ajaxFileUpload
+	(
+		{
+			url:'{&WWW}/Attach/ajax_upload',
+			secureuri:false,
+			fileElementId:'attachFileUpload',
+			dataType: 'json',
+			beforeSend:function()
+			{
+				$("#loading").show();
+			},
+			complete:function()
+			{
+				$("#loading").hide();
+			},				
+			success: function (data, status)
+			{
+				
+				if(data.status==1){
+					var imgUrl="<a href='javascript:void(0);'onclick='editor_attach();' aid='"+data.data.aid+"_"+data.data.type+"' url='"+data.data.url+"'>"+data.data.name+"</a>";
+					$("#upload_attach").html(imgUrl);
+				}else{
+					alert(data.info);
+				}
+			},
+			error: function (data, status, e)
+			{
+				//alert(e);
+				alert("上传文件出错！");
+			}
+		}
+	)
+	
+	return false;
+
+} */
+</script>

@@ -1,0 +1,46 @@
+{
+"status": <eq name="status" value="1">true<else />false</eq>,
+"desc": "{$desc}",
+"data": [ 
+<present name="euList">
+<volist name="euList" id="eu">
+{
+"id": {$eu.id},
+"email": "{$eu.email}",
+"nick": {$eu.nick|json_encode},
+"org_ids": [
+<volist name="eu.orgs" id="org" key="k">
+{
+"org_id":{$org}
+}
+<lt name="k" value="$eu.len">
+,
+</lt>
+</volist>
+],
+"status":{$eu.euStatus}
+}
+<lt name="i" value="$num">
+,
+</lt> 
+</volist> 
+</present>
+<present name="euList2" >
+<gt name="num2" value="0">
+,
+</gt>
+<volist name="euList2" id="eu2">
+{
+"id": {$eu2.id},
+"email": "{$eu2.email}",
+"nick": {$eu2.nick|json_encode},
+"org_ids": [],
+"status":{$eu.euStatus}
+}
+<lt name="i" value="$num2">
+,
+</lt> 
+</volist>
+</present>
+]
+}

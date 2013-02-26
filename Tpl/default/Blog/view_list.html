@@ -1,0 +1,291 @@
+<link rel="stylesheet" rev="stylesheet" href="{&STATIC}/Css/luntan.css" type="text/css" media="screen" />
+
+
+
+<div class="ojia_luntanout" class="fn-clear">
+<div class="ojia_luntan">
+	<div class="oLuntan_top">
+		<div class="oLuntan_top1">			
+			 今日：<span>{$todayNum}</span> | 主题：<span>{$totalNum}</span>			
+		</div>
+		<div class="oLuntan_top2">
+		
+		</div>
+	</div>
+	<div class="oLuntan_post">
+		<present name="_SESSION['RID']">
+		<eq name="_SESSION['RID']" value="1">
+		<a href="{&WWW}/Blog/new_posts?fid={$fid}" target="_blank" title="发帖" class="oLuntan_post_a1 fn-left"></a>
+		</eq>
+		</present>
+		<div class="page fn-right" style="clear:none;">
+			<present name="page">
+			{$page}
+			</present>
+		</div>
+		<div class="fn-clear"></div>
+	</div>
+	<div class="oLuntan_Listall">
+	<div class="oLuntan_Listall_downlist1">
+			<a href="#"> 
+				全部主题
+			</a>
+			<a href="#"> 
+				投票
+			</a>
+		</div>
+		<div class="oLuntan_Listall_downlist2">
+			<a href="#"> 
+				全部时间
+			</a>
+			<a href="#"> 
+				一天
+			</a>
+			<a href="#"> 
+				两天
+			</a>
+			<a href="#"> 
+				一周
+			</a>
+			<a href="#"> 
+				一个月
+			</a>
+			<a href="#"> 
+				三个月
+			</a>
+		</div>
+		<div class="oLuntan_Listall_downlist3">
+			<a href="#"> 
+				默认排序
+			</a>
+			<a href="#"> 
+				发帖时间
+			</a>
+			<a href="#"> 
+				回复/查看
+			</a>
+			<a href="#"> 
+				回复
+			</a>
+			<a href="#"> 
+				最后发表
+			</a>
+			<a href="#"> 
+				热门
+			</a>
+		</div>
+	<div class="oLuntan_List">
+		<div class="oLuntan_List_l fn-left"></div>
+		<div class="oLuntan_ListIn fn-left">
+				<div class="oLuntan_ListInL fn-left">	
+				<!-- 			
+					<span>筛选：</span>
+					<a href="javascript:void(0);" class="oLuntan_Listall_downlist1_click">全部主题</a>
+					<a href="javascript:void(0);" class="oLuntan_Listall_downlist2_click">全部时间题</a>
+					<span>排序：</span>
+					<a href="javascript:void(0);" class="oLuntan_Listall_downlist3_click">最后发表</a>
+					| <a href="#" class="essence">精华</a>				
+				-->
+				</div>
+			<div class="oLuntan_ListInR fn-right">
+				<input type="checkbox" />
+				<a href="#">回复/</a>
+				<a href="#">查看/</a>
+				<a href="#">最后发表</a>
+			</div>
+			<div class="fn-clear"></div>
+		</div>
+		<div class="oLuntan_List_r fn-left"></div>
+	</div>
+	<div class="oLuntan_content">
+		<div class="oLuntan_cond1">
+		<!--  
+			<a href="#">有新回复的主题，请点击查看</a>
+		-->
+		</div>
+		<div class="oLuntan_cond2">
+			<ul>
+			<present name="pList">
+			<volist name="pList" id="posts">
+				<li onmouseover="bghover(this);" onmouseout="bghoverout(this);">
+					<div class="oLuntan_cond2_l fn-left">
+						<a href="{&WWW}/Blog/view?tid={$posts.id}" class="oLuntan_cond2_abiaoti">{$posts.title}</a>
+						<present name="_SESSION['RID']">
+						<eq name="_SESSION['RID']" value="1">
+						<eq name="posts.top_num" value="0">
+						<a href="javascript:topPost({$posts.id},0);" >[置顶]</a>
+						<else />
+						<a href="javascript:topPost({$posts.id},1);" >[取消置顶]</a>
+						</eq>
+						<a id="pid_{$posts.id}" href="javascript:delPost({$posts.id});" >[删除]</a>
+						</eq>
+						</present>
+						<br />
+						<assign name="uid" value="$posts.user_id" />
+						<a href="#">
+							{$uList.$uid.nick_name}
+						</a>
+						<span class="post_time" title="{$posts.create_time}">&nbsp;</span>
+					</div>
+					<div class="oLuntan_cond2_r fn-right">
+						<a href="#" class="oLuntan_cond2_ra1 fn-right"> {$posts.reply_num} / {$posts.view_num} </a>
+						<div class="fn-clear"></div>
+						<assign name="lastId" value="$posts.last_uid" />
+						<a href="#" style="clear:both;">
+							{$uList.$lastId.nick_name}
+						</a>
+						<span class="post_time" title="{$posts.last_time}">&nbsp;</span>
+					</div>
+					<div class="fn-clear"></div>
+				</li>
+			</volist>
+			</present>
+			</ul>
+		</div>
+	</div>
+	<div class="oLuntan_post">
+		<present name="_SESSION['RID']">
+		<eq name="_SESSION['RID']" value="1">
+		<a href="{&WWW}/Blog/new_posts?fid={$fid}" target="_blank" title="发帖" class="oLuntan_post_a1 fn-left"></a>
+		</eq>
+		</present>
+		<div class="page fn-right" style="clear:none;">
+			<present name="page">
+			{$page}
+			</present>
+		</div>
+		<div class="fn-clear"></div>
+	</div>
+	</div>
+	<div class="oLuntan_up" title="回顶部" id="oLuntan_upid">
+		<a href="#"></a>
+	</div>
+	
+</div>
+<div class="fn-clear"></div>
+</div>
+<script>
+	$(".oLuntan_Listall").click(function(event){
+		if($(event.target).is(".oLuntan_Listall_downlist1_click")){
+			$(".oLuntan_Listall_downlist1").show();
+			$(".oLuntan_Listall_downlist2").hide();
+			$(".oLuntan_Listall_downlist3").hide();
+			$(".oLuntan_Listall_downlist1_click").toggle(
+				function(){
+					$(".oLuntan_Listall_downlist1").hide();
+					$(".oLuntan_Listall_downlist2").hide();
+					$(".oLuntan_Listall_downlist3").hide();
+				},
+				function(){
+					$(".oLuntan_Listall_downlist1").show();
+					$(".oLuntan_Listall_downlist2").hide();
+					$(".oLuntan_Listall_downlist3").hide();
+					
+				}	
+			);			
+		}else if($(event.target).is(".oLuntan_Listall_downlist2_click")){
+			$(".oLuntan_Listall_downlist2").show();
+			$(".oLuntan_Listall_downlist1").hide();
+			$(".oLuntan_Listall_downlist3").hide();
+			$(".oLuntan_Listall_downlist2_click").toggle(
+					function(){
+						$(".oLuntan_Listall_downlist1").hide();
+						$(".oLuntan_Listall_downlist2").hide();
+						$(".oLuntan_Listall_downlist3").hide();
+						
+					},
+					function(){
+						$(".oLuntan_Listall_downlist2").show();
+						$(".oLuntan_Listall_downlist1").hide();
+						$(".oLuntan_Listall_downlist3").hide();
+					}	
+			);	
+		}else if($(event.target).is(".oLuntan_Listall_downlist3_click")){
+			$(".oLuntan_Listall_downlist3").show();
+			$(".oLuntan_Listall_downlist1").hide();
+			$(".oLuntan_Listall_downlist2").hide();
+			$(".oLuntan_Listall_downlist3_click").toggle(
+					function(){
+						$(".oLuntan_Listall_downlist1").hide();
+						$(".oLuntan_Listall_downlist2").hide();
+						$(".oLuntan_Listall_downlist3").hide();
+						
+					},
+					function(){
+						$(".oLuntan_Listall_downlist3").show();
+						$(".oLuntan_Listall_downlist1").hide();
+						$(".oLuntan_Listall_downlist2").hide();
+					}	
+			);			
+		}else{
+			$(".oLuntan_Listall_downlist1").hide();
+			$(".oLuntan_Listall_downlist2").hide();
+			$(".oLuntan_Listall_downlist3").hide();
+		}
+	});
+</script>
+<script>
+	function bghover(obj){
+		obj.style.backgroundColor="#eaeaea";
+		$(obj).find(".oLuntan_cond2_l .oLuntan_cond2_abiaoti").css("color","#333");
+		$(obj).find(".oLuntan_cond2_l .oLuntan_cond2_abiaoti").css("text-decoration","underline");
+	}
+	function bghoverout(obj){
+		obj.style.backgroundColor="#fff";
+		$(obj).find(".oLuntan_cond2_l .oLuntan_cond2_abiaoti").css("color","#000");
+		$(obj).find(".oLuntan_cond2_l .oLuntan_cond2_abiaoti").css("text-decoration","none");
+	}
+	/*      回到顶部位置            */
+	function divFixedpo2() {
+		var rSidediv2=document.getElementById("oLuntan_upid");
+		var bWid2=document.body.offsetWidth-1000;
+		//alert(document.body.offsetWidth);
+		//alert(bWid);
+		var bWid12=((bWid2/2)+1000-10)+"px";
+		//alert(bWid1);
+		rSidediv2.style.left=bWid12;
+	}
+	divFixedpo2();
+
+	function postTime(){
+		var ptime=$(".post_time");
+		for(var i=0;i<ptime.length;i++){
+			var curTime=$(ptime[i]).attr("title");
+			var diffTime=jsDateDiff(curTime);
+			$(ptime[i]).html(diffTime);
+		}
+	 }
+	 postTime();
+</script>
+<present name="_SESSION['RID']">
+<eq name="_SESSION['RID']" value="1">
+<script>
+	function delPost(pid){
+		jQuery.post("{&WWW}/Blog/del",{"pid":pid,"mode":1},function(data){
+			if(data.status==1){
+				$("#pid_"+pid).parent("div").parent("li").remove();
+			}else{
+				alert("删除失败！");
+			}
+		},"json");
+	}
+	function topPost(pid,type){
+		var txt;
+		if(type==1){
+			txt="取消置顶";
+		}else{
+			txt="置顶";
+		}
+		if(confirm("确定要 "+txt+" 吗？")){
+			jQuery.post("{&WWW}/Blog/top_set",{"pid":pid},function(data){
+				if(data.status==1){
+					window.location.reload();
+				}else{
+					alert("置顶/取消置顶失败！");
+				}
+			},"json");
+		}
+	}
+</script>
+</eq>
+</present>

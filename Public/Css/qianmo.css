@@ -1,0 +1,421 @@
+@CHARSET "UTF-8";
+body{
+	width:100%;
+	padding:0;
+	margin:0;
+	background:url("../Img/qianmo_bg.jpg") repeat;
+	font-size:14px;
+	color:#939393;
+	font-family:"宋体",arial;
+}
+ul, li {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+img{
+	border:0 none;
+}
+a{
+	text-decoration: none;
+	color:#939393;
+}
+a:hover{
+	text-decoration: underline;
+}
+.main{
+	width:1000px;
+	margin:0 auto;
+}
+.header{
+	width:100%;
+	height:44px;
+	background:url("../Img/head_01.jpg") repeat;
+}
+.header_w{
+	width:1000px;
+	margin:0 auto;
+	heigth:44px;
+	line-height:44px;
+	color:#939393;
+}
+.header_t{
+	margin-left:17px;
+	float:left;
+}
+.login{
+	float:right;
+	margin-right:18px;
+}
+.login a:hover{
+	color:#3a86b9;
+	text-decoration: none;
+}
+.logo{
+	width:160px;
+	height:186px;
+	margin:46px 0 0 66px;
+	_margin:46px 0 0 48px;
+	float:left;
+}
+
+.pic_turn{
+	width:419px;
+	height:263px;
+	margin:80px 0 0 70px;
+	_margin:80px 0 0 50px;
+	float:left;
+}
+.pic_position{
+	height:243px;
+	background:url("../Img/pic_show.gif") no-repeat;
+	padding-top:6px;
+	padding-left:5px;
+}
+.pic_guide{
+	text-align:center;
+	margin-top:5px;
+	height:11px;
+}
+.pic_guide ul{
+	text-align:center;
+}
+.pic_guide li{
+	height:11px;
+	width:11px;
+	margin-right:6px;
+	float:left;
+}
+
+.pic_guide_first{
+	padding-left:175px;
+}
+.pic_guide_current{
+	cursor: pointer;
+	height:11px;
+	width:11px;
+	display:block;
+	background:url("../Img/pic_show_gide.gif") no-repeat scroll center right;
+}
+
+.pic_guide_no{
+	 cursor: pointer;
+	height:11px;
+	width:11px;
+	display:block;
+	background:url("../Img/pic_show_gide.gif") no-repeat scroll center left;
+}
+
+.center_area{
+	 margin-top:53px;
+}
+.center_left{
+	width:266px;
+	height:422px;
+	float:left;
+}
+.download_area{
+	 float:left;
+	 margin:27px 0 0 28px;
+	 width:294px;
+	 height:62px;
+	 /*
+	 background:url("../Img/qianmo_free.gif") no-repeat scroll right 70%;
+	 */
+}
+.contact{
+	float:left;
+	color:#757575;
+	font-size:14px;
+	width:214px;
+	height:60px;
+	margin: 12px 0 0 35px;
+	text-align:left;
+}
+.contact a{
+	color:#757575;
+}
+.contact_span{
+	display:block;
+	/*width:75px;*/
+	text-align:right;
+	float:left;
+}
+.center_right{
+	float:left;
+	width:481px;
+	margin-left:37px;
+	margin-top:60px;
+	margin-bottom:80px;
+	_margin-left:0px;
+}
+
+.msg_board li{
+	width:481px;
+}
+.board_img{
+	width:50px;
+	margin-right:8px;
+	float:left;
+}
+.board_user{
+	height:32px;
+	line-height:32px;
+	width:423px;
+	background-color:#eaf3f9;
+}
+.board_right{
+	float:left;
+	width:423px;
+}
+
+.board_content{
+	color:#000;
+	line-height:20px;
+	background-color:#fff;
+	margin-bottom:7px;
+	_margin-bottom:3px;
+}
+.board_body{
+	padding:12px 5px 12px 5px;
+	width:413px;
+}
+.board_uname{
+	margin:0 7px 0 7px;
+	color:#0055b2;
+	float:left;
+}
+.board_time{
+	margin-left:7px;
+	color:#939393;
+	float:left;
+}
+.board_reply{
+	float:right;
+	margin-right:12px;
+}
+.board_reply a{
+	color:#0055b2;
+}
+.board_reply a:hover{
+	text-decoration: none;
+}
+.send_board{
+	height:54px;
+	width:481px;
+	background-color:#eaf3f9;
+	float:left;
+	font-size: 12px;
+}
+.user_msg{
+	
+}
+.send_board img{
+	float:left;
+	margin:2px 0 0 0;
+}
+.send_u{
+	float:left;
+    font-size: 12px;
+    font-weight: bold;
+    color:#0255b1;
+	margin:14px 0 0 14px;
+}
+.send_login{
+	float:left;
+	margin:6px 0 0 14px;
+}
+.send_login a{
+	color:#3a86b9;
+}
+
+.board_more{
+	float:right;
+	margin:20px 8px 0 0;
+}
+.board_more a{
+	color:#3a86b9;
+	text-decoration: underline;
+}
+.send_content{
+	height:77px;
+	width:481px;
+	
+}
+.send_content textarea{
+	height:77px;
+	width:413px;
+	_width:410px;
+	float:left;
+	margin:0;
+	padding:0;
+	border:1px solid #51a7d8;
+}
+.send_button {
+    background-color: #51A7D8;
+    border: medium none;
+    color: #FFFFFF;
+    height: 81px;
+    margin: 0;
+    padding: 0;
+    width: 66px;
+    float:left;
+    cursor:pointer;
+}
+.reply_area{
+	background-color:#f7f8fa;
+	line-height:20px;
+}
+.reply_area span{
+	font-size:30px;
+}
+.clear_both{
+	clear:both;
+}
+/**
+.footer_line{
+	width:1000px;
+	height:0px;
+	display:block;
+	margin:0 auto;
+	border-top:1px solid #E5E5E5;
+	border-bottom:1px solid #f0f0f0;
+}*/
+.footer_line{
+	width:1000px;
+	height:1px;
+	line-height:1px;
+	background-color:#ededed;
+	margin:0 auto;
+}
+.footer{
+	width:1000px;
+	margin:0 auto;
+	height:48px;
+	line-height:48px;
+	text-align:center;
+}
+
+.top_left{
+	width:266px;
+	height:422px;
+	float:left;
+	margin-right:30px;
+}
+.top_right{
+	margin:0;
+	padding:0;
+}
+.register{
+	width:582px;
+	margin-top:20px;
+}
+.register tr{
+	height:40px;
+}
+.register_top{
+	width:589px;
+	height:28px;
+}
+.register_msg{
+	font-size:18px;
+	font-family: "微软雅黑";
+	float:left;
+}
+.register_login{
+	font-size: 12px;
+	float:right;
+	margin-right:16px;
+	margin-top:9px;
+}
+.register_login a{
+	color:#3a86b9;
+	text-decoration: underline;
+}
+.register_line{
+	width:589px;
+	height:1px;
+	line-height:1px;
+	background-color:#ededed;
+}
+.register_table{
+	width:
+}
+.register_left{
+	text-align:right;
+	width:83px;
+	
+}
+.input-len{
+	height:22px;
+	width:242px;
+	border: 1px solid #c3e3ec;
+}
+.register_btn{
+	background:url("../Img/register_button.jpg") no-repeat;
+	border:none;
+	width:161px;
+	height:40px;
+	cursor:pointer;
+}
+.login_btn{
+	background:url("../Img/login_btn.jpg") no-repeat;
+	border:none;
+	width:161px;
+	height:40px;
+	cursor:pointer;
+}
+.reg_input{
+	width:242px;
+}
+.reply_form{
+	width:481px;
+}
+
+.reply_close {
+    float: right;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 10px;
+}
+.user_pic{
+	width:146px;
+	height:146px;
+	margin:141px 0 0 66px;
+	_margin:141px 0 0 48px;
+	float:left;
+	text-align:center;
+	line-height:146px;
+	background-color:#fff;
+}
+.user_pic img{
+	margin: 3px;
+    vertical-align: middle;
+    width:140px;
+    height:140px;
+}
+.center_right2{
+	float: left;
+    margin-bottom: 80px;
+    margin-left: 37px;
+    margin-top: 131px;
+    width: 481px;
+}
+.user_info{
+	display: block;
+    margin-left: 30px;
+    width:146px;
+    text-align:center;
+}
+.user_info a{
+	color:#0879c8;
+	font-size:12px;
+	text-decoration: underline;
+}
+.update_btn{
+	background: url("../Img/update_btn.jpg") no-repeat scroll 0 0 transparent;
+    border: medium none;
+    cursor: pointer;
+    height: 39px;
+    width: 160px;
+}

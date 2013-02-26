@@ -1,0 +1,48 @@
+<div class="main">
+	<div class="center_area">
+		<h3>编辑发布</h3>
+		<form action="{&WWW}/Pub/update" method="post" enctype="multipart/form-data" onsubmit="return checkForm();">
+		<table width="80%">
+		<tr>
+		<td align="right">版本号<font color="red">*</font>：</td><td><input type="text" name="ver" value="{$pub.ver}"  /></td>
+		</tr>
+		<tr>
+		<td align="right">功能描述<font color="red">*</font>：</td><td><textarea name="desc" class="desc_area" style="width:300px;height:100px;" >{$pub.pub_desc}</textarea></td>
+		</tr>
+		<tr>
+		<td align="right">安装包：</td>
+		<td>
+		{$pub.install_file}
+		<br />
+		<input type="file" name="ins" value="" />
+		</td>
+		</tr>
+		<tr>
+		<td align="right">补丁包：</td>
+		<td>
+		{$pub.patch_file}
+		<br />
+		<input type="file" name="patch" value="" />
+		</td>
+		</tr>
+		<tr>
+		<td align="right"><input type="hidden" name="id" value="{$pub.id}" /></td>
+		<td><input type="submit" name="" value="保存发布信息" /></td>
+		</tr>
+		</table>
+		</form>
+	</div>
+</div>
+<script>
+ function checkForm(){
+	var ver=$.trim($("input[name=ver]").val());
+	if(ver==null||ver==""){
+		return false;
+	}
+	var desc=$.trim($(".desc_area").val());
+	if(desc==null||desc==""){
+		return false;
+	}
+	return true;
+}
+</script>

@@ -1,0 +1,27 @@
+<script type="text/javascript">document.domain = '{&DOMAIN}';</script>
+<script language="javascript" type="text/javascript" defer="defer" src="{&STATIC}/Js/datepicker/WdatePicker.js"></script>
+<div class="manager_right">
+<h3>创建软件轮播广告</h3>
+<form action="{&WWW}/SoftAd/save" method="post">
+	<table>
+		<tr>
+			<td>广告词：</td>
+			<td><input type="text" name="title" value="" /></td>
+		</tr>
+		<tr>
+			<td>广告链接：</td>
+			<td><input type="text" name="ad_url" value="" /></td>
+		</tr>
+		<tr>
+			<td>广告结束日期：</td>
+			<td>
+				<input type="text" name="exp_day" class="Wdate search_day" title="统计日期" value="{$day}"     onFocus="WdatePicker({minDate:'2011-11-08',startDate:'{$day}',dateFmt:'yyyy-MM-dd'})" readonly style="width:90px;font-size:12px;color:#555555" /> 
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><input type="submit" value="确定" /></td>
+		</tr>
+	</table>
+</form>
+</div>

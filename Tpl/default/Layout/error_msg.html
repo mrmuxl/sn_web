@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="局域网共享 跨网段共享  windows共享 文件共享" />
+<meta name="description" content="局域网共享 跨网段共享  windows共享 文件共享" />
+<link rel="stylesheet" href="{&STATIC}/Css/qianmo3.css" type="text/css" />
+<link rel="stylesheet" href="{&STATIC}/Css/page.css" type="text/css" />
+<script src="{&STATIC}/Js/jquery-1.4.2.min.js"></script>
+<title>阡陌软件 - 首页</title>
+
+</head>
+<body>
+	<layout name="Layout:header" cache="0" />
+
+	<div style="width:500px;height:500px;margin:0 auto;padding-left:400px;">
+	<h1>
+		错误提示：
+	</h1>
+	{$msg}
+	<br />
+	<br />
+	<eq name="type" value="-1">
+	{$time}秒自动跳转到指定页面
+	<else />
+	您可以：
+	</eq>
+	<br />
+	<switch name="type">
+	<case value="1">
+	返回，<a href="javascript:history.back();">请点击这里&gt;&gt;</a><br />
+	去首页，<a href="{$home}">请点击这里&gt;&gt;</a>
+	</case>
+	<case value="0">
+	返回，<a href="javascript:history.back();">请点击这里&gt;&gt;</a><br />
+	使用其他账号登录，<present name="callback"><a href="{$home}?callback={$callback}">请点击这里&gt;&gt;</a><else /><a href="{$home}">请点击这里&gt;&gt;</a></present>
+	</case>
+	<case value="-1">
+	立即跳转，<a href="{$jumpUrl}">请点击这里&gt;&gt;</a><br />
+	</case>
+	</switch>
+	</div>
+
+	<div class="clear"></div>
+
+	<layout name="Layout:footer" cache="0" />	
+
+
+
+
+</body>
+</html>

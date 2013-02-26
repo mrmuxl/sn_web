@@ -1,0 +1,35 @@
+<present name="step">
+		<switch name="step" >
+		<case value="1">
+		<p class="center"><span style="color:red;">1、输入您的账号，生成密码重置链接；</span>2、登陆您的邮箱，点击重置链接；3、输入新密码；</p>
+		<present name="code">
+		<eq name="code" value="0">
+		<p class="center" style="color:red;">账号不存在：{$email}</p>
+		<form method="post" action="/User/findPwd">
+		<p class="center">阡陌账号：<input type="text" value="" name="email" /></p>
+		<p class="center"><input type="submit" value="生成重置链接" name="" /></p>
+		</form>
+		</eq>
+		<eq name="code" value="2">
+		<p class="center" style="color:red;">邮件发送失败！</p>
+		<form method="post" action="/User/findPwd">
+		<p class="center">阡陌账号：<input type="text" value="{$email}" name="email" /></p>
+		<p class="center"><input type="submit" value="再次发送" name="" /></p>
+		</form>
+		</eq>
+		<else />
+		<form method="post" action="/User/findPwd">
+		<p class="center">阡陌账号：<input type="text" value="" name="email" /></p>
+		<p class="center"><input type="submit" value="生成重置链接" name="" /></p>
+		</form>
+		</present>
+		
+		</case>
+		<case value="2">
+		<p class="center">1、输入您的账号，生成密码重置链接；<span style="color:red;">2、登陆您的邮箱，点击重置链接；</span>3、输入新密码；</p>
+		<p class="center">请登录您的邮箱，点击链接重置密码。</p>
+		</case>
+		<default />
+		
+		</switch>
+		</present>

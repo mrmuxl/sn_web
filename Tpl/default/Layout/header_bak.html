@@ -1,0 +1,10 @@
+<div class="header">
+	<div class="header_w">
+	<span class="header_t"><a href="{&WWW}" title="首页">阡陌纵横，互通互联</a></span>
+	<present name="_SESSION['UID']">
+	<span class="login">您好，<a href="{&WWW}/User/info" style="color:#0879c8;text-decoration: underline;" title="个人中心">{$_SESSION['nick']}</a> ！<a href="{&WWW}/User/logout">退出</a> </span>
+	<else />
+	<span class="login"> <a href="{&WWW}/User/login">登录</a> | <a href="{&WWW}/User/register">注册</a></span>
+	</present>
+	</div>
+</div>

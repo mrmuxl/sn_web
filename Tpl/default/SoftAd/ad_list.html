@@ -1,0 +1,39 @@
+<div class="manager_right">
+<div><a href="{&WWW}/SoftAd/add">创建广告</a></div>
+	<table>
+		<tr>
+			<th>ID</th><th>广告词</th><th>广告URL</th><th>广告结束时间</th><th>操作</th>
+		</tr>
+		<present name="adList">
+		<volist name="adList" id="ad">
+		<tr class="ad_{$ad.id}">
+			<td>{$ad.id}</td>
+			<td>{$ad.title}</td>
+			<td>{$ad.ad_url}</td>
+			<td>{$ad.exp_day}</td>
+			<td><a href="javascript:delAd({$ad.id});">删除</a></td>
+		</tr>
+		</volist>
+		</present>
+	</table>
+	<present name="page">
+	<div class="page">{$page}</div>
+	</present>
+</div>
+<script>
+	function delAd(aid){
+		if(aid>0){
+			if(confirm("确定要删除ID："+aid+" 的广告吗？")){
+				jQuery.post("{&WWW}/SoftAd/del",{"aid":aid},function(data){
+					if(data.status){
+						$(".ad_"+aid).remove();
+					}else{
+						alert(data.info);
+					}
+				},"json");
+			}
+		}else{
+			alert("参数错误！");
+		}
+	}
+</script>
