@@ -45,7 +45,7 @@ class CommonAction extends Action {
 	protected function initInvateQianmoDot($userId,$invateInit){
 		if($invateInit==0){
 			$InvateRecord=M("InvateRecord");
-			$ir=$InvateRecord->where("user_id=".$userId)->find();
+			$ir=$InvateRecord->where("user_id='".$userId."'")->find();
 			$User=M("User");
 			if(isset($ir['id'])&&$ir['id']>0){
 				$invateId=$ir['invate_id'];
@@ -55,7 +55,7 @@ class CommonAction extends Action {
 				$User->startTrans();
 				$result=$User->save($data);
 				if($result!==false){
-					$sql="update kx_user set qianmo_dot=qianmo_dot+".$qianmoDot." where id=".$invateId;
+					$sql="update kx_user set qianmo_dot=qianmo_dot+".$qianmoDot." where id='".$invateId."'";
 					$result=$User->execute($sql);
 					if($result!==false){
 						$User->commit();

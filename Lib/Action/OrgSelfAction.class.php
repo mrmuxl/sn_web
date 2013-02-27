@@ -34,7 +34,7 @@ class OrgSelfAction extends CommonAction{
 			$this->returnList($status, $desc);
 			return;
 		}
-		if(isset($_POST['userId'])&&$_POST['userId']>0&&isset($_POST['targetUserId'])){
+		if(isset($_POST['userId'])&&trim($_POST['userId'])!=""&&isset($_POST['targetUserId'])){
 		  $OrgSelf=M("OrgSelf");
 		  $userId=$_POST['userId'];
 		  $targetUserIds=$_POST['targetUserId'];
@@ -42,7 +42,7 @@ class OrgSelfAction extends CommonAction{
 		  $entId=Cookie::get("ent_id");
 		  $num=count($targetUserIds);
 		  if($num==0){
-		  	$result=$OrgSelf->where("user_id=".$userId." and ent_id=".$entId)->delete();
+		  	$result=$OrgSelf->where("user_id='".$userId."' and ent_id=".$entId)->delete();
 		  	if($result!==false){
 		  		$status=1;
 		  		$desc="del user org self success";
@@ -51,7 +51,7 @@ class OrgSelfAction extends CommonAction{
 		  		$desc="del user org self failed";
 		  	}
 		  }else{
-		  	$OrgSelf->where("user_id=".$userId." and ent_id=".$entId)->delete();
+		  	$OrgSelf->where("user_id='".$userId."' and ent_id=".$entId)->delete();
 		  	$dataList=array();
 		  	for($i=0;$i<$num;$i++){
 		  		$dataList[$i]['user_id']=$userId;

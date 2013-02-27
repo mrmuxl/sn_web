@@ -119,11 +119,11 @@ class EntUserAction extends CommonAction{
 			$this->returnList($status, $desc);
 			return;
 		}
-		if(isset($_POST['id'])&&$_POST['id']>0){
+		if(isset($_POST['id'])&&trim($_POST['id'])!=""){
 			$EntUser=M("EntUser");
 			$UserOrg=M("UserOrg");
 			$entId=Cookie::get("ent_id");
-			$data['user_id']=$_POST['id'];
+			$data['user_id']=trim($_POST['id']);
 			$data['ent_id']=$entId;
 			$result=$EntUser->where($data)->delete();
 			if($result!==false){

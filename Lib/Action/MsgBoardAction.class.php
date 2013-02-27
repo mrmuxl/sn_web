@@ -63,7 +63,7 @@ class MsgBoardAction extends CommonAction{
        	}
 		if(count($userIds)>0){
        		$User=M("User");
-       		$userList=$User->where("id in (".implode(",", $userIds).")")->getField("id,avatar");
+       		$userList=$User->where("id in ('".implode("','", $userIds)."')")->getField("id,avatar");
        		$this->assign("userList",$userList);
        	}
        	$this->assign("msgList",$msgList);

@@ -55,7 +55,7 @@ class IndexAction extends CommonAction
        	}
        	if(count($userIds)>0){
        		$User=M("User");
-       		$userList=$User->where("id in (".implode(",", $userIds).")")->getField("id,avatar");
+       		$userList=$User->where("id in ('".implode("','", $userIds)."')")->getField("id,avatar");
        		$this->assign("userList",$userList);
        	}
        $this->assign("msgList",$msgList);
@@ -67,7 +67,7 @@ class IndexAction extends CommonAction
     }
 
    	public function index_3(){
-    	       if(isset($_GET['invite_info'])&&trim($_GET['invite_info'])!=""){
+    	if(isset($_GET['invite_info'])&&trim($_GET['invite_info'])!=""){
        		$email=base64_decode(trim($_GET["invite_info"]));	
        		Cookie::set("invite_email", $email);
        }
@@ -95,7 +95,7 @@ class IndexAction extends CommonAction
        	}
        	if(count($userIds)>0){
        		$User=M("User");
-       		$userList=$User->where("id in (".implode(",", $userIds).")")->getField("id,avatar");
+       		$userList=$User->where("id in ('".implode("','", $userIds)."')")->getField("id,avatar");
        		$this->assign("userList",$userList);
        	}
        $this->assign("msgList",$msgList);
