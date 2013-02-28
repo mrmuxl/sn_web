@@ -362,7 +362,7 @@ class UserAction extends CommonAction {
 	public function register_4(){
 		if(isset($_GET['email'])&&trim($_GET['email'])!=""){
 			$User=M("User");
-			$status=$User->where("email='".$_GET['email']."'")->getField("status");
+			$status=$User->where("email='".trim($_GET['email'])."'")->getField("status");
 			if($status!=2){
 				$this->error_msg("已激活的账号不能修改邮箱！");
 			}
@@ -1819,6 +1819,7 @@ class UserAction extends CommonAction {
 			}
 
 			$data['email']=$email;
+			$data['id']=md5($email);
 			$data['nick']=$nick;
 			$data['password']=md5($pwd);
 			$data['status']=0;
