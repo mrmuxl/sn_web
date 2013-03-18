@@ -9,7 +9,9 @@
 <link rel="stylesheet" href="{{STATIC_URL}}css/page.css" type="text/css" />
 <link rel="stylesheet" href="{{STATIC_URL}}js/video/video-js.css" type="text/css" />
 <script src="{{STATIC_URL}}js/video/video.js"></script>
-<script src="{{STATIC_URL}}js/jquery-1.4.2.min.js"></script>
+<!-- <script src="{{STATIC_URL}}js/jquery-1.4.2.min.js"></script> -->
+<script src="{{STATIC_URL}}js/jquery-1.7.2.min.js"></script>
+<script src="{{STATIC_URL}}js/django_ajax.js"></script>
 <title>{% block title %}{% endblock %}&nbsp;-&nbsp;SimpleNect阡陌软件</title>
 <style>
 	.mypng {
@@ -21,11 +23,42 @@
 		this.runtimeStyle.backgroundImage = "none")),this.pngSet=true);
 	}
 </style>
-	{% block header%}{% endblock %}
+<div class="header">
+	<div class="header_in">
+		<div class="logo">
+		<a href="/" title="首页">
+		<span><img src="{{STATIC_URL}}images/logo.jpg" /></span>
+		</a>
+		</div>
+		<div class="menu">
+			<a class="menu_index" href="/">首页</a>
+			<a class="menu_board" href="/msg_board/">留言区</a>
+			<a class="menu_guide" href="/blog">新手指南</a>
+		</div>
+		<div class="lr">
+		<!--<present name="_SESSION['UID']"> -->
+		<a href="/User/info" style="text-decoration: underline;" title="个人中心">{$_SESSION['nick']}</a>
+			<!--<present name="_SESSION['active']">-->
+			<a href="/User/to_active">激活账号</a>
+			<!-- </present> -->
+			<!-- <eq name="_SESSION['RID']" value="1"> -->
+			<a href="/SoftRecord/tongji" style="text-decoration: underline;">管理中心</a>
+			</eq>
+		<a href="/User/logout">退出</a>
+		<else />
+			<a href="/User/login">登录</a>
+			<a href="/User/register">注册</a>
+		<!-- </present> -->
+		</div>
+	</div>
+</div>
 </head>
 
 <body>
-     {% block index %}{% endblock %}
+     {% block content %}{% endblock %}
 
 </body>
 </html>
+
+
+
