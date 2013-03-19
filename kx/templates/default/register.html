@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+{% block header %} 
+
+{% include "header.html" %}
+
+{% endblock %}
 {% block content %}
 <div class="main">
 <div class="center_area" >
@@ -160,4 +165,10 @@
 	   return true;
 	}
 </script>
+{% endblock %}
+
+{% block footer %} 
+
+{% include "footer.html" %}
+
 {% endblock %}
