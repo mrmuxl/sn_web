@@ -1,21 +1,73 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
-<html lang="en">
-<head>
-    <title>Account Login</title>
-</head>
-<body>
-    {% if messages %}
-<ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-    <form action="" method="post">{% csrf_token %}
-    <table border="0" cellpadding="0" >
-        {{form.as_table}}        
-    </table>
-    <p> <a href="{%url 'register' %}">注册</a> <a href="{%url 'index'%}">返回首页</a> <input type="submit" value="登录"/></p>
-    </form>
-</body>
-</html>
+{% extends "base.html" %}
+{% block header %} 
+
+{% include "header.html" %}
+
+{% endblock %}
+{% block content %}
+
+<div class="main">
+<div class="center_area" >
+<div class="login_top_title">欢迎登录阡陌</div>
+<div class="center_register">
+<div class="login_area">
+<form action="/accounts/login/" method="post" enctype="multipart/form-data" onsubmit="return checkForm();">
+	{% csrf_token %}
+	<table class="register">
+		<tr>
+			<td class="register_left reg_name">登录阡陌</td>
+			<td class="reg_input">&nbsp;</td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="register_left">电子邮箱：</td>
+			<td class="reg_input">
+			
+				<input id="email" name="email" type="text" value="{{ email }}" class="input-len" />
+			
+			<!-- 	<input id="email" name="email" type="text" value="" class="input-len" /> -->
+			
+			</td>
+			<td class="reg_msg_email"></td>
+		</tr>
+		<tr>
+			<td class="register_left">密&nbsp;&nbsp;&nbsp;&nbsp;码：</td>
+			<td class="reg_input"><input id="pwd" name="password" type="password" value="" class="input-len" /></td>
+			<td class="reg_msg_pwd"></td>
+		</tr>
+		<present name="email">
+		<tr>
+			<td class="register_left">&nbsp;</td>
+			<td class="reg_input">
+				<span style="color:red;">
+				{% if messages %}
+				{% for message in messages %}
+				{{ message}}
+				{% endfor %}
+				{% endif %}
+			</span></td>
+			<td class="reg_msg_pwd"></td>
+		</tr>
+		</present>
+		<tr>
+			<td></td>
+			<td>
+				<input name="" type="submit" value="" class="login_btn"/>
+				&nbsp;&nbsp;<a href="/accounts/findPwd" style=" color: #007EFF;">忘记密码？</a>
+			</td>
+			<td></td>
+		</tr>
+	</table>
+</form>
+</div>
+</div>
+</div>
+</div>
+
+{% endblock %}
+
+{% block footer %} 
+
+{% include "footer.html" %}
+
+{% endblock %}
