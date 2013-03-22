@@ -32,7 +32,7 @@ class KxUserAdmin(UserAdmin):
     )
     search_fields = ('email',)
     ordering = ('email',)
-    #filter_horizontal = ()
+    filter_horizontal = ()
 
 # Now register the new UserAdmin...
 admin.site.register(KxUser, KxUserAdmin)
