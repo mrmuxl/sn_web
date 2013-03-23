@@ -28,108 +28,136 @@
 		</form>
 		
 		</div>
-		<div class="list_comment" style="margin-left:175px;">
-		<ul class="msg_board">
-		<present name="msgList">
-		<present name="_SESSION['RID']">
-		<eq name="_SESSION['RID']" value="1">
-			<volist name="msgList" id="msg">
-			<li id="msg_id_{$msg.id}">
+<div class="list_comment" style="margin-left:175px;">
+	<ul class="msg_board">
+		{% if msg_list %}
+			{% if user.is_superuser %}
+				{% for msg in msg_list %}
+			<li id="msg_id_{{ msg.id }}">
 				<div class="board_left">
 					<div class="board_img">
-						<gt name="msg.user_id" value="0">
-						<assign name="uid" value="$msg.user_id" />
-						<neq name="userList.$uid" value="">
-							<img src="{&IMG}/{$userList.$uid|getPicUri}/snap_50X50_{$userList.$uid|getPicName}" />
-						<else />
-						<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
-						</neq>
-						
-						<else />
+						{% if msg.user_id > 0 %}
+							{% for user in user_list %}
+								{% if not user.msg.user_id %}
+									<img src="{&IMG}/{$userList.$uid|getPicUri}/snap_50X50_{$userList.$uid|getPicName}" />
+								{% else %}
+								<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
+								{% endif %}
+							{% endfor %}
+						{% else %}
 							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
-						</gt>
+						{% endif %}
 					</div>
 				</div>
 				<div class="board_area">
-					<div class="board_user"><span class="board_uname" id="user_{$msg.id}"><gt name="msg.user_id" value="0">{$msg.user_nick} <else /> {$msg.ip|getBeforeIp}</gt></span><span class="board_time">{$msg.create_time}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({$msg.id});"></a></span> <span> | <a href="javascript:delMsg({$msg.id});">删除</a></span></span></div>
-					
+					<div class="board_user">
+						<span class="board_uname" id="user_{{ msg.id }}">
+						{% if msg.user_id > 0 %}
+							{{ msg.user_nick }}
+						{% else %}
+							  {{ msg.ip|slice:"8"|add:"*"}}
+						{% endif %}
+						</span>
+					<span class="board_time">{{ msg.create_time|date:"Y-m-d H:i:s" }}</span>
+					<span class="board_reply">
+						<span class="reply_small"><a href="javascript:replyMsg({ msg.id }});"></a></span>
+						<span> | <a href="javascript:delMsg({{ msg.id }});">删除</a></span>
+					</span>
+					</div>
 					<div class="board_right">
-					
-					<div class="board_content">
-						<div class="board_body">
-						{$msg.msg}
-						</div>
-					</div>
+						<div class="board_content"><div class="board_body">{{ msg.msg }}</div></div>
 
-					<assign name="rid" value="$msg.id" />
-					<present name="replyList.$rid">
+<!-- 					<assign name="rid" value="$msg.id" />
+					<present name="replyList.$rid"> -->
 					<div class="reply_area">
-						<volist name="replyList.$rid" id="reply">
-						<div class="board_body dashed_border">
-						答：{$reply.msg}
-						</div>
-						</volist>
-					</div>
-					</present>
-					</div>
+						{% for reply in reply_list.values %}
+						{% if  reply.reply_id == msg.id %}
+						<!-- <volist name="replyList.$rid" id="reply"> -->
+						<div class="board_body dashed_border">答：{{ reply.msg }}</div>
+					<!-- 	</volist> -->
+						{% endif %}			
+							{% endfor %}
+					</div></div>
 				</div>
 				<div class="clear"></div>
 			</li>
-		</volist>
-		
-		<else />
-		<volist name="msgList" id="msg">
+
+				{% endfor %}
+
+			{% elif user.is_authenticated %}
+				{% for msg in msg_list %}
 			<li>
 				<div class="board_left">
 					<div class="board_img">
-						<gt name="msg.user_id" value="0">
-						<assign name="uid" value="$msg.user_id" />
-						<neq name="userList.$uid" value="">
-							<img src="{&IMG}/{$userList.$uid|getPicUri}/snap_50X50_{$userList.$uid|getPicName}" />
-						<else />
-						<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
-						</neq>
-						
-						<else />
+						{% if msg.user_id > 0 %}
+							{% for user in user_list %}
+								{% if not user.msg.user_id %}
+									<img src="{&IMG}/{$userList.$uid|getPicUri}/snap_50X50_{$userList.$uid|getPicName}" />
+								{% else %}
+									<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
+								{% endif %}
+							{% endfor %}
+						{% else %}
 							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
-						</gt>
+						{% endif %}
 						
 					</div>
 				</div>
 	
 				<div class="board_area">
-					<div class="board_user"><span class="board_uname" id="user_{$msg.id}"><gt name="msg.user_id" value="0">{$msg.user_nick} <else /> {$msg.ip|getBeforeIp}</gt></span><span class="board_time">{$msg.create_time}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({$msg.id});"></a></span></span></div>
+					<div class="board_user">
+					<span class="board_uname" id="user_{{ msg.id }}">
+						{% if msg_user_id > 0 %}
+							{{ msg.user_nick }}
+						{% else %}
+						  {{ msg.ip }}
+						{% endif %}
+					</span>
+						 <span class="board_time">{{ msg.create_time|date:"Y-m-d H:i:s" }}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({{ msg.id }});"></a></span></span></div>
 					<div class="board_right">
 					
 						<div class="board_content">
 							<div class="board_body">
-							{$msg.msg}
+							{{ msg.msg }}
 							</div>
 						</div>
-	
-						<assign name="rid" value="$msg.id" />
-						<present name="replyList.$rid">
+				
 						<div class="reply_area">
-							<volist name="replyList.$rid" id="reply">
+							
+							{% for reply in reply_list.values %}
+							{% if  reply.reply_id == msg.id %}					
 							<div class="board_body dashed_border">
-							答：{$reply.msg}
+							答：{{ reply.msg }}
 							</div>
-							</volist>
+							{% endif %}			
+							{% endfor %}
+						
 						</div>
-						</present>
+					
 					</div>
 				</div>
 				<div class="clear"></div>
 			</li>
-		</volist>
-		</eq>
-		<else />
-			<volist name="msgList" id="msg">
+			{% endfor %}
+			{% else %}
+			{% for msg in msg_list %}
 			<li>
 			
 				<div class="board_left">
 					<div class="board_img">
-						<gt name="msg.user_id" value="0">
+
+						{% if msg.user_id > 0 %}
+							{% for user in user_list %}
+								{% if not user.msg.user_id %}
+									<img src="{&IMG}/{$userList.$uid|getPicUri}/snap_50X50_{$userList.$uid|getPicName}" />
+								{% else %}
+								<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
+								{% endif %}
+							{% endfor %}
+						{% else %}
+							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
+						{% endif %}
+<!-- 						<gt name="msg.user_id" value="0">
 						<assign name="uid" value="$msg.user_id" />
 						<neq name="userList.$uid" value="">
 							<img src="{&IMG}/{$userList.$uid|getPicUri}/snap_50X50_{$userList.$uid|getPicName}" />
@@ -139,43 +167,49 @@
 						
 						<else />
 							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
-						</gt>
+						</gt> -->
 						
+					
 					</div>
 				</div>
 			
 				<div class="board_area">
 					<div class="board_user">
-						<span class="board_uname" id="user_{$msg.id}"><gt name="msg.user_id" value="0">{$msg.user_nick} <else /> {$msg.ip|getBeforeIp}</gt> </span><span class="board_time">{$msg.create_time}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({$msg.id});"></a></span></span>
+						<span class="board_uname" id="user_{{ msg.id }}">
+						{% if msg.user_id > 0 %}
+							{{ msg.user_nick }}
+						{% else %}
+							  {{ msg.ip|slice:"8"|add:"*"}}
+						{% endif %}
+						</span><span class="board_time">{{ msg.create_time|date:"Y-m-d H:i:s" }}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({{ msg.id }});"></a></span></span>
 					</div>
 					<div class="board_right">
 					
 						<div class="board_content">
 							<div class="board_body">
-							{$msg.msg}
+							{{ msg.msg }}
 							</div>
 						</div>
 	
-						<assign name="rid" value="$msg.id" />
-						<present name="replyList.$rid">
+
 						<div class="reply_area">
-							<volist name="replyList.$rid" id="reply">
+							{% for reply in reply_list.values %}
+							{% if  reply.reply_id == msg.id %}					
 							<div class="board_body dashed_border">
-							答：{$reply.msg}
+							答：{{ reply.msg }}
 							</div>
-							</volist>
+							{% endif %}			
+							{% endfor %}
 						</div>
-						</present>
 					</div>
-				
 				</div>
 				<div class="clear"></div>
 			</li>
-		</volist>
-		</present>
-		</present>
-		</ul>
-		</div>	
+		{% endfor %}
+	</ul>
+</div>
+		{% endif %}	
+	{% endif %}	
 
 	<div id="msg_form" class="send_reply">
 	<form  action="/msg_board/add_msg/" method="post" onsubmit="return checkMsg3();">
