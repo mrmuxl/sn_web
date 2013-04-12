@@ -14,6 +14,8 @@ urlpatterns = patterns('',
     url(r'^msg_board/add_msg/$','kx.views.add_msg'),
     url(r'^blog/$','kx.views.post',name='show'),
     url(r'^SoftRecord/tongji/$','kx.views.tongji',name='tongji'),
+    url(r'^SoftRecord/record/$','kx.api.views.record'),
+
     url(r'^SoftRecord/login_tongji/$','kx.views.login_tongji',name='login_tongji'),
     url(r'^accounts/register/$','kx.views.register',name='register'),
     url(r'^accounts/login/$','kx.views.login',name='login'),

@@ -1,5 +1,5 @@
 添加字段并设置默认值
-ALTER TABLE kx_user ADD is_superuser tinyint(1) NOT NULL DEFAULT 0 COMMENT "是否为超级用户" AFTER active_time;
+ALTER TABLE kx_user ADD is_superuser tinyint(1) NOT NULL DEFAULT 0 COMMENT "是否为超级用户" AFTER last_lan_ip;
 ALTER TABLE kx_user ADD is_active tinyint(1) NOT NULL DEFAULT 1 COMMENT "用户是否激活跟status字段无关" AFTER is_superuser;
 ALTER TABLE kx_user ADD is_staff tinyint(1) NOT NULL DEFAULT 0 COMMENT "能否登入Django Admin" AFTER is_active;
 删除is_staff字段

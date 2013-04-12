@@ -86,7 +86,7 @@ CREATE TABLE `kx_alipay_order` (
   `pay_money` decimal(10,2) NOT NULL,
   `qianmo_dot` int(11) NOT NULL,
   `add_qianmo_dot` int(11) NOT NULL DEFAULT '0',
-  `user_id` int(11) NOT NULL,
+  `user_id` varchar(32) NOT NULL,
   `trade_no` varchar(16) DEFAULT NULL,
   `pay_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0=待支付，1=支付完成',
   `create_time` datetime NOT NULL,
@@ -126,7 +126,7 @@ DROP TABLE IF EXISTS `kx_email_invate`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `kx_email_invate` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL COMMENT '邀请人用户ID',
+  `user_id` varchar(32) NOT NULL COMMENT '邀请人用户ID',
   `user_name` varchar(20) NOT NULL COMMENT '邀请人用户姓名',
   `invate_email` varchar(50) NOT NULL COMMENT '被邀请用户email',
   `invate_name` varchar(20) NOT NULL COMMENT '被邀请用户姓名',
@@ -169,7 +169,7 @@ CREATE TABLE `kx_ent` (
   `ent_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '企业状态,',
   `ent_setup_indexMaxFileSize` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '索引的最大文件值,单位K',
   `ent_user_num` int(11) NOT NULL DEFAULT '1' COMMENT '企业用户数',
-  `ent_master_id` int(11) NOT NULL COMMENT '企业管理员ID',
+  `ent_master_id` varchar(32) NOT NULL COMMENT '企业管理员ID',
   `create_time` datetime NOT NULL COMMENT '信息录入时间',
   `update_time` datetime NOT NULL COMMENT '信息修改时间',
   `version` int(11) NOT NULL DEFAULT '0' COMMENT '策略版本号',
@@ -187,11 +187,11 @@ DROP TABLE IF EXISTS `kx_ent_user`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `kx_ent_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
+  `user_id` varchar(32) NOT NULL,
   `ent_id` int(11) NOT NULL,
   `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '企业用户状态',
   `update_time` datetime NOT NULL COMMENT '最近修改时间',
-  `updater_id` int(11) NOT NULL COMMENT '修改人',
+  `updater_id` varchar(32) NOT NULL COMMENT '修改人',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ent_user_index` (`user_id`,`ent_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8 COMMENT='企业--用户关系表';
@@ -209,7 +209,7 @@ CREATE TABLE `kx_forum_forum` (
   `name` varchar(20) NOT NULL COMMENT '版块名称',
   `posts_num` int(11) NOT NULL DEFAULT '0' COMMENT '版块帖子数',
   `order_num` int(11) NOT NULL DEFAULT '0' COMMENT '版块顺序（数字大的排在前面）',
-  `updater_id` int(11) NOT NULL COMMENT '更新用户',
+  `updater_id` varchar(32) NOT NULL COMMENT '更新用户',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `order_num` (`order_num`)
@@ -227,7 +227,7 @@ CREATE TABLE `kx_forum_mpost` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主帖ID',
   `forum_id` int(11) NOT NULL COMMENT '所属版块ID',
   `title` varchar(100) NOT NULL DEFAULT '' COMMENT '帖子标题',
-  `user_id` int(11) NOT NULL COMMENT '发帖用户',
+  `user_id` varchar(32) NOT NULL COMMENT '发帖用户',
   `reply_num` int(11) NOT NULL DEFAULT '0' COMMENT '主题帖的回复数',
   `view_num` int(11) NOT NULL DEFAULT '0' COMMENT '主题帖的访问数',
   `top_num` int(11) NOT NULL DEFAULT '0' COMMENT '置顶 数字越大越在前',
@@ -238,7 +238,7 @@ CREATE TABLE `kx_forum_mpost` (
   `create_time` datetime NOT NULL COMMENT '发帖时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   `last_time` datetime NOT NULL COMMENT '最新回帖时间',
-  `last_uid` int(11) NOT NULL COMMENT '最新回帖用户',
+  `last_uid` varchar(32) NOT NULL COMMENT '最新回帖用户',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `top_num` (`top_num`),
@@ -259,7 +259,7 @@ CREATE TABLE `kx_forum_posts` (
   `tid` int(11) NOT NULL COMMENT '主帖ID',
   `title` varchar(100) NOT NULL DEFAULT '' COMMENT '帖子标题',
   `content` text NOT NULL COMMENT '帖子内容',
-  `user_id` int(11) NOT NULL COMMENT '发帖用户',
+  `user_id` varchar(32) NOT NULL COMMENT '发帖用户',
   `reply_id` int(11) NOT NULL DEFAULT '0' COMMENT '回复的帖子ID',
   `is_main` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否是主帖',
   `user_ip` varchar(15) NOT NULL COMMENT '发帖用户IP',
@@ -322,8 +322,8 @@ DROP TABLE IF EXISTS `kx_invate_record`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `kx_invate_record` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL COMMENT '注册用户ID',
-  `invate_id` int(11) NOT NULL COMMENT '推广ID',
+  `user_id` varchar(32) NOT NULL COMMENT '注册用户ID',
+  `invate_id` varchar(32) NOT NULL COMMENT '推广ID',
   `qianmo_dot` int(11) NOT NULL COMMENT '赠送推广者的阡陌点',
   `create_time` datetime NOT NULL,
   PRIMARY KEY (`id`),
@@ -432,7 +432,7 @@ CREATE TABLE `kx_msg_board` (
   `create_time` datetime NOT NULL COMMENT '留言时间',
   `reply_id` int(11) NOT NULL DEFAULT '0' COMMENT '要回复的留言ID，0表示新的留言',
   `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除，0=未删除，1=删除',
-  `user_id` int(11) NOT NULL DEFAULT '0',
+  `user_id` varchar(32) NOT NULL DEFAULT '0',
   `user_nick` varchar(50) NOT NULL DEFAULT '--',
   PRIMARY KEY (`id`),
   KEY `create_time` (`create_time`),
@@ -454,7 +454,7 @@ CREATE TABLE `kx_org` (
   `ent_id` int(11) NOT NULL COMMENT '企业ID',
   `create_time` datetime NOT NULL,
   `update_time` datetime NOT NULL,
-  `updater_id` int(11) NOT NULL COMMENT '最后修改人（管理员）ID user.id',
+  `updater_id` varchar(32) NOT NULL COMMENT '最后修改人（管理员）ID user.id',
   PRIMARY KEY (`id`),
   KEY `org_parentId` (`parent_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COMMENT='企业角色（组织结构）';
@@ -469,12 +469,12 @@ DROP TABLE IF EXISTS `kx_org_self`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `kx_org_self` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL COMMENT '用户ID',
-  `target_user_id` int(11) NOT NULL COMMENT '查看该用户的其他用户ID',
+  `user_id` varchar(32) NOT NULL COMMENT '用户ID',
+  `target_user_id` varchar(32) NOT NULL COMMENT '查看该用户的其他用户ID',
   `ent_id` int(11) NOT NULL COMMENT '企业ID',
   `create_time` datetime NOT NULL,
   `update_time` datetime NOT NULL,
-  `updater_id` int(11) NOT NULL COMMENT '最后修改人（管理员）ID user.id',
+  `updater_id` varchar(32) NOT NULL COMMENT '最后修改人（管理员）ID user.id',
   PRIMARY KEY (`id`),
   UNIQUE KEY `org_self_index` (`user_id`,`target_user_id`,`ent_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8 COMMENT='企业用户定义权限（用户与用户的权限的关系，也会影响企业权限版本号）';
@@ -571,7 +571,7 @@ CREATE TABLE `kx_soft_ad` (
   `title` varchar(50) NOT NULL,
   `ad_url` varchar(200) NOT NULL,
   `exp_day` date NOT NULL,
-  `creater_id` int(11) NOT NULL,
+  `creater_id` varchar(32) NOT NULL,
   `create_time` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `exp_day` (`exp_day`)
@@ -686,7 +686,7 @@ DROP TABLE IF EXISTS `kx_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `kx_user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` varchar(32) NOT NULL,
   `email` varchar(50) NOT NULL COMMENT '用户名为邮箱',
   `nick` varchar(20) NOT NULL COMMENT '用户昵称',
   `password` varchar(50) NOT NULL COMMENT '密码',
@@ -709,6 +709,7 @@ CREATE TABLE `kx_user` (
   `user_share` int(11) NOT NULL DEFAULT '0',
   `share_begin_time` date DEFAULT NULL,
   `active_time` datetime DEFAULT NULL COMMENT '激活时间',
+  `last_lan_ip` varchar(50) default NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_email` (`email`),
   KEY `user_index_2` (`email`,`password`,`status`)
@@ -742,11 +743,11 @@ DROP TABLE IF EXISTS `kx_user_org`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `kx_user_org` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
+  `user_id` varchar(32) NOT NULL,
   `org_id` int(11) NOT NULL DEFAULT '-1' COMMENT '企业角色ID',
   `ent_id` int(11) NOT NULL,
   `update_time` datetime NOT NULL COMMENT ' 最近修改时间',
-  `updater_id` int(11) NOT NULL COMMENT '修改人',
+  `updater_id` varchar(32) NOT NULL COMMENT '修改人',
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_org_index` (`user_id`,`org_id`,`ent_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=utf8 COMMENT='用户企业角色关系表';
@@ -762,6 +763,8 @@ DROP TABLE IF EXISTS `kx_userlogin`;
 CREATE TABLE `kx_userlogin` (
   `email` varchar(50) NOT NULL,
   `mac` varchar(100) NOT NULL,
+  `lan_ip` varchar(50) default NULL,
+  `wlan_ip` varchar(50) default NULL,
   UNIQUE KEY `email` (`email`,`mac`),
   KEY `login_index` (`email`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

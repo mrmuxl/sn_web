@@ -1,7 +1,7 @@
 # Django settings for qm_web project.
 
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -13,7 +13,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'kx',                      # Or path to database file if using sqlite3.
+        'NAME': 'kx3',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
         'PASSWORD': 'mrmuxl',                  # Not used with sqlite3.
         'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -106,13 +106,13 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'rest_framework.authtoken',
+#    'rest_framework',
+#    'rest_framework.authtoken',
     #'django.contrib.comments',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     'kx',
-    'api',
+#    'api',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
