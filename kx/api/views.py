@@ -46,14 +46,12 @@ def record(request):
                     message['message']=u"校验码不匹配"
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
-
             else:
                 message['ver']=ver
                 message['clientIDentifie']=cid
                 message['md5str']=md5str
                 message['create_time']=str(now)
                 return HttpResponse(json.dumps(message),content_type="application/json")
-                
     except Exception as e:
         logger.debug("record:%s",e,exc_info=True)
         info = "%s" %(e)
@@ -95,17 +93,29 @@ def uninstall(request):
                     message['message']=u"校验码不匹配"
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
-
             else:
                 message['ver']=ver
                 message['clientIDentifie']=cid
                 message['md5str']=md5str
                 message['create_time']=str(now)
                 return HttpResponse(json.dumps(message),content_type="application/json")
-                
     except Exception as e:
         logger.debug("record:%s",e,exc_info=True)
         info = "%s" %(e)
         message['message']=info
         message['create_time']=str(now)
         return HttpResponse(json.dumps(message),content_type="application/json")
+
+@csrf_exempt
+def lan_record(request):
+    pc = request.POST.get('pc',None)
+    qm = request.POST.get('qm',None)
+    if pc is not None and qm is not None:
+        pc = int(pc)
+        qm = int(qm)
+        if pc >0 and qm > 0:
+            ip = request.META.get('REMOTE_ADDR','')
+            tongji_day = datetime.date.today()
+
+
+

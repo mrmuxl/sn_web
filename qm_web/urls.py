@@ -13,8 +13,6 @@ urlpatterns = patterns('',
     url(r'^msg_board/$','kx.views.msg_board',name='msg_show'),
     url(r'^msg_board/add_msg/$','kx.views.add_msg'),
     url(r'^blog/$','kx.views.post',name='show'),
-    url(r'^SoftRecord/',include('kx.api.urls')),
-    url(r'^accounts/',include('kx.accounts.urls')),
 
     # url(r'^qm_web/', include('qm_web.foo.urls')),
 
@@ -22,8 +20,12 @@ urlpatterns = patterns('',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-     url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', include(admin.site.urls)),
     #url(r'^api-token-auth/','api.auth.views.obtain_auth_token'), 
+)
+urlpatterns += patterns('',
+    url(r'^SoftRecord/',include('kx.api.urls')),
+    url(r'^accounts/',include('kx.accounts.urls')),
 )
 
 if settings.DEBUG:
