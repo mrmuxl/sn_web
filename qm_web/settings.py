@@ -1,7 +1,7 @@
 # Django settings for qm_web project.
 
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
