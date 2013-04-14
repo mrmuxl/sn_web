@@ -3,7 +3,7 @@ import logging,json,sys,datetime
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from kx.models import KxSoftRecord
+from kx.models import KxSoftRecord,KxLanTongji
 from hashlib import md5
 
 logger = logging.getLogger(__name__)
@@ -108,14 +108,89 @@ def uninstall(request):
 
 @csrf_exempt
 def lan_record(request):
+    '''
+    局域网数据统计,软件启动后提交数据
+    '''
+    now = datetime.datetime.now()
+    lan = {} 
+    message = {}
+    info = "Data save success"
     pc = request.POST.get('pc',None)
     qm = request.POST.get('qm',None)
     if pc is not None and qm is not None:
         pc = int(pc)
         qm = int(qm)
+        logger.info("pc:%d,qm:%d",pc,qm)
         if pc >0 and qm > 0:
             ip = request.META.get('REMOTE_ADDR','')
             tongji_day = datetime.date.today()
+            #ip = '118.77.168.132'
+            #tongji_day = '2013-04-12'
+            try:
+                lan_tj = KxLanTongji.objects.get(ip=ip,tongji_day=tongji_day)
+                if pc > lan_tj.pc_num:
+                    lan['pc_num'] = pc
+                if qm > lan_tj.qm_num:
+                    lan['qm_num'] = qm
+                if len(lan) > 0:
+                    if lan.has_key('pc_num'):
+                        pc_num = lan['pc_num']
+                    else:
+                        pc_num = pc 
+                    if lan.has_key('qm_num'):
+                        qm_num = lan['qm_num']
+                    else:
+                        qm_num = qm 
+                    lan_id = lan_tj.id
+                    logger.info("pc_num:%s,qm_num:%s",pc_num,qm_num)
+                    try:
+                        lan_tj = KxLanTongji.objects.filter(id__exact=lan_id).update(ip=ip,tongji_day=tongji_day,pc_num=pc_num,qm_num=qm_num)
+                        message['message']=info
+                        message['create_time']=str(now)
+                        return HttpResponse(json.dumps(message),content_type="application/json")
+                    except Exception as e:
+                        logger.debug(u"插入数据库失败!%s",e)
+                        info = "%s" %(e)
+                        message['message']=info
+                        message['create_time']=str(now)
+                        return HttpResponse(json.dumps(message),content_type="application/json")
+                message['message']=info
+                message['create_time']=str(now)
+                return HttpResponse(json.dumps(message),content_type="application/json")
+            except KxLanTongji.DoesNotExist as e:
+                logger.debug("%s",e)
+                pc_num = pc
+                qm_num = qm
+                logger.info("%s:%s",pc_num,qm_num)
+                try:
+                    lan_tj = KxLanTongji.objects.create(id=None,ip=ip,tongji_day=tongji_day,pc_num=pc_num,qm_num=qm_num)
+                    message['message']=info
+                    message['create_time']=str(now)
+                    return HttpResponse(json.dumps(message),content_type="application/json")
+                except Exception as e:
+                    logger.debug("%s",e)
+                    info = "%s" %(e)
+                    message['message']=info
+                    message['create_time']=str(now)
+                    return HttpResponse(json.dumps(message),content_type="application/json")
+        else:
+            message['message']=u"参数错误!"
+            message['create_time']=str(now)
+            return HttpResponse(json.dumps(message),content_type="application/json")
+    else:
+        message['message']=u"参数错误!"
+        message['create_time']=str(now)
+        return HttpResponse(json.dumps(message),content_type="application/json")
 
-
-
+@csrf_exempt
+def pub_record(request):
+    '''
+    发布24小时内统计数据记录
+    '''
+    now = datetime.datetime.now()
+    message = {}
+    info = "Data save success"
+    email = request.POST.get('email',None)
+    pub_type = request.POST.get('type',None)
+    num = request.POST.get('num',None)
+     
