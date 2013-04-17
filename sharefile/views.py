@@ -30,10 +30,14 @@ def friendFiles(request):
 
 
 #1 把自己的ip告诉服务器 2拿对方打洞的端口
-@api_view(['GET'])
+@api_view(['POST'])
 #@authentication_classes((TokenAuthentication,))
 #@permission_classes((IsAuthenticated,))
-def peerPort(request,mac):
+def peerPort(request):
+    mac = request.POST['mac']
+    if !mac:
+       return HttpResponse('')
+
     logger.debug('mac: ' + mac)
     con = get_redis_connection('default')
     result = con.lindex(mac, 10)
