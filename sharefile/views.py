@@ -35,7 +35,7 @@ def friendFiles(request):
 #@permission_classes((IsAuthenticated,))
 def peerPort(request):
     mac = request.POST['mac']
-    if !mac:
+    if mac in [None, '']:
        return HttpResponse('')
 
     logger.debug('mac: ' + mac)
