@@ -4,20 +4,15 @@
 from django.http import Http404
 from django.views.decorators.csrf import requires_csrf_token
 from django.shortcuts import render_to_response,render
-from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from kx.models import (KxUser,KxMsgBoard,KxSoftRecord,KxTongjiRecord)
-from django.contrib.auth import authenticate
 from django.contrib import auth,messages
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.utils.html import strip_tags
 from django.contrib.auth.decorators import login_required
-import uuid,os,datetime,json,logging
-from django.views.decorators.csrf import csrf_exempt
-from django.conf import settings
-from PIL import Image
+import datetime,logging
 
 logger = logging.getLogger(__name__)
 
@@ -144,141 +139,6 @@ def add_msg(request):
             return HttpResponse(u'请填写留言内容！<A HREF="javascript:history.back()">返 回</A>')
     return HttpResponseRedirect(reverse("msg_show"))    
 
-def register(request):
-    '''注册视图'''
-    return render_to_response("register.html",{},context_instance=RequestContext(request))
-        
-def check(request):
-    if request.method =="POST":
-        email = strip_tags(request.POST.get("email").strip())
-        if not email:
-            return HttpResponse(json.dumps({"data":0,"info":"","status":0}),content_type="application/json")
-        else:
-            count = KxUser.objects.filter(email=email).count()
-            if count == 0:
-                return HttpResponse(json.dumps({"data":1,"info":"OK","status":1}),content_type="application/json")
-    return HttpResponse(json.dumps({"data":0,"info":"","status":0}),content_type="application/json")
-
- 
-def save(request):
-    if request.method == "POST":
-        email = strip_tags(request.POST.get("email").lower().strip())
-        nick = strip_tags(request.POST.get("nick").strip())
-        password = request.POST.get("password").strip()
-        repassword = request.POST.get("repassword").strip()
-        raw_email ="""请填写邮箱！<A HREF="javascript:history.back()">返 回</A>"""
-        raw_nick ="""请填昵称！<A HREF="javascript:history.back()">返 回</A>"""
-        raw_nick_length ="""昵称应为4-12个字符！<A HREF="javascript:history.back()">返 回</A>"""
-        raw_password ="""请填写密码！<A HREF="javascript:history.back()">返 回</A>"""
-        raw_repassword ="""两次密码填写不一致！<A HREF="javascript:history.back()">返 回</A>"""
-        raw_has_email= """邮箱已存在！<A HREF="javascript:history.back()">返 回</A>"""
-        if not email:
-            return HttpResponse(raw_email)
-        if not nick:
-            return HttpResponse(raw_nick)
-        if len(nick)<4 and len(nick)>12:
-            return HttpResponse(raw_nick_length)
-        if not password:
-            return HttpResponse(raw_password)
-        if password != repassword:
-            return HttpResponse(raw_nick_length)
-        count = KxUser.objects.filter(email=email).count()
-        if count >0:
-            return HttpResponse(raw_has_email)
-        create_user=KxUser.objects.create_user(email=email,nick=nick,password=password,status=0)
-        create_user.save()
-        user = authenticate(username=email,password=password)
-        if user is not None and user.is_active:
-            auth.login(request,user)
-            return HttpResponseRedirect(reverse("index"))    
-
-def login(request):
-    '''登陆视图'''
-    if request.method == "POST":
-        email = strip_tags(request.POST.get("email").lower().strip())
-        password = request.POST.get("password").strip()
-        user = authenticate(username=email,password=password)
-        if user is not None and user.is_active:
-            auth.login(request,user)
-            return HttpResponseRedirect(reverse("index"))    
-        else:
-            data={"email":email}
-            messages.add_message(request,messages.INFO,_(u'用户名或密码错误'))
-            return render(request,"login.html",data)
-    return render(request,"login.html",{})
-
-def logout(request):
-    '''注销视图'''
-    auth.logout(request)
-    return HttpResponseRedirect(reverse('index'))
-
-
-@login_required
-def info(request):
-    try:
-        obj_avatar = KxUser.objects.filter(email=request.user.email).values('avatar')
-        l = []
-        if obj_avatar:
-            for i in obj_avatar[0]['avatar'].split(','):
-                l.append(i.split('='))
-            avatar = dict(l)
-            logger.info('%s',avatar)
-    except Exception as e:
-        avatar = {}
-        logger.debug(u'加载用户头像失败！',e,exc_info=True)
-    return render(request,"info.html",avatar)
-
-@login_required
-def avatar(request):
-    date =datetime.date.strftime(datetime.date.today(),"%Y/%m/%d")
-    uid = uuid.UUID.time_low.fget(uuid.uuid4())
-    if request.method == "POST":
-        file = request.FILES.get("avatar",None)
-        folder = "User/"+str(date)
-        if file:
-            ext = str(file.content_type).split("/")[-1:][0]
-            if ext in ('png','jpg','gif','bmp'):
-                file_name = file.name.encode('utf-8')
-                file_size = str(file.size)
-                file_uid = str(uid) 
-                path_root = settings.MEDIA_ROOT
-                path_folder = path_root + "/" + folder
-                path_upload = path_folder + "/" + file_uid + "." +ext
-                path_save = path_folder + "/" + file_uid + ".jpg"
-                save_50 = path_folder + "/" + 'snap_50X50_' + file_uid + '.jpg'
-                save_60 = path_folder + "/" + 'snap_60X60_' + file_uid + '.jpg'
-                avatar_info = 'folder='+ folder + ',uid=' + file_uid + ',ext=jpg' + ',swidth=0,sheight=0' + ',name=' +file_name +',size=' + file_size
-                try:
-                    if not os.path.isdir(path_folder):
-                        os.makedirs(path_folder)
-                    try:
-                        with open(path_upload,'wb') as fd:
-                            for chunk in file.chunks():
-                                fd.write(chunk)
-                    except Exception as e:
-                        logger.debug(u"图片上传失败！%s",e)
-                    size_50 = (50,50)
-                    size_60 = (60,60)
-                    image = Image.open(path_upload)
-                    if image.format == 'GIF':
-                        image = image.convert('RGB')
-                    image.save(path_save,format="jpeg",quality=100)
-                    image.resize(size_50,Image.ANTIALIAS).save(save_50,format="jpeg",quality=95)
-                    image.resize(size_60,Image.ANTIALIAS).save(save_60,format="jpeg",quality=95)
-                    try:
-                        avatar_obj = KxUser.objects.filter(email=request.user.email).update(avatar=avatar_info)
-                        #raise Exception(u"失败!")
-                    except Exception as e:
-                        logger.debug(u"插入数据库失败！%s",e)
-                    return HttpResponseRedirect(reverse('info'))
-                except Exception as e:
-                    logger.debug(u"压缩图片失败！%s",e)
-                    return HttpResponse("""上传文件失败请重新上传！<A HREF="javascript:history.back()">返 回</A>""")
-            else:
-                return HttpResponse("""不是支持的文件类型！<A HREF="javascript:history.back()">返 回</A>""")
-        else:
-            return HttpResponse("""请上传一张图片！<A HREF="javascript:history.back()">返 回</A>""")
-    return HttpResponseRedirect(reverse('info'))
 
 def post(request):
     pass
@@ -295,7 +155,7 @@ def tongji(request):
             login_num = 0
             logger.debug(u'用户呢?%s',e)
         try:
-            all_user_num = KxSoftRecord.objects.filter(is_uninstall__exact=0).extra(select={'num':'count(DISTINCT client_identifie)'}).values('num')
+            all_user_num = KxSoftRecord.objects.filter(is_uninstall__exact=0).extra(select={'num':'count(DISTINCT client_identifie)'}).values('num')[0]['num']
             #all_user_num = KxSoftRecord.objects.extra(select={'num':'count(distinct client_identifie)'}).filter(is_uninstall__exact=0)
             logger.info('all_user_num:%s',all_user_num)
         except Exception as e:
@@ -307,8 +167,20 @@ def tongji(request):
         except Exception as e:
             max_login =0
             logger.debug(u'问题在那里?%s',e)
+        today = datetime.date.today()
+        if request.method == 'GET':
+            tp = request.GET.get('type',1)
+            day = request.GET.get('day',today)
+            logger.info('type:%s day:%s',tp,day)
+        temp_var={
+                'title':u'统计',
+                'login_num':login_num,
+                'all_user_num':all_user_num,
+                'type':tp,
+                'day':day,
+                }
 
-        return render(request,"tongji.html",{})
+        return render(request,"tongji.html",temp_var)
 
 def login_tongji(request):
     if not request.user.is_superuser:
