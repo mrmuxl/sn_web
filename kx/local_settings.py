@@ -4,11 +4,14 @@ import logging
 ROOT_DIR = os.path.dirname(__file__)
 ALLOWED_HOSTS = ['en.qianmo.cc','localhost']
 THEME = '/default/'
+Img = '/Img/'
 
 STATIC_ROOT = os.path.join(ROOT_DIR,'static')
-STATIC_URL = '/static' + THEME
-MEDIA_ROOT = os.path.join(ROOT_DIR,'media/upload')
-MEDIA_URL = '/'
+STATIC_URL = 'http://static.qianmo.cc' + Img
+#STATIC_URL = '/static' + THEME
+#MEDIA_ROOT = os.path.join(ROOT_DIR,'media/upload')
+MEDIA_URL = 'http://images.qianmo.cc/'
+#MEDIA_URL = '/'
 
 STATICFILES_DIRS = (
 	os.path.join(ROOT_DIR,'static' + THEME),
