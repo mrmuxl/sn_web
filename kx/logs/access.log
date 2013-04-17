@@ -9928,3 +9928,79 @@ DEBUG [17/Apr/2013 15:49:50] [sharefile.views:views:peerPort:37] [None] mac: @C+
 DEBUG [17/Apr/2013 15:49:50] [sharefile.views:views:sendMyInfoToServer:53] [None] @C++3343|178BFBFF00040FB2547548697qqcom0,127.0.0.1,1030
 DEBUG [17/Apr/2013 15:51:07] [sharefile.views:views:peerPort:37] [None] mac: @C++3343|178BFBFF00040FB2547548697qqcom0
 DEBUG [17/Apr/2013 15:51:07] [sharefile.views:views:sendMyInfoToServer:53] [None] @C++3343|178BFBFF00040FB2547548697qqcom0,127.0.0.1,1030
+ERROR [17/Apr/2013 17:04:05] [django.request:base:handle_uncaught_exception:212] [(<class 'django.template.base.TemplateDoesNotExist'>, TemplateDoesNotExist(u'rest_framework/api.html',), <traceback object at 0x103061098>)] Internal Server Error: /shareFile/
+Traceback (most recent call last):
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/core/handlers/base.py", line 140, in get_response
+    response = response.render()
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/template/response.py", line 105, in render
+    self.content = self.rendered_content
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/rest_framework/response.py", line 44, in rendered_content
+    return renderer.render(self.data, media_type, context)
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/rest_framework/renderers.py", line 485, in render
+    template = loader.get_template(self.template)
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/template/loader.py", line 146, in get_template
+    template, origin = find_template(template_name)
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/template/loader.py", line 139, in find_template
+    raise TemplateDoesNotExist(name)
+TemplateDoesNotExist: rest_framework/api.html
+DEBUG [17/Apr/2013 17:04:53] [sharefile.views:views:peerPort:37] [None] mac: 
+ERROR [17/Apr/2013 17:04:57] [django.request:base:handle_uncaught_exception:212] [(<class 'django.template.base.TemplateDoesNotExist'>, TemplateDoesNotExist(u'rest_framework/api.html',), <traceback object at 0x10309f878>)] Internal Server Error: /shareFile/
+Traceback (most recent call last):
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/core/handlers/base.py", line 140, in get_response
+    response = response.render()
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/template/response.py", line 105, in render
+    self.content = self.rendered_content
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/rest_framework/response.py", line 44, in rendered_content
+    return renderer.render(self.data, media_type, context)
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/rest_framework/renderers.py", line 485, in render
+    template = loader.get_template(self.template)
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/template/loader.py", line 146, in get_template
+    template, origin = find_template(template_name)
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/template/loader.py", line 139, in find_template
+    raise TemplateDoesNotExist(name)
+TemplateDoesNotExist: rest_framework/api.html
+ERROR [17/Apr/2013 17:07:17] [django.request:base:handle_uncaught_exception:212] [(<class 'django.template.base.TemplateDoesNotExist'>, TemplateDoesNotExist(u'rest_framework/api.html',), <traceback object at 0x1074e2488>)] Internal Server Error: /shareFile/
+Traceback (most recent call last):
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/core/handlers/base.py", line 140, in get_response
+    response = response.render()
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/template/response.py", line 105, in render
+    self.content = self.rendered_content
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/rest_framework/response.py", line 44, in rendered_content
+    return renderer.render(self.data, media_type, context)
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/rest_framework/renderers.py", line 485, in render
+    template = loader.get_template(self.template)
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/template/loader.py", line 146, in get_template
+    template, origin = find_template(template_name)
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/template/loader.py", line 139, in find_template
+    raise TemplateDoesNotExist(name)
+TemplateDoesNotExist: rest_framework/api.html
+DEBUG [17/Apr/2013 17:09:32] [django.db.backends:util:execute:51] [None] (0.002) SELECT COUNT(*) FROM `kx_msg_board` WHERE `kx_msg_board`.`is_del` = 0 ; args=(False,)
+DEBUG [17/Apr/2013 17:09:32] [django.db.backends:util:execute:51] [None] (0.002) SELECT `kx_msg_board`.`id`, `kx_msg_board`.`ip`, `kx_msg_board`.`msg`, `kx_msg_board`.`create_time`, `kx_msg_board`.`reply_id`, `kx_msg_board`.`is_del`, `kx_msg_board`.`user_id`, `kx_msg_board`.`user_nick` FROM `kx_msg_board` WHERE (`kx_msg_board`.`reply_id` = 0  AND `kx_msg_board`.`create_time` >= '2013-03-18 23:59:59'  AND `kx_msg_board`.`create_time` <= '2013-04-17 23:59:59'  AND `kx_msg_board`.`is_del` = 0 ) ORDER BY `kx_msg_board`.`create_time` DESC LIMIT 5; args=(0, u'2013-03-18 23:59:59', u'2013-04-17 23:59:59', False)
+DEBUG [17/Apr/2013 17:09:32] [django.db.backends:util:execute:51] [None] (0.002) SELECT `kx_msg_board`.`id`, `kx_msg_board`.`reply_id`, `kx_msg_board`.`msg` FROM `kx_msg_board` WHERE (`kx_msg_board`.`reply_id` IN (386, 385) AND `kx_msg_board`.`is_del` = 0  AND `kx_msg_board`.`reply_id` > 0 ) ORDER BY `kx_msg_board`.`create_time` ASC; args=(386, 385, False, 0)
+DEBUG [17/Apr/2013 17:09:32] [django.db.backends:util:execute:51] [None] (0.003) SELECT `django_session`.`session_key`, `django_session`.`session_data`, `django_session`.`expire_date` FROM `django_session` WHERE (`django_session`.`session_key` = 'izlffi0pz0bldle6acwib64nk4stlrdr'  AND `django_session`.`expire_date` > '2013-04-17 17:09:32' ); args=('izlffi0pz0bldle6acwib64nk4stlrdr', u'2013-04-17 17:09:32')
+DEBUG [17/Apr/2013 17:09:32] [django.db.backends:util:execute:51] [None] (0.005) SELECT `kx_user`.`id`, `kx_user`.`avatar` FROM `kx_user` WHERE `kx_user`.`id` IN ('0', '0'); args=(u'0', u'0')
+ERROR [17/Apr/2013 17:09:34] [django.request:base:handle_uncaught_exception:212] [(<type 'exceptions.ValueError'>, ValueError(u"The view kx.views.post didn't return an HttpResponse object.",), <traceback object at 0x1044cd4d0>)] Internal Server Error: /blog/
+Traceback (most recent call last):
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/core/handlers/base.py", line 133, in get_response
+    raise ValueError("The view %s.%s didn't return an HttpResponse object." % (callback.__module__, view_name))
+ValueError: The view kx.views.post didn't return an HttpResponse object.
+ERROR [17/Apr/2013 17:09:39] [django.request:base:handle_uncaught_exception:212] [(<type 'exceptions.ValueError'>, ValueError(u"The view kx.views.post didn't return an HttpResponse object.",), <traceback object at 0x104495a70>)] Internal Server Error: /blog/
+Traceback (most recent call last):
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/core/handlers/base.py", line 133, in get_response
+    raise ValueError("The view %s.%s didn't return an HttpResponse object." % (callback.__module__, view_name))
+ValueError: The view kx.views.post didn't return an HttpResponse object.
+DEBUG [17/Apr/2013 17:09:40] [django.db.backends:util:execute:51] [None] (0.002) SELECT COUNT(*) FROM `kx_msg_board` WHERE `kx_msg_board`.`is_del` = 0 ; args=(False,)
+DEBUG [17/Apr/2013 17:09:40] [django.db.backends:util:execute:51] [None] (0.002) SELECT `kx_msg_board`.`id`, `kx_msg_board`.`ip`, `kx_msg_board`.`msg`, `kx_msg_board`.`create_time`, `kx_msg_board`.`reply_id`, `kx_msg_board`.`is_del`, `kx_msg_board`.`user_id`, `kx_msg_board`.`user_nick` FROM `kx_msg_board` WHERE (`kx_msg_board`.`reply_id` = 0  AND `kx_msg_board`.`create_time` >= '2013-03-18 23:59:59'  AND `kx_msg_board`.`create_time` <= '2013-04-17 23:59:59'  AND `kx_msg_board`.`is_del` = 0 ) ORDER BY `kx_msg_board`.`create_time` DESC LIMIT 5; args=(0, u'2013-03-18 23:59:59', u'2013-04-17 23:59:59', False)
+DEBUG [17/Apr/2013 17:09:40] [django.db.backends:util:execute:51] [None] (0.002) SELECT `kx_msg_board`.`id`, `kx_msg_board`.`reply_id`, `kx_msg_board`.`msg` FROM `kx_msg_board` WHERE (`kx_msg_board`.`reply_id` IN (386, 385) AND `kx_msg_board`.`is_del` = 0  AND `kx_msg_board`.`reply_id` > 0 ) ORDER BY `kx_msg_board`.`create_time` ASC; args=(386, 385, False, 0)
+DEBUG [17/Apr/2013 17:09:40] [django.db.backends:util:execute:51] [None] (0.002) SELECT `django_session`.`session_key`, `django_session`.`session_data`, `django_session`.`expire_date` FROM `django_session` WHERE (`django_session`.`session_key` = 'izlffi0pz0bldle6acwib64nk4stlrdr'  AND `django_session`.`expire_date` > '2013-04-17 17:09:40' ); args=('izlffi0pz0bldle6acwib64nk4stlrdr', u'2013-04-17 17:09:40')
+DEBUG [17/Apr/2013 17:09:40] [django.db.backends:util:execute:51] [None] (0.005) SELECT `kx_user`.`id`, `kx_user`.`avatar` FROM `kx_user` WHERE `kx_user`.`id` IN ('0', '0'); args=(u'0', u'0')
+DEBUG [17/Apr/2013 17:09:45] [django.db.backends:util:execute:51] [None] (0.002) SELECT `kx_msg_board`.`id`, `kx_msg_board`.`ip`, `kx_msg_board`.`msg`, `kx_msg_board`.`create_time`, `kx_msg_board`.`reply_id`, `kx_msg_board`.`is_del`, `kx_msg_board`.`user_id`, `kx_msg_board`.`user_nick` FROM `kx_msg_board` WHERE (`kx_msg_board`.`reply_id` = 0  AND `kx_msg_board`.`create_time` >= '2013-01-01 23:59:59'  AND `kx_msg_board`.`create_time` <= '2013-04-17 23:59:59'  AND `kx_msg_board`.`is_del` = 0 ) ORDER BY `kx_msg_board`.`create_time` DESC LIMIT 20; args=(0, u'2013-01-01 23:59:59', u'2013-04-17 23:59:59', False)
+DEBUG [17/Apr/2013 17:09:45] [django.db.backends:util:execute:51] [None] (0.001) SELECT `kx_msg_board`.`id`, `kx_msg_board`.`reply_id`, `kx_msg_board`.`msg` FROM `kx_msg_board` WHERE (`kx_msg_board`.`reply_id` IN (386, 385) AND `kx_msg_board`.`is_del` = 0  AND `kx_msg_board`.`reply_id` > 0 ) ORDER BY `kx_msg_board`.`create_time` ASC; args=(386, 385, False, 0)
+DEBUG [17/Apr/2013 17:09:45] [django.db.backends:util:execute:51] [None] (0.005) SELECT `kx_user`.`id`, `kx_user`.`avatar` FROM `kx_user` WHERE `kx_user`.`id` IN ('0', '0'); args=(u'0', u'0')
+DEBUG [17/Apr/2013 17:09:45] [django.db.backends:util:execute:51] [None] (0.001) SELECT `django_session`.`session_key`, `django_session`.`session_data`, `django_session`.`expire_date` FROM `django_session` WHERE (`django_session`.`session_key` = 'izlffi0pz0bldle6acwib64nk4stlrdr'  AND `django_session`.`expire_date` > '2013-04-17 17:09:45' ); args=('izlffi0pz0bldle6acwib64nk4stlrdr', u'2013-04-17 17:09:45')
+DEBUG [17/Apr/2013 17:09:48] [django.db.backends:util:execute:51] [None] (0.002) SELECT `django_session`.`session_key`, `django_session`.`session_data`, `django_session`.`expire_date` FROM `django_session` WHERE (`django_session`.`session_key` = 'izlffi0pz0bldle6acwib64nk4stlrdr'  AND `django_session`.`expire_date` > '2013-04-17 17:09:48' ); args=('izlffi0pz0bldle6acwib64nk4stlrdr', u'2013-04-17 17:09:48')
+DEBUG [17/Apr/2013 17:09:48] [django.db.backends:util:execute:51] [None] (0.001) INSERT INTO `kx_msg_board` (`ip`, `msg`, `create_time`, `reply_id`, `is_del`, `user_id`, `user_nick`) VALUES ('127.0.0.1', 'sdfasdfasf', '2013-04-17 17:09:48', 0, 0, '', '--'); args=['127.0.0.1', u'sdfasdfasf', u'2013-04-17 17:09:48', 0, False, u'', u'--']
+DEBUG [17/Apr/2013 17:09:48] [django.db.backends:util:execute:51] [None] (0.003) SELECT `kx_msg_board`.`id`, `kx_msg_board`.`ip`, `kx_msg_board`.`msg`, `kx_msg_board`.`create_time`, `kx_msg_board`.`reply_id`, `kx_msg_board`.`is_del`, `kx_msg_board`.`user_id`, `kx_msg_board`.`user_nick` FROM `kx_msg_board` WHERE (`kx_msg_board`.`reply_id` = 0  AND `kx_msg_board`.`create_time` >= '2013-01-01 23:59:59'  AND `kx_msg_board`.`create_time` <= '2013-04-17 23:59:59'  AND `kx_msg_board`.`is_del` = 0 ) ORDER BY `kx_msg_board`.`create_time` DESC LIMIT 20; args=(0, u'2013-01-01 23:59:59', u'2013-04-17 23:59:59', False)
+DEBUG [17/Apr/2013 17:09:48] [django.db.backends:util:execute:51] [None] (0.001) SELECT `kx_msg_board`.`id`, `kx_msg_board`.`reply_id`, `kx_msg_board`.`msg` FROM `kx_msg_board` WHERE (`kx_msg_board`.`reply_id` IN (387, 386, 385) AND `kx_msg_board`.`is_del` = 0  AND `kx_msg_board`.`reply_id` > 0 ) ORDER BY `kx_msg_board`.`create_time` ASC; args=(387, 386, 385, False, 0)
+DEBUG [17/Apr/2013 17:09:48] [django.db.backends:util:execute:51] [None] (0.006) SELECT `kx_user`.`id`, `kx_user`.`avatar` FROM `kx_user` WHERE `kx_user`.`id` IN ('', '0', '0'); args=(u'', u'0', u'0')
+DEBUG [17/Apr/2013 17:09:48] [django.db.backends:util:execute:51] [None] (0.003) SELECT `django_session`.`session_key`, `django_session`.`session_data`, `django_session`.`expire_date` FROM `django_session` WHERE (`django_session`.`session_key` = 'izlffi0pz0bldle6acwib64nk4stlrdr'  AND `django_session`.`expire_date` > '2013-04-17 17:09:48' ); args=('izlffi0pz0bldle6acwib64nk4stlrdr', u'2013-04-17 17:09:48')
