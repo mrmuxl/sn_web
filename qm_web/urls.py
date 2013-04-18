@@ -12,7 +12,6 @@ urlpatterns = patterns('',
     url(r'^$','kx.views.index',name='index'),
     url(r'^msg_board/$','kx.views.msg_board',name='msg_show'),
     url(r'^msg_board/add_msg/$','kx.views.add_msg',name='add_msg'),
-    url(r'^blog/$','kx.views.post',name='show'),
 
     # url(r'^qm_web/', include('qm_web.foo.urls')),
 
@@ -26,6 +25,7 @@ urlpatterns = patterns('',
 urlpatterns += patterns('',
     url(r'^SoftRecord/',include("kx.api.urls",)),
     url(r'^accounts/',include("kx.accounts.urls")),
+    url(r'^blog/',include("kx.blog.urls")),
 )
 
 if settings.DEBUG:
