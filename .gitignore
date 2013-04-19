@@ -4,5 +4,5 @@
 *.swp
 .hg
 .hgignore
-kx/media/
-kx/logs/
+kx/media/upload/User/
+kx/logs/access.log

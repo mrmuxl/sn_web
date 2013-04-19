@@ -9,7 +9,7 @@ STATIC_ROOT = os.path.join(ROOT_DIR,'static')
 #STATIC_URL = 'http://static.qianmo.cc' 
 STATIC_URL = '/static' + THEME
 MEDIA_ROOT = os.path.join(ROOT_DIR,'media/upload')
-#MEDIA_URL = 'http://images.qianmo.cc/'
+#MEDIA_URL = 'http://img.simplenect.cn/'
 MEDIA_URL = '/'
 
 STATICFILES_DIRS = (

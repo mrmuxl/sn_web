@@ -4,7 +4,6 @@
 {% block header %}{% include "header.html" %}{% endblock %}
 
 {% block content %}
-
 <div class="main ">
 	<div class="comment_in w1000">
 		<div style="height:50px;">
@@ -32,12 +31,12 @@
 			<li id="msg_id_{{ msg.id }}">
 				<div class="board_left">
 					<div class="board_img">
-						{% if msg.user_id != '0' %}
-							{% for user in user_list %}
-								{% if user.id == msg.user_id %}
-									<img src="{{ MEDIA_URL }}{{user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
+						{% if msg.user_id in user_list.keys %}
+							{% for user in user_list.values %}
+								{% if msg.user_id == user.id %}
+									<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
 								{% endif %}
-							{% endfor %}
+							{% endfor %}		
 						{% else %}
 							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
 						{% endif %}
@@ -76,16 +75,15 @@
 			<li>
 				<div class="board_left">
 					<div class="board_img">
-						{% if msg.user_id != '0' %}
-							{% for user in user_list %}
-								{% if user.id == msg.user_id %}
-									<img src="{{ MEDIA_URL }}{{user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
+						{% if msg.user_id in user_list.keys %}
+							{% for user in user_list.values %}
+								{% if msg.user_id == user.id %}
+									<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
 								{% endif %}
-							{% endfor %}
+							{% endfor %}		
 						{% else %}
 							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
 						{% endif %}
-						
 					</div>
 				</div>
 	
@@ -125,14 +123,14 @@
 			<li>
 				<div class="board_left">
 					<div class="board_img">
-						{% if msg.user_id != '0' %}
-							{% for user in user_list %}
-									{% if user.id == msg.user_id %}
-										<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
-									{% endif %}
-							{% endfor %}
+						{% if msg.user_id in user_list.keys %}
+							{% for user in user_list.values %}
+								{% if msg.user_id == user.id %}
+									<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
+								{% endif %}
+							{% endfor %}		
 						{% else %}
-							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg?ver=1" />
+							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
 						{% endif %}
 					</div>
 				</div>

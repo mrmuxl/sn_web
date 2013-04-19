@@ -149,12 +149,12 @@ var swfLeft=$(".main_in").offset().left;
 			<li id="msg_id_{{ msg.id }}">
 				<div class="board_left">
 					<div class="board_img">
-						{% if msg.user_id != '0' %}
-							{% for user in user_list %}
-								{% if user.id == msg.user_id %}
-									<img src="{{ MEDIA_URL }}{{user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
+						{% if msg.user_id in user_list.keys %}
+							{% for user in user_list.values %}
+								{% if msg.user_id == user.id %}
+									<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
 								{% endif %}
-							{% endfor %}
+							{% endfor %}		
 						{% else %}
 							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
 						{% endif %}
@@ -194,12 +194,12 @@ var swfLeft=$(".main_in").offset().left;
 			<li>
 				<div class="board_left">
 					<div class="board_img">
-						{% if msg.user_id != '0' %}
-							{% for user in user_list %}
-								{% if user.id == msg.user_id %}
-									<img src="{{ MEDIA_URL }}{{user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
+						{% if msg.user_id in user_list.keys %}
+							{% for user in user_list.values %}
+								{% if msg.user_id == user.id %}
+									<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
 								{% endif %}
-							{% endfor %}
+							{% endfor %}		
 						{% else %}
 							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
 						{% endif %}
@@ -213,7 +213,7 @@ var swfLeft=$(".main_in").offset().left;
 						{% else %}
 						  {{ msg.ip|slice:"8"|add:"*" }}
 						{% endif %}
-					</span><span class="board_time">{{ msg.create_time|date:"Y-m-d H:i:s" }}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({$msg.id});"></a></span></span></div>
+                </span><span class="board_time">{{ msg.create_time|date:"Y-m-d H:i:s" }}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({{ msg.id }});"></a></span></span></div>
 					<div class="board_right">
 						<div class="board_content">
 							<div class="board_body">
@@ -244,12 +244,12 @@ var swfLeft=$(".main_in").offset().left;
 			
 				<div class="board_left">
 					<div class="board_img">
-						{% if msg.user_id != '0' %}
-							{% for user in user_list %}
-									{% if user.id == msg.user_id %}
-										<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
-									{% endif %}
-							{% endfor %}
+						{% if msg.user_id in user_list.keys %}
+							{% for user in user_list.values %}
+								{% if msg.user_id == user.id %}
+									<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
+								{% endif %}
+							{% endfor %}		
 						{% else %}
 							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
 						{% endif %}
@@ -258,7 +258,7 @@ var swfLeft=$(".main_in").offset().left;
 			
 				<div class="board_area">
 					<div class="board_user">
-						<span class="board_uname" id="user_{$msg.id}">
+                        <span class="board_uname" id="user_{{ msg.id }}">
 						{% if msg.user_id = '0' %}
 							{{ msg.user_nick }}
 						{% else %}
