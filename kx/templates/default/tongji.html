@@ -10,15 +10,15 @@
 {% block content %}
 
 <div class="manager_right">
-<script type="text/javascript">document.domain = '{&DOMAIN}';</script>
+<script type="text/javascript">document.domain = '{{ domain }}';</script>
 <script language="javascript" type="text/javascript" defer="defer" src="{{ STATIC_URL }}js/datepicker/WdatePicker.js"></script>
 <h1 class="center">阡陌装机、登录统计信息</h1>
 {% if type = 1 %}
 <h3>
 今日注册用户登录数：<a href="/SoftRecord/login_tongji/" target="_blank">{{ login_num }}&nbsp;查看</a>；
-【{{ day|date:"Y-m-d" }}】总登录用户数：{$dayCount}，新装机用户数：{$newCount}，
-注册用户数：{$regUserNum};<a href="/SoftRecord/uninstall_chart?day={{ day|date:"Y-m-d" }}" title="查看当日卸载情况" target="_blank" style="color:blue;">卸载用户数：{$uninstallNum}；</a>
-2011-11-08起总的使用用户：{{ all_user_num }}；</h3>
+【{{ day|date:"Y-m-d" }}】总登录用户数：{{ day_count}}，新装机用户数：{{ new_count }}，
+注册用户数：{{ new_user }};<a href="/SoftRecord/uninstall_chart?day={{ day|date:"Y-m-d" }}" title="查看当日卸载情况" target="_blank" style="color:blue;">卸载用户数：{{ uninstall_num }}；</a>
+2011-11-08 起总的使用用户：{{ all_user_num }}；</h3>
 <h3>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/SoftRecord/bug_chart/" target="_blank">BUG统计&gt;&gt;</a>
 &nbsp;&nbsp;<a href="/SoftRecord/bug_msg/" target="_blank">客户端BUG信息记录&gt;&gt;</a>
@@ -34,7 +34,7 @@
   &nbsp;&nbsp;<a href="/SoftRecord/lan_stack_chart/" target="_blank">局域网PC、装机量统计&gt;&gt;</a>
   &nbsp;&nbsp;<a href="/SoftRecord/reg_tongji/" target="_blank">发布24小时注册统计&gt;&gt;</a>
 </h3>
-<h3>单日最高登录用户信息：<span style="color:red;">【日期】{$maxLoginMsg.login_time} 【人数】{$maxLoginMsg.login_num}</span>&nbsp;&nbsp;
+<h3>单日最高登录用户信息：<span style="color:red;">【日期】{{ max_login_day|date:"Y-m-d" }} 【人数】{{ max_login_num }}</span>&nbsp;&nbsp;
 查询日期 <input type="text" name="day" class="Wdate search_day" title="统计日期" value="{{ day|date:"Y-m-d" }}"     onFocus="WdatePicker({minDate:'2011-11-08',startDate:'{$day}',dateFmt:'yyyy-MM-dd'})" readonly style="width:90px;font-size:12px;color:#555555" /> 
 &nbsp;&nbsp;<input type="button" name="" value="确定" class="day_search" />
 </h3>
@@ -48,7 +48,7 @@
 				alert("请选择查询日期！");
 				return;
 			}
-			var url="/SoftRecord/tongji?day="+sDay;
+			var url="/SoftRecord/tongji/?day="+sDay;
 			window.location.href=url;
 		});
 {% endif %}

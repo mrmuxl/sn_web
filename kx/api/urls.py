@@ -8,9 +8,8 @@ urlpatterns = patterns('',
     url(r'^utime/$','kx.api.views.utime'),
     url(r'^cadd/$','kx.api.views.cadd'),
     url(r'^uninstall/$','kx.api.views.uninstall'),
-    url(r'^tongji/$','kx.views.tongji',name='tongji'),
-    url(r'^login_tongji/$','kx.views.login_tongji',name='login_tongji'),
-
-
+    #url(r'^$','kx.tongji.views.tongji',name='tongji'),
+    url(r'^tongji/$','kx.tongji.views.tongji',name='tongji'),
+    url(r'^login_tongji/$','kx.tongji.views.login_tongji',name='login_tongji'),
 )
 
