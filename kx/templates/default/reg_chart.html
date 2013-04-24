@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block header %}{% include "header.html" %}{% endblock %}
+
+{% block content %}
+<script type="text/javascript">document.domain = '{{ domain }}';</script>
+<script language="javascript" type="text/javascript" defer="defer" src="{{ STATIC_URL }}js/datepicker/WdatePicker.js"></script>
+<h1 class="center">阡陌发布24小时内新注册用户统计</h1>
+<!-- <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.4.2.min.js"></script> -->
+<script type="text/javascript">
+$(function () {
+    var chart;
+    $(document).ready(function() {
+        chart = new Highcharts.Chart({
+            chart: {
+     	  	 	renderTo: 'container',
+           		type: 'line'
+            },
+            title: {
+                text: '发布24小时内新注册用户统计',
+        
+            },
+            subtitle: {
+                //text: 'Source: WorldClimate.com',
+				text: '',
+            },
+            xAxis: {
+               
+				categories:[
+							 {% for pub in pub_list %}'{{ pub.ver }}'{% if not forloop.last%},{% endif %}{% endfor %}
+							]
+              },
+            yAxis: {
+                title: {
+                    text: '用户个数'
+                }
+            },
+            tooltip: {
+            	enabled: false,
+                formatter: function() {
+                        return '<b>'+ this.series.name +'</b><br/>'+
+                        this.x +': '+ this.y +'个';
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: false
+                }
+            },
+            series: [{
+                name: '注册用户',
+                data: [
+						{% for reg in reg_users %}{{ reg }}{% if not forloop.last%},{% endif %}{% endfor %}
+					]
+            },{
+                name: '未激活用户',
+                data: [
+						{% for inact in inactive %}{{ inact }}{% if not forloop.last%},{% endif %}{% endfor %}
+					]
+            },{
+                name: '卸载用户',
+                data: [
+						{% for uni in uninstall  %}{{ uni }}{% if not forloop.last%},{% endif %}{% endfor %}
+					]
+            }
+            
+            //, {
+            //    name: 'London',
+            //  data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+            //}
+        	]
+        });
+    });
+    
+});
+		</script>
+
+<script src="{{ STATIC_URL }}js/highcharts/highcharts.js"></script>
+<script src="{{ STATIC_URL }}js/highcharts/modules/exporting.js"></script>
+
+<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+{% endblock %}
+
+{% block footer %}{% include "footer.html" %}{% endblock %}
