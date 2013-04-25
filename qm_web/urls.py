@@ -10,8 +10,8 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^$','kx.views.index',name='index'),
-    url(r'^msg_board/$','kx.views.msg_board',name='msg_show'),
-    url(r'^msg_board/add_msg/$','kx.views.add_msg',name='add_msg'),
+    url(r'^msg_board$','kx.views.msg_board',name='msg_show'),
+    url(r'^msg_board/add_msg$','kx.views.add_msg',name='add_msg'),
 
     # url(r'^qm_web/', include('qm_web.foo.urls')),
 
