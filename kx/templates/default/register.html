@@ -11,7 +11,7 @@
 <div class="center_register">
 
 <div class="register_area">
-<form action="/accounts/save/" method="post" enctype="multipart/form-data" onsubmit="return checkForm();">
+<form action="{% url 'save' %}" method="post" enctype="multipart/form-data" onsubmit="return checkForm();">
 	{% csrf_token %}
 	<table class="register">
 		<tr>
@@ -51,7 +51,7 @@
 			<input type="hidden" name="invate_code" value="{{ invate_code }}" />
 			{% endif %}
 			<input name="" type="submit" value="" class="register_btn"/>
-			<a href="/user/findPwd/" style=" color: #007EFF;">忘记密码？</a>
+			<a href="{% url 'findPwd' %}" style=" color: #007EFF;">忘记密码？</a>
 			</td>
 			<td></td>
 		</tr>
@@ -72,7 +72,7 @@
 				alert("请填写电子邮箱aaa");
 				//$(".reg_msg_email").html("<span style='color:red;'>请填写电子邮箱</span>");
 			}else{
-			jQuery.post("/accounts/check/",{"email":val},function(data){
+			jQuery.post("{% url 'check' %}",{"email":val},function(data){
 					if(data.status==0){
 						alert("此邮箱地址已被注册!");
 						//$(".reg_msg_email").html("<span style='color:red;'>此邮箱地址已被注册</span>");
@@ -125,7 +125,7 @@
 			//$(".reg_msg_email").html("<span style='color:red;'>请填写电子邮箱</span>");
 			return false;
 		}else{
-			jQuery.post("/accounts/check/",{"email":val},function(data){
+			jQuery.post("{% url 'check' %}",{"email":val},function(data){
 			   if(data.status==0){
 					alert("此邮箱地址已被注册3");
 					//$(".reg_msg_email").html("<span style='color:red;'>此邮箱地址已被注册</span>");
