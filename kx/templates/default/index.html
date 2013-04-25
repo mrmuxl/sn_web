@@ -8,11 +8,12 @@
 {% endblock %}
 
 {% block content %}
+{% load split %}
 <div class="main index_banner">
 	<div class="main_in">
 		<div class="top_node">
 			<div class="download_area">
-				<layout name="index_download" cache="0" />
+				{% include "index_download.html" %}
 			</div>
 			<div class="video_area">
 				<div class="video_play">
@@ -130,7 +131,7 @@ var swfLeft=$(".main_in").offset().left;
 			<div class="send_area_top">&nbsp;</div>
 			<div class="send_area_text">
 			如果你对Simplenect软件的使用有问题，欢 迎您留下宝贵的意见让我们一起成长！
-			<form  action="/msg_board/add_msg/" method="post" onsubmit="return checkMsg();">
+			<form  action="{% url 'add_msg' %}" method="post" onsubmit="return checkMsg();">
 				{% csrf_token %}
 				<textarea id="msg_content" name="msg"></textarea>
 				<div class="send_area_btn">
@@ -162,10 +163,10 @@ var swfLeft=$(".main_in").offset().left;
 				</div>
 				<div class="board_area">
 					<div class="board_user"><span class="board_uname" id="user_{{ msg.id }}">
-						{% if msg.user_id = '0' %}
+						{% if msg.user_id and msg.user_id  != '0'  %}
 							{{ msg.user_nick }}
 						{% else %}
-							  {{ msg.ip|slice:"8"|add:"*"}}
+							  {{ msg.ip|split:"."|slice:"2"|join:"."|add:".*.*"}}
 						{% endif %}
 						</span><span class="board_time">{{ msg.create_time|date:"Y-m-d H:i:s" }}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({{ msg.id }});"></a></span><span> | <a href="javascript:delMsg({{ msg.id }});">删除</a></span></span></div>
 					
@@ -208,10 +209,10 @@ var swfLeft=$(".main_in").offset().left;
 	
 				<div class="board_area">
 					<div class="board_user"><span class="board_uname" id="user_{{ msg.id }}">
-						{% if msg_user_id = '0' %}
+						{% if msg.user_id and msg.user_id  != '0'  %}
 							{{ msg.user_nick }}
 						{% else %}
-						  {{ msg.ip|slice:"8"|add:"*" }}
+						  {{ msg.ip|split:"."|slice:"2"|join:"."|add:".*.*"}}
 						{% endif %}
                 </span><span class="board_time">{{ msg.create_time|date:"Y-m-d H:i:s" }}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({{ msg.id }});"></a></span></span></div>
 					<div class="board_right">
@@ -259,10 +260,10 @@ var swfLeft=$(".main_in").offset().left;
 				<div class="board_area">
 					<div class="board_user">
                         <span class="board_uname" id="user_{{ msg.id }}">
-						{% if msg.user_id = '0' %}
+                        	{% if msg.user_id and msg.user_id  != '0'  %}
 							{{ msg.user_nick }}
 						{% else %}
-							  {{ msg.ip|slice:"8"|add:"*"}}
+							  {{ msg.ip|split:"."|slice:"2"|join:"."|add:".*.*"}}
 						{% endif %}
 						</span><span class="board_time">{{ msg.create_time|date:"Y-m-d H:i:s" }}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({{ msg.id }});"></a></span></span>
 					</div>
@@ -299,7 +300,7 @@ var swfLeft=$(".main_in").offset().left;
 		
 		<div class="clear"></div>
 		<div id="msg_form" class="send_reply">
-		<form  action="/msg_board/add_msg" method="post" onsubmit="return checkMsg3();">
+		<form  action="{% url 'add_msg'%}" method="post" onsubmit="return checkMsg3();">
 			{% csrf_token %}
 			<textarea id="msg_content3" name="msg"></textarea>
 			<div class="comment_small_bg" id="scroll_comment"></div>
@@ -320,7 +321,7 @@ var swfLeft=$(".main_in").offset().left;
 	<span class="send_u" id="reply_u"> 回复“阡陌游客”：</span>
 	</div>
 	<div class="send_content2 send_bg" >
-	<form  action="/msg_board/add_msg/" method="post" onsubmit="return checkMsg2();">
+	<form  action="{% url 'add_msg'%}" method="post" onsubmit="return checkMsg2();">
 		{% csrf_token %}
 		<textarea name="msg" id="msg_content2"></textarea>
 		<div class="reply_btn">
@@ -437,7 +438,7 @@ var swfLeft=$(".main_in").offset().left;
 	function delMsg(mid){
 		if(mid>0){
 			if(confirm("确定要删除此留言吗？")){
-				jQuery.post("{&WWW}/MsgBoard/del_msg",{"id":mid},function(data){
+				jQuery.post("{% url 'del_msg'%}",{"id":mid},function(data){
 					if(data.status==1){
 						$("#msg_id_"+mid).remove();
 					}else{
