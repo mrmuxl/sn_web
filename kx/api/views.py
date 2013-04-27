@@ -342,13 +342,12 @@ def cadd(request):
     now = datetime.datetime.now()
     message = {}
     word = [u'simplenect',u'运营',u'管理',u'系统']
-    info = "Data save success"
     try:
         if request.method == 'POST':
-            email = request.POST.get('email',None)
-            nick = request.POST.get('nick',None)
-            password = request.POST.get('password',None)
-            if email is not None and nick is not None and password is not None:
+            email = request.POST.get('email','')
+            nick = request.POST.get('nick','')
+            password = request.POST.get('password','')
+            if email and nick and password:
                 email = strip_tags(email.strip().lower())
                 nick = strip_tags(nick.strip())
                 password = strip_tags(password.strip())
@@ -383,7 +382,7 @@ def cadd(request):
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 try:
                     uid=md5(email).hexdigest()
-                    create_user=KxUser.objects.create_user(auto_id=None,id=uid,email=email,nick=nick,password=password,status=0)
+                    create_user=KxUser.objects.create_user(id=uid,email=email,nick=nick,password=password,status=0)
                     create_user.save()
                 except Exception as e:
                     logger.debug("%s",e)

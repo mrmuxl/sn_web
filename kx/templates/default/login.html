@@ -1,10 +1,6 @@
 {% extends "base.html" %}
-{% block header %} 
-
-{% include "header.html" %}
-
-{% endblock %}
-{% block content %}
+{% block title %}{{title}}{% endblock %}
+{% block header %}{% include "header.html" %}{% endblock %}{% block content %}
 
 <div class="main">
 <div class="center_area" >
@@ -62,8 +58,4 @@
 
 {% endblock %}
 
-{% block footer %} 
-
-{% include "footer.html" %}
-
-{% endblock %}
+{% block footer %}{% include "footer.html" %}{% endblock %}
