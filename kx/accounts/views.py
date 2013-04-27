@@ -14,7 +14,7 @@ from django.shortcuts import render_to_response,render
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from kx.models import KxUser
+from kx.models import KxUser,KxEmailInvate
 from django.http import Http404
 
 logger = logging.getLogger(__name__)
@@ -120,7 +120,7 @@ def avatar(request):
                 path_save = path_folder + "/" + file_uid + ".jpg"
                 save_50 = path_folder + "/" + 'snap_50X50_' + file_uid + '.jpg'
                 save_60 = path_folder + "/" + 'snap_60X60_' + file_uid + '.jpg'
-                avatar_info = 'folder='+ folder + ',uid=' + file_uid + ',ext=jpg' + ',swidth=0,sheight=0' + ',name=' +file_name +',size=' + file_size
+                avatar_info = 'folder='+ folder + ',uid=' + file_uid + ',ext=jpg' + ',swidth=50,sheight=50' + ',name=' +file_name +',size=' + file_size
                 try:
                     if not os.path.isdir(path_folder):
                         os.makedirs(path_folder)
@@ -154,7 +154,34 @@ def avatar(request):
 
 def register(request):
     '''注册视图'''
-    return render_to_response("register.html",{},context_instance=RequestContext(request))
+    try:
+        if request.method == 'GET':
+            invate_code = request.GET.get('invate_code',None)
+            if invate_code is not None and isinstance(invate_code,unicode):
+                try:
+                    invate_code = invate_code.strip().strip('\t').strip('\n').strip('\r').strip('\0').strip('\x0B')
+                except Exception as e:
+                    invate_code = None
+                    logger.debug("%s",e)
+            try:
+                invate_obj = KxEmailInvate.objects.get(invate_code=invate_code)
+                if invate_obj.id:
+                    email = invate_obj.invate_email
+                logger.info("%s",invate_obj)
+            except Exception as e:
+                email = ''
+                invate_obj = None
+                logger.debug("%s",e)
+            temp_var = {
+                        'invate_code':invate_code,
+                        'email':email,
+                    }
+            return render_to_response("register.html",temp_var,context_instance=RequestContext(request))
+        else:
+            return HttpResponseRedirect(reverse("register"))
+    except Exception as e:
+        logger.debug("%s",e)
+        raise Http404
         
 def check(request):
     if request.method =="POST":
@@ -173,8 +200,6 @@ def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
 
-def post(request):
-    pass
 def chpasswd(request):
     pass
 
