@@ -19,8 +19,8 @@ logger = logging.getLogger(__name__)
 def friendFiles(request):
     logger.debug(request.user.email)
     email = request.user.email 
-    email = 'falqs@foxmail.com'
-    fileList = ShareFile.objects.raw('select s.id, share_name, comment_count, size, owner_email, u.nick from kx_share s, kx_share_follow f, kx_user u where s.owner_email=u.email and f.kx_share_id=s.id and  f.follower_email = %s', [email])
+    #email = 'falqs@foxmail.com'
+    fileList = ShareFile.objects.raw('select s.id, share_name, comment_count, size, owner_email, owner_mac, u.nick from kx_share s, kx_share_follow f, kx_user u where s.owner_email=u.email and f.kx_share_id=s.id and  f.follower_email = %s', [email])
     serializer = ShareFileSerializer(fileList, many=True)
 
     return Response(serializer.data)
@@ -31,8 +31,8 @@ def friendFiles(request):
 
 #1 把自己的ip告诉服务器 2拿对方打洞的端口
 @api_view(['POST'])
-#@authentication_classes((TokenAuthentication,))
-#@permission_classes((IsAuthenticated,))
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
 def peerPort(request):
     mac = request.POST['mac']
     if mac in [None, '']:
@@ -40,27 +40,37 @@ def peerPort(request):
 
     logger.debug('mac: ' + mac)
     con = get_redis_connection('default')
-    result = con.lindex(mac, 10)
-    logger.debug("result:" + result)
+    sPtr = con.lindex(mac, 11)
+    if sPtr in [None, '']:
+       return HttpResponse('')
+
+    ptr = int(sPtr)
+    logger.debug('ptr:%d', ptr*2)
+    result = con.lindex(mac, ptr*2)
+    logger.debug('result:'+  result)
     if result:
-        sendMyInfoToServer(request, mac)
+        #sendMyInfoToServer(request, mac)
         return HttpResponse(result)
     else:
         return HttpResponse('')
 
+#write message to fifo
 import os
 import cPickle
-def sendMyInfoToServer(request, mac):
-    wfPath = "/home/admin/sn_web_fifo"
-    #wfPath = "/Users/yangling/projectHome/sn_web/p1"
+@api_view(['POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def sendMyInfoToServer(request):
+    mac = request.POST['mac']
+    uuid = request.POST['uuid']
+    psw = request.POST['psw']
 
-    msg = mac + "," + request.META['REMOTE_ADDR'] + "," + "1030"
+    msg = "1#" + mac + "," + uuid + "," + psw 
     logger.debug(msg)
 
+    wfPath = "/home/admin/sn_web_fifo"
     wp = open(wfPath, 'w')
     wp.write(msg)
     wp.close()
 
-
-
-
+    return HttpResponse('')
