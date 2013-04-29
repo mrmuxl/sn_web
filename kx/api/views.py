@@ -8,6 +8,7 @@ from kx.models import (KxUser,KxSoftRecord,KxLanTongji,KxPubRecord)
 from kx.models import (KxSoftUtime)
 from django.utils.html import strip_tags
 from hashlib import md5
+from django.core.mail import send_mail,EmailMultiAlternatives
 
 logger = logging.getLogger(__name__)
 
@@ -337,7 +338,7 @@ def utime(request):
 @csrf_exempt
 def cadd(request):
     '''
-    登陆时长
+    客户端注册接口
     '''
     now = datetime.datetime.now()
     message = {}
@@ -384,28 +385,26 @@ def cadd(request):
                     uid=md5(email).hexdigest()
                     create_user=KxUser.objects.create_user(id=uid,email=email,nick=nick,password=password,status=0)
                     create_user.save()
+                    user = authenticate(username=email,password=password)
                 except Exception as e:
                     logger.debug("%s",e)
-                    time_str = time.time()
+                    message['message']=u'注册失败!请再重试一次!'
+                    message['create_time']=str(now)
+                    return HttpResponse(json.dumps(message),content_type="application/json")
+                if user is not None and user.status == 0:
+                    time_str = str(time.time())
                     chk = md5(email + "," + time_str + ",qianmo20120601").hexdigest()
                     ver_data =emial + "," + time_str + "," + chk
-                    url = ''
-                    msg = """尊敬的SimpleNect用户，" . 
-                    $email . "：<br />&nbsp;&nbsp;您好！ 
-                    <br />&nbsp;&nbsp;请点击以下链接激活您的账号：
-                    <a href='" . $url . "'>" . $url . "</a>"""
-                    sendmail
-                    try:
-                        user_obj = KxUser.objects.filter(email=email).update(status=1)
-                    except Exception as e:
-                        logger.debug("%s",e)
-                    
-
-                    
-                    
-
-
-
+                    url =settings.DOMAIN + reverse('activate',args=[urlsafe_b64encode(ver_data),])
+                    msg = "尊敬的SimpleNect用户，" + email + "：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;请点击以下链接激活您的账号：<a href='" + url + "'>" +     url + "</a>"
+                    subject = '请激活帐号完成注册!'
+                    from_email = 'SimpleNect <noreply@simaplenect.cn>'
+                    EmailMultiAlternative(subject,msg,from_email,[email])
+                    mail = EmailMultiAlternatives(subject,msg,from_email,[email])
+                    mail.content_subtype = "html"
+                    mail.send(fail_silently=True)
+                    return HttpResponseRedirect('/User/account_verify/?email='+email)
+                    #user_obj = KxUser.objects.filter(email=email).update(status=1)
     except Exception as e:
         logger.debug("cadd:%s",e,exc_info=True)
         info = "cadd:%s" %(e)
