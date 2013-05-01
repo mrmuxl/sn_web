@@ -21,6 +21,7 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api-token-auth/','auth.views.obtain_auth_token'), 
+    url(r'^api-register/','auth.views.api_register'), 
 )
 urlpatterns += patterns('',
     url(r'^MsgBoard/',include("kx.msg_board.urls")),
