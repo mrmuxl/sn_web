@@ -90,6 +90,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'http.http.SetRemoteAddrFromForwardedFor',
+    'django.middleware.transaction.TransactionMiddleware',
         # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )

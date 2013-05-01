@@ -18,13 +18,13 @@
 		<div class="contact">
 		<span class="user_info">用户昵称：{{ user.nick }}</span>
 	
-		<span class="user_info"><a href="/account/chpasswd/">修改密码</a>&nbsp;&nbsp;<a href="/accounts/info/">更改头像</a></span>
+		<span class="user_info"><a href="{% url 'chpasswd' %}">修改密码</a>&nbsp;&nbsp;<a href="{% url 'info' %}">更改头像</a></span>
 		</div>
 	</div>
 	<div class="center_right2">
 	<div class="register_top"><span class="register_msg">上传/修改头像</span></div>
 	<div class="register_line">&nbsp;</div>
-	<form action="/accounts/avatar/" method="post" enctype="multipart/form-data" onsubmit="return checkForm();">
+	<form action="{% url 'avatar' %}" method="post" enctype="multipart/form-data" onsubmit="return checkForm();">
 		{% csrf_token %}
 		<div class="user_pic" style="margin:24px 0 0 20px;float:none;">
 		{% if user.avatar %}
