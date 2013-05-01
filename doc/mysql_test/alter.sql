@@ -23,4 +23,6 @@ ALTER TABLE kx_user CHANGE auto_id id int(11) NOT NULL AUTO_INCREMENT
 ALTER TABLE kx_user CHANGE id uuid varchar(32) NOT NULL
 增加uuid的索引
 ALTER TABLE kx_user ADD INDEX `uuid_index`(`uuid`);
+删除原来id的索引
+ALTER TABLE kx_user DROP INDEX id_index;
 
