@@ -1,11 +1,11 @@
 #_*_coding:utf-8_*_
-import logging,json,sys,datetime,time
+import logging,json,sys,datetime,time,uuid
 from kx.utils import is_valid_email
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from kx.models import (KxUser,KxSoftRecord,KxLanTongji,KxPubRecord)
-from kx.models import (KxSoftUtime)
+from kx.models import (KxSoftUtime,KxEmailInvate)
 from django.utils.html import strip_tags
 from hashlib import md5
 from django.core.mail import send_mail,EmailMultiAlternatives
@@ -412,3 +412,65 @@ def cadd(request):
         message['create_time']=str(now)
         return HttpResponse(json.dumps(message),content_type="application/json")
 
+def invate(request):
+    '''邀请接口'''
+    message = {}
+    info = "Data save success"
+    now = datetime.datetime.now()
+    if request.method =="POST":
+        my_email = request.POST.get('my_email','')
+        invate_email = request.POST.get('invate_email','')
+        my_name = request.POST.get('my_name','')
+        invate_name = request.POST.get('nvate_name','')
+        group_id = request.POST.get('group_id','')
+        group_name = request.POST.get('group_name','')
+        if my_email and invate_email and my_name and invate_name and group_id and group_name:
+            my_email = my_email.strip()
+            invate_name = invate_name.strip()
+            if is_valid_email(my_email) and is_valid_email(invate_email):
+                message['message']="check email"
+                message['status']="ok"
+                message['create_time']=str(now)
+                return HttpResponse(json.dumps(message),content_type="application/json")
+            my_name = my_name.strip()
+            invate_name = invate_name.strip()
+            group_id = group_id.strip()
+            if not (group_id == -1 or group_id > 0):
+                message['message']="group id error"
+                message['status']="errors"
+                message['create_time']=str(now)
+                return HttpResponse(json.dumps(message),content_type="application/json")
+            group_id = group_id.strip()
+            try:
+                user = KxUser.objects.get(email=my_emal)
+                if user.uuid and user.uuid > 0:
+                    try:
+                        invate_code = md5(uuid.uuid4()).hexdigest()
+                        invate_obj = KxEmailInvate.objects.create(user_id=user.uuid,user_name=my_name,invate_email=invate_email,group_id=group_id,group_name=group_name,invate_code=invate_code,qianmo_dot=0,create_time=now,status=0)
+                        status = 1
+                        url = settings.DOMAIN + reverse('invate_code',args=[invate_code])
+                        if group_id == -1:
+                            msg = "尊敬的" + invate_name + "：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;" + my_name + " 邀请您成为TA的好友，赶快注册并使用阡陌软件吧！<a href='" + url + "'>" + url + "</a>" 
+                        else:
+                            msg = "尊敬的" + invate_name + "：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;" + my_name + " 邀请您加入“" + group_name + "”群，赶快注册并使用阡陌软件吧！<a href='" + url + "'>" + url + "</a>" 
+                        subject = '请激活帐号完成注册!'
+                        from_email = 'SimpleNect <noreply@simaplenect.cn>'
+                        mail = EmailMultiAlternatives(subject,msg,from_email,[invate_email])
+                        mail.content_subtype = "html"
+                        mail.send(fail_silently=True)
+                        message['message']="invate ok"
+                        message['status']="ok"
+                        message['create_time']=str(now)
+                        return HttpResponse(json.dumps(message),content_type="application/json")
+                    except Exception as e:
+                        logger.debug("%s",e)
+                        message['message']="invate error"
+                        message['status']="errors"
+                        message['create_time']=str(now)
+                        return HttpResponse(json.dumps(message),content_type="application/json")
+
+            except user.DoesNotExist:
+                message['message']="user dos not exist!"
+                message['status']="errors"
+                message['create_time']=str(now)
+                return HttpResponse(json.dumps(message),content_type="application/json")

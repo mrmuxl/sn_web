@@ -5,6 +5,7 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns('',
     url(r'^$','kx.accounts.views.login',name='login'),
     url(r'^register/?$','kx.accounts.views.register',name='register'),
+    url(r'^register/invate_code/(.+)$','kx.accounts.views.register',name='invate_code'),
     url(r'^login/?$','kx.accounts.views.login',name='login'),
     url(r'^logout/?$','kx.accounts.views.logout',name='logout'),
     url(r'^info/?$','kx.accounts.views.info',name='info'),
