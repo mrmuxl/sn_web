@@ -301,7 +301,7 @@ def utime(request):
                             return HttpResponse(json.dumps(message),content_type="application/json")
                     except Exception as e:
                         try:
-                            ut_obj = KxSoftUtime.objects.create(id=None,client_identifie=cid,tongji_day=day,utime=ut,create_time=now)
+                            ut_obj = KxSoftUtime.objects.create(client_identifie=cid,tongji_day=day,utime=ut,create_time=now)
                             message['message']=info
                             message['create_time']=str(now)
                             return HttpResponse(json.dumps(message),content_type="application/json")
@@ -353,7 +353,7 @@ def cadd(request):
                 nick = strip_tags(nick.strip())
                 password = strip_tags(password.strip())
                 if not email:
-                    message['message']=u'请填写邮箱!'
+                    message['message']=u'请填写邮箱email!'
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 if not is_valid_email(email):
@@ -361,34 +361,34 @@ def cadd(request):
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 if not nick:
-                    message['message']=u'nick请填写昵称!'
+                    message['message']=u'nick is null请填写昵称!'
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 if len(nick)<4 and len(nick)>12:
-                    message['message']=u'昵称应为4-12个字符!'
+                    message['message']=u'nickname昵称应为4-12个字符!'
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 if nick in word:
-                    message['message']=u'昵称包含非法字符!'
+                    message['message']=u'你被gfw墙了,昵称包含非法字符!'
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 if not password:
-                    message['message']=u'请填写密码!'
+                    message['message']=u'password请填写密码!'
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 count = KxUser.objects.filter(email=email).count()
                 if count > 0:
-                    message['message']=u'邮箱已经被使用,请更改一个可用的邮箱!'
+                    message['message']=u'another邮箱已经被使用,请更改一个可用的邮箱!'
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 try:
                     uid=md5(email).hexdigest()
-                    create_user=KxUser.objects.create_user(id=uid,email=email,nick=nick,password=password,status=0)
+                    create_user=KxUser.objects.create_user(uuid=uid,email=email,nick=nick,password=password,status=0)
                     create_user.save()
                     user = authenticate(username=email,password=password)
                 except Exception as e:
                     logger.debug("%s",e)
-                    message['message']=u'注册失败!请再重试一次!'
+                    message['message']=u'register 注册失败!请再重试一次!'
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 if user is not None and user.status == 0:
