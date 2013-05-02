@@ -101,12 +101,16 @@ def bug_log(request):
     now = datetime.datetime.now()
     date =datetime.date.strftime(datetime.date.today(),"%Y-%m-%d")
     path_root = settings.MEDIA_ROOT
-    folder = "/BugLog/"+"soft_bug_" + str(date)  
+    folder = "/BugLog/"  
+    path_folder = path_root + folder
+    file_name = "soft_bug_" + str(date)
+    if not os.path.isdir(path_folder):
+        os.makedirs(path_folder)
     if request.method == 'POST':
         mac = request.POST.get('clientIdentifie','')
         log = request.POST.get('log','')
         if client and log:
-            log_path = path_root + folder + '.log'
+            log_path = path_folder + file_name + '.log'
             log = mac + "   START*****************\n" + log + "\n" + mac  "   END*****************\n"
             with open(log_path,mode = 'a+',) as f:
                 f.write(log)
@@ -114,7 +118,7 @@ def bug_log(request):
             message['create_time']=str(now)
             return HttpResponse(json.dumps(message),content_type="application/json")
         else:
-            message['message']=u"bug_log ok!"
+            message['message']=u"bug_log fail!"
             message['create_time']=str(now)
             return HttpResponse(json.dumps(message),content_type="application/json")
 
