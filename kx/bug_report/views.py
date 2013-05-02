@@ -41,21 +41,21 @@ def upload_bug(request):
                     with open(path_folder + new_file,'wb') as fd:
                         for chunk in upload_file.chunks():
                             fd.write(chunk)
-                    message['message']=u"文件上传成功!"
+                    message['message']=u"dump upload success文件上传成功!"
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 except Exception as e:
-                    logger.debug(u"文件上传失败！%s",e)
+                    logger.debug(u"dump upload fail文件上传失败！%s",e)
                     message['message']=u"文件上传失败!"
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
             except Exception as e:
                 logger.debug(u"文件上传失败！%s",e)
-                message['message']=u"文件上传失败!"
+                message['message']=u"dump upload fail文件上传失败!"
                 message['create_time']=str(now)
                 return HttpResponse(json.dumps(message),content_type="application/json")
         else:
-            message['message']=u"文件上传失败!"
+            message['message']=u"dupm upload fail文件上传失败!"
             message['create_time']=str(now)
             return HttpResponse(json.dumps(message),content_type="application/json")
     
@@ -83,11 +83,11 @@ def soft_bug(request):
             if verify == md5str:
                 try:
                     soft_bug_obj = KxSoftBug.objects.create()
-                    message['message']=u"ok!"
+                    message['message']=u"soft_bug interface ok!"
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 except Exception as e:
-                    message['message']=u"error!"
+                    message['message']=u"soft_bug interface error!"
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                     logger.debug("%s",e)
