@@ -85,15 +85,16 @@ def soft_bug(request):
             verify=md5(ver+client+'123456').hexdigest()
             if verify == md5str:
                 try:
+                    ver = ver[:10]
                     soft_bug_obj = KxSoftBug.objects.create(client_identifie=client,version=ver,upload_time=now,os=os,auto_start=auto_start,lan_num=lan_num,u_email=email)
                     message['message']=u"soft_bug interface ok!"
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 except Exception as e:
+                    logger.debug("%s",e)
                     message['message']=u"soft_bug interface error!"
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
-                    logger.debug("%s",e)
                 
 @csrf_exempt
 def bug_log(request):
