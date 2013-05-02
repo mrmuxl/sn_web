@@ -60,6 +60,7 @@ def upload_bug(request):
             return HttpResponse(json.dumps(message),content_type="application/json")
     
     
+@csrf_exempt
 def soft_bug(request):
     message = {} 
     now = datetime.datetime.now()
@@ -92,5 +93,10 @@ def soft_bug(request):
                     return HttpResponse(json.dumps(message),content_type="application/json")
                     logger.debug("%s",e)
                 
+@csrf_exempt
 def bug_log(request):
-    pass
+    message = {} 
+    now = datetime.datetime.now()
+    message['message']=u"bug_log ok!"
+    message['create_time']=str(now)
+    return HttpResponse(json.dumps(message),content_type="application/json")
