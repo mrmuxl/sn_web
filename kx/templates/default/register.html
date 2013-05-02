@@ -69,7 +69,7 @@
 
 		if(name=="email"){
 			if(val==""){
-				alert("请填写电子邮箱aaa");
+				alert("请填写电子邮箱");
 				//$(".reg_msg_email").html("<span style='color:red;'>请填写电子邮箱</span>");
 			}else{
 			jQuery.post("{% url 'check' %}",{"email":val},function(data){
@@ -121,13 +121,13 @@
 		var val=$.trim($("#email").val());
 	
 		if(val==""){
-			alert("请填写电子邮箱2");
+			alert("请填写电子邮箱");
 			//$(".reg_msg_email").html("<span style='color:red;'>请填写电子邮箱</span>");
 			return false;
 		}else{
 			jQuery.post("{% url 'check' %}",{"email":val},function(data){
 			   if(data.status==0){
-					alert("此邮箱地址已被注册3");
+					alert("此邮箱地址已被注册");
 					//$(".reg_msg_email").html("<span style='color:red;'>此邮箱地址已被注册</span>");
 					return false;
 				}
@@ -167,8 +167,4 @@
 </script>
 {% endblock %}
 
-{% block footer %} 
-
-{% include "footer.html" %}
-
-{% endblock %}
+{% block footer %}{% include "footer.html" %}{% endblock %}
