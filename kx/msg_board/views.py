@@ -42,17 +42,17 @@ def msg_board(request):
             reply_dict[r["id"]] = r
         data.update(reply_list=reply_dict)
     if user_ids:
-        user_list = KxUser.objects.filter(id__in=user_ids).values('id','avatar')
+        user_list = KxUser.objects.filter(uuid__in=user_ids).values('uuid','avatar')
         u_dict={}
         ul = []
         for u in user_list:
             if u['avatar']:
-                ul.append([u"id",u['id']])
+                ul.append([u"uuid",u['uuid']])
                 for l in u['avatar'].split(','):
                     ul.append(l.split('='))
             user_dict=dict(ul)    
             if user_dict:
-                u_dict[u['id']]=user_dict
+                u_dict[u['uuid']]=user_dict
             ul=[]
         data.update(user_list=u_dict)
     return render(request,"msg_index.html",data) 
@@ -79,10 +79,10 @@ def add_msg(request):
             else:
                 reply_id = 0
             if request.user.is_authenticated() and not request.user.is_anonymous():
-                user_id = request.user.id
+                uuid = request.user.uuid
                 user_nick = request.user.nick
                 try:
-                    reply_create = KxMsgBoard.objects.create(ip=ip,msg=msg,create_time=create_time,reply_id=reply_id,user_id=user_id,user_nick=user_nick)
+                    reply_create = KxMsgBoard.objects.create(ip=ip,msg=msg,create_time=create_time,reply_id=reply_id,user_id=uuid,user_nick=user_nick)
                 except:
                     raise Http404
                 return HttpResponseRedirect(reverse("msg_index"))    
