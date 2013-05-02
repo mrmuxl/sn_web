@@ -72,7 +72,7 @@ def record(request):
 def uninstall(request):
     now = datetime.datetime.now()
     message = {}
-    info = "Data save success"
+    info = "uninstall success"
     try:
         if request.method == 'POST':
             ver = request.POST.get('ver',None)
@@ -80,8 +80,8 @@ def uninstall(request):
             md5str = request.POST.get('md5str',None)
             logger.info("ver:%s,cid:%s,md5str:%s",ver,cid,md5str,exc_info=True)
             if ver is not None and cid is not None and md5str is not None:
-                ver = ver.rstrip('\n')
-                cid = cid.rstrip('\n')
+                ver = ver.strip()
+                cid = cid.strip()
                 verify=md5(ver+cid+'123456').hexdigest()
                 if verify == md5str:
                     try:
@@ -414,7 +414,7 @@ def cadd(request):
 def invate(request):
     '''邀请接口'''
     message = {}
-    info = "Data save success"
+    info = "invate success"
     now = datetime.datetime.now()
     if request.method =="POST":
         my_email = request.POST.get('my_email','')
