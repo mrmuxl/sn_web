@@ -3,6 +3,7 @@
 
 from django.http import Http404
 from django.views.decorators.csrf import requires_csrf_token
+from django.views.decorators.http import require_POST
 from django.shortcuts import render_to_response,render
 from django.http import HttpResponse, HttpResponseRedirect
 from kx.models import (KxUser,KxMsgBoard)
@@ -10,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.utils.html import strip_tags
-import datetime,logging
+import datetime,logging,json
 
 logger = logging.getLogger(__name__)
 
@@ -96,6 +97,31 @@ def add_msg(request):
             return HttpResponse(u'请填写留言内容！<A HREF="javascript:history.back()">返 回</A>')
     return HttpResponseRedirect(reverse("msg_index"))    
 
+@require_POST
 def del_msg(request):
-    pass
+    message={}
+    if request.user.is_superuser:
+        if request.method =="POST":
+            msg_id = request.POST.get("id","")
+            if msg_id:
+                msg_id = int(msg_id)
+                try:
+                    msg_obj = KxMsgBoard.objects.filter(id=msg_id).delete()
+                    message['status']=1
+                    message['info']="ok"
+                    message['data']=1
+                    return HttpResponse(json.dumps(message),content_type="application/json")
+                except Exception as e:
+                    logger.debug("%s",e)
+                    message['status']=0
+                    message['info']="ok"
+                    message['data']=0
+                    return HttpResponse(json.dumps(message),content_type="application/json")
+    else:
+        message['status']=0
+        message['info']="no allow!权限不够"
+        message['data']=0
+        return HttpResponse(json.dumps(message),content_type="application/json")
+
+
 
