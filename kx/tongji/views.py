@@ -12,10 +12,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.utils.html import strip_tags
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_GET
 from django.db.models import Count,Max,Min
-import datetime,logging
+import datetime,logging,os
 from dateutil.parser import parse
 from utils import CustomSQL,bug_chart_sql
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -297,37 +299,51 @@ def bug_chart(request):
         logger.debug("%s",e)
         raise Http404
 
-
+@require_GET
 def bug_msg(request):
-    try:
-        if request.method == 'GET':
-            today = datetime.date.today()
-            day = request.GET.get('day',today)
-            if day is not None and isinstance(day,unicode):
-                try:
-                    day =parse(day.strip().strip('\t').strip('\n').strip('\r').strip('\0').strip('\x0B')).date()
-                except Exception as e:
-                    day = today
-                    logger.debug("%s",e)
-            if not request.user.is_superuser:
-                return HttpResponseRedirect(reverse('index'))
-            else:
-                try:
+    today = datetime.date.today()
+    day =str(request.GET.get('day',today))
+    if not request.user.is_superuser:
+        return HttpResponseRedirect(reverse('index'))
+    else:
+        try:
+            bug_list = KxSoftBug.objects.extra(where=['DATE(upload_time)=%s'],params=[day]).values()
+        except Exception as e:
+            bug_list = []
+            logger.debug("%s",e)
+        path_root = settings.MEDIA_ROOT
+        path_date = day.replace('-','/')
+        folder ='BugReport/' + path_date
+        if not os.path.exists(path_root + folder):
+            message ="""目录不存在！<A HREF="javascript:history.back()">返 回</A>"""
+            return HttpResponse(message)
+        else:
+            file_info = {}
+            for file_name in os.listdir(path_root + folder):
+                file_path = path_root + folder + "/" + file_name
+                ctime = os.path.getctime(file_path)
+                size = os.path.getsize(file_path)
+                file_info[file_name]={'ctime':ctime,'size':size}
+        temp_var = {
+                    'domain':u'simplenect.cn',
+                    'bug_list':bug_list,
+                    'folder':folder,
+                    'file_info':file_info,
+                    'day':day,
+                    }
+        return render(request,"bug_msg.html",temp_var)
+
 
 def bug_log(request):
     pass
 
+@require_GET
 def reg_tongji(request):
-    try:
-        if request.method == 'GET':
-            if not request.user.is_superuser:
-                return HttpResponseRedirect(reverse('index'))
-            else:
-                temp_var = {}
-                return render(request,"reg_tongji.html",temp_var)
-    except Exception as e:
-        logger.debug("%s",e)
-        raise Http404
+    if not request.user.is_superuser:
+        return HttpResponseRedirect(reverse('index'))
+    else:
+        temp_var = {}
+        return render(request,"reg_tongji.html",temp_var)
 
 def reg_chart(request):
     try:
@@ -386,12 +402,10 @@ def bug_ratio_chart(request):
                 day_list =[day-datetime.timedelta(days=d) for d in range(29,-1,-1)]
                 try:
                     bug_list = KxTongjiRecord.objects.filter(tongji_day__range=(old_day,day)).values('id','seven_new_num','seven_un_num','tongji_day')
-                    print bug_list
                 except Exception as e:
                     bug_list = []
                     logger.debug("%s",e)
                 bug_ratio = []
-                print len(bug_list)
                 if len(bug_list) < 30:
                     for i in range(30):
                         try:

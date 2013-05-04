@@ -15,12 +15,12 @@ LOGIN_REDIRECT_URL = LOGIN_URL
 APPEND_SLASH = True
 
 STATIC_ROOT = os.path.join(ROOT_DIR,'static')
-STATIC_URL = 'http://static.simplenect.cn/' 
-#STATIC_URL = '/static' + THEME
-#MEDIA_ROOT = os.path.join(ROOT_DIR,'media/upload')
-MEDIA_ROOT = '/home/admin/php/www/kx/Public/Upload/'
-MEDIA_URL = 'http://img.simplenect.cn/'
-#MEDIA_URL = '/'
+#STATIC_URL = 'http://static.simplenect.cn/' 
+STATIC_URL = '/static' + THEME
+MEDIA_ROOT = os.path.join(ROOT_DIR,'media/upload/')
+#MEDIA_ROOT = '/home/admin/php/www/kx/Public/Upload/'
+#MEDIA_URL = 'http://img.simplenect.cn/'
+MEDIA_URL = '/'
 
 EMAIL_HOST = 'mail.simplenect.cn'
 EMAIL_PORT = 25
