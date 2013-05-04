@@ -180,7 +180,7 @@ def lan_record(request):
                         qm_num = qm
                         logger.info("%s:%s",pc_num,qm_num)
                         try:
-                            lan_tj = KxLanTongji.objects.create(id=None,ip=ip,tongji_day=tongji_day,pc_num=pc_num,qm_num=qm_num)
+                            lan_tj = KxLanTongji.objects.create(ip=ip,tongji_day=tongji_day,pc_num=pc_num,qm_num=qm_num)
                             message['message']=info
                             message['create_time']=str(now)
                             return HttpResponse(json.dumps(message),content_type="application/json")

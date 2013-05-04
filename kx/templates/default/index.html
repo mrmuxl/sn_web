@@ -289,7 +289,7 @@ var swfLeft=$(".main_in").offset().left;
 		</ul>
 		{% endif %}	
 	{% endif %}
-		<div class="board_more_title"><span class="board_more_text">共</span><a href="/msg_board/" target="_blank">
+		<div class="board_more_title"><span class="board_more_text">共</span><a href="{% url 'msg_index' %}" target="_blank">
 			<span class="board_more_count">{{ msg_count }}</span></a>
 			<span class="board_more_text">条留言</span></div>
 		</div>
