@@ -17,7 +17,7 @@
 			<div class="comment_small_bg" id="top_comment"></div>
 			<div class="clear"></div>
 			<div class="send_btn send_btn_top">
-				<input type="hidden" name="send_from" value="1" />
+				<input type="hidden" id='form_send' name="send_from" value="1" />
 				<input type="submit" name value="" class="btn_send"/>
 				<input type="button" name value="" class="btn_cancel btn_cancel_top"/>
 			</div>
@@ -254,10 +254,23 @@
 	function checkMsg(){
 		var msg=$("#msg_content").val();
 		msg=$.trim(msg);
+		$.ajax({
+				type:"post",
+				url: "{% url 'check_msg' %}",
+				async:false,
+				dataType:"json",
+				success:function(data){
+					items = document.getElementsByName('send_from');
+					for(var i = 0;i < items.length;i++){
+						items[i].value = data.id;
+					}
+				}	
+		});
 		if(msg=="")
 			return false;
 		return true;
 	}
+
 	function checkMsg2(){
 		var msg=$("#msg_content2").val();
 		msg=$.trim(msg);
@@ -293,7 +306,7 @@
 	function delMsg(mid){
 		if(mid>0){
 			if(confirm("确定要删除此留言吗？")){
-				jQuery.post("{% url 'del_msg' %}",{"id":mid},function(data){
+				$.post("{% url 'del_msg' %}",{"id":mid},function(data){
 					if(data.status==1){
 						$("#msg_id_"+mid).remove();
 					}else{

@@ -6,5 +6,6 @@ urlpatterns = patterns('',
     url(r'^msg_index/?$','kx.msg_board.views.msg_board',name ='msg_index'),
     url(r'^add_msg/?$','kx.msg_board.views.add_msg',name ='add_msg'),
     url(r'^del_msg/?$','kx.msg_board.views.del_msg',name ='del_msg'),
+    url(r'^check_msg/?$','kx.msg_board.views.check_msg',name ='check_msg'),
 )
 

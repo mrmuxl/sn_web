@@ -1,7 +1,19 @@
 #_*_coding:utf-8_*_
+
 import os
-import logging
+
+# RUN_ENV = dev or test or deploy
+RUN_LEVEL = 'dev'
+
 ROOT_DIR = os.path.dirname(__file__)
+
+EMAIL = 'mrmuxl@sina.com'
+ADMINS = (
+    ('admin', EMAIL),
+)
+
+MANAGERS = ADMINS
+
 ALLOWED_HOSTS = ['simplenect.cn','www.simplenect.cn','www.qianmo.cc','qianmo.cc','localhost']
 
 THEME = '/default/'
@@ -13,42 +25,7 @@ LOGOUT_URL='/User/logout/'
 LOGIN_REDIRECT_URL = LOGIN_URL
 
 APPEND_SLASH = True
-
-STATIC_ROOT = os.path.join(ROOT_DIR,'static')
-#STATIC_URL = 'http://static.simplenect.cn/' 
-STATIC_URL = '/static' + THEME
-MEDIA_ROOT = os.path.join(ROOT_DIR,'media/upload/')
-#MEDIA_ROOT = '/home/admin/php/www/kx/Public/Upload/'
-#MEDIA_URL = 'http://img.simplenect.cn/'
-MEDIA_URL = '/'
-
-EMAIL_HOST = 'mail.simplenect.cn'
-EMAIL_PORT = 25
-EMAIL_HOST_USER ='noreply@simplenect.cn'
-EMAIL_HOST_PASSWORD = 'o86w9OQUTPW1'
-EMAIL_BACKEND ='kx.backends.esmtp.EmailBackend'
-
-STATICFILES_DIRS = (
-	os.path.join(ROOT_DIR,'static' + THEME),
-)
-AUTH_USER_MODEL = 'kx.KxUser'
-PASSWORD_HASHERS = (
-    'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
-)
-
-TEMPLATE_DIRS = (
-    os.path.join(ROOT_DIR,'templates' + THEME),
-)
-
-TEMPLATE_CONTEXT_PROCESSORS =(
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    'django.core.context_processors.tz',
-    'django.contrib.messages.context_processors.messages',
-)
+SESSION_COOKIE_AGE = 3600
 
 LOGGING = {
     'version': 1,
@@ -108,7 +85,14 @@ LOGGING = {
     }
 }
 
-EMAIL = 'mrmuxl@sina.com'
-ADMINS = (
-    ('admin', EMAIL),
-)
+
+if RUN_LEVEL == 'dev':
+    try:
+        from config.dev import *
+    except ImportError:
+        pass
+elif RUN_LEVEL == 'deploy':
+    try:
+        from config.deploy import *
+    except ImportError:
+        pass
