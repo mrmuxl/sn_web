@@ -56,6 +56,17 @@
 </div>
 </div>
 
+<script>
+	function checkForm(){
+		var val=$.trim($("#email").val());
+		if(val==""){
+			alert("请填写电子邮箱");
+			return false;
+		}
+		return true;
+	}
+</script>
+
 {% endblock %}
 
 {% block footer %}{% include "footer.html" %}{% endblock %}

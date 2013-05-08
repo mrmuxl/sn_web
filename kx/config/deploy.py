@@ -2,7 +2,7 @@
 import os
 import logging
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 try:
@@ -15,6 +15,7 @@ STATIC_ROOT = os.path.join(ROOT_DIR,'static')
 STATIC_URL = 'http://static.simplenect.cn/' 
 MEDIA_ROOT = '/home/admin/php/www/kx/Public/Upload/'
 MEDIA_URL = 'http://img.simplenect.cn/'
+PUBLISH_UPLOAD = '/home/admin/php/www/kx/Public/LiveUp'
 
 EMAIL_HOST = 'mail.simplenect.cn'
 EMAIL_PORT = 25
@@ -134,7 +135,7 @@ REST_FRAMEWORK = {
 CACHES = {
     "default": {
         "BACKEND": "redis_cache.cache.RedisCache",
-        "LOCATION": "192.168.18.200:6383:0",
+        "LOCATION": "127.0.0.1:6383:0",
         "OPTIONS": {
             "CLIENT_CLASS": "redis_cache.client.DefaultClient",
         }

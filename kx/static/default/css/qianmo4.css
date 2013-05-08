@@ -131,7 +131,7 @@ img{
 	background:url(../images/index_bg.jpg) no-repeat scroll center top;
 }
 .other_bg{
-	background: url("../images/qianmo_bg.jpg") repeat scroll 0 0 transparent;
+	background: url(../images/qianmo_bg.jpg) repeat scroll 0 0 transparent;
 }
 
 .main_in{
@@ -379,7 +379,7 @@ img{
 	width:677px;
 	height:33px;
 	_height:32px;
-	background:url("../images/comment_input.jpg") no-repeat scroll 0 0 #FFFFFF;
+	background:url(../images/comment_input.jpg) no-repeat scroll 0 0 #FFFFFF;
 	left: 2px;
     position: relative;
     top: -34px;
@@ -1149,7 +1149,7 @@ img{
 	margin:0 auto;
 }
 .manager_left{
-	width:150px;
+	width:110px;
 	float:left;
 }
 .manager_left ul{
@@ -1161,7 +1161,7 @@ img{
 	font-size:14px;
 }
 .manager_right{
-	width:800px;
+	width:890px;
 	float:left;
 }
 

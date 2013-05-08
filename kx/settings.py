@@ -27,6 +27,24 @@ LOGIN_REDIRECT_URL = LOGIN_URL
 APPEND_SLASH = True
 SESSION_COOKIE_AGE = 3600
 
+if RUN_LEVEL == 'dev':
+    try:
+        from config.dev import *
+    except ImportError:
+        pass
+
+if RUN_LEVEL == 'test':
+    try:
+        from config.deploy import *
+    except ImportError:
+        pass
+
+if RUN_LEVEL == 'deploy':
+    try:
+        from config.deploy import *
+    except ImportError:
+        pass
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -85,14 +103,3 @@ LOGGING = {
     }
 }
 
-
-if RUN_LEVEL == 'dev':
-    try:
-        from config.dev import *
-    except ImportError:
-        pass
-elif RUN_LEVEL == 'deploy':
-    try:
-        from config.deploy import *
-    except ImportError:
-        pass
