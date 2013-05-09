@@ -20,7 +20,7 @@ def friendFiles(request):
     logger.debug(request.user.email)
     email = request.user.email 
     #email = 'falqs@foxmail.com'
-    fileList = ShareFile.objects.raw('select s.id, share_name, comment_count, size, owner_email, owner_mac, u.nick from kx_share s, kx_share_follow f, kx_user u where s.owner_email=u.email and f.kx_share_id=s.id and  f.follower_email = %s', [email])
+    fileList = ShareFile.objects.raw('select s.id, share_name, comment_count, size, owner_email, owner_mac, u.nick from kx_share s, kx_share_follow f, kx_user u where s.owner_email=u.email and f.kx_share_id=s.id and  f.follower_email = %s and s.is_del=0', [email])
     serializer = ShareFileSerializer(fileList, many=True)
 
     return Response(serializer.data)
