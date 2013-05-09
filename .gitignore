@@ -4,6 +4,8 @@
 *.swp
 .hg
 .hgignore
+nohup.out
 kx/media/upload/User/
 kx/media/upload/BugReport/
+kx/media/upload/BugLog/
 kx/logs/access.log
