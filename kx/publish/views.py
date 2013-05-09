@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect,HttpResponse
 from django.shortcuts import render
 from forms import PublishAdd
-from django.conf import settings
+from utils import handle_uploaded_file
 
 logger = logging.getLogger(__name__)
 
@@ -47,9 +47,28 @@ def publish_add(request):
             if form.is_valid():
                 ver = form.cleaned_data['ver']
                 desc = form.cleaned_data['desc']
-                ins = request.FILES['ins']
-                patch = request.FILES['patch']
-
+                try:
+                    ins = request.FILES['ins']
+                    handle_uploaded_file(ver=ver,ins=ins)
+                except KeyError as e:
+                    logger.debug("ins参数不存在%s",e)
+                except OSError as e:
+                    logger.debug("目录创建错误%s",e)
+                except IOError as e:
+                    logger.debug("publish_add,安装包上传失败！%s",e)
+                    message ="""安装包上传失败！<A HREF="javascript:history.back()">返 回</A>"""
+                    return HttpResponse(message)
+                try:
+                    patch = request.FILES['patch']
+                    handle_uploaded_file(ver=ver,patch=patch)
+                except KeyError as e:
+                    logger.debug("%s",e)
+                except OSError as e:
+                    logger.debug("目录创建错误%s",e)
+                except IOError as e:
+                    logger.debug("publish_add,patch包上传失败！%s",e)
+                    message ="""patch上传失败！<A HREF="javascript:history.back()">返 回</A>"""
+                    return HttpResponse(message)
                 return HttpResponseRedirect(reverse('publish_index'))
             t_var ={'form':form}
             return render(request,"publish/add.html",t_var)
@@ -71,18 +90,29 @@ def publish_edit(request):
 
 def do_pub(request):
     pass
+
+
+@require_POST
 def del_pub(request):
-    pass
-
-def handle_uploaded_file(ins=None,patch=None):
-    path_root = settings.PUBLISH_UPLOAD
-
-    try:
-        if not os.path.isdir(path_folder):
-            os.makedirs(path_folder)
-        with open(path_upload,'wb') as fd:
-            for chunk in image.chunks():
-                fd.write(chunk)
-    except Exception as e:
-        logger.debug(u"文件上传失败！%s",e)
-
+    message={}
+    if request.user.is_superuser:
+        msg_id = request.POST.get("id","")
+        if msg_id:
+            msg_id = int(msg_id)
+            try:
+                msg_obj = KxMsgBoard.objects.filter(id=msg_id).delete()
+                message['status']=1
+                message['info']="ok"
+                message['data']=1
+                return HttpResponse(json.dumps(message),content_type="application/json")
+            except Exception as e:
+                logger.debug("%s",e)
+                message['status']=0
+                message['info']="false"
+                message['data']=0
+                return HttpResponse(json.dumps(message),content_type="application/json")
+    else:
+        message['status']=0
+        message['info']="deny!权限不够"
+        message['data']=0
+        return HttpResponse(json.dumps(message),content_type="application/json")

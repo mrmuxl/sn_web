@@ -3,7 +3,7 @@
 import os
 
 # RUN_ENV = dev or test or deploy
-RUN_LEVEL = 'dev'
+RUN_ENV = os.getenv("RUN_ENV",default='dev')
 
 ROOT_DIR = os.path.dirname(__file__)
 
@@ -27,19 +27,19 @@ LOGIN_REDIRECT_URL = LOGIN_URL
 APPEND_SLASH = True
 SESSION_COOKIE_AGE = 3600
 
-if RUN_LEVEL == 'dev':
+if RUN_ENV == 'dev':
     try:
         from config.dev import *
     except ImportError:
         pass
 
-if RUN_LEVEL == 'test':
+if RUN_ENV == 'test':
     try:
-        from config.deploy import *
+        from config.test import *
     except ImportError:
         pass
 
-if RUN_LEVEL == 'deploy':
+if RUN_ENV == 'deploy':
     try:
         from config.deploy import *
     except ImportError:
