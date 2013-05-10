@@ -5,7 +5,7 @@
 {% block content %}
 <div class="main">
 	<div class="center_area">
-		<h3>新增发布</h3>
+		<h3>发布</h3>
 		<form action="" method="post" enctype="multipart/form-data" onsubmit="return checkForm();">{% csrf_token %}
 		<table width="80%">
 		<tr>
@@ -20,8 +20,9 @@
 		<tr>
 		<td align="right">补丁包：</td><td>{{ form.patch }}</td>
 		</tr>
+		<tr><td>{{ form.id }}</td></tr>
 		<tr>
-		<td align="right">&nbsp;</td><td><input type="submit" name="" value="新增发布信息" /></td>
+		<td align="right">&nbsp;</td><td><input type="submit" name="" value="保存发布信息" /></td>
 		</tr>
 		</table>
 		</form>
