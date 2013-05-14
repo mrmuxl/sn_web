@@ -2,20 +2,20 @@
 import os
 import logging
 
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
 try:
     from kx.settings import *
 except ImportError:
     pass
-
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
-
 
 STATIC_ROOT = os.path.join(ROOT_DIR,'static')
 STATIC_URL = '/static' + THEME
 MEDIA_ROOT = os.path.join(ROOT_DIR,'media/upload/')
 MEDIA_URL = '/'
 PUBLISH_UPLOAD = os.path.join(ROOT_DIR,'media/upload/')
+SERVER_LOG =''
 
 EMAIL_HOST = 'mail.simplenect.cn'
 EMAIL_PORT = 25

@@ -10,6 +10,8 @@ from django.conf import settings
 from kx.models import KxSoftBug
 from hashlib import md5
 import datetime,logging,json,os
+from django.utils.encoding import smart_unicode,smart_str
+from django.utils.http import urlquote
 
 logger = logging.getLogger(__name__)
 
@@ -99,6 +101,7 @@ def soft_bug(request):
                 
 @csrf_exempt
 def bug_log(request):
+    logger.info("%s",request.POST)
     message = {} 
     now = datetime.datetime.now()
     date =datetime.date.strftime(datetime.date.today(),"%Y-%m-%d")
@@ -109,13 +112,16 @@ def bug_log(request):
     if not os.path.isdir(path_folder):
         os.makedirs(path_folder)
     if request.method == 'POST':
-        mac = request.POST.get('clientIdentifie','')
-        log = request.POST.get('log','')
+        mac = request.POST.get('clientIdentifie','').encode('utf8')
+        log = request.POST.get('log','').encode('utf8')
         if mac and log:
             log_path = path_folder + file_name + '.log'
-            c = str(mac) + "   START*****************\n" + str(log) + "\n" + str(mac) + "   END*****************\n"
-            with open(log_path,mode = 'a+',) as f:
-                f.write(c)
+            c = mac + "   START*****************\n" + log + "\n" + mac + "   END*****************\n\n"
+            try:
+                with open(log_path,mode = 'a+',) as f:
+                    f.write(c)
+            except Exception as e:
+                logger.debug("%s",e)
             message['message']=u"bug_log ok!"
             message['create_time']=str(now)
             return HttpResponse(json.dumps(message),content_type="application/json")

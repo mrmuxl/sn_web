@@ -8,14 +8,15 @@ TEMPLATE_DEBUG = DEBUG
 try:
     from kx.settings import *
 except ImportError:
-        pass
+    pass
 
 
 STATIC_ROOT = os.path.join(ROOT_DIR,'static')
 STATIC_URL = 'http://static.simplenect.cn/' 
 MEDIA_ROOT = '/home/admin/php/www/kx/Public/Upload/'
 MEDIA_URL = 'http://img.simplenect.cn/'
-PUBLISH_UPLOAD = '/home/admin/php/www/kx/Public/LiveUp'
+PUBLISH_UPLOAD = '/home/admin/php/www/kx/Public/LiveUp/'
+SERVER_LOG = '/home/admin/udtserver/'
 
 EMAIL_HOST = 'mail.simplenect.cn'
 EMAIL_PORT = 25

@@ -21,8 +21,8 @@ class KxUserAdmin(UserAdmin):
     list_filter = ('is_staff','is_superuser','status')
     fieldsets = (
         (u'用户基本信息', {'fields': ('email', 'password')}),
-        (u'用户详细信息', {'fields': ('nick','status','active_time')}),
-        (u'用户登陆时间', {'fields': ('last_login','create_time',)}),
+        (u'用户详细信息', {'fields': ('nick','status')}),
+        (u'用户登陆时间', {'fields': ('active_time','last_login','create_time',)}),
     )
     add_fieldsets = (
         (u'添加用户', {
@@ -34,8 +34,5 @@ class KxUserAdmin(UserAdmin):
     ordering = ('email',)
     filter_horizontal = ()
 
-# Now register the new UserAdmin...
 admin.site.register(KxUser, KxUserAdmin)
-# ... and, since we're not using Django's builtin permissions,
-# unregister the Group model from admin.
 admin.site.unregister(Group)

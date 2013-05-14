@@ -1,9 +1,6 @@
 {% extends "base.html" %}
-
 {% block title %}{{title}}{% endblock %}
-
 {% block header %}{% include "header.html" %}{% endblock %}
-
 {% block content %}
 <script type="text/javascript">document.domain = '{{ domain }}';</script>
 <script language="javascript" type="text/javascript" defer="defer" src="{{ STATIC_URL }}js/datepicker/WdatePicker.js"></script>
