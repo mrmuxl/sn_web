@@ -6,7 +6,7 @@
 <script language="javascript" type="text/javascript" defer="defer" src="{{ STATIC_URL }}js/datepicker/WdatePicker.js"></script>
 <h1 class="center">阡陌最近30天局域网数统计</h1>
 <h3 style="text-align:right;margin-right:150px;">
-{% if type == 1 %}
+{% if type == '1' %}
 <a href="{% url 'lan_stack_chart' %}?type=2&day={{ day }}">看PC数堆积图</a>
 {% else %}
 <a href="{% url 'lan_stack_chart' %}?type=1&day={{ day }}">看装机数堆积图</a>
@@ -25,7 +25,7 @@ $(function () {
                 type: 'area'
             },
             title: {
-                text: '{$typeName}堆积图'
+                text: '{{ type_name }}堆积图'
             },
             subtitle: {
                 text: ''
@@ -61,103 +61,40 @@ $(function () {
             	}
             },
             series: [{
-                name: '{$typeName}1',
+                name: '{{ type_name }}1',
                 data: [
-						<volist name="day_array" id="day">
-						<present name="dataMap.$day.num1">
-						{$dataMap.$day.num1}
-						<else />
-						0
-						</present>
-						<lt name="i" value="30">
-						,
-						</lt>
-						</volist>
+                		 {% for num in lan_dict.num1  %}{{ num }}{% if not forloop.last%},{% endif %}{% endfor %}
+                		]
+            }, {
+                name: '{{ type_name }}2-5',
+                data: [
+						{% for num in lan_dict.num2  %}{{ num }}{% if not forloop.last%},{% endif %}{% endfor %}
 					]
             }, {
-                name: '{$typeName}2-5',
+                name: '{{ type_name }}6-10',
                 data: [
-						<volist name="day_array" id="day">
-						<present name="dataMap.$day.num2">
-						{$dataMap.$day.num2}
-						<else />
-						0
-						</present>
-						<lt name="i" value="30">
-						,
-						</lt>
-						</volist>
+						{% for num in lan_dict.num3  %}{{ num }}{% if not forloop.last%},{% endif %}{% endfor %}
 					]
             }, {
-                name: '{$typeName}6-10',
+                name: '{{ type_name }}11-20',
                 data: [
-						<volist name="day_array" id="day">
-						<present name="dataMap.$day.num3">
-						{$dataMap.$day.num3}
-						<else />
-						0
-						</present>
-						<lt name="i" value="30">
-						,
-						</lt>
-						</volist>
+						{% for num in lan_dict.num4  %}{{ num }}{% if not forloop.last%},{% endif %}{% endfor %}
 					]
             }, {
-                name: '{$typeName}11-20',
+                name: '{{ type_name }}21-30',
                 data: [
-						<volist name="day_array" id="day">
-						<present name="dataMap.$day.num4">
-						{$dataMap.$day.num4}
-						<else />
-						0
-						</present>
-						<lt name="i" value="30">
-						,
-						</lt>
-						</volist>
-					]
-            }, {
-                name: '{$typeName}21-30',
-                data: [
-						<volist name="day_array" id="day">
-						<present name="dataMap.$day.num5">
-						{$dataMap.$day.num5}
-						<else />
-						0
-						</present>
-						<lt name="i" value="30">
-						,
-						</lt>
-						</volist>
+						{% for num in lan_dict.num5  %}{{ num }}{% if not forloop.last%},{% endif %}{% endfor %}
 					]
             }
             , {
-                name: '{$typeName}31-50',
+                name: '{{ type_name }}31-50',
                 data: [
-						<volist name="day_array" id="day">
-						<present name="dataMap.$day.num6">
-						{$dataMap.$day.num6}
-						<else />
-						0
-						</present>
-						<lt name="i" value="30">
-						,
-						</lt>
-						</volist>
+						{% for num in lan_dict.num6  %}{{ num }}{% if not forloop.last%},{% endif %}{% endfor %}
 					]
             }, {
-                name: '{$typeName}50以上',
+                name: '{{ type_name }}50以上',
                 data: [
-						<volist name="day_array" id="day">
-						<present name="dataMap.$day.num7">
-						{$dataMap.$day.num7}
-						<else />
-						0
-						</present>
-						<lt name="i" value="30">
-						,
-						</lt>
-						</volist>
+						{% for num in lan_dict.num7  %}{{ num }}{% if not forloop.last%},{% endif %}{% endfor %}
 					]
             }
 
