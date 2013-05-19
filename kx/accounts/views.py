@@ -82,7 +82,7 @@ def save(request):
                             from_email = 'SimpleNect <noreply@simaplenect.cn>'
                             mail = EmailMultiAlternatives(subject,msg,from_email,[email])
                             mail.content_subtype = "html"
-                            mail.send(fail_silently=False)
+                            mail.send(fail_silently=True)
                             return HttpResponseRedirect('/User/account_verify/?email='+email)
                         else:
                             message = """创建用户出现错误！<A HREF="javascript:history.back()">返 回</A>"""
@@ -406,7 +406,7 @@ def to_active(request):
                         from_email = 'SimpleNect <postmaster@simaplenect.cn>'
                         mail = EmailMultiAlternatives(subject,msg,from_email,[email])
                         mail.content_subtype = "html"
-                        mail.send(fail_silently=False)
+                        mail.send(fail_silently=True)
                         #send_mail(subject,msg,from_email,[email])
                         return HttpResponseRedirect('/User/account_verify/?email='+email)
                 except Exception as e:
