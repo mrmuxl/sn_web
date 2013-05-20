@@ -18,10 +18,10 @@ MEDIA_URL = 'http://img.simplenect.cn/'
 PUBLISH_UPLOAD = '/home/webapp_root/publish/'
 SERVER_LOG = '/home/admin/udtserver/'
 
-EMAIL_HOST = 'mail.simplenect.cn'
+EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_PORT = 25
-EMAIL_HOST_USER ='noreply@simplenect.cn'
-EMAIL_HOST_PASSWORD = 'o86w9OQUTPW1'
+EMAIL_HOST_USER ='postmaster@simplenect.com'
+EMAIL_HOST_PASSWORD = '2tuexhqw24h2'
 EMAIL_BACKEND ='kx.backends.esmtp.EmailBackend'
 
 STATICFILES_DIRS = (
