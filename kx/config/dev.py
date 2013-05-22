@@ -2,7 +2,7 @@
 import os
 import logging
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 COMPRESS_HTML = False
 
@@ -11,13 +11,12 @@ try:
 except ImportError:
     pass
 
-STATIC_ROOT = os.path.join(ROOT_DIR,'static')
+STATIC_ROOT = os.path.join(ROOT_DIR,'cssjs')
 STATIC_URL = '/static' + THEME
 MEDIA_ROOT = os.path.join(ROOT_DIR,'media/upload/')
 MEDIA_URL = '/'
 PUBLISH_UPLOAD = os.path.join(ROOT_DIR,'media/upload/')
 SERVER_LOG =''
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_PORT = 25
@@ -146,4 +145,28 @@ CACHES = {
         }
     }
 }
+####
+# django-pipeline
+####
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+PIPELINE_CSS = {
+    'qianmo': {
+        'source_filenames': (
+          'css/qianmo4.css',
+          'css/page.css',
+          'js/video/video-js.css',
+        ),
+        'output_filename': 'css/qianmo.css',
+    },
+}
 
+PIPELINE_JS = {
+    'qianmo': {
+        'source_filenames': (
+          'js/jquery-1.7.2.min.js',
+          'js/django_ajax.js',
+          'js/video/video.js',
+        ),
+        'output_filename': 'js/qianmo.js',
+    }
+}
