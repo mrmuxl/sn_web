@@ -4,6 +4,7 @@ import logging
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+COMPRESS_HTML = True
 
 try:
     from kx.settings import *
@@ -89,6 +90,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.transaction.TransactionMiddleware',
         # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'compresshtml.middleware.CompressHtmlMiddleware',
 )
 
 DATABASES = {

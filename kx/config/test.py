@@ -4,6 +4,7 @@ import logging
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+COMPRESS_HTML = False
 
 try:
     from kx.settings import *
