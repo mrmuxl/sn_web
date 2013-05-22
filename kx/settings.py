@@ -90,17 +90,19 @@ LOGGING = {
             'propagate': True,
         },
         'django.request': {
-            'handlers': ['mail_admins'],
+            'handlers': ['file','mail_admins'],
             'level': 'ERROR',
             'propagate': True,
         },
         'sharefile': {
             'handlers': ['console','file','mail_admins' ],
             'level': 'DEBUG',
+            'propagate': True,
         },
         'kx': {
             'handlers': ['console','file','mail_admins' ],
             'level': 'DEBUG',
+            'propagate': True,
         }
     }
 }
