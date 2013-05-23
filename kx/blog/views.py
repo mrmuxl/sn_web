@@ -1,7 +1,8 @@
 #_*_coding:utf-8_*_
 import logging
 from django.shortcuts import render
-from kx.models import (KxForumMpost,KxForumPosts)
+from django.views.decorators.http import require_GET
+from models import (KxForumMpost,KxForumPosts)
 
 logger = logging.getLogger(__name__)
 
@@ -17,3 +18,7 @@ def show(request):
                 'post_show':post_show
             }
     return render(request,"show.html",t_var)
+
+@require_GET
+def help(request):
+    return render(request,"help.html",{})

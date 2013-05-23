@@ -5,6 +5,8 @@ import logging
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 COMPRESS_HTML = True
+COMPRESS_ENABLED =True
+COMPRESS_OUTPUT_DIR='cache'
 
 try:
     from kx.settings import *
@@ -71,6 +73,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 # List of callables that know how to import templates from various sources.
@@ -120,9 +123,11 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'gunicorn',
     'kx',
+    'kx.blog',
     'sharefile',
     'online_user',
     'auth',
+    'compressor',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
