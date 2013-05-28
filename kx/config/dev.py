@@ -154,11 +154,10 @@ CACHES = {
            "CLIENT_CLASS": "redis_cache.client.DefaultClient",
        }
    }
-   "onlineUser": {                                                
-      "BACKEND": "redis_cache.cache.RedisCache",
-       "LOCATION": "192.168.18.200:6383:0",
-       "OPTIONS": {
-           "CLIENT_CLASS": "redis_cache.client.DefaultClient",
-       }
-   }
+
  }
+
+
+REDIS_IP = "192.168.18.200:6383"
+REDIS_PORT = "6383"
+REDIS_DB_ONLINE_USER = "0"
