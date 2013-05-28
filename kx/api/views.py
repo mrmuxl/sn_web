@@ -12,6 +12,7 @@ from django.core.mail import send_mail,EmailMultiAlternatives
 from kx.utils import send_mail_thread
 from django.contrib.auth import authenticate
 from django.conf import settings
+from django.core.urlresolvers import reverse
 
 logger = logging.getLogger(__name__)
 
