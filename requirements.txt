@@ -10,3 +10,6 @@ gunicorn
 python-dateutil
 redis
 distribute
+slimit
+django-compresshtml
+django-compressor
