@@ -13,6 +13,7 @@ from kx.utils import send_mail_thread
 from django.contrib.auth import authenticate
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from base64 import urlsafe_b64encode,urlsafe_b64decode
 
 logger = logging.getLogger(__name__)
 
