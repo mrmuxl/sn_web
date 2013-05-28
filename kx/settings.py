@@ -103,7 +103,7 @@ LOGGING = {
             'handlers': ['console','file','mail_admins' ],
             'level': 'DEBUG',
             'propagate': True,
-        }
+        },
         'gunicorn': {
             'handlers': ['console','file' ],
             'level': 'DEBUG',
