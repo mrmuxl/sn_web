@@ -1,4 +1,5 @@
 #!/bin/sh
 export RUN_ENV=deploy
-LOG_FILE=/var/log/nginx/kx.log
-python ../manage.py run_gunicorn -k gevent -w 10 -t 600  --max-requests=1000 --preload --worker-connections=2000 --log-level=debug --error-logfile=${LOG_FILE} --pid=gunicorn.pid -D
+ERROR_LOG_FILE=/var/log/nginx/kx_error.log
+ACCESS_LOG_FILE=/var/log/nginx/kx_access.log
+python ../manage.py run_gunicorn -k gevent -w 5 -t 600  --max-requests=1000 --preload --worker-connections=2000 --log-level=debug --error-logfile=${ERROR_LOG_FILE} --access-logfile=${ACCESS_LOG_FILE} --pid=gunicorn.pid -D
