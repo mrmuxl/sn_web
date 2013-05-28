@@ -153,10 +153,8 @@ CACHES = {
        "OPTIONS": {
            "CLIENT_CLASS": "redis_cache.client.DefaultClient",
        }
-   }
-
- }
-
+    }
+}
 
 REDIS_IP = "192.168.18.200"
 REDIS_PORT = "6383"
