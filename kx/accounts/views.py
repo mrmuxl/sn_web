@@ -127,7 +127,7 @@ def login(request):
             return render(request,"login.html",{})
     except Exception as e:
         logger.debug("%s",e)
-        raise Http404
+        #raise Http404
 
 
 
