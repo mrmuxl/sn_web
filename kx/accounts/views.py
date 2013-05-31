@@ -122,7 +122,7 @@ def login(request):
                     return render(request,"login.html",data)
                 else:
                     #refer = request.META.get('HTTP_REFERER','')
-                    return HttpResponseRedirect(refer)
+                    return HttpResponseRedirect(reverse(refer))
         elif request.method == "GET":
             return render(request,"login.html",{})
     except Exception as e:
