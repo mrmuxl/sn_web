@@ -123,8 +123,7 @@ def login(request):
                 else:
                     #refer = request.META.get('HTTP_REFERER','')
                     return HttpResponseRedirect(reverse(refer))
-        elif request.method == "GET":
-            return render(request,"login.html",{})
+        return render(request,"login.html",{})
     except Exception as e:
         logger.debug("%s",e)
         raise Http404
