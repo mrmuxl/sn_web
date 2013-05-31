@@ -12,7 +12,7 @@ from kx.utils import is_valid_email
 from django.utils.html import strip_tags
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
-from django.shortcuts import render_to_response,render
+from django.shortcuts import render_to_response,render,get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
@@ -102,6 +102,7 @@ def save(request):
 
 def login(request):
     '''登陆视图'''
+    next_url = request.GET.get("next","")
     try:
         if request.method == "POST":
             email = strip_tags(request.POST.get("email",'').lower().strip())
@@ -109,7 +110,10 @@ def login(request):
             user = authenticate(username=email,password=password)
             if user and user.is_active:
                 auth.login(request,user)
-                return HttpResponseRedirect(reverse("index"))    
+                if next:
+                    return HttpResponseRedirect(reverse("index"))    
+                else:
+                    return HttpResponseRedirect(next_url)    
             else:
                 data={"email":email}
                 messages.add_message(request,messages.INFO,_(u'用户名或密码错误'))
@@ -284,7 +288,7 @@ def findPwd(request):
             code =0
             email = email.strip()
             try:
-                user_obj = KxUser.objects.get(email=email)
+                user_obj = get_object_or_404(KxUser,email=email)
                 if user_obj.id:
                     time_str = str(time.time())
                     chk = md5(email + "," + time_str + ",kx2011").hexdigest()
@@ -305,13 +309,12 @@ def findPwd(request):
                         code = 2
                 else:
                     code = 0
-                t_var = {
-                         'step':step,
-                         'code':code,
-                        }
+                t_var = { 'step':step, 'code':code, }
                 return render(request,"findPwd.html",t_var)
             except Exception as e:
                 logger.debug("%s",e)
+                t_var = { 'step':step, 'code':code, }
+                return render(request,"findPwd.html",t_var)
         else:
             t_var ={ 'step':step,}
             return render(request,"findPwd.html",t_var)

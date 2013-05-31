@@ -363,12 +363,17 @@ class KxTongjiRecord(models.Model):
     class Meta:
         db_table = 'kx_tongji_record'
 
+STATUS_CHOICES = (
+    ('0', u'未激活'),
+    ('1', u'正常'),
+    ('2', u'封禁'),
+)
 class KxUser(AbstractBaseUser,PermissionsMixin):
     id                  = models.AutoField(primary_key = True)
     uuid                = models.CharField(db_index=True,max_length=32L)
     email               = models.EmailField(verbose_name=u'邮件地址', max_length=50, unique=True)
     nick                = models.CharField(u'用户昵称',max_length  = 20L)
-    status              = models.IntegerField(u'用户状态，0=未激活，1=正常，2=封禁',default  =True)
+    status              = models.IntegerField(u'用户状态，0=未激活，1=正常，2=封禁',default  =0,choices=STATUS_CHOICES)
     create_time         = models.DateTimeField(verbose_name=u'注册时间')
     update_time         = models.DateTimeField()
     avatar              = models.CharField(max_length = 200L, null = True,blank = True)
