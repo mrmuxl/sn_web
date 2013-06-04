@@ -87,22 +87,22 @@ LOGGING = {
         'django': {
             'handlers': ['console','file'],
             'level': 'DEBUG',
-            'propagate': True,
+            'propagate': False,
         },
         'django.request': {
             'handlers': ['file','mail_admins'],
             'level': 'ERROR',
-            'propagate': True,
+            'propagate': False,
         },
         'sharefile': {
             'handlers': ['console','file','mail_admins' ],
             'level': 'DEBUG',
-            'propagate': True,
+            'propagate': False,
         },
         'kx': {
             'handlers': ['console','file','mail_admins' ],
             'level': 'DEBUG',
-            'propagate': True,
+            'propagate': False,
         },
         'gunicorn': {
             'handlers': ['console','file' ],
