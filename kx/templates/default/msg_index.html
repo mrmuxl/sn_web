@@ -209,108 +209,6 @@
 	$(function(){
 		$(".menu_board").css({"color":"#000000"});
 	});
-	$("#top_comment").click(function(){
-		$(this).hide();
-		$("#msg_content").css({"height":"91px","border-bottom":"1px solid #c8c8c8"});
-		$(".send_btn_top").fadeIn("fast");
-		$("#msg_content")[0].focus();
-	});
-	
-	$("#msg_content").focus(function(){
-		$("#top_comment").hide();
-		$(this).prev("textarea").css({"height":"91px","border-bottom":"1px solid #c8c8c8"});
-		$(".send_btn_top").fadeIn("fast");
-	});
-	
-	$(".btn_cancel_top").click(function(){
-		$("#msg_content").val("");
-		$("#top_comment").show();
-		$("#msg_content").css({"height":"33px","border-bottom":"1px solid #b5dbe8"});
-		$(".send_btn_top").fadeOut("fast");
-		
-	});
-	
-	$("#scroll_comment").click(function(){
-		$(this).hide();
-		$("#msg_content3").css({"height":"91px","border-bottom":"1px solid #c8c8c8"});
-		$(".send_btn_scroll").fadeIn("fast");
-		$("#msg_content3")[0].focus();
-	});
-	
-	$("#msg_content3").focus(function(){
-		$("#scroll_comment").hide();
-		$(this).prev("textarea").css({"height":"91px","border-bottom":"1px solid #c8c8c8"});
-		$(".send_btn_scroll").fadeIn("fast");
-	});
-	
-	$(".btn_cancel_scroll").click(function(){
-		$("#msg_content3").val("");
-		$("#scroll_comment").show();
-		$("#msg_content3").css({"height":"33px","border-bottom":"1px solid #b5dbe8"});
-		$(".send_btn_scroll").fadeOut("fast");
-		
-	});
-
-	function checkMsg(){
-		var msg=$("#msg_content").val();
-		msg=$.trim(msg);
-		$.ajax({	type:"post",	url: "{% url 'check_msg' %}",async:false,dataType:"json",
-			success:function(data){document.getElementById('form1').value =data.id;}});
-		if(msg=="")
-			return false;
-		return true;
-	}
-
-	function checkMsg2(){
-		var msg=$("#msg_content2").val();
-		msg=$.trim(msg);
-		$.ajax({	type:"post",	url: "{% url 'check_msg' %}",async:false,dataType:"json",
-			success:function(data){document.getElementById('form2').value =data.id;}});
-		if(msg=="")
-			return false;
-		return true;
-	}
-
-	function checkMsg3(){
-		var msg=$.trim($("#msg_content3").val());
-		if(msg=="")
-		$.ajax({	type:"post",	url: "{% url 'check_msg' %}",async:false,dataType:"json",
-			success:function(data){document.getElementById('form3').value =data.id;}});
-			return false;
-		return true;
-	}
-	function replyMsg(mid){
-		if(mid>0){
-			$("#msg_form").hide();
-			$("#reply_msg").val(mid);
-			var reply_u=$("#user_"+mid).html();
-			$("#reply_u").html("回复“"+reply_u+"”：");
-			var _reply=$("#user_"+mid).parent(".board_user").parent(".board_area").parent("li");
-			var _left=_reply.offset().left; //左绝对距离 
-			var _top=_reply.offset().top+_reply.outerHeight(); //上绝对距离,此处要加上div的高度 
-			$(".reply_form").css({'position':'absolute','left':_left+'px','top':_top+'px'});
-			$(".reply_form").show(); 
-		}
-	
-	}
-	function replyClose(){
-		$(".reply_form").hide(); 
-	}
-
-	function delMsg(mid){
-		if(mid>0){
-			if(confirm("确定要删除此留言吗？")){
-				$.post("{% url 'del_msg' %}",{"id":mid},function(data){
-					if(data.status==1){
-						$("#msg_id_"+mid).remove();
-					}else{
-						alert("删除留言失败！");
-					}
-				},"json");
-			}
-
-		}
-	}
 	window.onscroll=function(){
 		if(document.getElementById('msg_form')!=null){
 		if(document.body.scrollTop>180 ||document.documentElement.scrollTop>180) {
@@ -321,8 +219,5 @@
 		}
 		} 
 </script>
-
-
 {% endblock %}
-
 {% block footer %}{% include "footer.html" %}{% endblock %}
