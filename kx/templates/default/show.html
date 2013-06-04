@@ -2,19 +2,25 @@
 {% block title %}{{title}}{% endblock %}
 {% block header %}{% include "header.html" %}{% endblock %}
 {% block content %}
+
+<div class="returnTop" title="上去了哦！"><span class="s"></span> <span class="b"></span> 返回顶部</div>
 <div class="blog">
-	{% for post in post_show %}
+	<br/>
+		{% for post in post_show %}
+		<div>
+			<a href="#blog_title_{{forloop.counter}}" class="goNext">
+				<span style="color:#337FE5;font-size:14px;">{{ post.title }}</span></a>
+		</div>
+		{% endfor %}		
 	<div class="blog_view">
-		<div class="blog_title">
-			{{ post.title }}
+		{% for post in post_show %}	
+		<div class="blog_view"></div>
+		<div class="blog_title" id="blog_title_{{forloop.counter}}">
+			<a href="javascript:scroll(0,0)">{{ post.title }}</a>
 		</div>
-		<div class="blog_time">
-			{{ post.create_time|date:"Y-m-d H:i:s" }}
-		</div>
-		<div class="blog_text">
-			{{ post.content|safe }}
-		</div>
-		<div class="blog_ctop">
+		<div class="blog_time">{{ post.create_time|date:"Y-m-d H:i:s" }}</div>
+		<div class="blog_text" >{{ post.content|safe }}</div>
+<!-- 		<div class="blog_ctop">
 			<span><a href="javascript:showSend({{ post.id }});">评论</a> <a href="javascript:showComment({{ post.id }});">({{ post.reply_num }})</a></span>
 		</div>
 		<div class="blog_comment">
@@ -29,52 +35,113 @@
 			<div class="comment_{{ post.id }}">
 			{# 评论加载区 #}
 			</div>
-
-		</div>
+		</div> -->
+		{% endfor %}
 	</div>
-	{% endfor %}
+
 </div>
-<script>
-
+<script type="text/javascript">
+jQuery.fn.anchorGoWhere = function(options){
+	var obj = jQuery(this);
+	var defaults = {target:1, timer:1000};
+	var o = jQuery.extend(defaults,options);
+	obj.each(function(i){
+		jQuery(obj[i]).click(function(){
+			var _rel = jQuery(this).attr("href").substr(1);
+			switch(o.target){
+				case 1: 
+					var targetTop = jQuery("#"+_rel).offset().top;
+					jQuery("html,body").animate({scrollTop:targetTop}, o.timer);
+					break;
+				case 2:
+					var targetLeft = jQuery("#"+_rel).offset().left;
+					jQuery("html,body").animate({scrollLeft:targetLeft}, o.timer);
+					break;
+			}
+			return false;
+		});
+	});
+};
 $(function(){
-	$(".menu_guide").css({"color":"#000000"});
-});
-function showSend(id){
-	if(id!=null&&id>0){
-		$(".blog_send_"+id).show();
-	}
-}
-function showComment(id){
-	if(id!=null&&id>0){
-		$(".comment_"+id).load("/blog/c_list?id="+id);
-	}
-}
+    // 给 window 对象绑定 scroll 事件
+    $(window).bind("scroll", function(){
 
-function sendComment(id){
-	if(id!=null&&id>0){
-		var msg=$(".blog_send_"+id+" textarea").val();
-		msg=$.trim(msg);
-		if(msg==""){
-			alert("请填写评论内容！");
-		}
-		$.post("/blog/add_comment/",{"id":id,"msg":msg},function(data){
-				if(data.status==0){
-					alert("评论失败，请重试");
-				}else{
-					$(".comment_"+id+" ul").prepend(data.data);
-					$(".blog_send_"+id+" textarea").val("");
-					$(".blog_send_"+id).hide();
+        var scrollTopNum = $(document).scrollTop(), // 获取网页文档对象滚动条的垂直偏移
+            winHeight = $(window).height(), // 获取浏览器当前窗口的高度
+            returnTop = $("div.returnTop");
+
+        // 滚动条的垂直偏移大于 0 时显示，反之隐藏
+        (scrollTopNum > 0) ? returnTop.fadeIn("fast") : returnTop.fadeOut("fast");
+
+        // 给 IE6 定位
+        if (!-[1,]&&!window.XMLHttpRequest) {
+            returnTop.css("top", scrollTopNum + winHeight - 200);    
+        } 
+
+    });
+
+    // 点击按钮后，滚动条的垂直方向的值逐渐变为0，也就是滑动向上的效果
+    $("div.returnTop").click(function() {
+        $("html, body").animate({ scrollTop: 0 }, 100);
+    });
+    
+});
+
+$(document).ready(function(){
+	$(".goTop").anchorGoWhere({target:1});
+	$(".goDown").anchorGoWhere({target:1});
+	$(".goNext").anchorGoWhere({target:1});
+	$(".goFront").anchorGoWhere({target:1});
+	// $(".goVertical").anchorGoWhere({target:2});
+});
+
+
+// $(document).ready(function(){
+//    $(".blog_title").toggle(function(){
+//    	$(this).next(".blog_time").next(".blog_text").animate({height: 'toggle', opacity: 'toggle'}, "slow");
+//    },function(){
+//    	$(this).next(".blog_time").next(".blog_text").animate({height: 'toggle', opacity: 'toggle'}, "slow");
+//    });
+// });
+
+// $(function(){
+// 	$(".menu_guide").css({"color":"#000000"});
+// });
+// function showSend(id){
+// 	if(id!=null&&id>0){
+// 		$(".blog_send_"+id).show();
+// 	}
+// }
+// function showComment(id){
+// 	if(id!=null&&id>0){
+// 		$(".comment_"+id).load("/blog/c_list?id="+id);
+// 	}
+// }
+
+// function sendComment(id){
+// 	if(id!=null&&id>0){
+// 		var msg=$(".blog_send_"+id+" textarea").val();
+// 		msg=$.trim(msg);
+// 		if(msg==""){
+// 			alert("请填写评论内容！");
+// 		}
+// 		$.post("/blog/add_comment/",{"id":id,"msg":msg},function(data){
+// 				if(data.status==0){
+// 					alert("评论失败，请重试");
+// 				}else{
+// 					$(".comment_"+id+" ul").prepend(data.data);
+// 					$(".blog_send_"+id+" textarea").val("");
+// 					$(".blog_send_"+id).hide();
 					
-				}
-			},"json");
-	}else{
-		alert("参数有误！");
-	}
-}
-$(".btn_cancel").click(function(){
-	$(this).parent().parent().hide();
-});
-
+// 				}
+// 			},"json");
+// 	}else{
+// 		alert("参数有误！");
+// 	}
+// }
+// $(".btn_cancel").click(function(){
+// 	$(this).parent().parent().hide();
+// });
 </script>
 {% endblock %}
 {% block footer %}{% include "footer.html" %}{% endblock %}

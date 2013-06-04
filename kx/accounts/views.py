@@ -15,13 +15,15 @@ from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render_to_response,render,get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST,require_GET
 from django.conf import settings
-from kx.models import KxUser,KxEmailInvate
+from kx.models import KxUser,KxEmailInvate,KxMailingAddfriend
 from django.http import Http404
 #from django.core.mail import send_mail,EmailMultiAlternatives
 from kx.utils import send_mail_thread
 from django.db import transaction
+from django.views.decorators.csrf import csrf_exempt
+from utils import invite_register,invite_tip
 
 logger = logging.getLogger(__name__)
 
@@ -328,38 +330,35 @@ def findPwd(request):
         t_var ={ 'step':step,}
         return render(request,"findPwd.html",t_var)
 
+@require_GET
 def resetPwd(request,verify):
-    try:
-        if verify:
-            now = time.time()
-            verify = urlsafe_b64decode(str(verify)).split(',')
-            email = verify[0]
-            time_str = verify[1]
-            md5_str = verify[2]
-            chk = md5(email + "," + time_str + ",kx2011").hexdigest()
-            if md5_str == chk:
-                if float(time_str)+24*3600 > now:
-                    chkcode = md5(email+"2011kx").hexdigest()
-                    t_var = {
-                             'email':email,
-                             'chkcode':chkcode,
-                            }
-                    return render(request,"resetPwd.html",t_var)
-                else:
-                    t_var ={'email':email,}
-                    messages.add_message(request,messages.INFO,_(u'链接已经失效'))
-                    return render(request,"resetPwd.html",t_var)
+    if verify:
+        now = time.time()
+        verify = urlsafe_b64decode(str(verify)).split(',')
+        email = verify[0]
+        time_str = verify[1]
+        md5_str = verify[2]
+        chk = md5(email + "," + time_str + ",kx2011").hexdigest()
+        if md5_str == chk:
+            if float(time_str)+24*3600 > now:
+                chkcode = md5(email+"2011kx").hexdigest()
+                t_var = {
+                         'email':email,
+                         'chkcode':chkcode,
+                        }
+                return render(request,"resetPwd.html",t_var)
             else:
                 t_var ={'email':email,}
-                messages.add_message(request,messages.INFO,_(u'链接错误'))
+                messages.add_message(request,messages.INFO,_(u'链接已经失效'))
                 return render(request,"resetPwd.html",t_var)
         else:
             t_var ={'email':email,}
-            messages.add_message(request,messages.INFO,_(u'链接非法'))
+            messages.add_message(request,messages.INFO,_(u'链接错误'))
             return render(request,"resetPwd.html",t_var)
-    except Exception as e:
-        logger.debug("%s",e)
-        return HttpResponseRedirect(reverse("index"))    
+    else:
+        t_var ={'email':email,}
+        messages.add_message(request,messages.INFO,_(u'链接非法'))
+        return render(request,"resetPwd.html",t_var)
 
 @require_POST
 def rePwd(request):
@@ -388,8 +387,8 @@ def rePwd(request):
                 }
         return render(request,"rePwd.html",t_var)
 
-    
 
+@require_GET
 def protocol(request):
     t_var ={
                 'title':u'用户协议',
@@ -429,72 +428,119 @@ def to_active(request):
         else:
             raise Http404
 
+@require_GET
 def account_verify(request):
-    try:
-        if request.method =="GET":
-            email = request.GET.get('email','')
-            if email and isinstance(email,unicode):
-                try:
-                    email = email.strip().strip('\t').strip('\n').strip('\r').strip('\0').strip('\x0B')
-                except Exception as e:
-                    email = ''
-                    logger.debug("%s",e)
-                email_suffix = email.split('@')[1]
-                email_login ='http://mail.' + email_suffix
-            else:
-                try:
-                    email = request.user.email
-                    email_suffix = email.split('@')[1]
-                    email_login ='http://mail.' + email_suffix
-                except Exception as e:
-                    email = ''
-                    logger.debug("%s",e)
-                    message = """注册邮箱不存在！<A HREF="javascript:history.go(-2)">返 回</A>"""
-                    return HttpResponse(message)
+    email = request.GET.get('email','')
+    if email and isinstance(email,unicode):
+        try:
+            email = email.strip().strip('\t').strip('\n').strip('\r').strip('\0').strip('\x0B')
+        except Exception as e:
+            email = ''
+            logger.debug("%s",e)
+        email_suffix = email.split('@')[1]
+        email_login ='http://mail.' + email_suffix
+    else:
+        try:
+            email = request.user.email
+            email_suffix = email.split('@')[1]
+            email_login ='http://mail.' + email_suffix
+        except Exception as e:
+            email = ''
+            logger.debug("%s",e)
+            message = """注册邮箱不存在！<A HREF="javascript:history.go(-2)">返 回</A>"""
+            return HttpResponse(message)
+    t_var={
+            'email':email,
+            'email_login':email_login,
+        }
+    return render(request,"account_verify.html",t_var)
 
-                
-            t_var={
-                    'email':email,
-                    'email_login':email_login,
-                }
-            return render(request,"account_verify.html",t_var)
-        else:
-            return HttpResponseRedirect(reverse("register"))
-    except Exception as e:
-        logger.debug("%s",e)
-        raise Http404
-
+@require_GET
 def activate(request,ver_data):
-    try:
-        if ver_data:
-            now = time.time()
-            active_time = datetime.datetime.now()
-            ver_data = urlsafe_b64decode(str(ver_data)).split(',')
-            email = ver_data[0]
-            time_str = ver_data[1]
-            md5_str = ver_data[2]
-            chk = md5(email + "," + time_str + ",qianmo20120601").hexdigest()
-            if md5_str == chk:
-                if float(time_str)+24*3600 > now:
-                    try:
-                        user_obj = KxUser.objects.filter(email=email).update(status=1,active_time=active_time)
-                        return HttpResponseRedirect(reverse("verify_success"))
-                    except Exception as e:
-                        logger.debug("%s",e)
-                        message = """激活失败！<A HREF="javascript:history.back()">返 回</A>"""
-                        return HttpResponse(message)
-                else:
-                    message = """链接已失效！<A HREF="javascript:history.back()">返 回</A>"""
+    if ver_data:
+        now = time.time()
+        active_time = datetime.datetime.now()
+        ver_data = urlsafe_b64decode(str(ver_data)).split(',')
+        email = ver_data[0]
+        time_str = ver_data[1]
+        md5_str = ver_data[2]
+        chk = md5(email + "," + time_str + ",qianmo20120601").hexdigest()
+        if md5_str == chk:
+            if float(time_str)+24*3600 > now:
+                try:
+                    user_obj = KxUser.objects.filter(email=email).update(status=1,active_time=active_time)
+                    return HttpResponseRedirect(reverse("verify_success"))
+                except Exception as e:
+                    logger.debug("%s",e)
+                    message = """激活失败！<A HREF="javascript:history.back()">返 回</A>"""
                     return HttpResponse(message)
             else:
-                message = """链接错误！<A HREF="javascript:history.back()">返 回</A>"""
+                message = """链接已失效！<A HREF="javascript:history.back()">返 回</A>"""
                 return HttpResponse(message)
         else:
-            message = """链接非法！<A HREF="javascript:history.back()">返 回</A>"""
+            message = """链接错误！<A HREF="javascript:history.back()">返 回</A>"""
             return HttpResponse(message)
-    except Exception as e:
-        logger.debug("%s",e)
+    else:
+        message = """链接非法！<A HREF="javascript:history.back()">返 回</A>"""
+        return HttpResponse(message)
 
+@require_GET
 def verify_success(request):
     return render(request,"verify_success.html",{})
 
+@csrf_exempt
+@require_GET
+def invite_msg(reqeust,ckey=''):
+    key = '518279d14e20e'
+    site_url = settings.DOMAIN
+    reg_url = settings.DOMAIN + u'/User/register'
+    sendok_ids = []
+    if ckey and key == ckey:
+        mail_list = KxMailingAddfriend.objects.filter(is_sendemail__exact=0).values()
+        email = 'mrmuxl@126.com'
+        for i in mail_list:
+            invite_content = i['invite_content'].strip()
+            from_email = i['user'].strip()
+            to_email = i['friend'].strip()
+            if not to_email:
+                continue
+            try:
+                user_obj = KxUser.objects.get(email=from_email)
+                from_nick = user_obj.nick
+            except Exception as e:
+                from_nick = from_email
+                logger.debug("invite_msg:%s",e)
+            if i['send_reason_type'] == 0:
+                subject = u'SimpleNect好友邀请信息！'
+                msg = invite_register(from_nick,invite_content,reg_url)
+                try:
+                    send_mail_thread(subject,msg,from_email,[to_email],html=msg)
+                    sendok_ids.append(i['id'])
+                except Exception as e:
+                    logger.debug("%s",e)
+            elif i['send_reason_type'] == 1:
+                subject = u'SimpleNect好友邀请提示信息！'
+                invite_content =u'希望加你为好友，请及时登录SimpleNect客户端，确认邀请信息。'
+                msg = invite_register(from_nick,invate_content,reg_url)
+                try:
+                    send_mail_thread(subject,msg,from_email,[to_email],html=msg)
+                    sendok_ids.append(i['id'])
+                except Exception as e:
+                    logger.debug("%s",e)
+            elif i['send_reason_type'] == 2:
+                subject = u'SimpleNect好友邀请提示信息！'
+                invite_content =u'通过了您的好友邀请，请登录SimpleNect客户端，现在你们可以进行通讯了。'
+                msg = invite_register(from_nick,invite_content,reg_url)
+                try:
+                    send_mail_thread(subject,msg,from_email,[to_email],html=msg)
+                    sendok_ids.append(i['id'])
+                except Exception as e:
+                    logger.debug("%s",e)
+            else:
+                pass
+        if sendok_ids:
+            KxMailingAddfriend.objects.filter(id__in=sendok_ids).update(is_del=1,is_sendemail=1)
+        return HttpResponse(sendok_ids)
+    else:
+        message = """Key Error!<A HREF="javascript:history.back()">返 回</A>"""
+        return HttpResponse(message)

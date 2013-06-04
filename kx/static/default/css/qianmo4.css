@@ -965,8 +965,11 @@ img{
 	line-height:38px;
 	overflow:hidden;
 	width:980px;
-	color:#010101;
+	color:#000000;
 	font-size:20px;
+	a:link, #blog_title a:visited{ background:#990033; color:#FFFFCC}
+	a:hover,#blog_title a:active { background:#FF0000; color:#FFFFCC}
+
 }
 .blog_time{
 	height:25px;

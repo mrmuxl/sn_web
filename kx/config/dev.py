@@ -107,8 +107,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'kx',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
-        'PASSWORD': 'abc123',                  # Not used with sqlite3.
-        'HOST': '192.168.18.200',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PASSWORD': 'mrmuxl',                  # Not used with sqlite3.
+        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -134,7 +134,7 @@ INSTALLED_APPS = (
     'online_user',
     'auth',
     'compressor',
-    'client',
+    #'client',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
@@ -147,15 +147,15 @@ REST_FRAMEWORK = {
     )
 }
 
-CACHES = {
-   "default": {
-       "BACKEND": "redis_cache.cache.RedisCache",
-       "LOCATION": "192.168.18.200:6383:15",
-       "OPTIONS": {
-           "CLIENT_CLASS": "redis_cache.client.DefaultClient",
-       }
-    }
-}
+#CACHES = {
+#   "default": {
+#       "BACKEND": "redis_cache.cache.RedisCache",
+#       "LOCATION": "192.168.18.200:6383:15",
+#       "OPTIONS": {
+#           "CLIENT_CLASS": "redis_cache.client.DefaultClient",
+#       }
+#    }
+#}
 
 REDIS_IP = "192.168.18.200"
 REDIS_PORT = "6383"
