@@ -428,7 +428,7 @@ def invate(request):
         my_email = request.POST.get('my_email','')
         invate_email = request.POST.get('invate_email','')
         my_name = request.POST.get('my_name','')
-        invate_name = request.POST.get('nvate_name','')
+        invate_name = request.POST.get('invate_name','')
         group_id = request.POST.get('group_id','')
         group_name = request.POST.get('group_name','')
         if my_email and invate_email and my_name and invate_name and group_id and group_name:
@@ -465,7 +465,10 @@ def invate(request):
                         #mail = EmailMultiAlternatives(subject,msg,from_email,[invate_email])
                         #mail.content_subtype = "html"
                         #mail.send(fail_silently=True)
-                        send_mail_thread(subject,msg,from_email,[email],html=msg)
+                        try:
+                            send_mail_thread(subject,msg,from_email,[email],html=msg)
+                        except Exception as e:
+                            logger("invate:%s",e)
                         message['message']="invate ok"
                         message['status']="ok"
                         message['create_time']=str(now)

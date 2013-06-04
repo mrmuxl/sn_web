@@ -85,7 +85,10 @@ def save(request):
                             #mail = EmailMultiAlternatives(subject,msg,from_email,[email])
                             #mail.content_subtype = "html"
                             #mail.send(fail_silently=True)
-                            send_mail_thread(subject,msg,from_email,[email],html=msg)
+                            try:
+                                send_mail_thread(subject,msg,from_email,[email],html=msg)
+                            except Exception as e:
+                                logger.debug("%s",e)
                             return HttpResponseRedirect('/User/account_verify/?email='+email)
                         else:
                             message = """创建用户出现错误！<A HREF="javascript:history.back()">返 回</A>"""
