@@ -7,7 +7,7 @@ $(function(){
             returnTop = $("div.returnTop");
 
         // 滚动条的垂直偏移大于 0 时显示，反之隐藏
-        (scrollTopNum > 0) ? returnTop.fadeIn("fast") : returnTop.fadeOut("fast");
+        (scrollTopNum > winHeight*2.5 ) ? returnTop.fadeIn("fast") : returnTop.fadeOut("fast");
 
         // 给 IE6 定位
         if (!-[1,]&&!window.XMLHttpRequest) {

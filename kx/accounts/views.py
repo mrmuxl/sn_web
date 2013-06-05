@@ -498,8 +498,8 @@ def invite_msg(reqeust,ckey=''):
     site_url = settings.DOMAIN
     reg_url = settings.DOMAIN + u'/User/register'
     sendok_ids = []
-    if ckey and key == ckey:
-        mail_list = KxMailingAddfriend.objects.filter(is_sendemail__exact=0).values()
+    mail_list = KxMailingAddfriend.objects.filter(is_sendemail__exact=0).values()
+    if ckey and mail_list and key == ckey:
         for i in mail_list:
             invite_content = i['invite_content'].strip()
             from_email = i['user'].strip()
@@ -518,7 +518,7 @@ def invite_msg(reqeust,ckey=''):
                 msg = invite_register(from_nick,invite_content,reg_url)
                 try:
                     send_mail_thread(subject,msg,from_email,[to_email],html=msg)
-                    sendok_ids.append(i['id'])
+                    sendok_ids.append(str(i['id']))
                 except Exception as e:
                     logger.debug("%s",e)
                 break
@@ -528,7 +528,7 @@ def invite_msg(reqeust,ckey=''):
                 msg = invite_register(from_nick,invite_content,reg_url)
                 try:
                     send_mail_thread(subject,msg,from_email,[to_email],html=msg)
-                    sendok_ids.append(i['id'])
+                    sendok_ids.append(str(i['id']))
                 except Exception as e:
                     logger.debug("%s",e)
                 break
@@ -539,7 +539,7 @@ def invite_msg(reqeust,ckey=''):
                 msg = invite_register(from_nick,invite_content,reg_url)
                 try:
                     send_mail_thread(subject,msg,from_email,[to_email],html=msg)
-                    sendok_ids.append(i['id'])
+                    sendok_ids.append(str(i['id']))
                 except Exception as e:
                     logger.debug("%s",e)
                 break
@@ -548,7 +548,8 @@ def invite_msg(reqeust,ckey=''):
         if sendok_ids:
             KxMailingAddfriend.objects.filter(id__in=sendok_ids).update(is_del=1,is_sendemail=1)
             logger.info("%s",sendok_ids)
+        sendok ="<br/>".join(sendok_ids)
         return HttpResponse(sendok_ids)
     else:
-        message = """Key Error!<A HREF="javascript:history.back()">返 回</A>"""
+        message = """Key Error or No email to send !<A HREF="javascript:history.back()">返 回</A>"""
         return HttpResponse(message)
