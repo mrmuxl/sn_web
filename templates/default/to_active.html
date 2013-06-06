@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block header %}{% include "header.html" %}{% endblock %}{% block content %}
+<div class="main">
+	<div class="center_area" >
+	<div class="center_register">
+				<div class="nclogin_allout">
+					<div class="nc_register2_bottom">
+				{% if messages %}
+				{% for message in messages %}
+				{{ message}}
+				{% endfor %}
+				{% endif %}
+						<br />
+					</div>
+				</div>
+			</div>	
+	</div>
+</div>
+{% endblock %}
+
+{% block footer %}{% include "footer.html" %}{% endblock %}		

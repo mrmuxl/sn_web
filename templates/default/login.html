@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block header %}{% include "header.html" %}{% endblock %}{% block content %}
+
+<div class="main">
+<div class="center_area" >
+<div class="login_top_title">欢迎登录阡陌</div>
+<div class="center_register">
+<div class="login_area">
+<form action="{% url 'login' %}" method="post" enctype="multipart/form-data" onsubmit="return checkForm();">
+	{% csrf_token %}
+	<table class="register">
+		<tr>
+			<td class="register_left reg_name">登录阡陌</td>
+			<td class="reg_input">&nbsp;</td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="register_left">电子邮箱：</td>
+			<td class="reg_input">
+				<input id="email" name="email" type="text" value="{{ email }}" class="input-len" />
+			</td>
+			<td class="reg_msg_email"></td>
+		</tr>
+		<tr>
+			<td class="register_left">密&nbsp;&nbsp;&nbsp;&nbsp;码：</td>
+			<td class="reg_input"><input id="pwd" name="password" type="password" value="" class="input-len" /></td>
+			<td class="reg_msg_pwd"></td>
+		</tr>
+		{% if email %}
+		<tr>
+			<td class="register_left">&nbsp;</td>
+			<td class="reg_input">
+				<span style="color:red;">
+				{% if messages %}
+				{% for message in messages %}
+				{{ message}}
+				{% endfor %}
+				{% endif %}
+			</span></td>
+			<td class="reg_msg_pwd"></td>
+		</tr>
+		{% endif %}
+		<tr>
+			<td></td>
+			<td>
+				<input name="" type="submit" value="" class="login_btn"/>
+				&nbsp;&nbsp;<a href="{% url 'findPwd' %}" style=" color: #007EFF;">忘记密码？</a>
+			</td>
+			<td></td>
+		</tr>
+	</table>
+</form>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+	function checkForm(){
+		var val=$.trim($("#email").val());
+		if(val==""){
+			alert("请填写电子邮箱");
+			return false;
+		}
+		return true;
+	}
+</script>
+
+{% endblock %}
+
+{% block footer %}{% include "footer.html" %}{% endblock %}

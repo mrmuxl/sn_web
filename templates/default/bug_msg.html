@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block header %}{% include "header.html" %}{% endblock %}
+{% block content %}
+<script type="text/javascript">document.domain = '{{ domain }}';</script>
+<script language="javascript" type="text/javascript" defer="defer" src="{{ STATIC_URL }}js/datepicker/WdatePicker.js"></script>
+<h1 class="center">每日客户端BUG信息</h1>
+<h3 style="text-align:right;margin-right:150px;">
+查询日期 <input type="text" name="day" class="Wdate search_day" title="统计日期" value="{{ day }}"     onFocus="WdatePicker({minDate:'2011-11-08',startDate:'{{ day }}',dateFmt:'yyyy-MM-dd'})" readonly style="width:90px;font-size:12px;color:#555555" />
+&nbsp;&nbsp;<input type="button" name="" value="确定" class="day_search" />
+</h3>
+<div style="width:1000px;margin:0 auto;">
+         {% for file_name,info in file_info.items %}
+		<a href="{{ MEDIA_URL }}{{ folder }}/{{ file_name }}" target="_blank">{{ file_name }}<span>&nbsp;size：{{ info.size}}</span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+		{% if forloop.counter|divisibleby:"4" %} 
+			<br />
+		{% endif %}
+         {% endfor %}
+</div>
+<table class="center" border="1" width="100%">
+	<tr>
+		<th>客户端ID</th><th>登录用户</th><th>软件版本</th><th>OS</th><th>开机启动</th><th>局域网成员数</th><th>BUG上传时间</th>
+	</tr>
+	{% for bug in bug_list %}
+	<tr>
+		<td>{{ bug.client_identifie }}</td>
+		<td>	{% if bug.u_email %}{{ bug.u_email }}{% else %}--{% endif %}</td>
+		<td>{{ bug.version }}</td>
+		<td>{{ bug.os }}</td>
+		<td>{% if bug.auto_start == 1 %}是	{% else %}否{% endif %}</td>
+		<td>	{{ bug.lan_num }}</td>
+		<td>	{{ bug.upload_time|date:"Y-m-d H:m:s" }}</td>
+	</tr>
+	{% endfor %}
+</table>
+
+<script>
+
+	$(".day_search").click(function(){
+			var sDay=$(".search_day").val();
+			if(null==sDay||sDay==""){
+				alert("请选择查询日期！");
+				return;
+			}
+			var url="{% url 'bug_msg' %}?day="+sDay;
+			window.location.href=url;
+		});
+
+
+</script>
+{% endblock %}
+{% block footer %}{% include "footer.html" %}{% endblock %}
