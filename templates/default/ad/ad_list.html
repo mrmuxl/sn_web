@@ -1,0 +1,24 @@
+{% extends "admin_index.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block header %}{% include "header.html" %}{% endblock %}
+{% block admin_left %}{% include "admin_left.html" %}{% endblock %}
+{% block content %}
+<div class="manager_right">
+<div><a href="/admin/">创建广告</a></div>
+	<table>
+		<tr>
+			<th>ID</th><th>广告词</th><th>广告URL</th><th>广告结束时间</th><th>操作</th>
+		</tr>
+		{% for ad in ad_list %}
+		<tr class="ad_{{ ad.id }}">
+			<td>{{ ad.id }}</td>
+			<td>{{ ad.title }}</td>
+			<td>{{ ad.ad_url }}</td>
+			<td>{{ ad.exp_day }}</td>
+			<td><a href="/admin/">删除</a></td>
+		</tr>
+		{% endfor %}
+	</table>
+</div>
+{% endblock %}
+{% block footer %}{% include "footer.html" %}{% endblock %}

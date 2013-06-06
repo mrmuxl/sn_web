@@ -62,6 +62,6 @@ LOGGING = {
 }
 
 try:
-    from kx.settings import *
+    from common import *
 except ImportError:
     pass
