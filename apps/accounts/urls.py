@@ -4,7 +4,7 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
     url(r'^$','apps.accounts.views.login',name='login'),
-    url(r'^register/?$','kx.accounts.views.register',name='register'),
+    url(r'^register/?$','apps.accounts.views.register',name='register'),
     url(r'^register/invate_code/(.+)$','apps.accounts.views.register',name='invate_code'),
     url(r'^login/?$','apps.accounts.views.login',name='login'),
     url(r'^logout/?$','apps.accounts.views.logout',name='logout'),
@@ -19,7 +19,7 @@ urlpatterns = patterns('',
 )
 urlpatterns += patterns('',
     url(r'^protocol/?$','apps.accounts.views.protocol',name='protocol'),
-    url(r'^cadd/?$','apps.api.views.cadd',name='cadd'),
+    url(r'^cadd/?$','apps.kx.api.views.cadd',name='cadd'),
     url(r'^avatar/?$','apps.accounts.views.avatar',name='avatar'),
 
 )
@@ -27,7 +27,7 @@ urlpatterns += patterns('',
     url(r'^verify_success/$','apps.accounts.views.verify_success',name='verify_success'),
     url(r'^account_verify/?$','apps.accounts.views.account_verify',name='account_verify'),
     url(r'^activate/verify/(.+)$','apps.accounts.views.activate',name='activate'),
-    url(r'^invate/$','apps.api.views.invate',name='invate'),
+    url(r'^invate/$','apps.kx.api.views.invate',name='invate'),
     url(r'^to_active/?$','apps.accounts.views.to_active',name='to_active'),
     url(r'^invite_msg/(\w+)/?$','apps.accounts.views.invite_msg',name='invite_msg'),
 )

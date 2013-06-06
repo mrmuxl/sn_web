@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     'compressor',
     'client',
     'apps.ad',
+    'apps.msg_board',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
