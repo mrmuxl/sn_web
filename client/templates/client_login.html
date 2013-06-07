@@ -21,14 +21,14 @@ body{
 
 
 <div class="container">
+{{ user.nick }}
 
-
-<form action="{% url 'login' %}?next=/client/friend/feed/" method="post" class="form-signin" enctype="multipart/form-data" >
+<form action="{% url 'login' %}?next=/client/friend/feed/" method="post" class="form-signin" enctype="multipart/form-data"  onsubmit="formExtractor.submit()">
 	{% csrf_token %}
 	      	<h3>欢迎使用SimpleNect</h3>
       	<div class="input-prepend btn-block">
 		    <span class="add-on"><i class="icon-envelope"></i></span>
-		    <input name = "email "class="input-block-level" type="text" placeholder="邮箱地址" style="width:270px">
+		    <input name = "email" class="input-block-level" type="text" placeholder="邮箱地址" style="width:270px">
 		</div>
 		<div class="input-prepend btn-block">
 		    <span class="add-on"><i class="icon-key"></i></span>
