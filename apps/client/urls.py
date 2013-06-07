@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 from apps.client.decorators import sn_required, snlogin_required
 
 urlpatterns = patterns('',
-	(r'^login/$', sn_required(TemplateView.as_view(template_name="client_login.html"))),
-    (r'^silenceLogin/$', 'apps.client.views.login'),
+	(r'^login/$', 'apps.client.views.login'),
+    (r'^silenceLogin/$', 'apps.client.views.silencelogin'),
     (r'^friend/feed/$', snlogin_required(TemplateView.as_view(template_name="feed.html"))),
     (r'^friend/addfriends/$', snlogin_required(TemplateView.as_view(template_name="addfriends.html"))),
     (r'^file/index/$', snlogin_required(TemplateView.as_view(template_name="file_index.html"))),
