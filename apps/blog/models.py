@@ -69,7 +69,8 @@ class Blog(models.Model):
     id = models.AutoField(primary_key = True)
     author = models.ForeignKey(KxUser, editable=False)
     title = models.CharField(max_length = 100L)
-    content= models.TextField()
+    summary = models.TextField(verbose_name=_(u'摘要'))
+    content= models.TextField(verbose_name=_(u'正文'))
     status  = models.IntegerField(verbose_name=_(u'文章状态'),default = 0,choices=BLOG_CHOICES,help_text=_(u'0=已发布，1=隐藏'))
     is_top =  models.BooleanField(verbose_name=_(u'置顶'),default = 0,choices=TOP_CHOICES,help_text=_(u'0=未置顶，1=已置顶'))
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'发布日期')
@@ -77,3 +78,4 @@ class Blog(models.Model):
     class Meta:
         db_table = 'blog'
         verbose_name_plural = verbose_name = _(u'Blog')
+ 

@@ -30,6 +30,8 @@ def ad_api(request):
     ad_dict = {}
     now = datetime.datetime.now()
     ad_list =list(KxSoftAd.objects.extra(where=['DATE(exp_day)>=CURDATE()']).order_by('-id').values('id','title','ad_url'))
+    for i in ad_list:
+        i.update(adUrl=i.pop('ad_url'))
     if ad_list:
         message['data']=ad_list
         message['status']="1"
