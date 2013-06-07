@@ -1,0 +1,99 @@
+{% extends "layout_base.html" %}
+
+{% block style %}
+<style type="text/css">
+.form-addfriend{
+	max-width: 300px;
+	 margin: 0 auto;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class = "well" style="padding:5px 10px; margin:0 20px 10px 20px">
+
+	<div>
+		<a class="btn" href="/client/friend/feed/">
+			<i class="icon-double-angle-left "></i> 返回
+		</a>
+	</div>
+
+</div>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span8" style="margin:0 auto;">
+			<form class="form-addfriend">
+				<h4 >添加好友</h4>
+				<p style="margin-bottom:10px" >输入好友的邮箱地址：</p>
+
+				<div class="input-prepend btn-block js-add-email-div">
+				    <span class="add-on"><i class="icon-user icon-large icon-gray"></i></span>
+				    <input class="input-block-level js-friend-email" type="text" style="width:270px">
+				</div>
+
+				<div class="input-prepend btn-block js-add-email-div">
+				    <span class="add-on"><i class="icon-user icon-large icon-gray"></i></span>
+				    <input class="input-block-level js-friend-email" type="text" style="width:270px">
+				</div>
+
+				<div class="input-prepend btn-block js-add-email-div">
+				    <span class="add-on"><i class="icon-user icon-large icon-gray"></i></span>
+				    <input class="input-block-level js-friend-email" type="text" style="width:270px">
+				</div>
+
+
+				<br>
+				<div>附注消息（可选）</div>
+				<textarea rows="3" class="input-block-level"></textarea>
+
+				<button class="btn btn-primary btn-block" type="submit" >发送邀请</button>
+			</form>
+
+		</div>
+		<div class="span4">
+			<div class="media">
+				 <a href="#" class="pull-left"><img src="img/a_002.jpg" class="media-object" alt='张三' /></a>
+				<div class="media-body">
+					<h5 class="media-heading">
+						共享文件名
+					</h5>
+					<div class="muted font12">
+					李四
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+var addEmailDiv = $("<div />").append($('.js-add-email-div').first().clone()).html();
+
+
+$(".form-addfriend").on('focus', ".js-friend-email" , function(e){
+	$(e.currentTarget).parent().find("i").css("color", "red");
+});
+
+$(".form-addfriend").on('blur' , ".js-friend-email", function(e){
+	$(e.currentTarget).parent().find("i").css("color", "");
+
+	var emptyField = 0;
+	$('.js-add-email-div').each(function(index){
+		if(!$(this).find(".js-friend-email").val()){
+			emptyField++;
+		}
+	});
+
+
+
+	if(emptyField <= 1){
+		$('.js-add-email-div').last().after(addEmailDiv);
+	}
+});
+
+</script>
+{% endblock %}
