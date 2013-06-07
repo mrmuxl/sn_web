@@ -88,7 +88,6 @@ def publish_add(request):
                 return HttpResponseRedirect(reverse('publish_index'))
             t_var ={'form':form}
             return render(request,"publish/add.html",t_var)
-
         elif request.method == "GET":
             pub_id = request.GET.get('id','')
             if pub_id:
@@ -106,16 +105,21 @@ def publish_add(request):
                 except Exception as e:
                     logger.debug("%s",e)
             else:
-                ver_obj = KxPub.objects.order_by('-id')[0:1].get()
-                current_ver = ver_obj.ver.split('.')
-                prefix_ver = current_ver[0:-1]
-                suffix_ver = unicode(int(current_ver[-1:][0])+1)
-                prefix_ver.append(suffix_ver)
-                form_data = '.'.join(prefix_ver)
-                form_init = {'ver':form_data}
-                form = PublishAdd(initial=form_init,auto_id=False) 
-                t_var ={'form':form}
-                return render(request,"publish/add.html",t_var)
+                try:
+                    ver_obj = KxPub.objects.order_by('-id')[0:1].get()
+                    current_ver = ver_obj.ver.split('.')
+                    prefix_ver = current_ver[0:-1]
+                    suffix_ver = unicode(int(current_ver[-1:][0])+1)
+                    prefix_ver.append(suffix_ver)
+                    form_data = '.'.join(prefix_ver)
+                    form_init = {'ver':form_data}
+                    form = PublishAdd(initial=form_init,auto_id=False) 
+                    t_var ={'form':form}
+                    return render(request,"publish/add.html",t_var)
+                except Exception as e:
+                    form = PublishAdd(auto_id=False) 
+                    t_var ={'form':form}
+                    return render(request,"publish/add.html",t_var)
 
 def publish_edit(request):
     return render(request,"publish/edit.html",{})
