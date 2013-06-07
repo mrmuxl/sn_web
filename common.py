@@ -94,12 +94,22 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': False,
         },
-        'sharefile': {
+        'apps.sharefile': {
             'handlers': ['console','file','mail_admins' ],
             'level': 'DEBUG',
             'propagate': False,
         },
-        'kx': {
+        'apps.client': {
+            'handlers': ['console','file','mail_admins' ],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'apps.kx': {
+            'handlers': ['console','file','mail_admins' ],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'apps.blog': {
             'handlers': ['console','file','mail_admins' ],
             'level': 'DEBUG',
             'propagate': False,
