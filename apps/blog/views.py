@@ -26,12 +26,9 @@ def help(request):
 @require_GET
 def blog_index(request):
     posts = Blog.objects.all()
-    top = [ i for i in posts if i.is_top == 1 and i.status == 0]
-    page = [ i for i in posts if i.is_top == 0 and i.status == 0]
     t_var = {
                 'title':u"新手指南",
-                'top':top,
-                'page':page,
+                'posts':posts,
             }
-    return render(request,"blog/show.html",t_var)
+    return render(request,"blog/index.html",t_var)
     

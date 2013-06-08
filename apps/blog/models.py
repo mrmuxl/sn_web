@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.conf import settings
 from apps.kx.models import KxUser
+from datetime import datetime
 
 
 class KxForumForum(models.Model):
@@ -56,6 +57,18 @@ class KxForumPosts(models.Model):
         db_table = 'kx_forum_posts'
         verbose_name_plural = verbose_name = _(u'文章')
 
+class Category(models.Model):
+    id = models.AutoField(primary_key = True)
+    name = models.CharField(max_length=50, unique=True, verbose_name='分类名称')
+    slug = models.SlugField()
+    order = models.IntegerField(blank=True, null=True, verbose_name='顺序')
+    class Meta:
+        db_table = 'category'
+        verbose_name_plural = verbose_name = _(u'博客分类')
+        ordering = ['order',]
+    def __unicode__(self):
+        return self.name
+
 
 BLOG_CHOICES = (
     (0,_(u'已发布')),
@@ -67,15 +80,21 @@ TOP_CHOICES = (
     )
 class Blog(models.Model):
     id = models.AutoField(primary_key = True)
-    author = models.ForeignKey(KxUser, editable=False)
-    title = models.CharField(max_length = 100L)
+    category = models.ForeignKey(Category, verbose_name='分类')
+    author = models.ForeignKey(KxUser, editable=False,verbose_name=_(u'作者'))
+    title = models.CharField(max_length = 100L,verbose_name=_(u'标题'))
+    slug = models.CharField(max_length=50, unique=True, db_index=True, verbose_name=u'Slug', help_text=u'页面的 URL 名称。可包含字母、数字、减号、下划线，不能是以下>    词语之一：archives、post、tag')
     summary = models.TextField(verbose_name=_(u'摘要'))
     content= models.TextField(verbose_name=_(u'正文'))
     status  = models.IntegerField(verbose_name=_(u'文章状态'),default = 0,choices=BLOG_CHOICES,help_text=_(u'0=已发布，1=隐藏'))
-    is_top =  models.BooleanField(verbose_name=_(u'置顶'),default = 0,choices=TOP_CHOICES,help_text=_(u'0=未置顶，1=已置顶'))
-    create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'发布日期')
-    update_time = models.DateTimeField(auto_now_add=True, verbose_name=u'更新日期')
+    is_above =  models.BooleanField(verbose_name=_(u'置顶'),default = 0,choices=TOP_CHOICES,help_text=_(u'0=未置顶，1=已置顶'))
+    created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    modified = models.DateTimeField(default=datetime.now, verbose_name='修改时间')
+    hits = models.IntegerField(default=0, editable=False, verbose_name='点击次数')
     class Meta:
         db_table = 'blog'
-        verbose_name_plural = verbose_name = _(u'Blog')
+        verbose_name_plural = verbose_name = _(u'博客')
+        ordering = ['-is_above', '-created']
  
+    def __unicode__(self):
+        return self.title

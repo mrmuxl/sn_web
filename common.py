@@ -9,7 +9,7 @@ ROOT_DIR = os.path.dirname(__file__)
 
 EMAIL = 'mrmuxl@sina.com'
 ADMINS = (
-    #('admin', EMAIL),
+    ('admin', EMAIL),
 )
 
 MANAGERS = ADMINS
