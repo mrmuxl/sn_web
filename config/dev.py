@@ -12,6 +12,7 @@ try:
 except ImportError:
     pass
 
+THEME ='/classic/'
 STATIC_ROOT = os.path.join(ROOT_DIR,'static')
 STATIC_URL = '/static' + THEME
 MEDIA_ROOT = os.path.join(ROOT_DIR,'media/upload/')
@@ -20,7 +21,7 @@ PUBLISH_UPLOAD = os.path.join(ROOT_DIR,'media/upload/')
 SERVER_LOG =''
 
 #django_compressor
-COMPRESS_ENABLED = True
+COMPRESS_ENABLED = False
 COMPRESS_ROOT=STATIC_ROOT + THEME
 COMPRESS_URL= STATIC_URL
 COMPRESS_OUTPUT_DIR='cache'

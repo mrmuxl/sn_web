@@ -1,82 +1,127 @@
-<div class="container">
-	<div class="row">
-		<div class="span12">
-			<ul class="breadcrumb">
-				<li>
-					首页 <span class="divider">留言区</span>
-				</li>
-				<li>
-					 <span class="divider">新手指南 登录 注册</span>
-				</li>
-			</ul>
-		</div>
-	</div>
-	<div class="row">
-		<div class="span12">
-			<div class="media">
-				 <a href="#" class="pull-left"><img src="img/a_002.jpg" class="media-object" alt='' /></a>
-				<div class="media-body">
-					<h4 class="media-heading">
-						嵌入媒体标题
-					</h4> 请尽量使用HTML5兼容的视频格式和视频代码实现视频播放, 以达到更好的体验效果.
-				</div>
-			</div><img alt="140x140" src="img/a.jpg" />
-		</div>
-	</div>
-	<div class="row">
-		<div class="span12">
-			<div class="row">
-				<div class="span4">
-				</div>
-				<div class="span4">
-					<h2>
-						标题
-					</h2>
-					<p>
-						本可视化布局程序在HTML5浏览器上运行更加完美, 能实现自动本地化保存, 即使关闭了网页, 下一次打开仍然能恢复上一次的操作.
-					</p>
-					<p>
-						<a class="btn" href="#">查看更多 »</a>
-					</p>
-					<div class="row">
-						<div class="span4">
-							<img alt="140x140" src="img/a.jpg" />
-						</div>
-						<div class="span4">
-							<img alt="140x140" src="img/a.jpg" />
-						</div>
-						<div class="span4">
-							<img alt="140x140" src="img/a.jpg" />
-						</div>
-					</div>
-				</div>
-				<div class="span4">
+{% extends "base.html" %}
+{% block header %}{% include "header.html" %}{% endblock %}
+{% block content %}
+<!-- <div class="container-fluid">
+	<div class="row"> -->
+<div class="main index_banner">
+	<div class="main_in">
+		<div class="top_node">
+			<div class="download_area">
+				{% include "index_download.html" %}
+			</div>
+			<div class="video_area">
+				<div class="video_play">
+					<img src="{{ STATIC_URL }}images/video_play2.png" class="mypng" />
+					<a href="javascript:;" onclick="showFlv();" class="video_play_btn"></a>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="row">
-		<div class="span12">
-			<div class="row">
-				<div class="span12">
+
+<div class="player_video" style="">
+	<div class="player_box">
+		<div id="player1" style=""><a href="http://www.macromedia.com/go/getflashplayer">没有Flash播放器？</a></div>
+	</div>
+</div>
+	<script type="text/javascript" src="{{ STATIC_URL }}flash/swfobject.js"></script>
+	<script type="text/javascript">
+		var swfUrl="{{ STATIC_URL }}flash/";
+		var swfLeft=$(".main_in").offset().left;
+			function showFlv(){
+				var s1 = new SWFObject(swfUrl+"flvplayer.swf","single","960","540","7");
+				s1.addParam("allowfullscreen","true");
+				s1.addParam("vmode","window");
+				s1.addVariable("autostart","true");
+				s1.addVariable("file",swfUrl+"simplenect.flv");
+				s1.addVariable("image",swfUrl+"flv_bg.jpg");
+				s1.addVariable("width","960");
+				s1.addVariable("height","540");
+				s1.addVariable("displayheight","540");
+				s1.write("player1");
+				$("#player1").css({"left":swfLeft});
+				$("#player1").show();
+				$(".player_video").show();
+			}
+		$(".player_video").click(function(){
+			$("#player1").hide();
+			$(".player_video").hide();
+			$("#player1").html("");
+		});
+	</script>
+</div>
+<div class="container-fluid"  style="background-color:#E5E9ED">
+	<br/><br/>
+	<div class="row-fluid">
+			<div class="span6 offset3">
+				<div class="text-center"><h2>SimpleNect的功能</h2>
+					<div><p>SimpleNect为您提供文件共享、打印共享、实现远程办公协同</p></div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="span6">
-					<h2>
-						标题
-					</h2>
-					<p>
-						本可视化布局程序在HTML5浏览器上运行更加完美, 能实现自动本地化保存, 即使关闭了网页, 下一次打开仍然能恢复上一次的操作.
-					</p>
-					<p>
-						<a class="btn" href="#">查看更多 »</a>
-					</p>
-				</div>
-				<div class="span6">
-					<img alt="140x140" src="img/a.jpg" />
-				</div>
-			</div>
+	</div>
+	<br/><br/>
+	<div class="row-fluid">
+		<div class="span6 offset3">
+			<img alt="574x138" src="{{STATIC_URL}}images/index/gongneng.png" />
 		</div>
 	</div>
 </div>
+
+<div style="background-color:#FDFDFD">
+	<br/><br/>
+<div class="container-narrow">
+	<div><div class="text-center"><h2>文件共享</h2></div></div>
+	<br/>
+	<div class="row">
+		<div class="span4">
+			<p>
+				简单：不同操作系统共享信息<br/>
+				安全：
+				快速：<br/>
+				跨网络：局域网或互联网彼此都可以分享文件
+			</p>
+		</div>
+		<div class="span8">
+			<img alt="667x421" src="{{STATIC_URL}}images/index/file_share.png" />
+		</div>
+	</div>
+</div>
+</div>
+
+<div style="background-color:#E5E9ED">
+<div class="container-narrow">
+	<br/><br/>
+	<div class="row" ><div class="text-center"><h2>打印机共享</h2></div></div>
+	<div class="row">
+		<br/>
+		<div class="span8">
+			<img alt="642x424" src="{{STATIC_URL}}images/index/printer_share.png" />
+		</div>
+		<div class="span4">
+			<p>
+				不仅帮你搞定局域网打印共享，还可以将打印机分享给互联网上的朋友
+			</p>
+		</div>
+
+	</div>
+</div>
+</div>
+<div style="background-color:#FDFDFD">
+	<br/><br/>
+<div class="container-narrow">
+	<div><div class="text-center"><h2>软件仓库</h2></div></div>
+	<br/>
+	<div class="row">
+		<div class="span4">
+			<p>
+			你可以利用SimpleNect组建个人的文件仓库，可以将仓库的部分权限分享给朋友们使用
+			</p>
+		</div>
+		<div class="span8">
+			<img alt="667x421" src="{{STATIC_URL}}images/index/file_share.png" />
+		</div>
+	</div>
+</div>
+</div>
+
+{% endblock %}
+{% block footer %}{% include "footer.html" %}{% endblock %}
