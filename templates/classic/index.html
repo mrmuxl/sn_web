@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% block header %}{% include "header.html" %}{% endblock %}
 {% block content %}
-<!-- <div class="container-fluid">
-	<div class="row"> -->
+{% load split %}
 <div class="main index_banner">
 	<div class="main_in">
 		<div class="top_node">
@@ -49,36 +48,34 @@
 		});
 	</script>
 </div>
-<div class="container-fluid"  style="background-color:#E5E9ED">
-	<br/><br/>
-	<div class="row-fluid">
-			<div class="span6 offset3">
-				<div class="text-center"><h2>SimpleNect的功能</h2>
-					<div><p>SimpleNect为您提供文件共享、打印共享、实现远程办公协同</p></div>
-				</div>
-			</div>
-	</div>
-	<br/><br/>
-	<div class="row-fluid">
-		<div class="span6 offset3">
+<div  style="background-color:#E5E9ED;height:430px">
+<div class="container-narrow">
+	<br/>
+	<div class="row">
+		<div class="span1"></div>
+		<div class="span10 text-center">
 			<img alt="574x138" src="{{STATIC_URL}}images/index/gongneng.png" />
 		</div>
+		<div class="span1"></div>
 	</div>
 </div>
+</div>
 
-<div style="background-color:#FDFDFD">
+<div style="background-color:#FDFDFD;">
 	<br/><br/>
 <div class="container-narrow">
 	<div><div class="text-center"><h2>文件共享</h2></div></div>
 	<br/>
-	<div class="row">
+	<div class="row-fluid">
 		<div class="span4">
-			<p>
-				简单：不同操作系统共享信息<br/>
-				安全：
-				快速：<br/>
-				跨网络：局域网或互联网彼此都可以分享文件
-			</p>
+			<div style="line-height:28px">
+				简&nbsp;&nbsp;&nbsp;单：不同操作系统共享信息<br/>
+				安&nbsp;&nbsp;&nbsp;全：自己的数据自己管理<br/>
+				快&nbsp;&nbsp;&nbsp;速：优秀的传输性能<br/>
+				跨网络：局域网或互联网彼此<br/>
+				       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				       都可以分享文件
+			</div>
 		</div>
 		<div class="span8">
 			<img alt="667x421" src="{{STATIC_URL}}images/index/file_share.png" />
@@ -87,34 +84,33 @@
 </div>
 </div>
 
-<div style="background-color:#E5E9ED">
+<div style="background-color:#E5E9ED;">
 <div class="container-narrow">
 	<br/><br/>
-	<div class="row" ><div class="text-center"><h2>打印机共享</h2></div></div>
+	<div class="row-fluid" ><div class="text-center"><h2>打印机共享</h2></div></div>
 	<div class="row">
 		<br/>
 		<div class="span8">
 			<img alt="642x424" src="{{STATIC_URL}}images/index/printer_share.png" />
 		</div>
-		<div class="span4">
-			<p>
-				不仅帮你搞定局域网打印共享，还可以将打印机分享给互联网上的朋友
-			</p>
+		<div class="span4 text-right">
+			<div style="line-height:28px">
+				不仅帮你搞定局域网打印共享，还可以<br/>将你的打印机分享给互联网上的朋友们
+			</div>
 		</div>
-
 	</div>
 </div>
 </div>
-<div style="background-color:#FDFDFD">
+<div style="background-color:#FDFDFD;">
 	<br/><br/>
 <div class="container-narrow">
 	<div><div class="text-center"><h2>软件仓库</h2></div></div>
 	<br/>
 	<div class="row">
 		<div class="span4">
-			<p>
-			你可以利用SimpleNect组建个人的文件仓库，可以将仓库的部分权限分享给朋友们使用
-			</p>
+			<div style="line-height:28px">
+			用SimpleNect组建个人的文件服务器，可以在任何地方访问
+		</div>
 		</div>
 		<div class="span8">
 			<img alt="667x421" src="{{STATIC_URL}}images/index/file_share.png" />
@@ -122,6 +118,336 @@
 	</div>
 </div>
 </div>
+<div style="background-color:#E5E9ED;">
+<div class="container-narrow">
+	<br/><br/><br/>
+	<div class="row">
+		<div class="span2"></div>
+		<div class="span8 text-center">
+			<img alt="574x138" src="{{STATIC_URL}}images/index/vip.png" />
+		</div>
+		<div class="span2"></div>
+	</div>
+</br>
+		<div class="container-narrow text-left well" style="background-color:#E4E4E4;color:#7E7E7E;border: 1px solid #C8C8C8">
+			<strong>注：</strong>每个企业版账户可以为200名企业用户授权
+		</div>
+</div>
+</div>
+<div style="background-color:#E5E9ED">
+	<br/>
+<div class="container-narrow" style="font-size:16px;line-height:28px">
+	<div class="row-fluid">
+		<div class="span8 well" style="background-color:#F2F2F2;height:240px">
+			<div style="font-size:14px;line-height:28px">
+				目标：￥10,000/已达
+			</div>
+			<h3>	<strong>￥：2,057</strong></h3>
+			
+			<div class="progress progress-primary" style="background-image: linear-gradient(to bottom, rgb(214, 211, 211), rgb(214, 211, 211));background-color:#C8C8C8;">
+				<div class="bar" style="background-image:none;width:40%;background-color:#000000;color:#C8C8C8"></div>
+			</div>
+			<div class="row-fluid">
+				<div class="span3 font-size:14px;line-height;28px">支持人数</div>
+				<div class="span3 font-size:14px;line-height:28px">浏览人数</div>
+				<div class="span3 font-size:14px;line-height:28px">剩余时间</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span3 font-size:24px;line-height:28px">19人</div>
+				<div class="span3 font-size:24px;line-height:28px">6020人</div>
+				<div class="span3 font-size:24px;line_height:28px">68天</div>
+			</div>	
+		</div>
+		<div class="span4 well" style="background-color:#FDFDFD;height:240px">
+			<div style="font-size:16px;line-height:28px;">
+			SimpleNect已经开发完成了大部分，目前整处于Beta测试阶段，如果你能够支持我们，您在购买正式版是能够享受<big><strong>买一送一</strong></big>优惠，我们提供三种价格支持：
+			<div  class="row-fluid">
+				<div class="span3 text-center">&nbsp;￥50 &nbsp;|</div>
+				<div class="span3 text-center">&nbsp;￥150&nbsp;|</div>
+				<div class="span3 text-center">&nbsp;￥200&nbsp;&nbsp;|</div>
+			</div>
+			<div class="text-center"><button class="btn btn-primary" type="button">支 持 我 们</button></div>
+			</div> 
+		</div>
+	</div>
+</div>
+</div>
+<div class="comment">
+	<div class="comment_in w1000">
+		<div class="send_area">
+			<div class="send_area_top">&nbsp;</div>
+			<div class="send_area_text">
+			如果你对Simplenect软件的使用有问题，欢 迎您留下宝贵的意见让我们一起成长！
+			<form  action="{% url 'add_msg' %}" method="post" onsubmit="return checkMsg();">
+				{% csrf_token %}
+				<textarea id="msg_content" name="msg"></textarea>
+				<div class="send_area_btn">
+					<input type="hidden" id="form1" name="send_from" value="1" />
+					<input type="submit" name value="" class="btn_send2"/>
+				</div>
+			</form>	
+			</div>
+		</div>
 
+		<div class="list_comment">
+		<ul class="msg_board">
+		{% if msg_list %}
+			{% if user.is_superuser %}
+				{% for msg in msg_list %}
+			<li id="msg_id_{{ msg.id }}">
+				<div class="board_left">
+					<div class="board_img">
+						{% if msg.user_id in user_list.keys %}
+							{% for user in user_list.values %}
+								{% if msg.user_id == user.uuid %}
+									<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
+								{% endif %}
+							{% endfor %}		
+						{% else %}
+							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
+						{% endif %}
+					</div>
+				</div>
+				<div class="board_area">
+					<div class="board_user"><span class="board_uname" id="user_{{ msg.id }}">
+						{% if msg.user_id and msg.user_id  != '0'  %}
+							{{ msg.user_nick }}
+						{% else %}
+							  {{ msg.ip|split:"."|slice:"2"|join:"."|add:".*.*"}}
+						{% endif %}
+						</span><span class="board_time">{{ msg.create_time|date:"Y-m-d H:i:s" }}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({{ msg.id }});"></a></span><span> | <a href="javascript:delMsg({{ msg.id }});">删除</a></span></span></div>
+					
+					<div class="board_right">
+					
+						<div class="board_content">
+							<div class="board_body">
+							{{ msg.msg }}
+							</div>
+						</div>
+						<div class="reply_area">
+						{% for reply in reply_list.values %}
+							{% if  reply.reply_id == msg.id %}
+								<div class="board_body dashed_border">答：{{ reply.msg }}</div>
+							{% endif %}			
+						{% endfor %}
+						</div>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</li>
+					{% endfor %}
+				{% elif user.is_authenticated %}
+					{% for msg in msg_list %}
+
+			<li>
+				<div class="board_left">
+					<div class="board_img">
+						{% if msg.user_id in user_list.keys %}
+							{% for user in user_list.values %}
+								{% if msg.user_id == user.uuid %}
+									<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
+								{% endif %}
+							{% endfor %}		
+						{% else %}
+							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
+						{% endif %}
+					</div>
+				</div>
+	
+				<div class="board_area">
+					<div class="board_user"><span class="board_uname" id="user_{{ msg.id }}">
+						{% if msg.user_id and msg.user_id  != '0'  %}
+							{{ msg.user_nick }}
+						{% else %}
+						  {{ msg.ip|split:"."|slice:"2"|join:"."|add:".*.*"}}
+						{% endif %}
+                </span><span class="board_time">{{ msg.create_time|date:"Y-m-d H:i:s" }}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({{ msg.id }});"></a></span></span></div>
+					<div class="board_right">
+						<div class="board_content">
+							<div class="board_body">
+							{{ msg.msg }}
+							</div>
+						</div>
+	
+						<div class="reply_area">
+							{% for reply in reply_list.values %}
+								{% if  reply.reply_id == msg.id %}					
+									<div class="board_body dashed_border">
+										答：{{ reply.msg }}
+									</div>
+								{% endif %}			
+							{% endfor %}
+
+						</div>
+
+					</div>
+				</div>
+				<div class="clear"></div>
+			</li>
+
+				{% endfor %}
+			{% else %}
+			{% for msg in msg_list %}
+			<li>
+			
+				<div class="board_left">
+					<div class="board_img">
+						{% if msg.user_id in user_list.keys %}
+							{% for user in user_list.values %}
+								{% if msg.user_id == user.uuid %}
+									<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
+								{% endif %}
+							{% endfor %}		
+						{% else %}
+							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
+						{% endif %}
+					</div>
+				</div>
+			
+				<div class="board_area">
+					<div class="board_user">
+                        <span class="board_uname" id="user_{{ msg.id }}">
+                        	{% if msg.user_id and msg.user_id  != '0'  %}
+							{{ msg.user_nick }}
+						{% else %}
+							  {{ msg.ip|split:"."|slice:"2"|join:"."|add:".*.*"}}
+						{% endif %}
+						</span><span class="board_time">{{ msg.create_time|date:"Y-m-d H:i:s" }}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({{ msg.id }});"></a></span></span>
+					</div>
+					<div class="board_right">
+					<div class="board_content">
+						<div class="board_body">
+						{{ msg.msg }}
+						</div>
+					</div>
+					<div class="reply_area">
+						{% for reply in reply_list.values %}
+							{% if  reply.reply_id == msg.id %}					
+								<div class="board_body dashed_border">
+								答：{{ reply.msg }}
+								</div>
+							{% endif %}			
+						{% endfor %}
+					</div>
+			
+					</div>
+				
+				</div>
+				<div class="clear"></div>
+			</li>
+		{% endfor %}
+		
+		</ul>
+		{% endif %}	
+	{% endif %}
+		<div class="board_more_title"><span class="board_more_text">共</span><a href="{% url 'msg_index' %}" target="_blank">
+			<span class="board_more_count">{{ msg_count }}</span></a>
+			<span class="board_more_text">条留言</span></div>
+		</div>
+		
+		<div class="clear"></div>
+		<div id="msg_form" class="send_reply">
+		<form  action="{% url 'add_msg'%}" method="post" onsubmit="return checkMsg3();">
+			{% csrf_token %}
+			<textarea id="msg_content3" name="msg"></textarea>
+			<div class="comment_small_bg" id="scroll_comment"></div>
+			<div class="clear"></div>
+			<div class="send_btn send_btn_scroll">
+				<input type="hidden" id="form3" name="send_from" value="1" />
+				<input type="submit" name value="" class="btn_send"/>
+				<input type="button" name value="" class="btn_cancel btn_cancel_scroll"/>
+			</div>
+		</form>
+		</div>			
+	</div>
+	<div class="clear"></div>
+</div>
+	
+	<div class="reply_form" style="display:none;">
+	<div class="send_board">
+	<span class="send_u" id="reply_u"> 回复“阡陌游客”：</span>
+	</div>
+	<div class="send_content2 send_bg" >
+	<form  action="{% url 'add_msg'%}" method="post" onsubmit="return checkMsg2();">
+		{% csrf_token %}
+		<textarea name="msg" id="msg_content2"></textarea>
+		<div class="reply_btn">
+		<input type="hidden" id="form2" name="send_from" value="1" />
+		<input id="reply_msg" type="hidden" name="reply" value="" />
+		<input type="submit" value="" class="send_button"/>
+		<input type="button" name="" onclick="javascript:replyClose();" class="reply_close"/>
+		</div>
+	</form>
+	</div>
+	</div>
+	<script>
+	$(function(){
+		$(".menu_index").css({"color":"#000000"});
+		// $(".job_item").click(function(){
+		// 	$(this).parent("dt").next("dd").show();
+		// });
+
+		// $(".faq_show_hide").parent().toggle(
+		// 	function(){
+		// 		$(this).next("dd").show();
+		// 		$(this).children("a").removeClass("faq_hide");
+		// 		$(this).children("a").addClass("faq_show");
+		// 	},
+		// 	function(){
+		// 		$(this).next("dd").hide();
+		// 		$(this).children("a").removeClass("faq_show");
+		// 		$(this).children("a").addClass("faq_hide");
+		// 	}
+		// );
+
+	});
+	
+	var top1=$("#a_file").offset().top;
+	var top2=$("#a_print").offset().top-15;
+	var top3=$("#a_chat").offset().top-15;
+	var maxtop=$(".comment").offset().top-145;
+	window.onscroll=function(){
+		var stop1=document.body.scrollTop;
+		var stop2=document.documentElement.scrollTop;
+		var curStop=0;
+		if(stop1>=stop2){
+			curStop=stop1;
+		}else{
+			curStop=stop2;
+		}
+		
+		if(curStop>top1&&curStop<=maxtop) {
+			if(curStop<=top2){
+				changeShareLeft(0);
+			}else if(curStop>top2&&curStop<=top3){
+				changeShareLeft(1);
+			}else if(curStop>top3){
+				changeShareLeft(2);
+			}
+			document.getElementById('fun_share_left').style.display="block";
+			$("#fun_share_top").hide();
+		}else{
+			document.getElementById('fun_share_left').style.display="none";
+			$("#fun_share_top").show();
+		}
+	}
+	
+
+	var surl="{{STATIC_URL}}";
+	function changeShareLeft(curId){
+		
+		  $(".fun_share_left .fun_share").attr("style","");
+		  $(".fun_share_left .fun_share").prev("span").attr("style","");
+		  var cur=$(".fun_share_left .fun_share").get(curId);
+		  $(cur).css({"color":"#000000"});
+		  switch(curId){
+		   case 0:$(cur).prev("span").css({"background":"url("+surl+"/images/fun_area.jpg) no-repeat scroll 0 -32px transparent"});break;
+		   case 1:$(cur).prev("span").css({"background":"url("+surl+"/images/fun_area.jpg) no-repeat scroll -38px -32px transparent"});break;
+		   case 2:$(cur).prev("span").css({"background":"url("+surl+"/images/fun_area.jpg) no-repeat scroll -76px -32px transparent"});break;
+		   default:;
+		  }
+	}
+
+</script>
 {% endblock %}
 {% block footer %}{% include "footer.html" %}{% endblock %}

@@ -1,29 +1,42 @@
-<div class="container-narrow">
+<style type="text/css">
+.nav a{ font-size: 16px;color: #838383}
+.nav a:link{color: #000000}
+.nav a:focus {color: #000000}
+.nav a:visited{color: #000000}
+.nav a:hover{color: #000000}
+</style>
+<div class="container-narrow" style="height:118px">
 	<div class="masthead">
-		<!-- <div class="navbar navbar-inverse navbar-fixed-top"> -->
-		<!-- <div class="navbar navbar-text navbar-fixed-top"> -->
-		<div class="nav-tabs">
-		<span><img src="{{ STATIC_URL }}images/logo.jpg" /></span>
-		<ul class="nav nav-pills pull-right">
-		<!-- <ul class="nav nav-tabs pull-right"> -->
-			<li class="divider"><a href="{% url 'index' %}">首页</a></li>
-			<li class="divider"><a href="{% url 'msg_index' %}">留言区</a>	</li>
-			<li class="divider"><a href="{% url 'show' %}">新手指南</a></li>
-		{% if user.is_authenticated %}
-			<li class="divider" ><a href="{%url 'info'%}" style="text-decoration: underline;" title="个人中心">{{ user.nick }}</a>
-			</li>
+			<ul class="nav nav-pills pull-left">
+				<li>
+				<a title="首页" href="{% url 'index' %}" class="disabled">
+					<span><img src="{{ STATIC_URL }}images/index/logo.png" /></span></a> </li>
+			</ul>
+			<div>
+				<ul class="nav nav-pills pull-left" style="color: #000000;margin-top: 30px;margin-left: 100px;">
+					<li class="disable"><a href="{% url 'index' %}">首页</a></li>
+					<li class="disable"><a href="{% url 'msg_index' %}">留言区</a>	</li>
+					<li class="disable"><a href="{% url 'show' %}">新手指南</a></li>
+				</ul>
+			</div>
+			<div>
+			<ul class="nav nav-pills pull-right" style="color: #000000;margin-top: 30px;margin-right: 100px;">
+			{% if user.is_authenticated %}
+				<li class="divider" ><a href="{%url 'info'%}" style="text-decoration: underline;" title="个人中心">{{ user.nick }}</a>
+				</li>
 			{% if user.status == 0 %}
 				<li class="divider"><a href="{% url 'to_active' %}">激活账号</a>
 			{% endif %}
 			{%if user.is_superuser %}
-				<li class="divider"><a href="{% url 'tongji' %}" style="text-decoration: underline;">管理中心</a></li>
+				<li class="disable"><a href="{% url 'tongji' %}" style="text-decoration: underline;">管理中心</a></li>
 			{% endif %}
-		 	<li class="divider`"><a href="{% url 'logout'%}">退出</a></li>
+		 		<li class="divider`"><a href="{% url 'logout'%}">退出</a></li>
 		{% else %}
 			<li class="divider"><a href="{% url 'login' %}">登录</a></li>
 			<li class="divider"><a href="{% url 'register'%}">注册</a></li>
 		{% endif %}
-		</ul>
-		</div>
+			</ul>
+			</div>
+		
 	</div>
 </div>

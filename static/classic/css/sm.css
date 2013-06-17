@@ -1,24 +1,21 @@
 body {
   padding-top: 60px;
   padding-bottom: 60px;
-  /*font-family: Frutiger, "YaHei Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif; */
-  font-family:Microsoft YaHei
+  font-family: "Microsoft YaHei","Frutiger", "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif; 
+  /*font-family:Microsoft YaHei*/
+  font-size: 14px;
   font-weight:normal;
 }
-h2 {
-  font-family:Microsoft YaHei
-  font-size: 18px;
-  font-weight:normal;
-}
-    /* Custom container */
+
+/* Custom container */
 .container-narrow {
   margin: 0 auto;
   max-width: 960px;
   }
-.row {
+/*.row {
   margin-left: 0px;
   *zoom: 1;
-  }
+  }*/
 .index_banner{ 
   background:url(../images/index/index_bg.png) no-repeat scroll center top;
 }
@@ -34,7 +31,7 @@ h2 {
   margin:0 auto;
 }
 .top_node{
-  width:1000px;
+  width:960px;
   height:489px;
   overflow:hidden;
 }
@@ -127,4 +124,80 @@ h2 {
   float:left;
   width:125px;
   margin:0 230px 0 5px;
+}
+
+
+.register_btn{
+  background:url("../images/register_btn.jpg") no-repeat;
+  border:none;
+  width:99px !important; 
+  height:43px;
+  cursor:pointer;
+  color:#ffffff;
+}
+.login_btn{
+  background:url("../images/login_btn2.jpg") no-repeat;
+  border:none;
+  width:99px !important; 
+  height:43px;
+  cursor:pointer;
+  color:#ffffff;
+}
+
+.btn_send{
+  background: url("../images/comment_btn.jpg") no-repeat scroll 0 0 transparent;
+  width:64px !important;
+  height:28px;
+  border:none;
+  padding:0;
+  float:right;
+  margin-right:12px;
+  margin-top:5px;
+  cursor: pointer;
+}
+
+.btn_cancel{
+  background: url("../images/cancel_btn.jpg") no-repeat scroll 0 0 transparent;
+  width:64px !important;
+  height:28px;
+  border:none;
+  padding:0;
+  float:right;
+  margin-right:12px;
+  margin-top:5px;
+  cursor: pointer;
+}
+.btn_send2{
+  background: url("../images/comment_btn2.jpg") no-repeat scroll 0 0 transparent;
+  width:65px !important;
+  height:31px;
+  border:none;
+  padding:0;
+  float:right;
+  margin-right:5px;
+  margin-top:5px;
+  cursor: pointer;
+}
+
+.send_button{
+  background: url("../images/reply_btn.jpg") no-repeat scroll 0 0 transparent;
+  border: medium none;
+    cursor: pointer;
+    float: right;
+    height: 28px;
+    margin-right: 12px;
+    margin-top: 5px;
+    padding: 0;
+    width: 64px !important;
+}
+.reply_close{
+  background: url("../images/cancel_btn.jpg") no-repeat scroll 0 0 transparent;
+  border: medium none;
+    cursor: pointer;
+    float: right;
+    height: 28px;
+    margin-right: 12px;
+    margin-top: 5px;
+    padding: 0;
+    width: 64px !important;
 }
