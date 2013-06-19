@@ -6,7 +6,7 @@
 	<div class="main_in">
 		<div class="top_node">
 			<div class="download_area">
-				{% include "index_download.html" %}
+				<span> <a href="{{DOWNLOAD}}/Install/{{ins_file.ins_file}}" target="_blank" title="下载"><img src="{{ STATIC_URL }}images/download_btn2.png" class="mypng" /></a></span>
 			</div>
 			<div class="video_area">
 				<div class="video_play">
@@ -57,34 +57,42 @@
 		<div class="row">
 			<div class="span2"></div>
 			<div class="span9 text-center">
-				<div class="row-fluid text-center">
+			<div class="row-fluid text-center">
 			
 <!-- 			<span class="icon-stack" style="font-size:80px">
 		 		<i class="icon-circle icon-stack-base"></i>	
 				<i class="icon-print icon-light" style="font-size:50px;margin-top:-20px"></i>
 				<i class="icon-light"style="font-size:18px;color:#FFFFFF;margin-top:30px">软件仓库</i>
 			</span> -->
-
-			<div class="span4" style="float:left">
-				<span class="circle">
-					<i class="icon-file icon-4x icon-light" style="display:block;"></i>
-					<span>文件共享</span>
-				</span>
-			</div>
-			<div class="span4" >
-				<span class="circle">
-					<i class="icon-print icon-4x icon-light" style="display:block;"></i>
-					<span>打印机共享</span>
-				</span>
-			</div>
-			<div class="span4" style="float:right" >
-				<span class="circle">
-					<i class="icon-home icon-4x icon-light" style="display:block;"></i>
-					<span>软件仓库</span>
-				</span>
-			</div>
-		
-			</div>
+			
+				<div class="span4" style="float:left">
+					<a class="disabled" href="#file_share">
+					<span class="circle">
+						<i class="icon-file icon-4x icon-light" style="display:block;"></i>
+						<span>文件共享</span>
+					</span>
+					</a>
+				</div>
+				
+				
+					<div class="span4" >
+						<a class="disabled" href="#print_share">
+						<span class="circle">
+							<i class="icon-print icon-4x icon-light" style="display:block;"></i>
+							<span>打印机共享</span>
+						</span>
+						</a>
+					</div>
+					
+				<div class="span4" style="float:right">
+					<a href="#repo">
+					<span class="circle">
+						<i class="icon-home icon-4x icon-light" style="display:block;"></i>
+						<span>软件仓库</span>
+					</span>
+					</a>
+				</div>
+		</div>
 		</div>
 			<div class="span1"></div>
 		</div>
@@ -94,9 +102,9 @@
 <div style="background-color:#FDFDFD;">
 	<br/><br/>
 <div class="container-narrow">
-	<div><div class="text-center"><h2>文件共享</h2></div></div>
+	<div class="row-fluid text-center" id="file_share" style="font-size:30px">文件共享</div>
 	<br/>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span4">
 			<div style="line-height:28px">
 				简&nbsp;&nbsp;&nbsp; 单：不同操作系统共享信息<br/>
@@ -114,10 +122,10 @@
 </div>
 </div>
 
-<div style="background-color:#E5E9ED;">
-<div class="container-narrow">
+<div style="background-color:#E5E9ED">
 	<br/><br/>
-	<div class="row-fluid" ><div class="text-center"><h2>打印机共享</h2></div></div>
+<div class="container-narrow">
+	<div class="row-fluid text-center" id="print_share" style="font-size:30px;margin-top:10px">打印机共享</div>
 	<div class="row">
 		<br/>
 		<div class="span8">
@@ -134,7 +142,7 @@
 <div style="background-color:#FDFDFD;">
 	<br/><br/>
 <div class="container-narrow">
-	<div><div class="text-center"><h2>软件仓库</h2></div></div>
+	<div class="row-fluid text-center" id="repo" style="font-size:30px;margin-top:10px">软件仓库</div>
 	<br/>
 	<div class="row">
 		<div class="span4">
@@ -143,32 +151,40 @@
 		</div>
 		</div>
 		<div class="span8">
-			<img alt="667x421" src="{{STATIC_URL}}images/index/file_share.png" />
+			<img alt="667x421" src="{{STATIC_URL}}images/index/repo.png" />
 		</div>
 	</div>
 </div>
 </div>
 <div style="background-color:#E5E9ED;">
 <div class="container-narrow">
-	<br/><br/><br/>
+	<br/><br/>
 	<div class="row">
-		<div class="span2"></div>
-		<div class="span8 text-center">
-			<img alt="574x138" src="{{STATIC_URL}}images/index/vip.png" />
-		</div>
-		<div class="span2"></div>
+		<!-- <div class="span2"></div> -->
+		<!-- <div class="span8 text-center"> -->
+			<img alt="574x138" src="{{STATIC_URL}}images/index/shoufei.png" />
+		<!-- </div> -->
+		<!-- <div class="span2"></div> -->
 	</div>
 </br>
-		<div class="container-narrow text-left well" style="background-color:#E4E4E4;color:#7E7E7E;border: 1px solid #C8C8C8">
+<!-- 		<div class="container-narrow text-left well" style="background-color:#E4E4E4;color:#7E7E7E;border: 1px solid #C8C8C8">
 			<strong>注：</strong>每个企业版账户可以为200名企业用户授权
-		</div>
+		</div> -->
 </div>
 </div>
-<div style="background-color:#E5E9ED">
+<div style="background-color:#FDFDFD">
 	<br/>
 <div class="container-narrow" style="font-size:16px;line-height:28px">
+	<div class="row-fluid">
+		<div class="span12 text-center" style="font-size:30px;margin-top:20px;margin-bottom:0px">活动期优惠方案</div>
+		
+
+	</div>
+	<div class="row-fluid">
+	<div class="span12 text-center" style="font-size:20px;margin-top:5px;margin-bottom:20px">SimpleNect买一送一</div>
+</div>
 	<div class="row-fluid ">
-		<div class="span8 well" style="background-color:#F2F2F2;height:240px">
+		<div class="span8 well" style="background-color:#FDFDFD;height:240px">
 			<div style="font-size:14px;line-height:28px">
 				目标：￥10,000/已达
 			</div>
@@ -190,17 +206,26 @@
 		</div>
 		<div class="span4 well pull-right" style="background-color:#FDFDFD;height:240px">
 			<div style="font-size:16px;line-height:28px;">
-			SimpleNect已经开发完成了大部分，目前整处于Beta测试阶段，如果你能够支持我们，您在购买正式版是能够享受<big><strong>买一送一</strong></big>优惠，我们提供三种价格支持：
+			SimpleNect公测版即将发布。目前正在<a href="">【点名时间】</a>网站进行众筹预售，现在对我们提供支持的朋友，将获得额外的优惠，我们提供三种价格支持：
 			<div  class="row-fluid">
-				<div class="span3 text-center">&nbsp;￥50 &nbsp;|</div>
-				<div class="span3 text-center">&nbsp;￥150&nbsp;|</div>
-				<div class="span3 text-center">&nbsp;￥200&nbsp;&nbsp;|</div>
+				<div class="span4 text-center">&nbsp;￥50 &nbsp;&nbsp;&nbsp;|</div>
+				<div class="span4 text-center">&nbsp;￥150&nbsp;&nbsp;&nbsp;&nbsp;|</div>
+				<div class="span4 text-center">&nbsp;￥200&nbsp;&nbsp;</div>
 			</div>
-			<div class="text-center"><button class="btn btn-primary" style="width:190px;height:" type="button">支 持 我 们</button></div>
+			<div class="text-center"><a href=""><button class="btn btn-primary" style="width:190px;margin-top:5px" type="button">查看优惠细节</button></a></div>
 			</div> 
 		</div>
 	</div>
+	<div class="row-fluid ">
+		<div class="container-narrow text-center well" style="background-color:#E5E9ED;color:#7E7E7E;border: 1px solid #C8C8C8">
+			<strong>最便捷的文件和打印机共享软件</strong>
+			<div class="text-center">
+				<a href="{{DOWNLOAD}}/Install/{{ins_file.ins_file}}"><button class="btn" style="width:190px;margin-top:10px" type="button">立即下载试用</button></a>
+			</div>
+		</div> 
+	</div>
 </div>
+<br><br>
 </div>
 <div class="comment">
 	<div class="comment_in w1000">
@@ -410,74 +435,6 @@
 	</form>
 	</div>
 	</div>
-	<script>
-	$(function(){
-		$(".menu_index").css({"color":"#000000"});
-		// $(".job_item").click(function(){
-		// 	$(this).parent("dt").next("dd").show();
-		// });
 
-		// $(".faq_show_hide").parent().toggle(
-		// 	function(){
-		// 		$(this).next("dd").show();
-		// 		$(this).children("a").removeClass("faq_hide");
-		// 		$(this).children("a").addClass("faq_show");
-		// 	},
-		// 	function(){
-		// 		$(this).next("dd").hide();
-		// 		$(this).children("a").removeClass("faq_show");
-		// 		$(this).children("a").addClass("faq_hide");
-		// 	}
-		// );
-
-	});
-	
-	var top1=$("#a_file").offset().top;
-	var top2=$("#a_print").offset().top-15;
-	var top3=$("#a_chat").offset().top-15;
-	var maxtop=$(".comment").offset().top-145;
-	window.onscroll=function(){
-		var stop1=document.body.scrollTop;
-		var stop2=document.documentElement.scrollTop;
-		var curStop=0;
-		if(stop1>=stop2){
-			curStop=stop1;
-		}else{
-			curStop=stop2;
-		}
-		
-		if(curStop>top1&&curStop<=maxtop) {
-			if(curStop<=top2){
-				changeShareLeft(0);
-			}else if(curStop>top2&&curStop<=top3){
-				changeShareLeft(1);
-			}else if(curStop>top3){
-				changeShareLeft(2);
-			}
-			document.getElementById('fun_share_left').style.display="block";
-			$("#fun_share_top").hide();
-		}else{
-			document.getElementById('fun_share_left').style.display="none";
-			$("#fun_share_top").show();
-		}
-	}
-	
-
-	var surl="{{STATIC_URL}}";
-	function changeShareLeft(curId){
-		
-		  $(".fun_share_left .fun_share").attr("style","");
-		  $(".fun_share_left .fun_share").prev("span").attr("style","");
-		  var cur=$(".fun_share_left .fun_share").get(curId);
-		  $(cur).css({"color":"#000000"});
-		  switch(curId){
-		   case 0:$(cur).prev("span").css({"background":"url("+surl+"/images/fun_area.jpg) no-repeat scroll 0 -32px transparent"});break;
-		   case 1:$(cur).prev("span").css({"background":"url("+surl+"/images/fun_area.jpg) no-repeat scroll -38px -32px transparent"});break;
-		   case 2:$(cur).prev("span").css({"background":"url("+surl+"/images/fun_area.jpg) no-repeat scroll -76px -32px transparent"});break;
-		   default:;
-		  }
-	}
-
-</script>
 {% endblock %}
 {% block footer %}{% include "footer.html" %}{% endblock %}
