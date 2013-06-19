@@ -12,7 +12,6 @@ try:
 except ImportError:
     pass
 
-THEME ='/classic/'
 STATIC_ROOT = os.path.join(ROOT_DIR,'static')
 STATIC_URL = '/static' + THEME
 MEDIA_ROOT = os.path.join(ROOT_DIR,'media/upload/')
