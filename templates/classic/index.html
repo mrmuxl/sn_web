@@ -24,7 +24,7 @@
 		<div id="player1" style=""><a href="http://www.macromedia.com/go/getflashplayer">没有Flash播放器？</a></div>
 	</div>
 </div>
-	// <script type="text/javascript" src="{{ STATIC_URL }}flash/swfobject.js"></script>
+<!-- <script type="text/javascript" src="{{ STATIC_URL }}flash/swfobject.js"></script>
 	// <script type="text/javascript">
 	// 	var swfUrl="{{ STATIC_URL }}flash/";
 	// 	var swfLeft=$(".main_in").offset().left;
@@ -49,6 +49,7 @@
 	// 		$("#player1").html("");
 	// 	});
 	// </script>
+-->
 </div>
 <div  style="background-color:#E5E9ED;height:430px">
 	<div class="container-narrow">
@@ -223,27 +224,25 @@
 			<strong>最便捷的文件和打印机共享软件</strong>
 			<div class="text-center">
 				<!-- <a href="{{DOWNLOAD}}/Install/{{ins_file.ins_file}}"><button class="btn" style="width:190px;margin-top:10px" type="button">立即下载试用</button></a> -->
-
 				<a href="#kxModal" role="button" class="btn" data-toggle="modal" style="width:190px;margin-top:10px">立即下载试用</a>
-
-	<div id="kxModal" class="modal hide fade text-left">
-    <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>通知</h3>
-    </div>
-    <div class="modal-body">
-    <p>软件下载链接暂时关闭，大家请到这里：<a href="http://www.demohour.com/projects/319663" target="_blank">http://www.demohour.com/projects/319663</a>【点名时间】关注我们的项目，然后截图下自己在点名时间的登录名，发到我们的qq群：205528924，管理员会把下载连接发给你</p>
-    </div>
-    <div class="modal-footer">
-    <a href="http://www.demohour.com/projects/319663" class="btn" target="_blank">关闭</a>
-    </div>
-    </div>
 			</div>
 		</div> 
 	</div>
 </div>
 <br><br>
 </div>
+    <div id="kxModal" class="modal hide fade text-left">
+    <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>通知</h3>
+    </div>
+    <div class="modal-body">
+    <p>软件下载链接暂时关闭，大家请到这里：<a href="http://www.demohour.com/projects/319663" target="_blank">http://www.demohour.com/projects/319663</a>【点名时间】关注我们的项目(登录后点击右上角的“关注此项目”按钮)，然后截图下自己在点名时间的登录名，发到我们的qq群：205528924，管理员会把下载连接发给你</p>
+    </div>
+    <div class="modal-footer">
+    <a href="http://www.demohour.com/projects/319663" class="btn" target="_blank">关闭</a>
+    </div>
+    </div>
 <div class="comment">
 	<div class="comment_in w1000">
 		<div class="send_area">
@@ -260,7 +259,6 @@
 			</form>	
 			</div>
 		</div>
-
 		<div class="list_comment">
 		<ul class="msg_board">
 		{% if msg_list %}
