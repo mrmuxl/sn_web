@@ -16,7 +16,7 @@ body {
   *zoom: 1;
   }*/
 .index_banner{ 
-  background:url(../images/index/index_bg.png) no-repeat scroll center top;
+  background:url(../images/index/index_bg.jpg) no-repeat scroll center top;
 }
 .other_bg{
 	background: url(../images/qianmo_bg.jpg) repeat scroll 0 0 transparent;
