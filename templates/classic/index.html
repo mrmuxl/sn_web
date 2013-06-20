@@ -24,31 +24,31 @@
 		<div id="player1" style=""><a href="http://www.macromedia.com/go/getflashplayer">没有Flash播放器？</a></div>
 	</div>
 </div>
-	<script type="text/javascript" src="{{ STATIC_URL }}flash/swfobject.js"></script>
-	<script type="text/javascript">
-		var swfUrl="{{ STATIC_URL }}flash/";
-		var swfLeft=$(".main_in").offset().left;
-			function showFlv(){
-				var s1 = new SWFObject(swfUrl+"flvplayer.swf","single","960","540","7");
-				s1.addParam("allowfullscreen","true");
-				s1.addParam("vmode","window");
-				s1.addVariable("autostart","true");
-				s1.addVariable("file",swfUrl+"simplenect.flv");
-				s1.addVariable("image",swfUrl+"flv_bg.jpg");
-				s1.addVariable("width","960");
-				s1.addVariable("height","540");
-				s1.addVariable("displayheight","540");
-				s1.write("player1");
-				$("#player1").css({"left":swfLeft});
-				$("#player1").show();
-				$(".player_video").show();
-			}
-		$(".player_video").click(function(){
-			$("#player1").hide();
-			$(".player_video").hide();
-			$("#player1").html("");
-		});
-	</script>
+	// <script type="text/javascript" src="{{ STATIC_URL }}flash/swfobject.js"></script>
+	// <script type="text/javascript">
+	// 	var swfUrl="{{ STATIC_URL }}flash/";
+	// 	var swfLeft=$(".main_in").offset().left;
+	// 		function showFlv(){
+	// 			var s1 = new SWFObject(swfUrl+"flvplayer.swf","single","960","540","7");
+	// 			s1.addParam("allowfullscreen","true");
+	// 			s1.addParam("vmode","window");
+	// 			s1.addVariable("autostart","true");
+	// 			s1.addVariable("file",swfUrl+"simplenect.flv");
+	// 			s1.addVariable("image",swfUrl+"flv_bg.jpg");
+	// 			s1.addVariable("width","960");
+	// 			s1.addVariable("height","540");
+	// 			s1.addVariable("displayheight","540");
+	// 			s1.write("player1");
+	// 			$("#player1").css({"left":swfLeft});
+	// 			$("#player1").show();
+	// 			$(".player_video").show();
+	// 		}
+	// 	$(".player_video").click(function(){
+	// 		$("#player1").hide();
+	// 		$(".player_video").hide();
+	// 		$("#player1").html("");
+	// 	});
+	// </script>
 </div>
 <div  style="background-color:#E5E9ED;height:430px">
 	<div class="container-narrow">
@@ -232,7 +232,7 @@
     <h3>通知</h3>
     </div>
     <div class="modal-body">
-    <p>软件下载链接暂时关闭，大家请到这里：<a href="http://www.demohour.com/projects/319663 target="_blank"">http://www.demohour.com/projects/319663</a>【点名时间】关注我们的项目，然后截图下自己在点名时间的登录名，发到我们的qq群：205528924，管理员会把下载连接发给你</p>
+    <p>软件下载链接暂时关闭，大家请到这里：<a href="http://www.demohour.com/projects/319663" target="_blank">http://www.demohour.com/projects/319663</a>【点名时间】关注我们的项目，然后截图下自己在点名时间的登录名，发到我们的qq群：205528924，管理员会把下载连接发给你</p>
     </div>
     <div class="modal-footer">
     <a href="http://www.demohour.com/projects/319663" class="btn" target="_blank">关闭</a>
