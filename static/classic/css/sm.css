@@ -334,5 +334,5 @@ body {
 .inputWrap{ position:relative; }
 .mailAutoTip{ display:none; position:absolute; left:0; top:29px; border:1px solid #ccc; background:#fff; z-index:10000;}
 .mailAutoTip li{ height:24px; line-height:24px; color:#777;}
-.mailAutoTip li a{ display:block; width:200px; height:24px; padding-left:5px; color:#333; overflow:hidden; }
+.mailAutoTip li a{ display:block; width:330px; height:24px; padding-left:5px; color:#333; overflow:hidden; }
 .mailAutoTip li a:hover,.mailAutoTip li.on a{ background:#00388A; color:#fff; text-decoration:none;}
