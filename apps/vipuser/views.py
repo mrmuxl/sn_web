@@ -33,8 +33,8 @@ def vipuser_api(request):
                 return HttpResponse(json.dumps(message),content_type="application/json")
             else:
                 message['is_vip']=False
-                message['vip_friends']=list(vip_friends)
-                message['status']="vip expired"
+                message['vip_friends']='no friends'
+                message['status']="vip is overdue"
                 return HttpResponse(json.dumps(message),content_type="application/json")
         except Exception as e:
             logger.debug("email not found:%s",e)
