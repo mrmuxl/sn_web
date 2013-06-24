@@ -1,0 +1,455 @@
+{% extends "base.html" %}
+{% block header %}{% include "header.html" %}{% endblock %}
+{% block content %}
+{% load split %}
+<div class="main index_banner">
+	<div class="main_in">
+		<div class="top_node">
+			<div class="download_area">
+				<!-- <span> <a href="{{DOWNLOAD}}/Install/{{ins_file.ins_file}}" target="_blank" title="下载"><img src="{{ STATIC_URL }}images/download_btn2.png" class="mypng" /></a></span> -->
+				<span><a href="#kxModal" class="disabled" data-toggle="modal" target="_blank" title="下载"><img src="{{ STATIC_URL }}images/download_btn2.png" class="mypng" /></a></span>
+			</div>
+			<div class="video_area">
+				<div class="video_play">
+					<img src="{{ STATIC_URL }}images/video_play2.png" class="mypng" />
+					<!-- <a href="javascript:;" onclick="showFlv();" class="video_play_btn"></a> -->
+					<a href="http://www.demohour.com/projects/319663" target="_blank" class="video_play_btn" ><img src="{{ STATIC_URL }}images/video_play2.png" class="mypng" /></a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<div class="player_video" style="">
+	<div class="player_box">
+		<div id="player1" style=""><a href="http://www.macromedia.com/go/getflashplayer">没有Flash播放器？</a></div>
+	</div>
+</div>
+<!-- <script type="text/javascript" src="{{ STATIC_URL }}flash/swfobject.js"></script>
+	// <script type="text/javascript">
+	// 	var swfUrl="{{ STATIC_URL }}flash/";
+	// 	var swfLeft=$(".main_in").offset().left;
+	// 		function showFlv(){
+	// 			var s1 = new SWFObject(swfUrl+"flvplayer.swf","single","960","540","7");
+	// 			s1.addParam("allowfullscreen","true");
+	// 			s1.addParam("vmode","window");
+	// 			s1.addVariable("autostart","true");
+	// 			s1.addVariable("file",swfUrl+"simplenect.flv");
+	// 			s1.addVariable("image",swfUrl+"flv_bg.jpg");
+	// 			s1.addVariable("width","960");
+	// 			s1.addVariable("height","540");
+	// 			s1.addVariable("displayheight","540");
+	// 			s1.write("player1");
+	// 			$("#player1").css({"left":swfLeft});
+	// 			$("#player1").show();
+	// 			$(".player_video").show();
+	// 		}
+	// 	$(".player_video").click(function(){
+	// 		$("#player1").hide();
+	// 		$(".player_video").hide();
+	// 		$("#player1").html("");
+	// 	});
+	// </script>
+-->
+</div>
+<div  style="background-color:#E5E9ED;height:430px">
+	<div class="container-narrow">
+	<br/>
+		<div class="row text-center">
+			<img alt="574x138" src="{{STATIC_URL}}images/index/gongneng.png" />
+		</div>
+		<div class="row">
+			<div class="span2"></div>
+			<div class="span9 text-center">
+			<div class="row-fluid text-center">
+			
+<!-- 			<span class="icon-stack" style="font-size:80px">
+		 		<i class="icon-circle icon-stack-base"></i>	
+				<i class="icon-print icon-light" style="font-size:50px;margin-top:-20px"></i>
+				<i class="icon-light"style="font-size:18px;color:#FFFFFF;margin-top:30px">软件仓库</i>
+			</span> -->
+			
+				<div class="span4" style="float:left">
+					<a class="disabled" href="#file_share">
+					<span class="circle">
+						<i class="icon-file icon-4x icon-light" style="display:block;"></i>
+						<span>文件共享</span>
+					</span>
+					</a>
+				</div>
+				
+				
+					<div class="span4" >
+						<a class="disabled" href="#print_share">
+						<span class="circle">
+							<i class="icon-print icon-4x icon-light" style="display:block;"></i>
+							<span>打印机共享</span>
+						</span>
+						</a>
+					</div>
+					
+				<div class="span4" style="float:right">
+					<a href="#repo">
+					<span class="circle">
+						<i class="icon-home icon-4x icon-light" style="display:block;"></i>
+						<span>软件仓库</span>
+					</span>
+					</a>
+				</div>
+		</div>
+		</div>
+			<div class="span1"></div>
+		</div>
+	</div>
+</div>
+
+<div style="background-color:#FDFDFD;">
+	<br/><br/>
+<div class="container-narrow">
+	<div class="row-fluid text-center" id="file_share" style="font-size:30px">文件共享</div>
+	<br/>
+	<div class="row">
+		<div class="span4">
+			<div style="line-height:28px">
+				简&nbsp;&nbsp;&nbsp; 单：不同操作系统共享信息<br/>
+				安&nbsp;&nbsp;&nbsp; 全：自己的数据自己管理<br/>
+				快&nbsp;&nbsp;&nbsp; 速：优秀的传输性能<br/>
+				跨网络：局域网或互联网彼此<br/>
+				       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				       都可以分享文件
+			</div>
+		</div>
+		<div class="span8">
+			<img alt="667x421" src="{{STATIC_URL}}images/index/file_share.jpg" />
+		</div>
+	</div>
+</div>
+</div>
+
+<div style="background-color:#E5E9ED">
+	<br/><br/>
+<div class="container-narrow">
+	<div class="row-fluid text-center" id="print_share" style="font-size:30px;margin-top:10px">打印机共享</div>
+	<div class="row">
+		<br/>
+		<div class="span8">
+			<img alt="642x424" src="{{STATIC_URL}}images/index/printer_share.jpg" />
+		</div>
+		<div class="span4 text-right">
+			<div style="line-height:28px">
+				不仅帮你搞定局域网打印共享，还可以<br/>将你的打印机分享给互联网上的朋友们
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<div style="background-color:#FDFDFD;">
+	<br/><br/>
+<div class="container-narrow">
+	<div class="row-fluid text-center" id="repo" style="font-size:30px;margin-top:10px">软件仓库</div>
+	<br/>
+	<div class="row">
+		<div class="span4">
+			<div style="line-height:28px">
+			用SimpleNect组建的文件服务器，可以在任何地方访问
+		</div>
+		</div>
+		<div class="span8">
+			<img alt="667x421" src="{{STATIC_URL}}images/index/repo.png" />
+		</div>
+	</div>
+</div>
+</div>
+<div style="background-color:#E5E9ED;">
+<div class="container-narrow">
+	<br/><br/>
+	<div class="row">
+		<!-- <div class="span2"></div> -->
+		<!-- <div class="span8 text-center"> -->
+			<img alt="574x138" src="{{STATIC_URL}}images/index/shoufei.jpg" />
+		<!-- </div> -->
+		<!-- <div class="span2"></div> -->
+	</div>
+</br>
+<!-- 		<div class="container-narrow text-left well" style="background-color:#E4E4E4;color:#7E7E7E;border: 1px solid #C8C8C8">
+			<strong>注：</strong>每个企业版账户可以为200名企业用户授权
+		</div> -->
+</div>
+</div>
+<div style="background-color:#FDFDFD">
+	<br/>
+<div class="container-narrow" style="font-size:16px;line-height:28px">
+	<div class="row-fluid">
+		<div class="span12 text-center" style="font-size:30px;margin-top:20px;margin-bottom:0px">活动期优惠方案</div>
+		
+
+	</div>
+	<div class="row-fluid">
+	<div class="span12 text-center" style="font-size:20px;margin-top:5px;margin-bottom:20px">SimpleNect买一送一</div>
+</div>
+	<div class="row-fluid ">
+		<div class="span8 well" style="background-color:#FDFDFD;height:240px">
+			<div style="font-size:14px;line-height:28px">
+				目标：152人关注/已达（正在预热中）
+			</div>
+			<h3>	<strong>55</strong>人</h3>
+			
+			<div class="progress progress-primary" style="background-image: linear-gradient(to bottom, rgb(214, 211, 211), rgb(214, 211, 211));background-color:#C8C8C8;">
+				<div class="bar" style="background-image:none;width:40%;background-color:#000000;color:#C8C8C8"></div>
+			</div>
+			<div class="row-fluid">
+				<div class="span3 font-size:14px;line-height;28px">话题总数</div>
+				<div class="span3 font-size:14px;line-height:28px">浏览人数</div>
+				<div class="span3 font-size:14px;line-height:28px">已经预热</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span3 font-size:24px;line-height:28px">3条</div>
+				<div class="span3 font-size:24px;line-height:28px">228人</div>
+				<div class="span3 font-size:24px;line_height:28px">1天</div>
+			</div>	
+		</div>
+		<div class="span4 well pull-right" style="background-color:#FDFDFD;height:240px">
+			<div style="font-size:16px;line-height:28px;">
+			SimpleNect公测版即将发布。目前正在<a href="http://www.demohour.com/projects/319663" target="_blank">【点名时间】</a>网站进行众筹预售，现在对我们提供支持的朋友，将获得额外的优惠，我们提供三种价格支持：
+			<div  class="row-fluid">
+				<div class="span4 text-center">&nbsp;￥50 &nbsp;&nbsp;&nbsp;|</div>
+				<div class="span4 text-center">&nbsp;￥300&nbsp;&nbsp;&nbsp;&nbsp;|</div>
+				<div class="span4 text-center">&nbsp;￥500&nbsp;&nbsp;</div>
+			</div>
+			<div class="text-center"><a href="http://www.demohour.com/projects/319663" target="_blank" ><button class="btn btn-primary" style="width:190px;margin-top:5px" type="button">查看优惠细节</button></a></div>
+			</div> 
+		</div>
+	</div>
+	<div class="row-fluid ">
+		<div class="container-narrow text-center well" style="background-color:#E5E9ED;color:#7E7E7E;border: 1px solid #C8C8C8">
+			<strong>最便捷的文件和打印机共享软件</strong>
+			<div class="text-center">
+				<!-- <a href="{{DOWNLOAD}}/Install/{{ins_file.ins_file}}"><button class="btn" style="width:190px;margin-top:10px" type="button">立即下载试用</button></a> -->
+				<a href="#kxModal" role="button" class="btn" data-toggle="modal" style="width:190px;margin-top:10px">立即下载试用</a>
+			</div>
+		</div> 
+	</div>
+</div>
+<br><br>
+</div>
+    <div id="kxModal" class="modal hide fade text-left">
+    <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>通知</h3>
+    </div>
+    <div class="modal-body">
+    <p>软件下载链接暂时关闭，大家请到这里：<a href="http://www.demohour.com/projects/319663" target="_blank">http://www.demohour.com/projects/319663</a>【点名时间】关注我们的项目(登录后点击右上角的“关注此项目”按钮)，然后截图下自己在点名时间的登录名，发到我们的qq群：205528924，管理员会把免费版本的下载连接发给你。</p>
+    </div>
+    <div class="modal-footer">
+    <a href="http://www.demohour.com/projects/319663" class="btn" target="_blank">关闭</a>
+    </div>
+    </div>
+<div class="comment">
+	<div class="comment_in w1000">
+		<div class="send_area">
+			<div class="send_area_top">&nbsp;</div>
+			<div class="send_area_text">
+			如果你对Simplenect软件的使用有问题，欢 迎您留下宝贵的意见让我们一起成长！
+			<form  action="{% url 'add_msg' %}" method="post" onsubmit="return checkMsg();">
+				{% csrf_token %}
+				<textarea id="msg_content" name="msg"></textarea>
+				<div class="send_area_btn">
+					<input type="hidden" id="form1" name="send_from" value="1" />
+					<input type="submit" name value="" class="btn_send2"/>
+				</div>
+			</form>	
+			</div>
+		</div>
+		<div class="list_comment">
+		<ul class="msg_board">
+		{% if msg_list %}
+			{% if user.is_superuser %}
+				{% for msg in msg_list %}
+			<li id="msg_id_{{ msg.id }}">
+				<div class="board_left">
+					<div class="board_img">
+						{% if msg.user_id in user_list.keys %}
+							{% for user in user_list.values %}
+								{% if msg.user_id == user.uuid %}
+									<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
+								{% endif %}
+							{% endfor %}		
+						{% else %}
+							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
+						{% endif %}
+					</div>
+				</div>
+				<div class="board_area">
+					<div class="board_user"><span class="board_uname" id="user_{{ msg.id }}">
+						{% if msg.user_id and msg.user_id  != '0'  %}
+							{{ msg.user_nick }}
+						{% else %}
+							  {{ msg.ip|split:"."|slice:"2"|join:"."|add:".*.*"}}
+						{% endif %}
+						</span><span class="board_time">{{ msg.create_time|date:"Y-m-d H:i:s" }}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({{ msg.id }});"></a></span><span> | <a href="javascript:delMsg({{ msg.id }});">删除</a></span></span></div>
+					
+					<div class="board_right">
+					
+						<div class="board_content">
+							<div class="board_body">
+							{{ msg.msg }}
+							</div>
+						</div>
+						<div class="reply_area">
+						{% for reply in reply_list.values %}
+							{% if  reply.reply_id == msg.id %}
+								<div class="board_body dashed_border">答：{{ reply.msg }}</div>
+							{% endif %}			
+						{% endfor %}
+						</div>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</li>
+					{% endfor %}
+				{% elif user.is_authenticated %}
+					{% for msg in msg_list %}
+
+			<li>
+				<div class="board_left">
+					<div class="board_img">
+						{% if msg.user_id in user_list.keys %}
+							{% for user in user_list.values %}
+								{% if msg.user_id == user.uuid %}
+									<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
+								{% endif %}
+							{% endfor %}		
+						{% else %}
+							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
+						{% endif %}
+					</div>
+				</div>
+	
+				<div class="board_area">
+					<div class="board_user"><span class="board_uname" id="user_{{ msg.id }}">
+						{% if msg.user_id and msg.user_id  != '0'  %}
+							{{ msg.user_nick }}
+						{% else %}
+						  {{ msg.ip|split:"."|slice:"2"|join:"."|add:".*.*"}}
+						{% endif %}
+                </span><span class="board_time">{{ msg.create_time|date:"Y-m-d H:i:s" }}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({{ msg.id }});"></a></span></span></div>
+					<div class="board_right">
+						<div class="board_content">
+							<div class="board_body">
+							{{ msg.msg }}
+							</div>
+						</div>
+	
+						<div class="reply_area">
+							{% for reply in reply_list.values %}
+								{% if  reply.reply_id == msg.id %}					
+									<div class="board_body dashed_border">
+										答：{{ reply.msg }}
+									</div>
+								{% endif %}			
+							{% endfor %}
+
+						</div>
+
+					</div>
+				</div>
+				<div class="clear"></div>
+			</li>
+
+				{% endfor %}
+			{% else %}
+			{% for msg in msg_list %}
+			<li>
+			
+				<div class="board_left">
+					<div class="board_img">
+						{% if msg.user_id in user_list.keys %}
+							{% for user in user_list.values %}
+								{% if msg.user_id == user.uuid %}
+									<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
+								{% endif %}
+							{% endfor %}		
+						{% else %}
+							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
+						{% endif %}
+					</div>
+				</div>
+			
+				<div class="board_area">
+					<div class="board_user">
+                        <span class="board_uname" id="user_{{ msg.id }}">
+                        	{% if msg.user_id and msg.user_id  != '0'  %}
+							{{ msg.user_nick }}
+						{% else %}
+							  {{ msg.ip|split:"."|slice:"2"|join:"."|add:".*.*"}}
+						{% endif %}
+						</span><span class="board_time">{{ msg.create_time|date:"Y-m-d H:i:s" }}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({{ msg.id }});"></a></span></span>
+					</div>
+					<div class="board_right">
+					<div class="board_content">
+						<div class="board_body">
+						{{ msg.msg }}
+						</div>
+					</div>
+					<div class="reply_area">
+						{% for reply in reply_list.values %}
+							{% if  reply.reply_id == msg.id %}					
+								<div class="board_body dashed_border">
+								答：{{ reply.msg }}
+								</div>
+							{% endif %}			
+						{% endfor %}
+					</div>
+			
+					</div>
+				
+				</div>
+				<div class="clear"></div>
+			</li>
+		{% endfor %}
+		
+		</ul>
+		{% endif %}	
+	{% endif %}
+		<div class="board_more_title"><span class="board_more_text">共</span><a href="{% url 'msg_index' %}" target="_blank">
+			<span class="board_more_count">{{ msg_count }}</span></a>
+			<span class="board_more_text">条留言</span></div>
+		</div>
+		
+		<div class="clear"></div>
+		<div id="msg_form" class="send_reply">
+		<form  action="{% url 'add_msg'%}" method="post" onsubmit="return checkMsg3();">
+			{% csrf_token %}
+			<textarea id="msg_content3" name="msg"></textarea>
+			<div class="comment_small_bg" id="scroll_comment"></div>
+			<div class="clear"></div>
+			<div class="send_btn send_btn_scroll">
+				<input type="hidden" id="form3" name="send_from" value="1" />
+				<input type="submit" name value="" class="btn_send"/>
+				<input type="button" name value="" class="btn_cancel btn_cancel_scroll"/>
+			</div>
+		</form>
+		</div>			
+	</div>
+	<div class="clear"></div>
+</div>
+	
+	<div class="reply_form" style="display:none;">
+	<div class="send_board">
+	<span class="send_u" id="reply_u"> 回复“阡陌游客”：</span>
+	</div>
+	<div class="send_content2 send_bg" >
+	<form  action="{% url 'add_msg'%}" method="post" onsubmit="return checkMsg2();">
+		{% csrf_token %}
+		<textarea name="msg" id="msg_content2"></textarea>
+		<div class="reply_btn">
+		<input type="hidden" id="form2" name="send_from" value="1" />
+		<input id="reply_msg" type="hidden" name="reply" value="" />
+		<input type="submit" value="" class="send_button"/>
+		<input type="button" name="" onclick="javascript:replyClose();" class="reply_close"/>
+		</div>
+	</form>
+	</div>
+	</div>
+
+{% endblock %}
+{% block footer %}{% include "footer.html" %}{% endblock %}

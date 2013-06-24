@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block header %}{% include "header.html" %}{% endblock %}
+{% block content %}
+
+<div class="blog">
+	<br/>
+		{% for post in posts %}
+		<div>
+			<a href="#blog_title_{{forloop.counter}}" class="goNext">
+				<span style="color:#337FE5;font-size:14px;">{{ post.title }}</span></a>
+		</div>
+		{% endfor %}		
+{% endblock %}
+{% block footer %}{% include "footer.html" %}{% endblock %}

@@ -8,7 +8,7 @@ TEMPLATE_DEBUG = DEBUG
 COMPRESS_HTML = True
 
 try:
-    from kx.settings import *
+    from common import *
 except ImportError:
     pass
 
@@ -53,6 +53,7 @@ TEMPLATE_CONTEXT_PROCESSORS =(
     'django.core.context_processors.static',
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
+    'apps.kx.context_processors.kx_settings',
 )
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
