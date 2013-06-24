@@ -7,10 +7,20 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import AdminPasswordChangeForm
 
 from apps.kx.models import KxUser
-from apps.kx.admin_forms import (UserChangeForm,UserCreationForm)
+from apps.kx.forms import (UserChangeForm,UserCreationForm)
+from apps.vipuser.models import VIPUser
+
+class VIPUserInline(admin.StackedInline):
+    model = VIPUser
+    #fieldsets=(
+    #    (None, {
+    #        'fields': ('is_vip', 'expire')
+    #    }),
+    #)
 
 class KxUserAdmin(UserAdmin):
     # The forms to add and change user instances
+    inlines = [VIPUserInline,]
     form = UserChangeForm
     add_form = UserCreationForm
 

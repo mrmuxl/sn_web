@@ -32,6 +32,7 @@ urlpatterns += patterns('',
     url(r'^BugReport/',include("apps.bug_report.urls")),
     url(r'^Pub/',include("apps.publish.urls")),
     url(r'^SoftAd/',include("apps.ad.urls")),
+    url(r'^vipuser/',include("apps.vipuser.urls")),
 )
 
 if settings.DEBUG:
