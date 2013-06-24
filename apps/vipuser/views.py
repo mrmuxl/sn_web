@@ -16,32 +16,35 @@ def vipuser_api(request):
     message = {}
     now = datetime.datetime.now()
     email = request.POST.get('email','')
+    logger.info("email:%s",email)
     if email:
         friends=KxUserFriend.objects.filter(user=email).values('friend')
         vip_friends=VIPUser.objects.filter(is_vip__exact=1,email__in=friends).values('email')
+        logger.info("friends:%s;vip_friends:%s",friends,vip_friends)
         try:
             vipuser_obj = VIPUser.objects.get(email=email)
             if vipuser_obj.is_vip:
-                message['is_vip']=True
-                message['expire']=str(vipuser_obj.expire)
-                message['status']="ok"
+                message['status']=1
+                message['vip_friends']=[]
                 return HttpResponse(json.dumps(message),content_type="application/json")
             elif vip_friends:
-                message['is_vip']=False
+                message['status']="2"
                 message['vip_friends']=list(vip_friends)
-                message['status']="ok"
                 return HttpResponse(json.dumps(message),content_type="application/json")
             else:
-                message['is_vip']=False
-                message['vip_friends']='no friends'
-                message['status']="vip is overdue"
+                message['status']="0"
+                message['vip_friends']=[]
                 return HttpResponse(json.dumps(message),content_type="application/json")
         except Exception as e:
             logger.debug("email not found:%s",e)
-            message['is_vip']=False
-            message['vip_friends']=list(vip_friends)
-            message['status']="ok"
-            return HttpResponse(json.dumps(message),content_type="application/json")
+            if vip_friends
+                message['status']="2"
+                message['vip_friends']=list(vip_friends)
+                return HttpResponse(json.dumps(message),content_type="application/json")
+            else:
+                message['status']="0"
+                message['vip_friends']=[]
+                return HttpResponse(json.dumps(message),content_type="application/json")
     else:
         message['message']='please post to me a email'
         message['status']="error"
