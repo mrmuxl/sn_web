@@ -52,7 +52,8 @@
 </head>
 <body>
 
-  <div class="navbar navbar-inverse navbar-fixed-top">
+
+  <div class="navbar navbar-inner navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container-fluid">
       <div class="nav-collapse collapse">
@@ -63,6 +64,15 @@
           <li id="menu_print"><a href="/client/print/index/"><i class="icon-print icon-3x"></i><br>打印共享</a></li>
           <li id="menu_help"><a href="/client/help/nav/"><i class="icon-book icon-3x"></i><br>帮助教程</a></li>
         </ul>
+
+        <div class="dropdown pull-right">
+          <a class="dropdown-toggle" id="drop5" role="button" data-toggle="dropdown" href="#" style="color:#ccc;">{{user.nick}} <b class="caret"></b></a>
+          <ul id="menu2" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">个人设置</a></li>
+            <li role="presentation" class="divider"></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">退出</a></li>
+          </ul>
+        </div>
       </div><!--/.nav-collapse -->
     </div>
   </div>
@@ -72,6 +82,7 @@
 {% block content %}{% endblock %}
 
 <script src="http://code.jquery.com/jquery.js"></script>
+<script src="{{STATIC_URL}}js/jquery.cookie.js"></script>
 <script src="{{STATIC_URL}}js/bootstrap.min.js"></script>
 <script type="text/javascript">
 //高亮选中的菜单
