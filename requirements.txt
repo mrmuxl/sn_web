@@ -2,7 +2,6 @@ Cython
 Django==1.5.1
 Markdown
 MySQL-python
-PIL
 djangorestframework
 greenlet
 gunicorn
@@ -13,4 +12,5 @@ distribute
 slimit
 django-compresshtml
 django-compressor
-django-debug-toobar==dev
+django-debug-toolbar==dev
+PIL
