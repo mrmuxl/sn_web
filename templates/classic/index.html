@@ -2,54 +2,38 @@
 {% block header %}{% include "header.html" %}{% endblock %}
 {% block content %}
 {% load split %}
+
+
+<link href="{{ STATIC_URL }}/css/videojs.css" rel="stylesheet">
+<script src="http://vjs.zencdn.net/4.0/video.js"></script>
+<script src="{{ STATIC_URL }}js/video.js"></script>
+<script type="text/javascript">
+
+
+
+</script>
+
 <div class="main index_banner">
 	<div class="main_in">
-		<div class="top_node">
+		<div class="top_node" id="intro">
 			<div class="download_area">
 				<span> <a href="{{DOWNLOAD}}/Install/{{ins_file}}" target="_blank" title="下载"><img src="{{ STATIC_URL }}images/download_btn2.png" class="mypng" /></a></span>
 				<!-- <span><a href="#kxModal" class="disabled" data-toggle="modal" target="_blank" title="下载"><img src="{{ STATIC_URL }}images/download_btn2.png" class="mypng" /></a></span> -->
 			</div>
-			<div class="video_area">
-				<div class="video_play">
-					<img src="{{ STATIC_URL }}images/video_play2.png" class="mypng" />
-					<a href="javascript:;" onclick="showFlv();" class="video_play_btn"></a>
-					<!-- <a href="http://www.demohour.com/projects/319663" target="_blank" class="video_play_btn" ><img src="{{ STATIC_URL }}images/video_play2.png" class="mypng" /></a> -->
-				</div>
+
+			<div class="video-wrapper" title="点击播放 simplenect 的介绍视频">
+				<a href="javascript:;" class="video-preview" data-video-width="960" data-video-height="540">
+					<img src="{{ STATIC_URL }}images/video-bg.png"/>
+					<div class="btn-play" style="display:block;"></div>
+				</a>
 			</div>
+
+
 		</div>
 	</div>
+</div>
 
-<div class="player_video" style="">
-	<div class="player_box">
-		<div id="player1" style=""><a href="http://www.macromedia.com/go/getflashplayer">没有Flash播放器？</a></div>
-	</div>
-</div>
-<script type="text/javascript" src="{{ STATIC_URL }}flash/swfobject.js"></script>
-	<script type="text/javascript">
-		var swfUrl="{{ STATIC_URL }}flash/";
-		var swfLeft=$(".main_in").offset().left;
-			function showFlv(){
-				var s1 = new SWFObject(swfUrl+"flvplayer.swf","single","960","540","7");
-				s1.addParam("allowfullscreen","true");
-				s1.addParam("vmode","window");
-				s1.addVariable("autostart","true");
-				s1.addVariable("file",swfUrl+"simplenect.flv");
-				s1.addVariable("image",swfUrl+"flv_bg.jpg");
-				s1.addVariable("width","960");
-				s1.addVariable("height","540");
-				s1.addVariable("displayheight","540");
-				s1.write("player1");
-				$("#player1").css({"left":swfLeft});
-				$("#player1").show();
-				$(".player_video").show();
-			}
-		$(".player_video").click(function(){
-			$("#player1").hide();
-			$(".player_video").hide();
-			$("#player1").html("");
-		});
-	</script>
-</div>
+
 <div  style="background-color:#E5E9ED;height:430px">
 	<div class="container-narrow">
 	<br/>
@@ -456,6 +440,8 @@
 	</form>
 	</div>
 	</div>
+
+
 
 {% endblock %}
 {% block footer %}{% include "footer.html" %}{% endblock %}
