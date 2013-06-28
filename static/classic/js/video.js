@@ -7582,8 +7582,8 @@ function(a) {
             },
             beforeSend: function(b, c) {
                 if (c.type != "GET") {
-                    var d = a("meta[name='csrf-token']").attr("content");
-                    b.setRequestHeader("X-CSRF-Token", d)
+                    var d = a("input[name='csrfmiddlewaretoken']").attr("value");
+                    b.setRequestHeader("X-CSRFToken", d)
                 }
             },
             error: function(b, c, d) {
