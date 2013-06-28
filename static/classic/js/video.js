@@ -7813,9 +7813,11 @@ function(a) {
         },
         transitionEnd: function(b, c) {
             if (mcw.supportTransition()) {
+                alert("transitionEnd support");
                 var d = "transitionend";
                 a.browser.webkit ? d = "webkitTransitionEnd": a.browser.msie ? d = "transitionend": a.browser.opera && (d = "oTransitionEnd"),
                 b.one(d, c);
+                alert("b one after");
             } else setTimeout(c, 200)
         },
         dialog: function() {
@@ -9001,6 +9003,7 @@ function(a) {
                 d = c.data("video-height");
                 mcw.transitionEnd(i,
                 function() {
+                    alert("remove img");
                     j = i.find("img").remove(),
                     i.html('<video id="video" class="video-js vjs-default-skin" width="' + b + '" height="' + d + '" controls poster="http://static.simplenect.cn/classic/images/video-preview-431bdceb1b043aa2f98a22b989b88cc4.png" preload="auto">\t\t\t\t\t<source type="video/mp4" src="http://static.simplenect.cn/flash/intro.mp4">\t\t\t\t\t<source type="video/webm" src="http://static.simplenect.cn/flash/intro.webm">\t\t\t\t</video>\t\t\t\t<a id="close" href="javascript:;" title="关闭视频">关闭</a>'),
                     a("#close").click(function() {
