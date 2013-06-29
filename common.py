@@ -107,7 +107,7 @@ LOGGING = {
         },
         'apps.kx': {
             'handlers': ['console','file','mail_admins' ],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': False,
         },
         'apps.blog': {
