@@ -107,10 +107,25 @@ LOGGING = {
         },
         'apps.kx': {
             'handlers': ['console','file','mail_admins' ],
-            'level': 'INFO',
+            'level': 'DEBUG',
             'propagate': False,
         },
         'apps.blog': {
+            'handlers': ['console','file','mail_admins' ],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'apps.msg_board': {
+            'handlers': ['console','file','mail_admins' ],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'apps.ad': {
+            'handlers': ['console','file','mail_admins' ],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'apps.vipuser': {
             'handlers': ['console','file','mail_admins' ],
             'level': 'DEBUG',
             'propagate': False,

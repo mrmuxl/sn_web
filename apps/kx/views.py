@@ -29,6 +29,7 @@ def index(request):
         ins_file = KxPub.objects.filter(pub_time__isnull=False).order_by('-id')[0:1].get()
         msg_count = KxMsgBoard.objects.filter(is_del__exact=0).count()
         msg_list = KxMsgBoard.objects.filter(reply_id__exact=0,is_del__exact=0,create_time__gte=left_create_time,create_time__lte=right_create_time).order_by("-create_time").values()[:5]
+        logger.info("msg_count:%s",msg_count)
     except Exception as e:
         msg_count = 0
         msg_list = ''
