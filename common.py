@@ -130,6 +130,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'apps.publish': {
+            'handlers': ['console','file','mail_admins' ],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
         'gunicorn': {
             'handlers': ['console','file' ],
             'level': 'ERROR',

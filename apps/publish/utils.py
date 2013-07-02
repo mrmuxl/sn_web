@@ -2,6 +2,7 @@
 
 import logging,os
 from django.conf import settings
+from hashlib import md5
 
 logger = logging.getLogger(__name__)
 
@@ -10,11 +11,15 @@ def handle_uploaded_file(ver=None,ins=None,patch=None):
     if ins is not None:
         path_folder=path_root + "/Install/"
         path_upload = path_folder + "SimpleNect_" + ver.upper() + ".zip"
-        do_upload(path_folder,path_upload,ins)
+        install_md5 = do_upload(path_folder,path_upload,ins)
+        if install_md5:
+            return install_md5 
     if patch is not None:
         path_folder=path_root + "/Install/" + ver + "/"
         path_upload = path_folder + "Patch.zip"
-        do_upload(path_folder,path_upload,patch)
+        patch_md5 = do_upload(path_folder,path_upload,patch)
+        if patch_md5:
+            return patch_md5 
 
 def do_upload(path_folder,path_upload,upload_file):
     try:
@@ -23,6 +28,9 @@ def do_upload(path_folder,path_upload,upload_file):
         with open(path_upload,'wb') as fd:
             for chunk in upload_file.chunks():
                 fd.write(chunk)
+        with open(path_upload,'rb') as fd:
+            file_md5 = md5(fd.read()).hexdigest()
+        return file_md5
     except OSError as e:
         logger.debug(u"目录创建失败！%s",e)
         raise 
