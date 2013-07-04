@@ -11,7 +11,7 @@ from django.http import HttpResponseRedirect,HttpResponse
 from django.shortcuts import render
 from forms import PublishAdd
 from utils import handle_uploaded_file,update_download_link
-
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -225,7 +225,7 @@ def del_pub(request):
 
 @csrf_exempt
 @require_POST
-def publish_select(request):
+def published(request):
     message = {}
     now = datetime.datetime.now()
     email = request.POST.get('email','')
@@ -234,16 +234,35 @@ def publish_select(request):
         try:
             publish_user = PublishUser.objects.get(email=email)
             if publish_user.is_publish:
-                publish_info = KxPub.object.filter(email=email).values()
-                print publish_info
+                publish_info = KxPub.objects.get(pk=publish_user.ver_id)
+                ver_list = publish_info.ver.split('.')
+                ver_dict={"Major":ver_list[0],"Minor": ver_list[1],"Build":ver_list[2],"Revision":ver_list[3],"MajorRevision":0,"MinorRevision": 0}
+                standAloneVersion = []
+                files = []
+                file_ins = {"fileRelativePath":publish_info.install_file,"url":settings.DOWNLOAD+'/'+publish_info.install_file,"MD5":publish_info.install_md5}
+                file_patch = {"fileRelativePath":"Patch.zip","url":settings.DOWNLOAD+'/'+publish_info.patch_file,"MD5":publish_info.patch_md5}
+                files.append(file_ins)
+                files.append(file_patch)
+                stand_dict = {}
+                stand_dict.update(ver=ver_dict)
+                stand_dict.update(files=files)
+                stand_dict.update(pubTime=str(publish_info.pub_time))
+                stand_dict.update(URL=settings.DOWNLOAD)
+                stand_dict.update(installFile="Patch.zip")
+                stand_dict.update(installArgs=["/VERYSILENT",])
+                standAloneVersion.append(stand_dict)
+                message.update(standAloneVersion=standAloneVersion)
+                message.update(netWorkVersion=[])
                 message['is_publish']=True
+                from pprint import pprint
+                pprint(message)
                 return HttpResponse(json.dumps(message),content_type="application/json")
             else:
-                message['is_publish']=False
+                message['is_publish1']=False
                 return HttpResponse(json.dumps(message),content_type="application/json")
         except Exception as e:
             logger.debug("email not found:%s",e)
-            message['is_publish']=False
+            message['is_publish2']=False
             return HttpResponse(json.dumps(message),content_type="application/json")
     else:
         message['status']="error"
