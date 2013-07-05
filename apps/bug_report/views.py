@@ -99,9 +99,7 @@ def soft_bug(request):
 @csrf_exempt
 @require_POST
 def bug_log(request):
-    #raw_str=request.raw_post_data.split('=')[2]
     #print "%r" %(raw_str)
-    #print raw_str.decode('gbk')
     message = {} 
     now = datetime.datetime.now()
     date =datetime.date.strftime(datetime.date.today(),"%Y-%m-%d")
@@ -112,7 +110,9 @@ def bug_log(request):
     if not os.path.isdir(path_folder):
         os.makedirs(path_folder)
     mac = request.POST.get('clientIdentifie','').encode('utf8')
-    log = request.POST.get('log','')
+    #log = request.POST.get('log','')
+    raw_log=request.raw_post_data.split('=')[2]
+    log = raw_log.decode('gbk').encode('utf8')
     if mac and log:
         log_path = path_folder + file_name + '.log'
         c = mac + "   START*****************\n" + log + "\n" + mac + "   END*****************\n\n"
