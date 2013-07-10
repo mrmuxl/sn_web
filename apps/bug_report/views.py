@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
-from apps.kx.models import KxSoftBug
+from models import KxSoftBug
 from hashlib import md5
 import datetime,logging,json,os
 from django.utils.encoding import smart_unicode,smart_str
