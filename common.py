@@ -78,6 +78,13 @@ LOGGING = {
             'filename':os.path.join(ROOT_DIR+'/logs/','access.log'),
             'formatter': 'standard'
             },
+        'alipay': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            #'filters': ['require_debug_false'],
+            'filename':os.path.join(ROOT_DIR+'/logs/','alipay.log'),
+            'formatter': 'standard'
+            },
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
@@ -125,6 +132,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'apps.bug_report': {
+            'handlers': ['console','file','mail_admins' ],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
         'apps.vipuser': {
             'handlers': ['console','file','mail_admins' ],
             'level': 'DEBUG',
@@ -132,6 +144,11 @@ LOGGING = {
         },
         'apps.publish': {
             'handlers': ['console','file','mail_admins' ],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'apps.alipay': {
+            'handlers': ['console','alipay','mail_admins' ],
             'level': 'DEBUG',
             'propagate': False,
         },

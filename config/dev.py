@@ -130,9 +130,9 @@ INSTALLED_APPS = (
     #'django.contrib.comments',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
-    #'gunicorn',
+    'gunicorn',
     'apps.kx',
-    #'apps.blog',
+    'apps.blog',
     'apps.sharefile',
     'apps.online_user',
     'apps.auth',
@@ -141,10 +141,10 @@ INSTALLED_APPS = (
     'apps.ad',
     'apps.msg_board',
     'apps.bug_report',
-    'debug_toolbar',
     'apps.vipuser',
     'apps.publish',
     'apps.alipay',
+    'debug_toolbar',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
