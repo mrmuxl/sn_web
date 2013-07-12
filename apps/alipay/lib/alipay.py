@@ -38,7 +38,7 @@ def smart_str(s, encoding='utf-8', strings_only=False, errors='strict'):
         return s
 
 # 网关地址
-_GATEWAY = 'https://www.alipay.com/cooperate/gateway.do?'
+_GATEWAY = 'https://mapi.alipay.com/gateway.do?'
 
 
 # 对数组排序并除去数组中的空值和签名参数
@@ -117,14 +117,16 @@ def notify_verify(post):
         return False
     
     # 二级验证--查询支付宝服务器此条信息是否有效
+    #https://mapi.alipay.com/gateway.do?service=notify_verify& #支付宝新地址
     params = {}
     params['partner'] = settings.ALIPAY_PARTNER
     params['notify_id'] = post.get('notify_id')
     if settings.ALIPAY_TRANSPORT == 'https':
         params['service'] = 'notify_verify'
-        gateway = 'https://www.alipay.com/cooperate/gateway.do'
+        gateway = 'https://mapi.alipay.com/gateway.do?'
     else:
-        gateway = 'http://notify.alipay.com/trade/notify_query.do'
+        gateway = 'http://notify.alipay.com/trade/notify_query.do?'
+    print "notify_verify:",params
     veryfy_result = urlopen(gateway, urlencode(params)).read()
     if veryfy_result.lower().strip() == 'true':
         return True
