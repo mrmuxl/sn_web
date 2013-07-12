@@ -8,5 +8,6 @@ urlpatterns = patterns('',
     url(r'do_pub/?$','apps.publish.views.do_pub',name ='do_pub'),
     url(r'del_pub/?$','apps.publish.views.del_pub',name ='del_pub'),
     url(r'published/?$','apps.publish.views.published'),
+    url(r'repo_published/?$','apps.publish.views.repo_published'),
 )
 
