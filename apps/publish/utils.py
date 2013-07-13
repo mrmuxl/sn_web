@@ -71,6 +71,7 @@ def publish_message(publish_info):
     standAloneVersion.append(stand_dict)
     message.update(standAloneVersion=standAloneVersion)
     message.update(netWorkVersion=[])
-    from pprint import pprint 
-    pprint(message)
+    if settings.DEBUG:
+        from pprint import pprint 
+        pprint(message)
     return message
