@@ -255,8 +255,8 @@ def published(request):
                 message.update(standAloneVersion=standAloneVersion)
                 message.update(netWorkVersion=[])
                 message['is_publish']=True
-                from pprint import pprint
-                pprint(message)
+                #from pprint import pprint
+                #pprint(message)
                 return HttpResponse(json.dumps(message),content_type="application/json")
             else:
                 raise
@@ -285,8 +285,8 @@ def published(request):
                 message.update(standAloneVersion=standAloneVersion)
                 message.update(netWorkVersion=[])
                 message['is_publish']=False
-                from pprint import pprint
-                pprint(message)
+                #from pprint import pprint
+                #pprint(message)
                 message['is_publish']=False
                 return HttpResponse(json.dumps(message),content_type="application/json")
     else:
@@ -326,8 +326,8 @@ def repo_published(request):
                 message.update(standAloneVersion=standAloneVersion)
                 message.update(netWorkVersion=[])
                 message['is_publish']=True
-                from pprint import pprint
-                pprint(message)
+                #from pprint import pprint
+                #pprint(message)
                 return HttpResponse(json.dumps(message),content_type="application/json")
             else:
                 raise
@@ -357,6 +357,6 @@ def repo_published(request):
                 message.update(standAloneVersion=standAloneVersion)
                 message.update(netWorkVersion=[])
                 message['is_publish']=True
-                from pprint import pprint
-                pprint(message)
+                #from pprint import pprint
+                #pprint(message)
                 return HttpResponse(json.dumps(message),content_type="application/json")
