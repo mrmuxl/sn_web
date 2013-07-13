@@ -314,7 +314,6 @@ def bug_msg(request):
                 ctime = os.path.getctime(file_path)
                 size = os.path.getsize(file_path)
                 file_info[file_name]={'ctime':ctime,'size':size}
-        print bug_list
         temp_var = {
                     'domain':u'simplenect.cn',
                     'bug_list':bug_list,
