@@ -31,7 +31,7 @@ def order_info(request):
 @require_POST
 def order_result(request):
     order_id = time.strftime("%Y%m%d") + str(uuid.UUID.get_time_low(uuid.uuid1()))
-    print order_id
+    logger.info("order_id:%s",order_id)
     t = request.POST.get('type','12')
     if t == '12':
         name = u'SimpleNectVIP'
