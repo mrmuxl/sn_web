@@ -43,7 +43,7 @@ def publish_add(request):
                 ver = form.cleaned_data['ver'].lower()
                 desc = form.cleaned_data['desc']
                 try:
-                    ins = request.FILES['ins']
+                    ins = request.FILES.get('ins',None)
                     install_md5 = handle_uploaded_file(ver=ver,ins=ins)
                 except KeyError as e:
                     logger.debug("ins参数不存在%s",e)
@@ -56,7 +56,7 @@ def publish_add(request):
                     message ="""安装包上传失败！<A HREF="javascript:history.back()">返 回</A>"""
                     return HttpResponse(message)
                 try:
-                    patch = request.FILES['patch']
+                    patch = request.FILES.get('patch',None)
                     patch_md5 = handle_uploaded_file(ver=ver,patch=patch)
                 except KeyError as e:
                     logger.debug("%s",e)
