@@ -62,8 +62,8 @@ def publish_message(publish_info):
     ver_dict={"Major":int(ver_list[0].strip('VvSs')),"Minor": int(ver_list[1]),"Build":int(ver_list[2]),"Revision":int(ver_list[3]),"MajorRevision":0,"MinorRevision": 0}
     standAloneVersion = []
     files = []
-    file_ins = {"fileRelativePath":publish_info.install_file,"url":settings.DOWNLOAD+'/Install/'+publish_info.install_file,"MD5":publish_info.install_md5}
     file_patch = {"fileRelativePath":"Patch.zip","url":settings.DOWNLOAD+'/Install/'+publish_info.patch_file,"MD5":publish_info.patch_md5}
+    file_ins = {"fileRelativePath":publish_info.install_file,"url":settings.DOWNLOAD+'/Install/'+publish_info.install_file,"MD5":publish_info.install_md5}
     files.append(file_ins)
     files.append(file_patch)
     stand_dict = {}
