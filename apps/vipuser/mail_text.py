@@ -24,7 +24,7 @@ BODY {
 </style>
       <meta content="MSHTML 6.00.2900.6400" name="GENERATOR">
       <div>你好，</div>
-      <div style="TEXT-INDENT: 2em">SimpleNect新推出了软件仓库功能，欢迎下载试用，地址：</div>
+      <div style="TEXT-INDENT: 2em">SimpleNect文件仓库3.3.6.2版本发布，新推出了软件仓库功能，欢迎下载试用，地址：</div>
       <div style="TEXT-INDENT: 2em">&nbsp;</div>
       <div style="TEXT-INDENT: 2em"><a moz-do-not-send="true"
           href="'''
