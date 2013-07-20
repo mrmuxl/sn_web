@@ -53,7 +53,6 @@ def update_download_link(install_file):
         raise 
 
 def publish_message(publish_info):
-    #message = OrderedDict()
     message = {}
     if publish_info.patch_md5:
         patch_md5 = publish_info.patch_md5.upper()
@@ -68,7 +67,6 @@ def publish_message(publish_info):
     file_ins = {"fileRelativePath":publish_info.install_file,"url":settings.DOWNLOAD+'/Install/'+publish_info.install_file,"MD5":publish_info.install_md5}
     files.append(file_patch)
     files.append(file_ins)
-    #stand_dict = OrderedDict()
     stand_dict = {}
     stand_dict.update(ver=ver_dict)
     stand_dict.update(files=files)
