@@ -56,7 +56,7 @@ def vipuser_api(request):
 @require_GET
 def vipuser_test(reqeust,ckey,email):
     key = '518279d14e20e'
-    download_url =u'http://download.simplenect.cn/Install/SimpleNect_S3.3.6.0.zip' 
+    download_url =u'http://download.simplenect.cn/Install/SimpleNect_S3.3.6.2.zip' 
     from_email =u"SimpleNect"
     if ckey and email and key == ckey:
         email = strip_tags(email.strip().strip('/').lower())
