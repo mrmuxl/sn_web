@@ -12,6 +12,10 @@ ADMINS = (
     ('admin', EMAIL),
 )
 
+DATE_FORMAT = 'Y-m-d'
+DATETIME_FORMAT = 'Y-m-d H:i:s'
+SHORT_DATE_FORMAT = 'Y-m-d'
+SHORT_DATETIME_FORMAT = 'Y-m-d H:i:s'
 MANAGERS = ADMINS
 
 ALLOWED_HOSTS = ['simplenect.cn','www.simplenect.cn','www.qianmo.cc','qianmo.cc','localhost']
