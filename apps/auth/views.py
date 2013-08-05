@@ -20,8 +20,10 @@ class ObtainAuthToken(APIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.DATA)
         if serializer.is_valid():
-            token, created = Token.objects.get_or_create(user=serializer.object['user'])
-            return Response({'token': token.key, 'ip':request.META['REMOTE_ADDR']})
+            user = serializer.object['user']
+            token, created = Token.objects.get_or_create(user = serializer.object['user'])
+            return Response({'token': token.key, 'ip':request.META['REMOTE_ADDR'], 'email':user.email, 'nick':user.nick})
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -44,5 +46,5 @@ class Register(ObtainAuthToken):
        return super(Register,self).post(request);
 
 
-api_register = Register.as_view()
+api_register = Register.as_view() 
 

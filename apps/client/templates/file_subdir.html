@@ -1,0 +1,155 @@
+{% extends "layout_base.html" %}
+
+{% block style %}
+<style type="text/css">
+.orange{
+	color:orange;
+}
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<ul class="breadcrumb" style="margin:0 20px 20px;">
+  <li>
+  	<a href="/client/file/index/" class="btn btn-link" style="margin:0; padding:0"><i class="icon-home icon-large"></i></a>
+  	 <span class="divider">/</span>
+  </li>
+  <li><a href="/client/file/index/" class="j_back btn btn-link" style="margin:0; padding:0">返回上级目录</a> </li>
+  <i class="icon-refresh icon-large pull-right"></i>
+</ul>
+
+<div class="text-right" style="margin: 5px 30px;">
+
+</div>
+
+<div class="container-fluid">
+	<table class="table table-hover trans-record">
+		<thead>
+			<tr>
+				<th class="span8">文件名</th>
+				<th class="span4">修改时间</th>
+			</tr>
+		</thead>
+
+		<tbody class="j_fileListBody">
+			<tr class="j_fileLine hide" >
+				<td>
+					<div class="media">
+						<a href="#">
+							<i class="icon-large pull-left"></i>
+						</a>
+						<div class="media-body">
+							<h5 class="media-heading">
+								<a href="#" class="j_fileName"></a>
+							</h5>
+							<div class="muted font12 j_fileSize">
+							</div>
+						</div>
+					</div>
+				</td>
+				<td>
+					<span class="j_fileTime"></span>
+				</td>
+			</tr>
+		</tbody>
+		
+	</table>
+
+</div>
+
+<form action="/client/file/subdir/" class="subDirForm" method="post">
+	{% csrf_token %}
+	<input type="hidden" name="path" value="c:/" class="path">
+</form>
+
+
+{% endblock %}
+
+
+{% block js %}
+<script type="text/javascript">
+//设置返回上级的链接
+var setBackLink = function(){
+	var parts = "{{path}}".trim().split("/");
+	//去掉空串项
+	parts = $.grep(parts, function(value) {
+	  return value;
+	});
+
+	var link = "/client/file/index/";
+	if(parts.length != 1){
+		parts = parts.splice(0, parts.length-1);
+		link = parts.join("/") + "/";
+		$(".j_back").addClass("j_folder");
+	}
+
+	//如果是根目录，那么返回到首页
+	$(".j_back").attr("href", link);
+};
+setBackLink();
+
+
+//显示文件列表
+var displayFileList = function(){
+	var fileList = mySubDir.getFileList("{{path}}") ;
+	var fileLineTemplate = $(".j_fileLine")[0].outerHTML;
+	var fileNameNodeDeepth = $(fileLineTemplate).find(".j_fileName").parents().length;
+	var fileTimeNodeDeepth = $(fileLineTemplate).find(".j_fileTime").parents().length;
+	var fileSizeNodeDeepth = $(fileLineTemplate).find(".j_fileSize").parents().length;
+	var iconNodeDeepth = $(fileLineTemplate).find("i").parents().length;
+	$.each(fileList, function(key, file){
+		
+		var t = fileLineTemplate;
+		
+		t = $(t).find(".j_fileTime").append(file.time).parents()[fileTimeNodeDeepth-1];
+		if(!file.isDir){
+			t = $(t).find(".j_fileSize").append(file.size).parents()[fileSizeNodeDeepth-1];
+			t = $(t).find(".j_fileName").append(file.name).parents()[fileNameNodeDeepth-1];
+			t = $(t).find("i").addClass("icon-file-alt").parents()[iconNodeDeepth-1];
+			
+		}else{
+			t = $(t).find(".j_fileName").addClass("j_folder").attr("href", "{{path}}"+"/"+file.name).append(file.name).parents()[fileNameNodeDeepth-1];
+			t = $(t).find("i").addClass("icon-folder-close-alt").parents()[iconNodeDeepth-1];
+			t = $(t).find("a:first").addClass("j_folder").attr("href", "{{path}}"+"/"+file.name).parents()[iconNodeDeepth-2];
+		}
+		t = $(t).removeClass("hide");
+		$(".j_fileListBody").append(t);
+
+	});
+};
+displayFileList();
+
+
+
+//设置点击事件
+$(".j_folder").click(function(){
+	var link = $(this).attr('href');
+	$(".subDirForm .path").val(link);
+	$(".subDirForm").submit();
+
+	return false;
+});
+
+
+//鼠标移上去显示按钮
+var buttonShareTemplate = '<a class="btn" href="/client/friend/addfriends/"><i class="icon-plus"></i> 共享</a>';
+var buttonCancelTemplate = '<a class="btn" href="/client/friend/addfriends/" style="margin-left:10px;"><i class="icon-minus"></i> 取消共享</a>';
+
+var mouseIn = function(){
+	$(this).find(".j_filetime").toggle();
+	$(this).find("td:last-child").append(buttonShareTemplate);
+	$(this).find("td:last-child").append(buttonCancelTemplate);
+};
+var mouseOut = function(line){
+	$(this).find(".j_fileTime").toggle();
+	$(this).find(".btn").remove();
+};
+
+$(".trans-record tr").hover(mouseIn, mouseOut);
+
+
+</script>
+{% endblock %}

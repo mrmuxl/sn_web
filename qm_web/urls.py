@@ -1,3 +1,5 @@
+#_*_coding:utf-8_*_
+
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -21,6 +23,8 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+    #这个连接在发布时要去掉
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api-token-auth/','apps.auth.views.obtain_auth_token'), 
     url(r'^api-register/','apps.auth.views.api_register'), 
 )
