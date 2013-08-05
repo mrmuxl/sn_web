@@ -33,8 +33,9 @@ class EmailThread(threading.Thread):
             msg.attach_alternative(self.html, "text/html")
         try:
             msg.send(self.fail_silently)
+            logger.info("recipient:%s",self.recipient_list)
         except Exception as e:
-            logger.debug("Send email error:%s,e")
+            logger.debug("Send email error:%s",e)
 
 def send_mail_thread(subject, body, from_email, recipient_list, fail_silently=False, html=None, *args, **kwargs):
     EmailThread(subject, body, from_email, recipient_list, fail_silently, html).start()

@@ -12,6 +12,10 @@ ADMINS = (
     ('admin', EMAIL),
 )
 
+DATE_FORMAT = 'Y-m-d'
+DATETIME_FORMAT = 'Y-m-d H:i:s'
+SHORT_DATE_FORMAT = 'Y-m-d'
+SHORT_DATETIME_FORMAT = 'Y-m-d H:i:s'
 MANAGERS = ADMINS
 
 ALLOWED_HOSTS = ['simplenect.cn','www.simplenect.cn','www.qianmo.cc','qianmo.cc','localhost']
@@ -20,7 +24,7 @@ ALLOWED_HOSTS = ['simplenect.cn','www.simplenect.cn','www.qianmo.cc','qianmo.cc'
 THEME = '/classic/'
 
 DOMAIN = 'http://www.simplenect.cn'
-DOWNLOAD='http://download.qianmo.cc'
+DOWNLOAD='http://download.simplenect.cn'
 
 LOGIN_URL = '/User/login/'
 LOGOUT_URL='/User/logout/'
@@ -78,6 +82,13 @@ LOGGING = {
             'filename':os.path.join(ROOT_DIR+'/logs/','access.log'),
             'formatter': 'standard'
             },
+        'alipay': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            #'filters': ['require_debug_false'],
+            'filename':os.path.join(ROOT_DIR+'/logs/','alipay.log'),
+            'formatter': 'standard'
+            },
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
@@ -112,6 +123,36 @@ LOGGING = {
         },
         'apps.blog': {
             'handlers': ['console','file','mail_admins' ],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'apps.msg_board': {
+            'handlers': ['console','file','mail_admins' ],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'apps.ad': {
+            'handlers': ['console','file','mail_admins' ],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'apps.bug_report': {
+            'handlers': ['console','file','mail_admins' ],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'apps.vipuser': {
+            'handlers': ['console','file','mail_admins' ],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'apps.publish': {
+            'handlers': ['console','file','mail_admins' ],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'apps.alipay': {
+            'handlers': ['console','alipay','mail_admins' ],
             'level': 'DEBUG',
             'propagate': False,
         },

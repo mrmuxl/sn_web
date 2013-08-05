@@ -250,18 +250,6 @@ class KxOrgSelf(models.Model):
     class Meta:
         db_table = 'kx_org_self'
 
-class KxPub(models.Model):
-    id           = models.IntegerField(primary_key = True)
-    ver          = models.CharField(max_length = 30L, unique = True)
-    pub_desc     = models.CharField(max_length = 600L)
-    install_file = models.CharField(max_length = 100L, blank = True)
-    patch_file   = models.CharField(max_length = 100L, blank = True)
-    create_time  = models.DateTimeField()
-    pub_time     = models.DateTimeField(null = True, blank = True)
-    is_tongji    = models.IntegerField()
-    class Meta:
-        db_table = 'kx_pub'
-
 class KxPubRecord(models.Model):
     id          = models.IntegerField(primary_key = True)
     email       = models.CharField(max_length     = 50L)
@@ -301,18 +289,6 @@ class KxPubTongji(models.Model):
     invite4 = models.IntegerField()
     class Meta:
         db_table = 'kx_pub_tongji'
-
-class KxSoftBug(models.Model):
-    id               = models.IntegerField(primary_key = True)
-    client_identifie = models.CharField(max_length     = 32L)
-    version          = models.CharField(max_length     = 10L)
-    upload_time      = models.DateTimeField()
-    os               = models.CharField(max_length     = 50L)
-    auto_start       = models.IntegerField()
-    lan_num          = models.IntegerField()
-    u_email          = models.CharField(max_length     = 50L, blank = True)
-    class Meta:
-        db_table = 'kx_soft_bug'
 
 class KxSoftRecord(models.Model):
     id               = models.AutoField(primary_key = True)
