@@ -62,7 +62,7 @@ def vipuser_test(reqeust,ckey,email):
         email = strip_tags(email.strip().strip('/').lower())
         if not is_valid_email(email):
             message ="""邮箱格式不正确！<A HREF="javascript:history.back()">返 回</A>"""
-        subject = u'SimpleNect文件仓库3.3.6.2版本发布！'
+        subject = u'SimpleNect文件仓库3.3.6.4版本发布！'
         msg = vipuser_tip(download_url)
         try:
             send_mail_thread(subject,msg,from_email,[email],html=msg)
