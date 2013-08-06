@@ -1,0 +1,87 @@
+
+/* ============================================================================================================================
+== BUBBLE WITH A BORDER AND TRIANGLE
+** ============================================================================================================================ */
+
+/* THE SPEECH BUBBLE
+------------------------------------------------------------------------------------------------------------------------------- */
+
+.triangle-border {
+	position:relative;
+	padding:15px;
+	border:1px solid #eee;
+	color:#333;
+	background:#eee;
+	/* css3 */
+	-webkit-border-radius:10px;
+	-moz-border-radius:10px;
+	border-radius:10px;
+	display: block;
+}
+
+/* Variant : for left positioned triangle
+------------------------------------------ */
+
+.triangle-border.left {
+	margin-left:30px;
+	margin-right:60px;
+	background-color: #eeeeff;
+	border-color: #eeeeff;
+}
+
+/* Variant : for right positioned triangle
+------------------------------------------ */
+
+.triangle-border.right {
+	margin-right:30px;
+	margin-left:60px;
+}
+
+/* THE TRIANGLE
+------------------------------------------------------------------------------------------------------------------------------- */
+
+.triangle-border:before {
+	content:"";
+	position:absolute;
+	bottom:-20px; /* value = - border-top-width - border-bottom-width */
+	left:40px; /* controls horizontal position */
+    border-width:20px 20px 0;
+	border-style:solid;
+    /* reduce the damage in FF3.0 */
+
+    width:0;
+}
+
+
+
+
+/* Variant : left
+------------------------------------------ */
+
+/* creates the larger triangle */
+.triangle-border.left:before {
+	top:10px; /* controls vertical position */
+	bottom:auto;
+	left:-10px; /* value = - border-left-width - border-right-width */
+	border-width:5px 10px 5px 0;
+	border-color:transparent #eeeeff;
+}
+
+
+
+/* Variant : right
+------------------------------------------ */
+
+/* creates the larger triangle */
+.triangle-border.right:before {
+	top:auto; /* controls vertical position */
+	bottom:10px;
+    left:auto;
+	right:-10px; /* value = - border-left-width - border-right-width */
+	border-width:5px 0 5px 10px;
+	border-color:transparent #eee;
+}
+
+
+
+
