@@ -11,7 +11,7 @@ class ProductInfo(models.Model):
     id = models.AutoField(primary_key = True)
     name = models.CharField(max_length=200,verbose_name = _(u'产品名称'))
     desc = models.TextField(verbose_name = _(u'产品描述'))
-    price = models.IntegerField(verbose_name = _(u'单价'))
+    price = models.DecimalField(verbose_name = _(u'单价'),max_digits=10,decimal_places=2)
     stocked = models.IntegerField(verbose_name = _(u'库存'))
     class Meta:
         db_table = 'product_info'
@@ -26,7 +26,7 @@ class OrderInfo(models.Model):
     buy_user = models.EmailField(_(u'购买人'),max_length=50)
     buy_product = models.ForeignKey(ProductInfo,verbose_name = _(u'购买产品'))
     number = models.IntegerField(verbose_name=_(u'购买数量'))
-    total_fee = models.IntegerField(verbose_name=_(u'支付总额'))
+    total_fee = models.DecimalField(verbose_name=_(u'支付总额'),max_digits=10,decimal_places=2)
     pay_status = models.BooleanField(verbose_name=_(u'支付状态'),help_text=_(u'0：未付款，1：已付款'))
     pay_at = models.DateTimeField(default = datetime(1970,1,1),verbose_name = _(u'付款时间'))
     trade_no = models.CharField(default ='0',db_index=True,max_length=64,verbose_name=_(u'支付宝交易号')) 
