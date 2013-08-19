@@ -193,7 +193,6 @@ def notify_url_handler(request):
         logger.info("request error!")
         return HttpResponse('fail')
 
-@csrf_exempt
 
 
 @require_POST
