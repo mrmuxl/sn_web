@@ -96,11 +96,11 @@ def return_url_handler(request):
                 return HttpResponse('fail')
         else:
             logger.info("This order is checkout==>order_id:%s",order_id)
-            return HttpResponse('success')
+            return render(request,"alipay/return_url.html",{'order_id':order_id})
+            #return HttpResponse('success')
     else:
         logger.info("trade_status:%s",trade_status)
-        return render(request,"alipay/return_url.html",{'order_id':order_id})
-        #return HttpResponse('fail')
+        return HttpResponse('fail')
 
 @csrf_exempt
 @require_POST
