@@ -99,7 +99,8 @@ def return_url_handler(request):
             return HttpResponse('success')
     else:
         logger.info("trade_status:%s",trade_status)
-        return HttpResponse('fail')
+        return render(request,"alipay/return_url.html",{'order_id':order_id})
+        #return HttpResponse('fail')
 
 @csrf_exempt
 @require_POST
