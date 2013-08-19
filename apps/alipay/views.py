@@ -207,16 +207,16 @@ def order_result(request):
         name = product_info[0].name
         #desc = u'12个月'
         desc = product_info[0].desc
-        #price = 0.01 
         price = product_info[0].price
+        price = 0.01 
     elif t == '6':
         pid = product_info[1].id
         #name = u'SimpleNectVIP'
         name = product_info[1].name
         #desc = u'6个月'
         desc = product_info[1].desc
-        #price = 0.06
         price = product_info[1].price
+        price = 0.06
     try:
         uid = str(uuid.UUID.get_time_low(uuid.uuid1()))
         if len(uid) < 10:
