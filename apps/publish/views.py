@@ -3,6 +3,7 @@
 import datetime,logging,json,os
 from django.http import Http404
 from models import KxPub,PublishUser
+from apps.kx.models import KxUser
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import (require_POST,require_GET)
 from django.core.urlresolvers import reverse
@@ -217,15 +218,22 @@ def del_pub(request):
 @require_POST
 def published(request):
     message = {}
+    Dday = datetime.datetime(2013,8,20) #1944-06-06
     email = request.POST.get('email','')
+    ver = request.POST.get('ver','')
     logger.info("email:%s",email)
     if email:
         try:
             publish_user = PublishUser.objects.filter(is_publish__exact=1).get(email=email)
             publish_info = KxPub.objects.get(pk=publish_user.ver_id)
+            logger.info("%s,%s",publish_user,publish_info)
         except Exception as e:
             logger.debug("define publish:%s",e)
-            email = 'simplenect@simplenect.com'
+            user_obj = KxUser.objects.get(email=email)
+            if user_obj.create_time >= Dday:
+                email = 'update@simplenect.com'
+            else:
+                email = 'simplenect@simplenect.com'
             publish_user = PublishUser.objects.get(email=email)
             publish_info = KxPub.objects.get(pk=publish_user.ver_id)
         message = publish_message(publish_info)
