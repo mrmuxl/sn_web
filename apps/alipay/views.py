@@ -30,74 +30,77 @@ def return_url_handler(request):
         order_info = OrderInfo.objects.filter(order_id=out_trade_no)
         order_list = order_info.values('order_id','pay_status','pay_at','trade_no','buy_product_id','buy_user')
         logger.info("order_list%s",order_list)
-        order_id = order_list[0]['order_id']
-        pay_status = order_list[0]['pay_status']
-        pay_at = order_list[0]['pay_at']
-        my_trade_no = order_list[0]['trade_no']
-        buy_product_id = order_list[0]['buy_product_id']
-        buy_user = order_list[0]['buy_user']
-        product_info = ProductInfo.objects.filter(id=buy_product_id)
-        logger.info("order_id:%s,pay_status:%s,pay_at:%s",order_id,pay_status,pay_at)
-        logger.info("my_trade_no:%s,buy_product_id:%s,buy_user:%s",my_trade_no,buy_product_id,buy_user)
-        if not pay_status and trade_no != my_trade_no:
-            if out_trade_no == order_id:
-                try:
-                    vipuser = VIPUser.objects.filter(email=buy_user)
-                    order_info.update(pay_status=1,pay_at=notify_time,trade_no=trade_no)
-                    if vipuser:
-                        myexpire = vipuser.values('expire')[0]['expire']
-                        logger.info("expire:%s",myexpire)
-                        if buy_product_id == 1:
-                            if myexpire >= now:
-                                try:
-                                    expire = myexpire + datetime.timedelta(days=365)
-                                    vipuser.update(is_vip=1,expire=expire)
-                                    logger.info("==>>VIPUser update email:%s,expire:%s",buy_user,expire)
-                                except Exception as e:
-                                    logger.debug("==>>VIPUser update fail expire:%s,%s",expire,e)
-                            else:
-                                try:
-                                    expire = now + datetime.timedelta(days=365)
-                                    vipuser.update(is_vip=1,expire = expire)
-                                    logger.info("==>>VIPUser update email:%s,now:%s,expire:%s",buy_user,now,expire)
-                                except Exception as e:
-                                    logger.debug("==>>VIPUser update fail:expire:%s",expire,e)
-                        elif buy_product_id == 2:
-                            if expire >= now:
-                                try:
-                                    expire = myexpire + datetime.timedelta(days=182)
-                                    vipuser.update(is_vip=1,expire=expire)
-                                    logger.info("==>>VIPUser update email:%s,expire:%s",buy_user,expire)
-                                except Exception as e:
-                                    logger.debug("==>>VIPUser update fail expire:%s,%s",expire,e)
-                            else:
-                                try:
-                                    expire = now + datetime.timedelta(days=365)
-                                    vipuser.update(is_vip=1,expire = expire)
-                                    logger.info("==>>VIPUser update email:%s,now:%s,expire:%s",buy_user,now,expire)
-                                except Exception as e:
-                                    logger.debug("==>>VIPUser update fail:expire:%s",expire,e)
-                    else:
-                        if buy_product_id == 1:
-                            expire = now + datetime.timedelta(days=365)
-                            VIPUser.objects.create(email=buy_user,is_vip=1,expire=expire)
-                            logger.info("==>>VIPUser create product 1 email:%s,expire:%s",buy_user,expire)
+        if order_list:
+            order_id = order_list[0]['order_id']
+            pay_status = order_list[0]['pay_status']
+            pay_at = order_list[0]['pay_at']
+            my_trade_no = order_list[0]['trade_no']
+            buy_product_id = order_list[0]['buy_product_id']
+            buy_user = order_list[0]['buy_user']
+            product_info = ProductInfo.objects.filter(id=buy_product_id)
+            logger.info("order_id:%s,pay_status:%s,pay_at:%s",order_id,pay_status,pay_at)
+            logger.info("my_trade_no:%s,buy_product_id:%s,buy_user:%s",my_trade_no,buy_product_id,buy_user)
+            if not pay_status and trade_no != my_trade_no:
+                if out_trade_no == order_id:
+                    try:
+                        vipuser = VIPUser.objects.filter(email=buy_user)
+                        order_info.update(pay_status=1,pay_at=notify_time,trade_no=trade_no)
+                        if vipuser:
+                            myexpire = vipuser.values('expire')[0]['expire']
+                            logger.info("expire:%s",myexpire)
+                            if buy_product_id == 1:
+                                if myexpire >= now:
+                                    try:
+                                        expire = myexpire + datetime.timedelta(days=365)
+                                        vipuser.update(is_vip=1,expire=expire)
+                                        logger.info("==>>VIPUser update email:%s,expire:%s",buy_user,expire)
+                                    except Exception as e:
+                                        logger.debug("==>>VIPUser update fail expire:%s,%s",expire,e)
+                                else:
+                                    try:
+                                        expire = now + datetime.timedelta(days=365)
+                                        vipuser.update(is_vip=1,expire = expire)
+                                        logger.info("==>>VIPUser update email:%s,now:%s,expire:%s",buy_user,now,expire)
+                                    except Exception as e:
+                                        logger.debug("==>>VIPUser update fail:expire:%s",expire,e)
+                            elif buy_product_id == 2:
+                                if expire >= now:
+                                    try:
+                                        expire = myexpire + datetime.timedelta(days=182)
+                                        vipuser.update(is_vip=1,expire=expire)
+                                        logger.info("==>>VIPUser update email:%s,expire:%s",buy_user,expire)
+                                    except Exception as e:
+                                        logger.debug("==>>VIPUser update fail expire:%s,%s",expire,e)
+                                else:
+                                    try:
+                                        expire = now + datetime.timedelta(days=365)
+                                        vipuser.update(is_vip=1,expire = expire)
+                                        logger.info("==>>VIPUser update email:%s,now:%s,expire:%s",buy_user,now,expire)
+                                    except Exception as e:
+                                        logger.debug("==>>VIPUser update fail:expire:%s",expire,e)
                         else:
-                            expire = now + datetime.timedelta(days=182)
-                            VIPUser.objects.create(email=request.user,is_vip=1,expire=expire)
-                            logger.info("==>>VIPUser create product 2 email:%s,expire:%s",buy_user,expire)
-                    logger.info("==>>update successful:out_trade_no:%s,trade_no%s",out_trade_no,trade_no)
-                    return render(request,"alipay/return_url.html",{'order_id':order_id})
-                except Exception as e:
-                    logger.debug("==>>update fail:out_trade_no:%s,%s",out_trade_no,e)
+                            if buy_product_id == 1:
+                                expire = now + datetime.timedelta(days=365)
+                                VIPUser.objects.create(email=buy_user,is_vip=1,expire=expire)
+                                logger.info("==>>VIPUser create product 1 email:%s,expire:%s",buy_user,expire)
+                            else:
+                                expire = now + datetime.timedelta(days=182)
+                                VIPUser.objects.create(email=request.user,is_vip=1,expire=expire)
+                                logger.info("==>>VIPUser create product 2 email:%s,expire:%s",buy_user,expire)
+                        logger.info("==>>update successful:out_trade_no:%s,trade_no%s",out_trade_no,trade_no)
+                        return render(request,"alipay/return_url.html",{'order_id':order_id})
+                    except Exception as e:
+                        logger.debug("==>>update fail:out_trade_no:%s,%s",out_trade_no,e)
+                        return HttpResponse('fail')
+                else:
+                    logger.info("out_trade_no:%s,order_id:%s",out_trade_no,order_id)
                     return HttpResponse('fail')
             else:
-                logger.info("out_trade_no:%s,order_id:%s",out_trade_no,order_id)
-                return HttpResponse('fail')
+                logger.info("This order is checkout==>order_id:%s",order_id)
+                return render(request,"alipay/return_url.html",{'order_id':order_id})
+                #return HttpResponse('success')
         else:
-            logger.info("This order is checkout==>order_id:%s",order_id)
-            return render(request,"alipay/return_url.html",{'order_id':order_id})
-            #return HttpResponse('success')
+            return HttpResponse(u'order not found')
     else:
         logger.info("trade_status:%s",trade_status)
         return HttpResponse('fail')
@@ -203,7 +206,7 @@ def order_result(request):
         name = product_info[0].name
         #desc = u'12个月'
         desc = product_info[0].desc
-        price = product_info[0].price
+        #price = product_info[0].price
         price = 0.01 
     elif t == '6':
         pid = product_info[1].id
@@ -211,7 +214,7 @@ def order_result(request):
         name = product_info[1].name
         #desc = u'6个月'
         desc = product_info[1].desc
-        price = product_info[1].price
+        #price = product_info[1].price
         price = 0.06
     try:
         uid = str(uuid.UUID.get_time_low(uuid.uuid1()))
