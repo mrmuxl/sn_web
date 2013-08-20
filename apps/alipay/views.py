@@ -202,20 +202,14 @@ def order_result(request):
     t = request.POST.get('type','12')
     if t == '12':
         pid = product_info[0].id
-        #name = u'SimpleNectVIP'
         name = product_info[0].name
-        #desc = u'12个月'
         desc = product_info[0].desc
-        #price = product_info[0].price
-        price = 0.01 
+        price = product_info[0].price
     elif t == '6':
         pid = product_info[1].id
-        #name = u'SimpleNectVIP'
         name = product_info[1].name
-        #desc = u'6个月'
         desc = product_info[1].desc
-        #price = product_info[1].price
-        price = 0.06
+        price = product_info[1].price
     try:
         uid = str(uuid.UUID.get_time_low(uuid.uuid1()))
         if len(uid) < 10:
@@ -230,16 +224,14 @@ def order_result(request):
         number =1
         total_fee = number * price
         logger.info("buy_user:%s,order_id:%s,number:%s,total_fee:%s",email,order_id,number,total_fee)
-        OrderInfo.objects.create(order_id=order_id,create_at=now,buy_user=email,buy_product_id=pid,number=1,total_fee=total_fee,pay_status=0)
+        OrderInfo.objects.create(order_id=order_id,create_at=now,buy_user=email,buy_product_id=pid,number=number,total_fee=total_fee,pay_status=0,trade_no='0000')
     except Exception as e:
         logger.debug("order_result:%s",e)
     try:
         pay_url = create_direct_pay_by_user(order_id,name,desc,total_fee)
         logger.info("pay_url:%s",pay_url)
         return HttpResponseRedirect(pay_url)
-        #return HttpResponseRedirect("/")
     except Exception as e:
         logger.debug("pay_url_debug:%s",e)
         raise Http404
-        #return HttpResponseRedirect(pay_url)
      
