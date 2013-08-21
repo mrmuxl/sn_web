@@ -68,7 +68,8 @@ def index(request):
         data.update(user_list=u_dict)
     try:
         ins_file = KxPub.objects.filter(pub_time__isnull=False).order_by('-id')[0:1].get()
-        data.update(ins_file=ins_file.install_file)
+        repo_file = KxPub.objects.filter(pub_time__isnull=False).order_by('-id')[1:2].get()
+        data.update(ins_file=ins_file.install_file,repo_file=repo_file.install_file)
     except Exception as e:
         data.update(ins_file='')
         logger.debug("ins_file:%s",e)
