@@ -36,7 +36,7 @@ def vipuser_api(request):
             if vipuser_obj.is_vip:
                 message['status']=1 #为VIP用户
                 message['is_vip']=vipuser_obj.is_vip
-                message['remainder_days']=-1
+                message['remainder_days']=-1 #不显示
                 message['vip_friends']='not needed'
                 return HttpResponse(json.dumps(message),content_type="application/json")
             elif vip_friends:
@@ -47,7 +47,7 @@ def vipuser_api(request):
                 return HttpResponse(json.dumps(message),content_type="application/json")
             elif remainder_days <= 15:
                 message['status']=1 #为VIP用户
-                message['remainder_days']=(15-remainder_days)
+                message['remainder_days']=(15-remainder_days) #显示剩余天数
                 message['is_vip']=False
                 message['vip_friends']='not needed'
                 return HttpResponse(json.dumps(message),content_type="application/json")
