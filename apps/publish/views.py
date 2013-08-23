@@ -1,9 +1,9 @@
 #_*_coding:utf-8_*_
 
 import datetime,logging,json,os
-from django.conf import settings
 from django.http import Http404
 from models import KxPub,PublishUser
+from apps.kx.models import KxUser
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import (require_POST,require_GET)
 from django.core.urlresolvers import reverse
@@ -12,6 +12,7 @@ from django.shortcuts import render
 from forms import PublishAdd
 from utils import handle_uploaded_file,update_download_link
 from django.conf import settings
+from utils import publish_message
 
 logger = logging.getLogger(__name__)
 
@@ -20,16 +21,6 @@ def publish_index(request):
     if not request.user.is_superuser:
         return HttpResponseRedirect(reverse('login'))
     else:
-        #try:
-        #    p = int(request.GET.get('p','1'))
-        #except ValueError:
-        #    p = 1
-        #try:
-        #    pub_count = KxPub.objects.all().count()
-        #    logger.info("%s",pub_count)
-        #except Exception as e:
-        #    pub_count = 0
-        #    logger.debug("%s",e)
         try:
             pub_list = KxPub.objects.order_by('-id').values()
             logger.info("%s",pub_list)
@@ -50,10 +41,10 @@ def publish_add(request):
             form = PublishAdd(request.POST,request.FILES,auto_id=False) 
             if form.is_valid():
                 pub_id =form.cleaned_data['id']
-                ver = form.cleaned_data['ver']
+                ver = form.cleaned_data['ver'].lower()
                 desc = form.cleaned_data['desc']
                 try:
-                    ins = request.FILES['ins']
+                    ins = request.FILES.get('ins',None)
                     install_md5 = handle_uploaded_file(ver=ver,ins=ins)
                 except KeyError as e:
                     logger.debug("ins参数不存在%s",e)
@@ -66,7 +57,7 @@ def publish_add(request):
                     message ="""安装包上传失败！<A HREF="javascript:history.back()">返 回</A>"""
                     return HttpResponse(message)
                 try:
-                    patch = request.FILES['patch']
+                    patch = request.FILES.get('patch',None)
                     patch_md5 = handle_uploaded_file(ver=ver,patch=patch)
                 except KeyError as e:
                     logger.debug("%s",e)
@@ -227,88 +218,26 @@ def del_pub(request):
 @require_POST
 def published(request):
     message = {}
-    now = datetime.datetime.now()
+    Dday = datetime.datetime(2013,8,20) #1944-06-06
     email = request.POST.get('email','')
+    ver = request.POST.get('ver','')
     logger.info("email:%s",email)
     if email:
         try:
-            publish_user = PublishUser.objects.get(email=email)
-            if publish_user.is_publish:
-                publish_info = KxPub.objects.get(pk=publish_user.ver_id)
-                ver_list = publish_info.ver.split('.')
-                #ver_dict={"Major":ver_list[0],"Minor": ver_list[1],"Build":ver_list[2],"Revision":ver_list[3],"MajorRevision":0,"MinorRevision": 0}
-                ver_dict={"Major":int(ver_list[0].strip('v')),"Minor": int(ver_list[1]),"Build":int(ver_list[2]),"Revision":int(ver_list[3]),"MajorRevision":0,"MinorRevision": 0}
-                standAloneVersion = []
-                files = []
-                file_ins = {"fileRelativePath":publish_info.install_file,"url":settings.DOWNLOAD+'/'+publish_info.install_file,"MD5":publish_info.install_md5}
-                file_patch = {"fileRelativePath":"Patch.zip","url":settings.DOWNLOAD+'/'+publish_info.patch_file,"MD5":publish_info.patch_md5}
-                files.append(file_ins)
-                files.append(file_patch)
-                stand_dict = {}
-                stand_dict.update(ver=ver_dict)
-                stand_dict.update(files=files)
-                stand_dict.update(pubTime=str(publish_info.pub_time))
-                stand_dict.update(URL=settings.DOWNLOAD)
-                stand_dict.update(installFile="Patch.zip")
-                stand_dict.update(installArgs=["/VERYSILENT",])
-                standAloneVersion.append(stand_dict)
-                message.update(standAloneVersion=standAloneVersion)
-                message.update(netWorkVersion=[])
-                message['is_publish']=True
-                from pprint import pprint
-                pprint(message)
-                return HttpResponse(json.dumps(message),content_type="application/json")
-            else:
-                publish_info = KxPub.objects.filter(is_publish=1).order_by('-id')[0:1].get()
-                ver_list = publish_info.ver.split('.')
-                ver_dict={"Major":int(ver_list[0].strip('v')),"Minor": int(ver_list[1]),"Build":int(ver_list[2]),"Revision":int(ver_list[3]),"MajorRevision":0,"MinorRevision": 0}
-                standAloneVersion = []
-                files = []
-                file_ins = {"fileRelativePath":publish_info.install_file,"url":settings.DOWNLOAD+'/'+publish_info.install_file,"MD5":publish_info.install_md5}
-                file_patch = {"fileRelativePath":"Patch.zip","url":settings.DOWNLOAD+'/'+publish_info.patch_file,"MD5":publish_info.patch_md5}
-                files.append(file_ins)
-                files.append(file_patch)
-                stand_dict = {}
-                stand_dict.update(ver=ver_dict)
-                stand_dict.update(files=files)
-                stand_dict.update(pubTime=str(publish_info.pub_time))
-                stand_dict.update(URL=settings.DOWNLOAD)
-                stand_dict.update(installFile="Patch.zip")
-                stand_dict.update(installArgs=["/VERYSILENT",])
-                standAloneVersion.append(stand_dict)
-                message.update(standAloneVersion=standAloneVersion)
-                message.update(netWorkVersion=[])
-                message['is_publish']=False
-                from pprint import pprint
-                pprint(message)
-                return HttpResponse(json.dumps(message),content_type="application/json")
+            publish_user = PublishUser.objects.filter(is_publish__exact=1).get(email=email)
+            publish_info = KxPub.objects.get(pk=publish_user.ver_id)
+            logger.info("%s,%s",publish_user,publish_info)
         except Exception as e:
-            logger.debug("email not found:%s",e)
-            publish_info = KxPub.objects.filter(is_publish=1).order_by('-id')[0:1].get()
-            ver_list = publish_info.ver.split('.')
-            #ver_dict={"Major":ver_list[0],"Minor": ver_list[1],"Build":ver_list[2],"Revision":ver_list[3],"MajorRevision":0,"MinorRevision": 0}
-            ver_dict={"Major":int(ver_list[0].strip('v')),"Minor": int(ver_list[1]),"Build":int(ver_list[2]),"Revision":int(ver_list[3]),"MajorRevision":0,"MinorRevision": 0}
-            standAloneVersion = []
-            files = []
-            file_ins = {"fileRelativePath":publish_info.install_file,"url":settings.DOWNLOAD+'/'+publish_info.install_file,"MD5":publish_info.install_md5}
-            file_patch = {"fileRelativePath":"Patch.zip","url":settings.DOWNLOAD+'/'+publish_info.patch_file,"MD5":publish_info.patch_md5}
-            files.append(file_ins)
-            files.append(file_patch)
-            stand_dict = {}
-            stand_dict.update(ver=ver_dict)
-            stand_dict.update(files=files)
-            stand_dict.update(pubTime=str(publish_info.pub_time))
-            stand_dict.update(URL=settings.DOWNLOAD)
-            stand_dict.update(installFile="Patch.zip")
-            stand_dict.update(installArgs=["/VERYSILENT",])
-            standAloneVersion.append(stand_dict)
-            message.update(standAloneVersion=standAloneVersion)
-            message.update(netWorkVersion=[])
-            message['is_publish']=False
-            from pprint import pprint
-            pprint(message)
-            message['is_publish']=False
-            return HttpResponse(json.dumps(message),content_type="application/json")
+            logger.debug("define publish:%s",e)
+            user_obj = KxUser.objects.get(email=email)
+            if user_obj.create_time >= Dday:
+                email = 'update@simplenect.com'
+            else:
+                email = 'simplenect@simplenect.com'
+            publish_user = PublishUser.objects.get(email=email)
+            publish_info = KxPub.objects.get(pk=publish_user.ver_id)
+        message = publish_message(publish_info)
+        return HttpResponse(json.dumps(message),content_type="application/json")
     else:
         message['status']="error"
         message['message']='please POST to me a email'
@@ -318,90 +247,20 @@ def published(request):
 @require_POST
 def repo_published(request):
     message = {}
-    now = datetime.datetime.now()
     email = request.POST.get('email','')
     logger.info("email:%s",email)
     if email:
         try:
-            publish_user = PublishUser.objects.get(email=email)
-            if publish_user.is_publish:
-                publish_info = KxPub.objects.get(pk=publish_user.ver_id)
-                ver_list = publish_info.repo_ver.split('.')
-                #ver_dict={"Major":ver_list[0],"Minor": ver_list[1],"Build":ver_list[2],"Revision":ver_list[3],"MajorRevision":0,"MinorRevision": 0}
-                ver_dict={"Major":int(ver_list[0].strip('v')),"Minor": int(ver_list[1]),"Build":int(ver_list[2]),"Revision":int(ver_list[3]),"MajorRevision":0,"MinorRevision": 0}
-                standAloneVersion = []
-                files = []
-                file_ins = {"fileRelativePath":publish_info.install_file,"url":settings.DOWNLOAD+'/'+publish_info.install_file,"MD5":publish_info.install_md5}
-                file_patch = {"fileRelativePath":"Patch.zip","url":settings.DOWNLOAD+'/'+publish_info.patch_file,"MD5":publish_info.patch_md5}
-                files.append(file_ins)
-                files.append(file_patch)
-                stand_dict = {}
-                stand_dict.update(ver=ver_dict)
-                stand_dict.update(files=files)
-                stand_dict.update(pubTime=str(publish_info.pub_time))
-                stand_dict.update(URL=settings.DOWNLOAD)
-                stand_dict.update(installFile="Patch.zip")
-                stand_dict.update(installArgs=["/VERYSILENT",])
-                standAloneVersion.append(stand_dict)
-                message.update(standAloneVersion=standAloneVersion)
-                message.update(netWorkVersion=[])
-                message['is_publish']=True
-                from pprint import pprint
-                pprint(message)
-                return HttpResponse(json.dumps(message),content_type="application/json")
-            else:
-                publish_info = KxPub.objects.filter(is_publish=1).order_by('-id')[0:1].get()
-                ver_list = publish_info.repo_ver.split('.')
-                ver_dict={"Major":int(ver_list[0].strip('v')),"Minor": int(ver_list[1]),"Build":int(ver_list[2]),"Revision":int(ver_list[3]),"MajorRevision":0,"MinorRevision": 0}
-                standAloneVersion = []
-                files = []
-                file_ins = {"fileRelativePath":publish_info.install_file,"url":settings.DOWNLOAD+'/'+publish_info.install_file,"MD5":publish_info.install_md5}
-                file_patch = {"fileRelativePath":"Patch.zip","url":settings.DOWNLOAD+'/'+publish_info.patch_file,"MD5":publish_info.patch_md5}
-                files.append(file_ins)
-                files.append(file_patch)
-                stand_dict = {}
-                stand_dict.update(ver=ver_dict)
-                stand_dict.update(files=files)
-                stand_dict.update(pubTime=str(publish_info.pub_time))
-                stand_dict.update(URL=settings.DOWNLOAD)
-                stand_dict.update(installFile="Patch.zip")
-                stand_dict.update(installArgs=["/VERYSILENT",])
-                standAloneVersion.append(stand_dict)
-                message.update(standAloneVersion=standAloneVersion)
-                message.update(netWorkVersion=[])
-                message['is_publish']=False
-                from pprint import pprint
-                pprint(message)
-                return HttpResponse(json.dumps(message),content_type="application/json")
+            publish_user = PublishUser.objects.filter(is_publish__exact=1).get(email=email)
+            publish_info = KxPub.objects.get(pk=publish_user.repo_ver_id)
         except Exception as e:
-            logger.debug("email not found:%s",e)
-            publish_info = KxPub.objects.filter(is_publish=1).order_by('-id')[0:1].get()
-            ver_list = publish_info.repo_ver.split('.')
-            #ver_dict={"Major":ver_list[0],"Minor": ver_list[1],"Build":ver_list[2],"Revision":ver_list[3],"MajorRevision":0,"MinorRevision": 0}
-            ver_dict={"Major":int(ver_list[0].strip('v')),"Minor": int(ver_list[1]),"Build":int(ver_list[2]),"Revision":int(ver_list[3]),"MajorRevision":0,"MinorRevision": 0}
-            standAloneVersion = []
-            files = []
-            file_ins = {"fileRelativePath":publish_info.install_file,"url":settings.DOWNLOAD+'/'+publish_info.install_file,"MD5":publish_info.install_md5}
-            file_patch = {"fileRelativePath":"Patch.zip","url":settings.DOWNLOAD+'/'+publish_info.patch_file,"MD5":publish_info.patch_md5}
-            files.append(file_ins)
-            files.append(file_patch)
-            stand_dict = {}
-            stand_dict.update(ver=ver_dict)
-            stand_dict.update(files=files)
-            stand_dict.update(pubTime=str(publish_info.pub_time))
-            stand_dict.update(URL=settings.DOWNLOAD)
-            stand_dict.update(installFile="Patch.zip")
-            stand_dict.update(installArgs=["/VERYSILENT",])
-            standAloneVersion.append(stand_dict)
-            message.update(standAloneVersion=standAloneVersion)
-            message.update(netWorkVersion=[])
-            message['is_publish']=False
-            from pprint import pprint
-            pprint(message)
-            message['is_publish']=False
-            return HttpResponse(json.dumps(message),content_type="application/json")
+            logger.debug("define repo_published:%s",e)
+            email = 'simplenect@simplenect.com'
+            publish_user = PublishUser.objects.get(email=email)
+            publish_info = KxPub.objects.get(pk=publish_user.repo_ver_id)
+        message = publish_message(publish_info)
+        return HttpResponse(json.dumps(message),content_type="application/json")
     else:
         message['status']="error"
         message['message']='please POST to me a email'
         return HttpResponse(json.dumps(message),content_type="application/json")
-

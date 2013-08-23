@@ -1,0 +1,40 @@
+<html>
+<head>
+	<title>main</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css" media=screen>
+	<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}font-awesome/css/font-awesome.min.css">
+{% block style %}{% endblock %}
+
+</head>
+<body >
+
+{% block wrapdiv %}{% endblock %}
+
+<div style="min-height:100%; height: auto !important; padding-bottom:200px; margin-top:20px; padding-top:70px;">
+
+<div class="navbar-fixed-top" style="margin:0 10px; background:#fff; padding:10px 0 20px 0;">
+	<div class="media" >
+		 <a href="#" class="pull-left">
+		 	<i class="icon-user icon-4x"></i>
+		 </a>
+		<div class="media-body">
+			<h5 class="media-heading {% if friend.login_status = 0 %}muted{% endif %}">
+				{{friend.nick}}
+			</h5>
+			<div class="{% if friend.login_status = 0 %}muted{% endif %} font12">
+				{{friend.email}}
+			</div>
+		</div>
+	</div>
+</div>
+
+
+	{% block content %}{% endblock %}
+
+<script src="{{STATIC_URL}}js/lib/jquery.min.js"></script>
+<script src="{{STATIC_URL}}js/lib/bootstrap.min.js"></script>
+
+{% block js %}{% endblock %}
+</body>
+</html>

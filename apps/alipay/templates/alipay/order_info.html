@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="description" content="局域网共享 跨网段共享  windows共享 文件共享 打印共享 阡陌软件" />
+<meta name="keywords" content="局域网共享 跨网段共享  windows共享 文件共享 打印共享 阡陌软件" />
+{% if DEBUG %}
+	<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.css" type="text/css" />
+	<link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome.css" type="text/css" />
+	<!--[if IE 7]>
+	<link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome-ie7.css" type="text/css" />
+	<![endif]-->
+{% else %}
+	<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.min.css" type="text/css" />
+	<link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome.min.css" type="text/css" />
+	<!--[if IE 7]>
+	<link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome-ie7.min.css" type="text/css" />
+	<![endif]-->
+{% endif %}
+<script src="{{STATIC_URL}}js/lib/bootstrap.min.js"></script>
+<style type="text/css">
+.container-narrow {
+  margin: 0 auto;
+  max-width: 960px;
+  }
+  body {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color:#E5E8ED;
+  font-family: "Microsoft YaHei","Frutiger", "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif !important; 
+  font-size: 14px;
+  font-weight:normal;
+}
+</style>
+</head>
+<body>
+<div class="container-narrow">
+	<div class="row" style="margin-top:100px;">
+		<div class="span2"></div>
+		<div class="span8">
+		<span style="font-size:21px;">SimpleNect支付中心</span>
+		<span class="pull-right" style="font-size:18px">你好，{{user.nick}} <a href="{% url 'logout'%}">退出</a></span>
+		</div>
+	</div>
+	<div class="row" style="margin-top:20px;">
+		<div class="span2"></div>
+		<div class="span8">
+			<div class="well" style="background-color:#FDFDFD;margin-bottom:10px;">
+				<span style="color:red;font-size:16px">
+					你将开通的VIP帐号：{{user.email}}
+				</span>
+			</div>
+			<div class="hero-unit" style="background-color:#FDFDFD;padding:40px;">
+			<form action="{% url 'order_result' %}" method="post">
+				{% csrf_token %}
+				<fieldset>
+					 <legend>开通VIP：<span style="color:#999;font-size:12px">（VIP及其好友可使用全部付费功能）</span></legend>
+					  <label ></label>
+					  <label class="radio" style="font-size:20px;margin-top:10px;">
+					  	<input type="radio" name="type" value="12" checked="true"/><span>&nbsp;1000元</span><span style="color:red">&nbsp;&nbsp;12个月</span>（全年更多实惠）
+					  </label>
+					  <label class="radio" style="font-size:20px;margin-top:20px">
+					  	<input type="radio" name="type" value="6" /><span>&nbsp;&nbsp;600元</span><span style="color:red">&nbsp;&nbsp;6个月</span>
+					  </label>
+					  <button type="submit" class="btn-primary text-center btn-large" style="margin-top:20px;">支付宝支付</button>
+				</fieldset>
+			</form>
+			温馨提示：如有疑问，请加入我们的QQ群：205528924
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

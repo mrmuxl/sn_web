@@ -3,6 +3,7 @@
 import logging,os
 from django.conf import settings
 from hashlib import md5
+from ordereddict import OrderedDict
 
 logger = logging.getLogger(__name__)
 
@@ -50,3 +51,33 @@ def update_download_link(install_file):
     except EnvironmentError as e:
         logger.debug(u"写跟新发布文件错误！%s",e)
         raise 
+
+def publish_message(publish_info):
+    message = {}
+    if publish_info.patch_md5:
+        patch_md5 = publish_info.patch_md5.upper()
+        publish_info.patch_md5 = publish_info.patch_md5.upper()
+    if publish_info.install_md5:
+        publish_info.install_md5 = publish_info.install_md5.upper()
+    ver_list = publish_info.ver.split('.')
+    ver_dict={"Major":int(ver_list[0].strip('VvSs')),"Minor": int(ver_list[1]),"Build":int(ver_list[2]),"Revision":int(ver_list[3]),"MajorRevision":0,"MinorRevision": 0}
+    standAloneVersion = []
+    files = []
+    file_patch = {"fileRelativePath":"Patch.zip","url":settings.DOWNLOAD+'/Install/'+publish_info.patch_file,"MD5":publish_info.patch_md5}
+    file_ins = {"fileRelativePath":publish_info.install_file,"url":settings.DOWNLOAD+'/Install/'+publish_info.install_file,"MD5":publish_info.install_md5}
+    files.append(file_patch)
+    files.append(file_ins)
+    stand_dict = {}
+    stand_dict.update(ver=ver_dict)
+    stand_dict.update(files=files)
+    stand_dict.update(pubTime=str(publish_info.pub_time))
+    stand_dict.update(URL=settings.DOWNLOAD)
+    stand_dict.update(installFile="Patch.zip")
+    stand_dict.update(installArgs=["/VERYSILENT",])
+    standAloneVersion.append(stand_dict)
+    message.update(standAloneVersion=standAloneVersion)
+    message.update(netWorkVersion=[])
+    if settings.DEBUG:
+        from pprint import pprint 
+        pprint(message)
+    return message

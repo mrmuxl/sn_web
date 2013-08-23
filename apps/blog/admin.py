@@ -8,6 +8,7 @@ import datetime
 class PostsAdmin(admin.ModelAdmin):
     posts = Posts
     list_display =('title','create_time','update_time')
+    list_display_links = ('title',)
     fieldsets = (
     #(u'添加文章',{'fields':('title','content','create_time','update_time')}),
     )
@@ -31,8 +32,8 @@ class ForumsAdmin(admin.ModelAdmin):
 
 class MpostAdmin(admin.ModelAdmin):
     mpost = Forums
-    list_display =('id','title','create_time','update_time')
-    list_display_link=('title',)
+    list_display = ('id','title','create_time','update_time')
+    list_display_links = ('title',)
 
 
 class BlogAdmin(admin.ModelAdmin):

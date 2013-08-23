@@ -41,3 +41,8 @@ ALTER TABLE django_admin_log ADD CONSTRAINT `user_id_refs_id_fda4e7d9` FOREIGN K
 ALTER TABLE kx_pub ADD install_md5 varchar(32) NULL DEFAULT NULL COMMENT "安装文件的MD5" AFTER install_file;
 ALTER TABLE kx_pub ADD patch_md5 varchar(32) NULL DEFAULT NULL COMMENT "patch文件的MD5" AFTER patch_file;
 ALTER TABLE kx_pub ADD is_publish tinyint(1) NOT NULL DEFAULT 0 COMMENT "是否灰度发布用户" AFTER is_tongji;
+
+给order_info表添加的字段
+ALTER TABLE order_info ADD total_fee int NOT NULL DEFAULT 0.0 COMMENT "总额" AFTER number;
+ALTER TABLE order_info ADD trade_no varchar(64) NOT NULL DEFAULT '0000' COMMENT "支付宝交易号" AFTER pay_at;
+alter table order_info change total_fee total_fee decimal(10,2) NOT NULL default 0.0;
