@@ -4,7 +4,7 @@ from django.contrib import admin
 from models import ProductInfo,OrderInfo
 
 class ProductInfoAdmin(admin.ModelAdmin):
-    list_display = ('name','price','stocked')
+    list_display = ('name','category','price','stocked')
 
 class OrderInfoAdmin(admin.ModelAdmin):
     list_filter = ('pay_status',)

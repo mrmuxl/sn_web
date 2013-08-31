@@ -377,7 +377,7 @@ class KxUser(AbstractBaseUser,PermissionsMixin):
         return self.email
 
     def __unicode__(self):
-        return self.nick
+        return self.email
     #@property
     #def is_active(self):
     #    return self.status

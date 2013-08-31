@@ -22,7 +22,7 @@ class KxPub(models.Model):
         db_table = 'kx_pub'
         verbose_name_plural = verbose_name = _(u'灰度发布')
     def __unicode__(self):
-        return unicode(self.ver)
+        return self.ver
         
 class PublishUser(models.Model):
     email = models.EmailField(verbose_name=_(u'邮件地址'), max_length=50, unique=True)
@@ -33,4 +33,4 @@ class PublishUser(models.Model):
         db_table = 'publish_user'
         verbose_name_plural = verbose_name = _(u'灰度发布用户')
     def __unicode__(self):
-        return unicode(self.email)
+        return self.email
