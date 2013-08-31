@@ -45,8 +45,8 @@ def vipuser_api(request):
                 message['vip_friends']='not needed'
                 message['is_print']= True #为打印共享用户
                 message['is_shared']= True #为文件共享用户
-                message['remainder_print_num']= -1
-                message['remainder_shared_num']= -1
+                message['remainder_print_num']= 999
+                message['remainder_shared_num']= 999
                 message['print_access_user']=[]
                 message['shared_access_user']=[]
                 if settings.DEBUG:
@@ -59,8 +59,8 @@ def vipuser_api(request):
                 message['vip_friends']=list(vip_friends)
                 message['is_print']= True #为打印共享用户
                 message['is_shared']= True #为文件共享用户
-                message['remainder_print_num']= -1
-                message['remainder_shared_num']= -1
+                message['remainder_print_num']= 999
+                message['remainder_shared_num']= 999
                 message['print_access_user']=[]
                 message['shared_access_user']=[]
                 if settings.DEBUG:
@@ -73,8 +73,8 @@ def vipuser_api(request):
                 message['vip_friends']='not needed'
                 message['is_print']= True #为打印共享用户
                 message['is_shared']= True #为文件共享用户
-                message['remainder_print_num']= -1
-                message['remainder_shared_num']= -1
+                message['remainder_print_num']= 999
+                message['remainder_shared_num']= 999
                 message['print_access_user']=[]
                 message['shared_access_user']=[]
                 if settings.DEBUG:
@@ -147,8 +147,8 @@ def vipuser_api(request):
                 message['vip_friends']=list(vip_friends)
                 message['is_print']= True #为打印共享用户
                 message['is_shared']= True #为文件共享用户
-                message['remainder_print_num']= -1
-                message['remainder_shared_num']= -1
+                message['remainder_print_num']= 999
+                message['remainder_shared_num']= 999
                 message['print_access_user']=[]
                 message['shared_access_user']=[]
                 if settings.DEBUG:
@@ -161,8 +161,8 @@ def vipuser_api(request):
                 message['vip_friends']='false'
                 message['is_print']= True #为打印共享用户
                 message['is_shared']= True #为文件共享用户
-                message['remainder_print_num']= -1
-                message['remainder_shared_num']= -1
+                message['remainder_print_num']= 999
+                message['remainder_shared_num']= 999
                 message['print_access_user']=[]
                 message['shared_access_user']=[]
                 if settings.DEBUG:
