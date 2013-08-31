@@ -14,17 +14,22 @@ class VIPUserAdmin(admin.ModelAdmin):
 #class AccessUserAdmin(admin.ModelAdmin):
 #    list_display = ('email','access_user')
 #    search_fields = ['email__email',]
+
 class PrintAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('email','is_print','print_num','used_print_num','create_at','expire')
+    search_fields = ['email__email',]
 
 class SharedAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('email','is_shared','shared_num','used_shared_num','create_at','expire')
+    search_fields = ['email__email',]
 
 class PrintAccessAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('email','access_user','create_at','status')
+    search_fields = ['email__email',]
 
 class SharedAccessAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('email','access_user','create_at','status')
+    search_fields = ['email__email',]
 
 admin.site.register(VIPUser,VIPUserAdmin)
 admin.site.register(Print,PrintAdmin)
