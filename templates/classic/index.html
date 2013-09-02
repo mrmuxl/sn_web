@@ -5,30 +5,21 @@
 
 
 <link href="{{ STATIC_URL }}css/videojs.css" rel="stylesheet">
-
-
-
 <div class="main index_banner">
 	<div class="main_in">
 		<div class="top_node" id="intro">
 			<div class="download_area">
 				<span> <a href="{{DOWNLOAD}}/Install/{{ins_file}}" target="_blank" title="下载"><img src="{{ STATIC_URL }}images/download_btn3.png" class="mypng" /></a></span>
-				<!-- <span><a href="#kxModal" class="disabled" data-toggle="modal" target="_blank" title="下载"><img src="{{ STATIC_URL }}images/download_btn2.png" class="mypng" /></a></span> -->
 			</div>
-
 			<div class="video-wrapper" title="点击播放 simplenect 的介绍视频">
 				<a href="javascript:;" class="video-preview" data-video-width="960" data-video-height="540">
 					<img src="{{ STATIC_URL }}images/video-bg.png"/>
 					<div class="btn-play" style="display:block;"></div>
 				</a>
 			</div>
-
-
 		</div>
 	</div>
 </div>
-
-
 <div  style="background-color:#E5E9ED;height:430px">
 	<div class="container-narrow">
 	<br/>
@@ -136,42 +127,27 @@
 </div>
 <div style="background-color:#E5E8ED;">
 <div class="container-narrow">
-	<br/><br/><br/>
-<!-- 	<div class="row text-center" style="font-size:30px;margin-top:20px;margin-bottom:15px;">SimpleNect正式版收费方案</div>
-	<div class="row text-center" style="font-size:20px;margin-top:15px;margin-bottom:10px;color:#939393">敬请期待</div> -->
+	<br/><br/>
 	<div class="row">
-			<img alt="574x138" src="{{STATIC_URL}}images/index/pay.jpg" />
+			<img alt="574x138" src="{{STATIC_URL}}images/index/pay2013090201.png" />
 	    <div class="row">
 	    	<div class="span4 text-center">
-		    <a href="{% url 'order_info' %}" >
-		    	<button class="btn-primary" style="width:180px;margin-top:10px" type="button">购 买</button>
+		    <a href="{% url 'order_info' %}/?c=2" >
+		    	<button class="btn-primary" style="width:170px;margin-top:5px;margin-left:15px" type="button">购 买</button>
 		    </a>
 		</div>
 		<div class="span4 text-center">
-			<a href="{% url 'order_info' %}" >
-		    	<button class="btn-primary" style="width:180px;margin-top:10px" type="button">购 买</button>
+			<a href="{% url 'order_info' %}/?c=4" >
+		    	<button class="btn-primary" style="width:170px;margin-top:5px;margin-left:20px" type="button">购 买</button>
 		    </a>
-<!-- 		<form  action="{% url 'order_info' %}" method="post">
-	    		{% csrf_token %}
-	    		<input  name="order_type" value="2" type="hidden">
-		    <button class="btn-primary" style="width:180px;margin-top:10px" type="submit">购买</button>
-		</form> -->
+		</div> 
+		<div class="span4 text-center">
+			<a href="{% url 'order_info' %}/?c=1" >
+		    	<button class="btn-primary" style="width:170px;margin-top:5px;margin-left:35px" type="button">购 买</button>
+		    </a>
 		</div> 
 	    </div>
 	</div>
-</br>
-<!-- 		<div class="container-narrow text-left well" style="background-color:#E4E4E4;color:#7E7E7E;border: 1px solid #C8C8C8">
-			<strong>注：</strong>每个企业版账户可以为200名企业用户授权
-		</div> -->
-<!-- 	<div class="row-fluid " style="margin-bottom;20px">
-		<div class="container-narrow text-center well" style="background-color:#E5E9ED;color:#7E7E7E;border: 1px solid #C8C8C8">
-			<strong>最便捷的文件和打印机共享软件</strong>
-			<div class="text-center">
-				<a href="{{DOWNLOAD}}/Install/{{ins_file}}"><button class="btn" style="width:190px;margin-top:10px" type="button">立即下载试用</button></a>
-				<a href="#kxModal" role="button" class="btn" data-toggle="modal" style="width:190px;margin-top:10px">立即下载试用</a>
-			</div>
-		</div> 
-	</div> -->
 	<br><br>
 </div>
 </div>
