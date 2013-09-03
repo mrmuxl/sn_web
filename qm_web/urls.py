@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'client/', include('apps.client.urls')),
     url(r'onlineUser/', include('apps.online_user.urls')),
     url(r'^$','apps.kx.views.index',name='index'),
+    url(r'^buy/?$','apps.kx.views.buy',name='buy'),
 
     # url(r'^qm_web/', include('qm_web.foo.urls')),
 

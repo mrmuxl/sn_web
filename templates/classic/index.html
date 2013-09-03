@@ -129,26 +129,12 @@
 <div class="container-narrow">
 	<br/><br/>
 	<div class="row">
-			<img alt="574x138" src="{{STATIC_URL}}images/index/pay2013090201.png" />
-	    <div class="row">
-	    	<div class="span4 text-center">
-		    <a href="{% url 'order_info' %}/?c=2" >
-		    	<button class="btn-primary" style="width:170px;margin-top:5px;margin-left:15px" type="button">购 买</button>
-		    </a>
-		</div>
-		<div class="span4 text-center">
-			<a href="{% url 'order_info' %}/?c=4" >
-		    	<button class="btn-primary" style="width:170px;margin-top:5px;margin-left:20px" type="button">购 买</button>
-		    </a>
-		</div> 
-		<div class="span4 text-center">
-			<a href="{% url 'order_info' %}/?c=1" >
-		    	<button class="btn-primary" style="width:170px;margin-top:5px;margin-left:35px" type="button">购 买</button>
-		    </a>
-		</div> 
-	    </div>
+			<div class="text-center">
+				<span style="font-size:28px;margin:50px 80px 10px 10px;padding:5px" >   免费试用15天</span>			
+				<a href="{{DOWNLOAD}}/Install/{{ins_file.ins_file}}"><img style="margin-bottom:10px" src="{{ STATIC_URL }}images/download.png" class="mypng" /></a>
+
 	</div>
-	<br><br>
+	<br>
 </div>
 </div>
 <!-- <div style="background-color:#FDFDFD">
