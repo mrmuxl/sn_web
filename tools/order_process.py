@@ -31,7 +31,7 @@ def fetchone(sql,cursor,data=None):
 def get_all_order(cursor):
     order_sql="""select order_id,buy_user,buy_product_id,auth_user_num,total_fee from order_info where pay_status=1 and status =0"""
     order = fetchall(order_sql,cursor)
-    print order
+    print "get_all_order:",order
     return order
 
 def get_product(cursor,pid):
@@ -117,6 +117,7 @@ if __name__ == '__main__':
     all_order = get_all_order(cursor)
     if all_order:
         for i in all_order:
+            print i
             pdt = get_product(cursor,i['buy_product_id'])
             if  pdt['category'] == 1:
                 month = int(i['total_fee']/50)
