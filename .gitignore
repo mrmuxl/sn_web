@@ -11,7 +11,7 @@ media/upload/BugLog/
 media/upload/Install/
 logs/access.log
 logs/alipay.log
-logs/
+logs/*
 bin/gunicorn.pid
 templates/default/index_download.html
 static/default/cache/
