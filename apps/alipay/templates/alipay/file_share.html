@@ -97,12 +97,17 @@
 						<fieldset>
 					 	<legend>开通文件共享VIP：<span style="color:#999;font-size:12px">（你和及其好友可使用文件共享功能）</span></legend>
 				<div class="product">
-					<ul><li style="color:#8e8e8e;margin:5px;list-style:none;float:left;" >价&nbsp格：</li><li style="list-style:none"><span id="price" style="color:#F80;margin-top:100px;font-size:24px" >0.00</span><span style="font-size:14px;margin-left:10px">元</span></li></ul>
+					<ul><li style="color:#8e8e8e;margin:5px;list-style:none;float:left;" >价&nbsp格：</li><li style="list-style:none"><span id="price" style="color:#F80;margin-top:100px;font-size:24px" >15.00</span><span style="font-size:14px;margin-left:10px">元</span></li></ul>
 					<ul style="margin-top:10px"><li class="product_title" >周&nbsp期：</li>
-						{% for pdt in pdt_list %}						
-							{% if pdt.slug  %}
+					{% for pdt in pdt_list %}						
+						{% if pdt.slug  %}
+							{%if forloop.first %}
+                                 <input id="product_type" type="hidden" name="type" value="{{pdt.id}}">
+                                 <li class="product_item"><a class="selected" id="{{pdt.id}}" href="javascript:void(0)"><span id="{{pdt.price}}_{{pdt.id}}" >{{pdt.slug}}</span></a></li>
+                                {% else %}
 							<li class="product_item"><a  id="{{pdt.id}}" href="javascript:void(0)">	<span id="{{pdt.price}}_{{pdt.id}}" >{{pdt.slug}}</span></a></li>
 							{% endif %}
+						{% endif %}
 						{%endfor%}
 					</ul>
 				</div>
@@ -112,15 +117,17 @@
 						<ul>赠送5个客户端授权&nbsp&nbsp(<a id="access_user" href="javascript:void(0)">增加</a>)</ul>
 				</div>
 				<div class="another">
-							<p>单价：5.00元/人</p>
-							<input id="min" name="" type="button" value="-" />							
+							<p>单&nbsp价：5.00元/人</p>
+							增&nbsp加：<input id="min" name="" type="button" value="-" />							
 							<input style="max-width:30px;margin-top:10px" readonly="" id="text_box" name="auth" type="text" value="0" />
-							<input id="add" name="" type="button" value="+" /> 
+							<input id="add" name="" type="button" value="+" />人
 				</div>
-					<input id="product_type" type="hidden" name="type" value="0">
+					<!-- <input id="product_type" type="hidden" name="type" value="0"> -->
 					<input id="product_submit" type="submit" class="btn-primary pull-left  btn-large" style="margin-top:20px;margin-left:20px;" value="支付宝支付">
 					</fieldset>
 					</form>
+					<div class="text-left" style="font-size:24px;margin-top:30px"><span style="color:red;font-size:30px">优惠活动：</span>现在购买满六个月赠送一个月</div>
+					<br>
 						温馨提示：如有疑问，请加入我们的QQ群：205528924
 				</div>
 			</div>
