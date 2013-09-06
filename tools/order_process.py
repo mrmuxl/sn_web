@@ -109,6 +109,9 @@ def update_order(cursor,order_id):
         print "update order_info execute error",e
         return False
 
+def new_month(month):
+    pass
+
 if __name__ == '__main__':
     now = datetime.now()
     print now
@@ -147,7 +150,6 @@ if __name__ == '__main__':
                     update_order(cursor,i['order_id'])
                 except Exception as e:
                     print "vip process",e
-
             elif pdt['category'] == 2:
                 month = int((i['total_fee']-i['auth_user_num']*5)/15)
                 one_print = get_print(cursor,i['buy_user'])
