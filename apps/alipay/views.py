@@ -202,6 +202,9 @@ def create_order(request):
 @require_GET
 def order_info(request):
     p = request.GET.get('c',u'1')
+    t = request.GET.get('type',u'12')
+    if t and t.isdigit() and  t == u'12': #buy
+        return render(request,"buy.html",{})
     if p and  p.isdigit():
         if p == u'1':#VIP
             pdt_list = ProductInfo.objects.filter(category=p).filter(slug__isnull=False).order_by('order_num').values()
