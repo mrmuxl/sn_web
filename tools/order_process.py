@@ -9,7 +9,7 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 
 def get_conn(host,user,passwd,db):
-    conn = MySQLdb.connect(host='localhost',user='root',passwd='abc123!!',db='kx')
+    conn = MySQLdb.connect(host=host,user=user,passwd=passwd,db=db)
     return conn
 
 def init_cursor(conn):
@@ -157,7 +157,7 @@ def set_expire(now,month,expire=None):
 if __name__ == '__main__':
     now = datetime.now()
     print now
-    conn = get_conn('localhost','root','mrmuxl','kx')
+    conn = get_conn('localhost','root','abc123!!','kx')
     cursor = init_cursor(conn)
     all_order = get_all_order(cursor)
     if all_order:
@@ -172,24 +172,20 @@ if __name__ == '__main__':
                 try:
                     if one_print:
                         expire = set_expire(now,month,one_print['expire'])
-                        #expire = one_print['expire']+ timedelta(days=month*30)
                         print "p",expire
                         print_num = 999
                         update_print(cursor,i['buy_user'],print_num,expire)
                     else:
-                        #expire = now + timedelta(days=month*30)
                         expire = set_expire(now,month)
                         print "pr",expire
                         print_num = 999
                         insert_print(cursor,i['buy_user'],print_num,now,expire)
                     if one_shared:
                         expire = set_expire(now,month,one_shared['expire'])
-                        #expire = one_shared['expire']+ timedelta(days=month*30)
                         print "s",expire
                         shared_num = 999
                         update_shared(cursor,i['buy_user'],shared_num,expire)
                     else:
-                        #expire = now + timedelta(days=month*30)
                         expire = set_expire(now,month)
                         print "sd",expire
                         shared_num = 999
@@ -203,12 +199,10 @@ if __name__ == '__main__':
                 one_print = get_print(cursor,i['buy_user'])
                 if one_print:
                     expire = set_expire(now,month,one_print['expire'])
-                    #expire = one_print['expire']+ timedelta(days=month*30)
                     print_num = one_print['print_num'] + i['auth_user_num']
                     update_print(cursor,i['buy_user'],print_num,expire)
                     update_order(cursor,i['order_id'])
                 else:
-                    #expire = now + timedelta(days=month*30)
                     expire = set_expire(now,month)
                     print_num = 5 + i['auth_user_num']
                     insert_print(cursor,i['buy_user'],print_num,now,expire)
@@ -234,5 +228,7 @@ if __name__ == '__main__':
             else:
                 print "no category"
     cursor.close()
+    print "cursor close"
     conn.commit()
     conn.close()
+    print "conn close"
