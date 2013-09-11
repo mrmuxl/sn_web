@@ -16,6 +16,17 @@ from decimal import Decimal
 
 logger = logging.getLogger(__name__)
 
+def get_order_id():
+    uid = str(uuid.UUID.get_time_low(uuid.uuid1()))
+    if len(uid) < 10:
+        d = 10 - len(uid)
+        for i in range(d):
+            r = random.randint(0,9)
+            uid = uid + str(r)
+    order_id = time.strftime("%Y%m%d") + uid
+    logger.info("order_id:%s",order_id)
+    return order_id
+
 @require_GET
 def return_url_handler(request):
     now = datetime.datetime.now()
@@ -41,51 +52,8 @@ def return_url_handler(request):
             if not pay_status and trade_no != my_trade_no:
                 if out_trade_no == order_id:
                     try:
-                        #vipuser = VIPUser.objects.filter(email=buy_user)
                         order_info.update(pay_status=1,pay_at=notify_time,trade_no=trade_no)
                         #这一段注释掉，订单只做订单处理，不和产品耦合,最初设计就是错误的，后来需求变更，导致这边代码成了累赘,vip用户准备用脚本异步做
-                        #if vipuser:
-                        #    myexpire = vipuser.values('expire')[0]['expire']
-                        #    logger.info("expire:%s",myexpire)
-                        #    if buy_product_id == 1:
-                        #        if myexpire >= now:
-                        #            try:
-                        #                expire = myexpire + datetime.timedelta(days=365)
-                        #                vipuser.update(is_vip=1,expire=expire)
-                        #                logger.info("==>>VIPUser update email:%s,expire:%s",buy_user,expire)
-                        #            except Exception as e:
-                        #                logger.debug("==>>VIPUser update fail expire:%s,%s",expire,e)
-                        #        else:
-                        #            try:
-                        #                expire = now + datetime.timedelta(days=365)
-                        #                vipuser.update(is_vip=1,expire = expire)
-                        #                logger.info("==>>VIPUser update email:%s,now:%s,expire:%s",buy_user,now,expire)
-                        #            except Exception as e:
-                        #                logger.debug("==>>VIPUser update fail:expire:%s",expire,e)
-                        #    elif buy_product_id == 2:
-                        #        if expire >= now:
-                        #            try:
-                        #                expire = myexpire + datetime.timedelta(days=182)
-                        #                vipuser.update(is_vip=1,expire=expire)
-                        #                logger.info("==>>VIPUser update email:%s,expire:%s",buy_user,expire)
-                        #            except Exception as e:
-                        #                logger.debug("==>>VIPUser update fail expire:%s,%s",expire,e)
-                        #        else:
-                        #            try:
-                        #                expire = now + datetime.timedelta(days=365)
-                        #                vipuser.update(is_vip=1,expire = expire)
-                        #                logger.info("==>>VIPUser update email:%s,now:%s,expire:%s",buy_user,now,expire)
-                        #            except Exception as e:
-                        #                logger.debug("==>>VIPUser update fail:expire:%s",expire,e)
-                        #else:
-                        #    if buy_product_id == 1:
-                        #        expire = now + datetime.timedelta(days=365)
-                        #        VIPUser.objects.create(email=buy_user,is_vip=1,expire=expire)
-                        #        logger.info("==>>VIPUser create product 1 email:%s,expire:%s",buy_user,expire)
-                        #    else:
-                        #        expire = now + datetime.timedelta(days=182)
-                        #        VIPUser.objects.create(email=request.user,is_vip=1,expire=expire)
-                        #        logger.info("==>>VIPUser create product 2 email:%s,expire:%s",buy_user,expire)
                         logger.info("==>>update successful:out_trade_no:%s,trade_no%s",out_trade_no,trade_no)
                         return render(request,"alipay/return_url.html",{'order_id':order_id})
                     except Exception as e:
@@ -154,40 +122,56 @@ def create_order(request):
     product_info = ProductInfo.objects.all()
     t = request.POST.get('type',None)
     num = request.POST.get('auth',None)
-    if t and  t is not None and t.isdigit():
-        for i in product_info:
-            if int(t)== int(i.id):
-                pid = i.id
-                name = i.name
-                desc = i.desc
-                price = i.price
-            else:
-                continue
-    else:
-        return HttpResponse(u'创建失败，参数错误!')
-    if num and num is not None and num.isdigit():
-        money = Decimal(str(int(num)*5.00))
-    else:
-        money = Decimal("0.00")
-        num = 0
-
-    try:
-        uid = str(uuid.UUID.get_time_low(uuid.uuid1()))
-        if len(uid) < 10:
-            d = 10 - len(uid)
-            for i in range(d):
-                r = random.randint(0,9)
-                uid = uid + str(r)
-        order_id = time.strftime("%Y%m%d") + uid
-        logger.info("order_id:%s",order_id)
+    print_num = request.POST.get('print',None)
+    file_num = request.POST.get('file',None)
+    if print_num or file_num:
+        order_id = get_order_id()
         email = request.user.email
         logger.info("email:%s",email)
-        number =1
-        total_fee = number * price + money
+        if print_num:
+            number = print_num
+            pid = 13
+            name =u'打印共享用户授权' 
+            desc =u'打印共享用户授权' 
+        else:
+            number = 0
+        if file_num:
+            num = file_num
+            pid = 13
+            name = u'文件共享用户授权' 
+            desc = u'文件共享用户授权' 
+        else:
+            num =0
+        total_fee = Decimal(str(int(number)*5.00))+Decimal(str(int(num)*5.00))
         logger.info("buy_user:%s,order_id:%s,number:%s,total_fee:%s,num:%s",email,order_id,number,total_fee,num)
         OrderInfo.objects.create(order_id=order_id,create_at=now,buy_user=email,buy_product_id=pid,number=number,total_fee=total_fee,pay_status=0,trade_no='0000',auth_user_num=num)
-    except Exception as e:
-        logger.debug("order_result:%s",e)
+    else:
+        if t and  t is not None and t.isdigit():
+            for i in product_info:
+                if int(t)== int(i.id):
+                    pid = i.id
+                    name = i.name
+                    desc = i.desc
+                    price = i.price
+                else:
+                    continue
+        else:
+            return HttpResponse(u'创建失败，参数错误!')
+        if num and num is not None and num.isdigit():
+            money = Decimal(str(int(num)*5.00))
+        else:
+            money = Decimal("0.00")
+            num = 0
+        try:
+            order_id = get_order_id()
+            email = request.user.email
+            logger.info("email:%s",email)
+            number =1
+            total_fee = number * price + money
+            logger.info("buy_user:%s,order_id:%s,number:%s,total_fee:%s,num:%s",email,order_id,number,total_fee,num)
+            OrderInfo.objects.create(order_id=order_id,create_at=now,buy_user=email,buy_product_id=pid,number=number,total_fee=total_fee,pay_status=0,trade_no='0000',auth_user_num=num)
+        except Exception as e:
+            logger.debug("order_result:%s",e)
     try:
         pay_url = create_direct_pay_by_user(order_id,name,desc,total_fee)
         logger.info("pay_url:%s",pay_url)
@@ -219,3 +203,7 @@ def order_info(request):
             return HttpResponse(u'没有此类产品')
     else:
         return HttpResponse(u'参数错误')
+
+def access_user_buy(request):
+    return render(request,"alipay/access_user_buy.html",{})
+
