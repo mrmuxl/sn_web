@@ -23,7 +23,7 @@ $(function(){
     
 });
 
-jQuery.fn.anchorGoWhere = function(options){
+$.fn.anchorGoWhere = function(options){
     var obj = jQuery(this);
     var defaults = {target:1, timer:1000};
     var o = jQuery.extend(defaults,options);
@@ -44,13 +44,7 @@ jQuery.fn.anchorGoWhere = function(options){
         });
     });
 };
-$(document).ready(function(){
-    $(".goTop").anchorGoWhere({target:1});
-    $(".goDown").anchorGoWhere({target:1});
-    $(".goNext").anchorGoWhere({target:1});
-    $(".goFront").anchorGoWhere({target:1});
-    // $(".goVertical").anchorGoWhere({target:2});
-});
+
 
 
 // $(document).ready(function(){
@@ -204,11 +198,6 @@ $(function(){
 
         }
     }
-
-$(function(){
-   $("#email").mailAutoTip();
-});
-
 
 //邮件自动完成提示插件
 var mailArr=new Array("@qq.com","@sina.com","@163.com","@126.com","@sohu.com", "@gmail.com","@hotmail.com","@msn.com");
