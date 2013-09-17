@@ -4,6 +4,7 @@ from models import Spool
 
 class SpoolForm(forms.ModelForm):
     class Meta:
-        spoolform = Spool
+        model = Spool
+        fields = ['uuid','origin_email','accept_email','origin_uuid','accept_uuid']
 
 

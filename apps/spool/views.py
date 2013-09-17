@@ -13,16 +13,20 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
+@csrf_exempt
 @require_POST
 def spool_add(request):
     message = {}
     form = SpoolForm(request.POST)
     if form.is_valid():
-        form.save()
-        message['status']="ok"
+        try:
+            form.save()
+        except Exception as e:
+            logger.debug("spool add=>%s",e)
+        message['status']=0
         return HttpResponse(json.dumps(message),content_type="application/json")
     else:
-        message['status']="error"
+        message['status']=1
         return HttpResponse(json.dumps(message),content_type="application/json")
 
 @require_POST
