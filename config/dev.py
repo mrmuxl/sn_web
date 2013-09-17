@@ -145,6 +145,7 @@ INSTALLED_APPS = (
     'apps.publish',
     'apps.alipay',
     'debug_toolbar',
+    'apps.spool',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )

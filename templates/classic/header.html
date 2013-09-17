@@ -7,27 +7,24 @@
 
 </style>
 <div class="container-narrow" style="height:100px">
-
-
-				<ul class="nav nav-pills pull-left">
-					<li><a title="首页" href="{% url 'index' %}" >
-						<i class="icon-simplenect icon-4x" style="color:#333"></i>
-						</a></li>
-					<li class="disable" style="padding-top:35px;"><a title="首页" href="{% url 'index' %}" >
-							<span style="font-size:20px; color:#333">SimpleNect</span>
-						</a></li>
-				</ul>
-
-
-			<div>
-				<ul class="nav nav-pills pull-left" style="color: #000000;margin-top: 35px;margin-left: 90px;">
-					<li class="disable"><a href="{% url 'index' %}">首页</a></li>
-					<li class="disable"><a href="{% url 'msg_index' %}">留言区</a>	</li>
-					<li class="disable"><a href="{% url 'show' %}">新手指南</a></li>
-				</ul>
-			</div>
-			<div>
-			<ul class="nav nav-pills pull-right" style="color: #000000;margin-top: 35px;margin-right: 90px;">
+	<div>
+	<ul class="nav nav-pills pull-left">
+		<li><a title="首页" href="{% url 'index' %}" >
+			<i class="icon-simplenect icon-4x" style="color:#333"></i></a></li>
+			<li class="disable" style="padding-top:35px;"><a title="首页" href="{% url 'index' %}" >
+			<span style="font-size:20px; color:#333">SimpleNect</span></a></li>
+	</ul>
+	</div>
+		<div>
+			<ul class="nav nav-pills pull-left" style="color: #000000;margin-top: 35px;margin-left:60px;">
+				<li class="disable"><a href="{% url 'index' %}">首页</a></li>
+				<li class="disable"><a href="{% url 'msg_index' %}">留言区</a></li>
+				<li class="disable"><a href="{% url 'show' %}">新手指南</a></li>
+				<li class="disable"><a href="{% url 'buy' %}">价格</a></li>
+			</ul>
+		</div>
+		<div>
+			<ul class="nav nav-pills pull-right" style="color: #000000;margin-top: 35px;margin-right: 60px;">
 			{% if user.is_authenticated %}
 				<li class="divider" ><a href="{%url 'info'%}" style="text-decoration: underline;" title="个人中心">{{ user.nick }}</a>
 				</li>
@@ -43,7 +40,7 @@
 			<li class="divider"><a href="{% url 'register'%}">注册</a></li>
 		{% endif %}
 			</ul>
-			</div>
+		</div>
 	</div>
 </div>
 <div class="returnTop" title="上去了哦！">

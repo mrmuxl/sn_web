@@ -43,5 +43,14 @@ ALTER TABLE kx_pub ADD patch_md5 varchar(32) NULL DEFAULT NULL COMMENT "patch文
 ALTER TABLE kx_pub ADD is_publish tinyint(1) NOT NULL DEFAULT 0 COMMENT "是否灰度发布用户" AFTER is_tongji;
 
 给order_info表添加的字段
-ALTER TABLE order_info ADD total_fee int NOT NULL DEFAULT 0 COMMENT "总额" AFTER number;
+ALTER TABLE order_info ADD total_fee int NOT NULL DEFAULT 0.0 COMMENT "总额" AFTER number;
 ALTER TABLE order_info ADD trade_no varchar(64) NOT NULL DEFAULT '0000' COMMENT "支付宝交易号" AFTER pay_at;
+alter table order_info change total_fee total_fee decimal(10,2) NOT NULL default 0.0;
+#以上已经更新
+ALTER TABLE product_info ADD category int NOT NULL DEFAULT 0 COMMENT "产品分类" AFTER name;
+ALTER TABLE product_info ADD slug varchar(50) NULL DEFAULT NULL  COMMENT "价格标签" AFTER name;
+ALTER TABLE product_info ADD order_num int NULL DEFAULT 0 COMMENT "排序" AFTER stocked;
+ALTER TABLE vipuser ADD create_at datetime NOT NULL  COMMENT "创建时间" AFTER is_vip;
+#以上已经更新20130902
+ALTER TABLE order_info ADD auth_user_num int NOT NULL DEFAULT 0 COMMENT "购买的授权用户数" AFTER number;
+ALTER TABLE order_info ADD status tinyint(1) NOT NULL DEFAULT 0 COMMENT "订单是否处理" AFTER trade_no;

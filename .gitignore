@@ -9,8 +9,10 @@ media/upload/User/
 media/upload/BugReport/
 media/upload/BugLog/
 media/upload/Install/
+media/*
 logs/access.log
 logs/alipay.log
+logs/*
 bin/gunicorn.pid
 templates/default/index_download.html
 static/default/cache/
