@@ -22,7 +22,7 @@ class Spool(models.Model):
     printer_name  = models.CharField(verbose_name=_(u'打印机名称'), max_length = 260, blank = True)
     printer_uuid  = models.CharField(verbose_name=_(u'打印机mac地址'),max_length = 260, blank = True)
     file_name     = models.CharField(verbose_name=_(u'打印文件名'),max_length = 260, blank = True)
-    file_path     = models.FilePathField(verbose_name=_(u'打印文件路径'))
+    file_path     = models.CharField(verbose_name=_(u'打印文件路径'),max_length=260)
     page_num      = models.IntegerField(verbose_name=_(u'文件打印张数'))
     print_time    = models.DateTimeField(default=datetime.now(), verbose_name=_(u'打印时间'))
     #thumb        = models.ImageField(upload_to=get_image_path)
