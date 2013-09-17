@@ -1,6 +1,6 @@
 #_*_coding:utf-8_*_
 
-import datetime,logging,json,os
+import logging,json,os
 from django.http import Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import (require_POST,require_GET)
@@ -11,6 +11,7 @@ from forms import SpoolForm
 from models import Spool 
 from django.conf import settings
 from pprint import pprint
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -54,11 +55,12 @@ def spool_select(request):
 @csrf_exempt
 @require_POST
 def spool_update(request):
+    message = {}
     uuid  = request.POST.get('uuid','')
     status = request.POST.get('status','')
     if uuid and status:
         try:
-            Spool.objects.filter(uuid=uuid).update(status=status)
+            Spool.objects.filter(uuid=uuid).update(status=status,status_time=datetime.now())
             message['status'] = 0
             return HttpResponse(json.dumps(message),content_type="application/json")
         except Exception as e:
