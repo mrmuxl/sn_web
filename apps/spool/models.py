@@ -22,8 +22,8 @@ class Spool(models.Model):
     printer_name  = models.CharField(verbose_name=_(u'打印机名称'), max_length = 260, blank = True)
     printer_uuid  = models.CharField(verbose_name=_(u'打印机唯一码'),max_length = 260, blank = True)
     file_name     = models.CharField(verbose_name=_(u'打印文件名'),max_length = 260, blank = True)
-    file_path     = models.CharField(verbose_name=_(u'接受方打印文件路径'),max_length=260)
-    page_num      = models.IntegerField(verbose_name=_(u'文件打印张数'))
+    file_path     = models.CharField(verbose_name=_(u'接受方打印文件路径'), blank = True,max_length=260)
+    page_num      = models.IntegerField(default=0,verbose_name=_(u'文件打印张数'))
     print_time    = models.DateTimeField(default=datetime.now(), verbose_name=_(u'打印时间'))
     status        = models.IntegerField(default=1,verbose_name=_(u'打印队列状态'),help_text=_(u'0=队列中，1=打印成功，2=打印失败，3=取消，4=删除，5=取消'))
     create_at     = models.DateTimeField(default=datetime.now(), verbose_name=_(u'加入队列时间'))
@@ -32,5 +32,5 @@ class Spool(models.Model):
         db_table = 'print_spool'
         verbose_name_plural = verbose_name = _(u'打印队列')
     def __unicode__(self):
-        return self.file_name
+        return self.uuid
         
