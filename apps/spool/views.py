@@ -81,19 +81,19 @@ def spool_update(request):
                 spool_info.update(status=status,status_time=datetime.now())
             if file_path:
                 spool_info.update(file_path=file_path,status_time=datetime.now())
-                try:
-                    sp_list = spool_info.values('origin_email','origin_uuid')
-                    if sp_list:
-                        user_online = KxUserlogin.objects.filter(email=sp_list[0]['origin_email']).filter(mac__contains=sp_list[0]['origin_uuid']).values('email','mac')
-                        if user_online:
-                            p = "/home/admin/sn_web_fifo"
-                            with open(p,"w") as f:
-                                p = "100#" + user_online[0]['mac'] + user_oneline[0]['email'] + "\n"
-                                f.write(p)
-                except Exception as e:
-                    logger.debug("spool_update:%s",e)
-                message['status'] = 0
-                return HttpResponse(json.dumps(message),content_type="application/json")
+            try:
+                sp_list = spool_info.values('origin_email','origin_uuid')
+                if sp_list:
+                    user_online = KxUserlogin.objects.filter(email=sp_list[0]['origin_email']).filter(mac__contains=sp_list[0]['origin_uuid']).values('email','mac')
+                    if user_online:
+                        p = "/home/admin/sn_web_fifo"
+                        with open(p,"w") as f:
+                            p = "100#" + user_online[0]['mac'] + user_oneline[0]['email'] + "\n"
+                            f.write(p)
+            except Exception as e:
+                logger.debug("spool_update:%s",e)
+            message['status'] = 0
+            return HttpResponse(json.dumps(message),content_type="application/json")
         except Exception as e:
             message['status'] = 1
             return HttpResponse(json.dumps(message),content_type="application/json")
