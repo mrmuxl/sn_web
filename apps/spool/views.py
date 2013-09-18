@@ -100,10 +100,14 @@ def spool_update(request):
             if status:
                 spool_info.update(status=status,status_time=datetime.now())
                 try:
-                    sp_list = spool_info.values('origin_email','origin_uuid')
-                    if sp_list:
-                        user_online = KxUserlogin.objects.filter(email=sp_list[0]['origin_email']).filter(mac__contains=sp_list[0]['origin_uuid']).values('email','mac')
-                        print user_online
+                    if status == u'5':
+                        sp_list = spool_info.values('accept_email','accept_uuid')
+                        if sp_list:
+                            user_online = KxUserlogin.objects.filter(email=sp_list[0]['accept_email']).filter(mac__contains=sp_list[0]['accept_uuid']).values('email','mac')
+                    else:
+                        sp_list = spool_info.values('origin_email','origin_uuid')
+                        if sp_list:
+                            user_online = KxUserlogin.objects.filter(email=sp_list[0]['origin_email']).filter(mac__contains=sp_list[0]['origin_uuid']).values('email','mac')
                         if user_online:
                             p = "/home/admin/sn_web_fifo"
                             with open(p,"w") as f:
