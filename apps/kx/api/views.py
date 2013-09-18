@@ -494,7 +494,7 @@ def send_diskfree_email(request):
     mail_type = request.POST.get('type','1')
     uuid = request.POST.get('uuid','')
     disk_info = request.POST.get('disk_info','')
-    print disk_info,uuid,mail_type
+    logger.info(disk_info,uuid,mail_type)
     if mail_type == '1':
         if uuid and disk_info:
             try:

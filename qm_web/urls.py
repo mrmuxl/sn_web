@@ -35,6 +35,7 @@ urlpatterns += patterns('',
     url(r'^SoftAd/',include("apps.ad.urls")),
     url(r'^vipuser/',include("apps.vipuser.urls")),
     url(r'^alipay/',include("apps.alipay.urls")),
+    url(r'^spool/',include("apps.spool.urls")),
 )
 
 if settings.DEBUG:
