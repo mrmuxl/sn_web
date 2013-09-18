@@ -1,6 +1,8 @@
 #_*_coding:utf-8_*_
 
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
+from datetime import datetime
 
 class KxSoftAd(models.Model):
     id          = models.AutoField(primary_key = True)
@@ -12,3 +14,15 @@ class KxSoftAd(models.Model):
     class Meta:
         db_table = 'kx_soft_ad'
         verbose_name_plural = verbose_name = u'推广'
+
+
+class PrinterPop(models.Model):
+    id = models.AutoField(primary_key = True)
+    email = models.EmailField(verbose_name=_(u'推广邮件地址'), max_length = 50)
+    create_at = models.DateTimeField(default=datetime.now(), verbose_name=_(u'加入时间'))
+    class Meta:
+        db_table = 'print_pop'
+        verbose_name_plural = verbose_name = u'创业'
+    def __unicode__(self):
+        return self.email
+
