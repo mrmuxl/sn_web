@@ -36,13 +36,13 @@ def spool_select(request):
     email = request.POST.get('email','')
     mac  = request.POST.get('mac','')
     if email and mac:
-        origin_list = Spool.objects.filter(origin_email=email).filter(origin_uuid=mac).values()
-        accept_list = Spool.objects.filter(accept_email=email).filter(accept_uuid=mac).values()
+        origin_list = Spool.objects.filter(origin_email=email).filter(origin_uuid=mac).order_by('print_time').values()
+        accept_list = Spool.objects.filter(accept_email=email).filter(accept_uuid=mac).order_by('print_time').values()
         if origin_list:
             for i in origin_list:
-                print_time = datetime.strftime(i['print_time'],"%Y-%m-%d %H:%m:%s")
-                create_at = datetime.strftime(i['create_at'],"%Y-%m-%d %H:%m:%s")
-                status_time = datetime.strftime(i['status_time'],"%Y-%m-%d %H:%m:%s")
+                print_time = datetime.strftime(i['print_time'],"%Y-%m-%d %H:%M:%S")
+                create_at = datetime.strftime(i['create_at'],"%Y-%m-%d %H:%M:%S")
+                status_time = datetime.strftime(i['status_time'],"%Y-%m-%d %H:%M:%S")
                 i['print_time'] = print_time
                 i['create_at'] = create_at
                 i['status_time'] = status_time
@@ -51,9 +51,9 @@ def spool_select(request):
             message['origin'] = []
         if accept_list:
             for i in accept_list:
-                print_time = datetime.strftime(i['print_time'],"%Y-%m-%d %H:%m:%s")
-                create_at = datetime.strftime(i['create_at'],"%Y-%m-%d %H:%m:%s")
-                status_time = datetime.strftime(i['status_time'],"%Y-%m-%d %H:%m:%s")
+                print_time = datetime.strftime(i['print_time'],"%Y-%m-%d %H:%M:%S")
+                create_at = datetime.strftime(i['create_at'],"%Y-%m-%d %H:%M:%S")
+                status_time = datetime.strftime(i['status_time'],"%Y-%m-%d %H:%M:%S")
                 i['print_time'] = print_time
                 i['create_at'] = create_at
                 i['status_time'] = status_time

@@ -86,7 +86,7 @@
 			<div class="row-fluid">
 				<div class="well" style="background-color:#FDFDFD;margin-bottom:10px;padding:20px;width:600px;"><span style="color:red;font-size:16px">你将开通的VIP帐号：{{user.email}}	</span></div>
 			</div>
-			<div class="row">
+			<div class="row-fluid">
 				<div class="hero	-unit pull-left" style="background-color:#FDFDFD;padding:40px;width:560px;">
 					<form action="{% url 'create_order' %}" method="post">{% csrf_token %}
 						<fieldset>
