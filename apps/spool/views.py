@@ -78,7 +78,7 @@ def spool_select(request):
         else:
             message['accept'] = []
         message['status']= 0
-        return HttpResponse(json.dumps(message,ensure_ascii=False,encoding='gbk'),content_type="application/json")
+        return HttpResponse(json.dumps(message,ensure_ascii=True,encoding='gbk'),content_type="application/json")
     else:
         message['status']= 1
         return HttpResponse(json.dumps(message),content_type="application/json")
