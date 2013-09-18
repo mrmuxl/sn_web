@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block header %}{% include "header.html" %}{% endblock %}
+{% block content %}
+{% load split %}
+
+
+<div class="print-bg">
+	<div class="container-narrow">
+		<a class="btn btn-lg" style="margin:360px 0 0 58px; padding:5px 90px; color:#333; font-size:18px;">下载试用</a>
+	</div>
+</div>
+
+<div style="background-color:#f8f8f8;">
+	<div class="container-narrow print-email">
+		<div class="container-fluid" style="margin:5px 5px 5px 70px;">
+			<div class="row-fluid">
+				<div class="span6">
+					<div style="color:#a0a0a0; font-size:16px;padding-top:10px">加入我们！</div>
+					<div style="color:#a0a0a0;">有兴趣进一步了解创业计划的，请留下邮箱：</div>
+				</div>
+				<div class="span6">
+					<form class="navbar-form pull-left" style="margin-top:15px;">
+					  <input type="text" style="width:200px;" placeholder="邮箱地址">
+					  <button type="submit" class="btn" style="width:100px;">我有兴趣</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-narrow print-main">
+	<div class="text-center" style="margin:35px auto; font-size:20px; color:#7e7e7e">
+		SimpleNect打印平台可以为你提供
+	</div>
+
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span4 text-center print-prop1" style="padding-top:110px;">
+				<div class="print-prop-header">远程打印机共享技术</div>
+				<div class="print-prop-body text-left">
+					客户可以安装您共享的打印机直接打印，或者把打印资料放入打印队列，付款后再打印。
+				</div>
+			</div>
+			<div class="span4 text-center print-prop2" style="padding-top:110px;">
+				<div class="print-prop-header">移动打印技术</div>
+				<div class="print-prop-body text-left">
+					用户安装了SimpleNect的打印客户端后，可以直接把手机上的文件发到您的打印机打印。
+				</div>
+			</div>
+			<div class="span4 text-center print-prop3" style="padding-top:110px;">
+				<div class="print-prop-header">客户积累</div>
+				<div class="print-prop-body text-left">
+					只要使用了您打印机的客户及可成为你的好友，便于客户积累和主动营销。
+				</div>
+			</div>
+		</div>
+
+		<div class="row-fluid" style="margin-top:20px">
+			<div class="span4 text-center print-prop4" style="padding-top:110px;">
+				<div class="print-prop-header">打印店地理定位</div>
+				<div class="print-prop-body text-left">
+					用户可以用地图搜索离自己最近的打印店，直接发送资料进行打印。
+				</div>
+			</div>
+			<div class="span4 text-center print-prop5" style="padding-top:110px;">
+				<div class="print-prop-header">快捷支付</div>
+				<div class="print-prop-body text-left">
+					可以利用传统方式进行面对面交易，也支持网上支付。
+				</div>
+			</div>
+			<div class="span4 text-center print-prop6" style="padding-top:110px;">
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
+{% block footer %}{% include "footer.html" %}{% endblock %}
