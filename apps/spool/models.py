@@ -25,7 +25,7 @@ class Spool(models.Model):
     file_path     = models.CharField(verbose_name=_(u'接受方打印文件路径'), blank = True,max_length=260)
     page_num      = models.IntegerField(default = 0,verbose_name=_(u'文件打印张数'))
     print_time    = models.DateTimeField(default=datetime.now(), verbose_name=_(u'打印时间'))
-    status        = models.IntegerField(default=1,verbose_name=_(u'打印队列状态'),help_text=_(u'0=队列中，1=打印成功，2=打印失败，3=取消，4=删除，5=取消'))
+    status        = models.IntegerField(default=1,verbose_name=_(u'打印队列状态'),help_text=_(u'0=不输出，1=队列中，2=打印成功，3=打印失败，4=取消，5=删除，6=取消'))
     create_at     = models.DateTimeField(default=datetime.now(), verbose_name=_(u'加入队列时间'))
     status_time   = models.DateTimeField(default=datetime.now(), verbose_name=_(u'队列状态修改时间'))
     class Meta:
