@@ -114,7 +114,7 @@ def spool_update(request):
                         logger.info("pipe_path:%s",pipe_path)
                         #print pipe_path
                         with open(pipe_path,"w") as f:
-                            s = "101#" + user_online[0]['mac'] + user_online[0]['email'] + "\n"
+                            s = "101#" + user_online[0]['mac'] + ',' + user_online[0]['email'] + "\n"
                             logger.info("pipe:=>%s",s)
                             #s = "101#@C++3373|078BFBFF00200F31falqs0hotmailcom0,falqs0@hotmail.com\n"
                             #print s
