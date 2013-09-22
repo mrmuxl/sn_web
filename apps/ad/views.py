@@ -49,7 +49,7 @@ def printer(request):
     if request.method == 'GET':
         data={"title":u"打印创业计划"}
         try:
-            ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartwith='SimpleNect_V').order_by('-id')[0:1].get()
+            ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_V').order_by('-id')[0:1].get()
         except Exception as e:
             data.update(ins_file='')
             logger.debug("ins_file:%s",e)
