@@ -195,27 +195,31 @@ def access_user(request):
     tp = request.POST.get('type','')
     users = request.POST.getlist('users','')
     logger.info("email:%s,tp:%s,users:%s",email,tp,users)
-    if email and tp and users:
+    if email and tp:
         if tp == u'1':
             try:
                 ins_print = Print.objects.get(email=email)
                 PrintAccess.objects.filter(email=email).update(status=0)
-                for u in users:
-                    try:
-                        if ins_print.used_print_num <= ins_print.print_num:
-                            u_ins = KxUser.objects.get(email=u)
-                            PrintAccess.objects.create(email=ins_print,access_user=u_ins,create_at=now,status=1)
-                            ins_print.used_print_num =len(users)
-                            ins_print.save()
-                            message['status']=0
-                            message['message']="ok"
-                        else:
-                            message['status']=3
-                            message['message']="do nothing"
-                    except Exception as e:
-                        logger.debug("print_access_user:%s",e)
-                        message['status']=1
-                        message['message']=str(e)
+                if users:
+                    for u in users:
+                        try:
+                            if ins_print.used_print_num <= ins_print.print_num:
+                                u_ins = KxUser.objects.get(email=u)
+                                PrintAccess.objects.create(email=ins_print,access_user=u_ins,create_at=now,status=1)
+                                ins_print.used_print_num =len(users)
+                                ins_print.save()
+                                message['status']=0
+                                message['message']="ok"
+                            else:
+                                message['status']=3
+                                message['message']="do nothing"
+                        except Exception as e:
+                            logger.debug("print_access_user:%s",e)
+                            message['status']=1
+                            message['message']=str(e)
+                    return HttpResponse(json.dumps(message),content_type="application/json")
+                message['status']=0
+                message['message']="ok"
                 return HttpResponse(json.dumps(message),content_type="application/json")
             except Exception as e:
                 message['status']=1
@@ -225,22 +229,26 @@ def access_user(request):
             try:
                 ins_shared = Shared.objects.get(email=email)
                 SharedAccess.objects.filter(email=email).update(status=0)
-                for u in users:
-                    try:
-                        if ins_shared.used_shared_num <= ins_shared.shared_num:
-                            u_ins = KxUser.objects.get(email=u)
-                            SharedAccess.objects.create(email=ins_shared,access_user=u_ins,create_at=now,status=1)
-                            ins_shared.used_shared_num = len(users)
-                            ins_shared.save()
-                            message['status']=0
-                            message['message']="ok"
-                        else:
-                            message['status']=3
-                            message['message']="do nothing"
-                    except Exception as e:
-                        logger.debug("shared_access:%s",e)
-                        message['status']=1
-                        message['message']=str(e)
+                if users:
+                    for u in users:
+                        try:
+                            if ins_shared.used_shared_num <= ins_shared.shared_num:
+                                u_ins = KxUser.objects.get(email=u)
+                                SharedAccess.objects.create(email=ins_shared,access_user=u_ins,create_at=now,status=1)
+                                ins_shared.used_shared_num = len(users)
+                                ins_shared.save()
+                                message['status']=0
+                                message['message']="ok"
+                            else:
+                                message['status']=3
+                                message['message']="do nothing"
+                        except Exception as e:
+                            logger.debug("shared_access:%s",e)
+                            message['status']=1
+                            message['message']=str(e)
+                    return HttpResponse(json.dumps(message),content_type="application/json")
+                message['status']=0
+                message['message']="ok"
                 return HttpResponse(json.dumps(message),content_type="application/json")
             except Exception as e:
                 message['status']=1
