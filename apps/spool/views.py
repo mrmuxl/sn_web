@@ -91,7 +91,6 @@ def spool_update(request):
     uuid  = request.POST.get('uuid','')
     status = request.POST.get('status','')
     file_path = request.POST.get('file_path','')
-    print uuid,status,file_path
     if uuid:
         try:
             spool_info = Spool.objects.filter(uuid=uuid)
