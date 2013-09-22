@@ -65,7 +65,7 @@ def printer(request):
             except Exception as e:
                 logger.debug("printer view:%s",e)
         try:
-            ins_file = KxPub.objects.filter(pub_time__isnull=False).order_by('-id')[0:1].get()
+            ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_V').order_by('-id')[0:1].get()
         except Exception as e:
             data.update(ins_file='')
             logger.debug("ins_file:%s",e)
