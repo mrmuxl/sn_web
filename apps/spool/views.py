@@ -91,6 +91,7 @@ def spool_update(request):
     uuid  = request.POST.get('uuid','')
     status = request.POST.get('status','')
     file_path = request.POST.get('file_path','')
+    logger.info("uuid:%s,status:%s",uuid,status)
     if uuid:
         try:
             spool_info = Spool.objects.filter(uuid=uuid)
@@ -110,6 +111,7 @@ def spool_update(request):
                     logger.info("user_online:%s",user_online)
                     if user_online:
                         pipe_path = "/home/admin/sn_web_fifo"
+                        logger.info("pipe_path:%s",pipe_path)
                         #print pipe_path
                         with open(pipe_path,"w") as f:
                             s = "101#" + user_online[0]['mac'] + user_oneline[0]['email'] + "\n"
