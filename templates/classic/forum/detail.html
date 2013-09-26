@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block header %}{% include "header.html" %}{% endblock %}
+{% block content %}
+{% load split %}
+<style type="text/css">
+.vote-list {
+margin: 0;
+padding: 0;
+border: 0;
+font-size: 100%;
+font: inherit;
+vertical-align: baseline;
+clear: both;
+font-size: 12px;
+font-weight: normal;
+line-height: 14px;
+display: block;
+/*list-style-type: decimal;*/
+-webkit-margin-before: 1em;
+-webkit-margin-after: 1em;
+-webkit-margin-start: 0px;
+-webkit-margin-end: 0px;
+-webkit-padding-start: 40px;
+}
+.vote-body {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	color: #292c33;
+}
+.vote-title {
+font-size: 18px;
+/*font-weight: bold;*/
+font-weight: normal;
+line-height: 1em;
+margin-bottom: 10px;
+
+}
+.vote-item {
+font-weight: normal;
+clear: both;
+margin: 0 0 60px 0!important;
+min-height: 83px;
+padding-left: 100px;
+position: relative;
+line-height: 14px;
+margin-bottom: 8px;
+word-wrap: break-word;
+/*margin-bottom: 23px !important;*/
+}
+.vote-content {
+	font-size: 13px;
+	margin-bottom: 10px;
+	line-height: 1.4em;
+	text-rendering: optimizeLegibility;
+	color: #292c33;
+}
+.vote-badge {
+	position: absolute;
+	top: 20px;
+	left: 0;
+	width: 70px;
+	vertical-align: baseline;
+	display: block;
+}
+.vote-count {
+	background-color: #fcfdff;
+	border: 1px solid #cfd7e6;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	-moz-box-shadow: rgba(0,0,0,.1) 0 1px 1px;
+	-webkit-box-shadow: rgba(0,0,0,.1) 0 1px 1px;
+	box-shadow: rgba(0,0,0,.1) 0 1px 1px;
+	color: #8f9bb3;
+	font-size: 12px;
+	line-height: 14px;
+	margin-bottom: 3px;
+	padding: 12px 0 9px 0;
+	text-align: center;
+	vertical-align: baseline;
+}
+.vote-header {
+padding-top: 11px;
+word-wrap: break-word;
+}
+
+.vote-count-post {
+display: block;
+font-size: 24px;
+padding-top: 2px;
+color: #555;
+}
+
+.vote-up-off, .vote-up-on, .vote-down-off, .vote-down-on{
+background-image: url('{{STATIC_URL}}images/forum/sprites.png');
+background-repeat: no-repeat;
+overflow: hidden;
+}
+.vote-up-off, .vote-down-off, .vote-up-on, .vote-down-on{
+	text-indent: -9999em;
+	font-size: 1px;
+	cursor: pointer;
+	display: block;
+	margin: 0 auto;
+	width: 41px;
+	height: 25px;
+	/*vertical-align: baseline;*/
+	/*background: transparent;*/
+}
+.vote-up-off{
+	background-position: 0px -265px;
+}
+.vote-down-off{
+	background-position: 0px -300px;
+}
+
+</style>
+<div class="container-narrow">
+	<div class="row">
+		<div class="vote-body">
+			<ol class="vote-list">
+				<li class="vote-item">
+					<div class="vote-header">
+						<h2 class="vote-title"><a href="#">标题</a></h2>
+						<div class="vote-content">
+							<p>哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦哦哦哦哦哦哦哦哦哦哦 <a href="http://help.hipchat.com/forums/138883-suggestions/suggestions/3589512-make-yall-or-y-all-an-alias-for-all" rel="nofollow">http://help.hipchat.com/forums/138883-suggestions/suggestions/3589512-make-yall-or-y-all-an-alias-for-all</a> but would be nice to have that granularity when notifying certain groups.</p>
+							<p>Ryan</p>
+						</div>
+						<div class="vote-badge">
+							<div class="vote-count">
+								<a class="vote-up-off" title="This question shows research effort; it is useful and clear">up vote</a>
+								<strong strong="color:#292c33;display:block;font-size:18px	;font-weight:bold;margin-bottom:5px;font:inherit;vertical-align:baseline">345</strong>
+								<!-- <span style="vertical-align: baseline;">票</span> -->
+								<a class="vote-down-off" title="This question does not show any research effort; it is unclear or not useful">down vote</a>     
+							</div>
+						</div>
+					</div>
+				</li>
+				
+			</ol>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block footer %}{% include "footer.html" %}{% endblock %}
