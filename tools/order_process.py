@@ -183,6 +183,22 @@ def set_expire(now,month,expire=None):
         t = datetime(y,m,d)
     return t
 
+def get_mac(cursor,email):
+    sql = '''select mac from kx_userlogin where email=%(email)s'''
+    values ={'email':email}
+    mac = fetchone(sql,cursor,data=values)
+    return mac
+
+def write_pipe(email,cursor):
+    mac = get_mac(cursor,email)
+    if mac:
+        pipe_path = "/home/admin/sn_web_fifo"
+        with open(pipe_path,"w") as f:
+            s = "100#" + mac['mac'] + "," + email + "\n"
+            f.write(s)
+    
+    
+
 
 if __name__ == '__main__':
     now = datetime.now()
@@ -233,6 +249,7 @@ if __name__ == '__main__':
                         print "vipd",expire
                         insert_vip(cursor,i['buy_user'],now,expire)
                     update_order(cursor,i['order_id'])
+                    write_pipe(i['buy_user'],cursor)
                 except Exception as e:
                     print "vip process",e
             elif pdt['category'] == 2:
@@ -244,11 +261,13 @@ if __name__ == '__main__':
                     print_num = one_print['print_num'] + i['auth_user_num']
                     update_print(cursor,i['buy_user'],print_num,expire)
                     update_order(cursor,i['order_id'])
+                    write_pipe(i['buy_user'],cursor)
                 else:
                     expire = set_expire(now,month)
                     print_num = 5 + i['auth_user_num']
                     insert_print(cursor,i['buy_user'],print_num,now,expire)
                     update_order(cursor,i['order_id'])
+                    write_pipe(i['buy_user'],cursor)
             elif pdt['category'] == 4:
                 m = int((i['total_fee']-i['auth_user_num']*5)/15)
                 month = new_month(m)
@@ -259,12 +278,14 @@ if __name__ == '__main__':
                     update_shared(cursor,i['buy_user'],shared_num,expire)
                     print "update shared"
                     update_order(cursor,i['order_id'])
+                    write_pipe(i['buy_user'],cursor)
                 else:
                     expire = set_expire(now,month)
                     shared_num = 5 + i['auth_user_num']
                     insert_shared(cursor,i['buy_user'],shared_num,now,expire)
                     print "instert shared"
                     update_order(cursor,i['order_id'])
+                    write_pipe(i['buy_user'],cursor)
             else:
                 print "no category"
     cursor.close()
