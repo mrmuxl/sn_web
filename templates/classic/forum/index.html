@@ -119,9 +119,9 @@ overflow: hidden;
 <div class="container-narrow">
 	<div class="row">
 		<div class="span12">
-			<form>
+<!-- 			<form>
 				<fieldset>
-					 <!-- <legend></legend> -->
+					 <legend></legend>
 					 <label></label>
 					  <input class="input-block-level" type="text" placeholder=".input-block-level">
 					 <div id="comment" style="none">
@@ -129,8 +129,23 @@ overflow: hidden;
 					 </div>
 					  <button type="submit" class="btn">提交留言</button>
 				</fieldset>
-			</form>
+			</form> -->
+		<div class="send_content">
+		<form  action="{% url 'add_msg'%}" method="post" onsubmit="return checkMsg();">
+			{% csrf_token %}
+			<textarea id="msg_content" name="msg"></textarea>
+			<div class="comment_small_bg" id="top_comment"></div>
+			<div class="clear"></div>
+			<div class="send_btn send_btn_top">
+				<input type="hidden" id='form1' name="send_from" value="1" />
+				<input type="submit" name value="" class="btn_send"/>
+				<input type="button" name value="" class="btn_cancel btn_cancel_top"/>
+			</div>
+		</form>
+		
 		</div>
+		</div>
+
 		<div class="span12">
 		<div class="vote-body">
 			<ol class="vote-list">
@@ -171,5 +186,16 @@ overflow: hidden;
 		</div>
 	</div>
 </div>
+<script>
+	window.onscroll=function(){
+		if(document.getElementById('msg_form')!=null){
+		if(document.body.scrollTop>180 ||document.documentElement.scrollTop>180) {
+		document.getElementById('msg_form').style.display="block";
+		}else{
+		document.getElementById('msg_form').style.display="none";
+		}
+		}
+		} 
+</script>
 {% endblock %}
 {% block footer %}{% include "footer.html" %}{% endblock %}
