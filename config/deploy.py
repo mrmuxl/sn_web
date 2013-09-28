@@ -14,10 +14,10 @@ except ImportError:
 
 STATIC_ROOT = os.path.join(ROOT_DIR,'static')
 STATIC_URL = 'http://static.simplenect.cn/' 
-MEDIA_ROOT = '/home/webapp_root/upload/'
+MEDIA_ROOT = '/data/webapp_root/upload/'
 MEDIA_URL = 'http://img.simplenect.cn/'
-PUBLISH_UPLOAD = '/home/webapp_root/publish/'
-SERVER_LOG = '/home/admin/udtserver/'
+PUBLISH_UPLOAD = '/data/webapp_root/publish/'
+SERVER_LOG = '/data/admin/udtserver/'
 
 #django_compressor
 COMPRESS_ENABLED = True
