@@ -26,3 +26,12 @@ class PrinterPop(models.Model):
     def __unicode__(self):
         return self.email
 
+class FZu(models.Model):
+    id = models.AutoField(primary_key = True)
+    email = models.EmailField(verbose_name=_(u'推广邮件地址'), max_length = 50)
+    create_at = models.DateTimeField(default=datetime.now(), verbose_name=_(u'加入时间'))
+    class Meta:
+        db_table = 'print_fzu'
+        verbose_name_plural = verbose_name =_( u'福州大学')
+    def __unicode__(self):
+        return self.email
