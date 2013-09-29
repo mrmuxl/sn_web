@@ -44,6 +44,8 @@ def vipuser_api(request):
         v = VIPUser.objects.filter(email=email,is_vip__exact=1,expire__gt=now)
         p = Print.objects.filter(email=email,is_print__exact=1,expire__gt=now)
         s = Shared.objects.filter(email=email,is_shared__exact=1,expire__gt=now)
+        pa = PrintAccess.objects.filter(access_user=email,status__exact=1)
+        sa = SharedAccess.objects.filter(access_user=email,status__exact=1)
         remainder_days = get_remainder_days(email)
         if v:
             message['status']=1 #为VIP用户
@@ -58,7 +60,19 @@ def vipuser_api(request):
                 pprint(message)
             return HttpResponse(json.dumps(message),content_type="application/json")
         elif p or s:
-            message['status']=0 #为VIP用户
+            message['status']=0 #不为VIP用户
+            message['is_vip']=False
+            message['remainder_days']=-1 #不显示
+            message['vip_friends']='vip'
+            p = access_user_print(email)
+            s = access_user_shared(email)
+            message.update(p)
+            message.update(s)
+            if settings.DEBUG:
+                pprint(message)
+            return HttpResponse(json.dumps(message),content_type="application/json")
+        elif pa or sa:
+            message['status']=0 #不为VIP用户
             message['is_vip']=False
             message['remainder_days']=-1 #不显示
             message['vip_friends']='vip'
