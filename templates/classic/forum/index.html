@@ -130,8 +130,9 @@ overflow: hidden;
 					  <button type="submit" class="btn">提交留言</button>
 				</fieldset>
 			</form> -->
-		<div class="send_content">
-		<form  action="{% url 'add_msg'%}" method="post" onsubmit="return checkMsg();">
+		<!-- <div class="send_content"> -->
+		<div>
+		<form  action="{% url 'forum_add'%}" method="post" onsubmit="return checkMsg();">
 			{% csrf_token %}
 			<textarea id="msg_content" name="msg"></textarea>
 			<div class="comment_small_bg" id="top_comment"></div>

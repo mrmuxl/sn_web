@@ -49,5 +49,5 @@ class CategoryAdmin(admin.ModelAdmin):
 #admin.site.register(KxForumPosts,PostsAdmin)
 #admin.site.register(KxForumMpost,MpostAdmin)
 #admin.site.register(KxForumForum,ForumsAdmin)
-#admin.site.register(Blog,BlogAdmin)
-#admin.site.register(Category,CategoryAdmin)
+admin.site.register(Blog,BlogAdmin)
+admin.site.register(Category,CategoryAdmin)

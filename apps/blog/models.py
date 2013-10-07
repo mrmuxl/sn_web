@@ -6,6 +6,7 @@ from django.db import models
 from django.conf import settings
 from apps.kx.models import KxUser
 from datetime import datetime
+from apps.wmd import models as wmd_models
 
 
 class KxForumForum(models.Model):
@@ -84,8 +85,10 @@ class Blog(models.Model):
     author = models.ForeignKey(KxUser, editable=False,verbose_name=_(u'作者'))
     title = models.CharField(max_length = 100L,verbose_name=_(u'标题'))
     slug = models.CharField(max_length=50, unique=True, db_index=True, verbose_name=u'Slug', help_text=u'页面的 URL 名称。可包含字母、数字、减号、下划线，不能是以下>    词语之一：archives、post、tag')
-    summary = models.TextField(verbose_name=_(u'摘要'))
-    content= models.TextField(verbose_name=_(u'正文'))
+    #summary = models.TextField(verbose_name=_(u'摘要'))
+    summary = wmd_models.MarkDownField(verbose_name=_(u'摘要'))
+    #content= models.TextField(verbose_name=_(u'正文'))
+    content = wmd_models.MarkDownField(verbose_name=_(u'正文'))
     status  = models.IntegerField(verbose_name=_(u'文章状态'),default = 0,choices=BLOG_CHOICES,help_text=_(u'0=已发布，1=隐藏'))
     is_above =  models.BooleanField(verbose_name=_(u'置顶'),default = 0,choices=TOP_CHOICES,help_text=_(u'0=未置顶，1=已置顶'))
     created = models.DateTimeField(default=datetime.now(), verbose_name='创建时间')
