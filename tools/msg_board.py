@@ -4,7 +4,7 @@ import MySQLdb
 import logging
 
 logger = logging.getLogger(__name__)
-conn = MySQLdb.connect(host='localhost',user='root',passwd='mrmuxl',db='kx')
+conn = MySQLdb.connect(host='localhost',user='root',passwd='abc123!!',db='kx')
 with conn:
     cursor = conn.cursor()
     #字典游标
