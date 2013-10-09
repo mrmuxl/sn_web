@@ -14,8 +14,8 @@ class PrinterPopForm(forms.ModelForm):
     class Meta:
         ppform = PrinterPop
 
-class OperatorForm(forms.Form):
+class OperatorForm(forms.ModelForm):
     class Meta:
-        operator = Operator
+        model = Operator
         fields = ['name','tel','qq','school','resource']
 

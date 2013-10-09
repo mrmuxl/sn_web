@@ -219,101 +219,73 @@ word-wrap: break-word;
 	line-height: 20px;
 	/*margin-bottom: 5px;*/
 }
-}
 </style>
 <div class="container-narrow">
 	<div class="row">
-		<div class="span12">
-<!-- 			<form>
-				<fieldset>
-					 <legend></legend>
-					 <label></label>
-					  <input class="input-block-level" type="text" placeholder=".input-block-level">
-					 <div id="comment" style="none">
-					 	<textarea class="input-block-level" rows="4"></textarea>
-					 </div>
-					  <button type="submit" class="btn">提交留言</button>
-				</fieldset>
-			</form> -->
-		<!-- <div class="send_content"> -->
-<!-- 		<div>
-		<form  action="{% url 'forum_add'%}" method="post" onsubmit="return checkMsg();">
-			{% csrf_token %}
-			<textarea id="msg_content" name="msg"></textarea>
-			<div class="comment_small_bg" id="top_comment"></div>
-			<div class="clear"></div>
-			<div class="send_btn send_btn_top">
-				<input type="hidden" id='form1' name="send_from" value="1" />
-				<input type="submit" name value="" class="btn_send"/>
-				<input type="button" name value="" class="btn_cancel btn_cancel_top"/>
-			</div>
-		</form>
-		</div> -->
-		
-		</div>
-
-		<div class="span12">
+	<div class="span12">
 		<div class="post-body">
 			<ul class="post-list">
 				<li class="post-item">
 					<div class="post-header">
 						<h2 class="post-title">{{post.title}}</h2>
-						<div class="post-content">
-							<p>{{post.content}}</p>
-							<!-- <p>{{post.author.nick}}</p> -->
-						</div>
+							<div class="post-content">
+								<p>{{post.content}}</p>
+								<!-- <p>{{post.author.nick}}</p> -->
+							</div>
 						<div class="post-badge">
 							<div class="post-count">
-								<a class="post-up-off" title="This question shows research effort; it is useful and clear">up post</a>
-								<strong strong="color:#292c33;display:block;font-size:18px	;font-weight:bold;margin-bottom:5px;font:inherit;vertical-align:baseline">
-									{% with a=post.id b=post.id %}
-									{{ a|add:-1 }}
-									{%endwith%}</strong>
-								<a class="post-down-off" title="This question does not show any research effort; it is unclear or not useful">down vote</a>     
+								<a class="post-up-off" title="vote_up" href="javascript:vote_up({{ post.id }})">up post</a>
+								<strong id="vote_{{ post.id }}"  style="color:#292c33;display:block;font-size:18px;font-weight:bold;margin-bottom:5px;font:inherit;vertical-align:baseline">
+									{{ vote }}</strong>
+								<a class="post-down-off" title="vote_down" href="javascript:vote_down({{ post.id }})">down vote</a>     
 							</div>
 						</div>
-						<div class="comment_header">
+						<!-- <div class="comment_header"> -->
+							<br>
 							<!-- <div class="vcard">
 							<span class="comment-badge" ><img class="comment_photo" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg"></span>
 							</div> -->
-							<span>{{post.author.nick}} 的分享</span>
-							
+							<p><span>{{post.user.nick}} &nbsp {{post.created}}</span></p>
+							<br>
+						<!-- </div> -->
+						<div class="span10">
+							<form  action="{% url 'forum_reply' %}" method="post">{% csrf_token %}
+								<fieldset>
+					 			<legend></legend>
+					 			<label></label>
+					  			<input  type="hidden" name="fid" value={{ post.id }}>
+						 		<div id="comment" style="none">
+					 				<textarea class="input-block-level" name="content" rows="4" placeholder="内容..."></textarea></div>
+					  				<button type="submit" class="btn">提交留言</button>
+								</fieldset>
+							</form>
 						</div>
 					</div>
 				</li>
 			</ul>
 		</div>
-		<div class="comment-body">
-			<ul class="comment-list">
-			{% for c in comments %}
-				<li class="comment-item">
-					<div class="comment-header">
-						
-						<p>{{c.author.nick}}</p>
-						<span class="comment-badge"><img class="comment_photo" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg"></span>
-						<div class="comment-content">
+	</div>
+	<div class="span12">
+			<div class="comment-body">
+				<ul class="comment-list">
+				{% for c in comments %}
+					<li class="comment-item">
+						<div class="comment-header">
 							
-							<p>{{c.content}}</p>
-							
+							<p>{{c.user.nick}} &nbsp {{ c.created }}</p>
+							<span class="comment-badge"><img class="comment_photo" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg"></span>
+							<div class="comment-content">
+								
+								<p>{{c.content}}</p>
+								
+							</div>
 						</div>
-					</div>
-				</li>
-				{%endfor%}
-			</ul>
-		</div>	
+					</li>
+					{%endfor%}
+				</ul>
+			</div>	
 		</div>
 	</div>
 </div>
-<script>
-	window.onscroll=function(){
-		if(document.getElementById('msg_form')!=null){
-		if(document.body.scrollTop>180 ||document.documentElement.scrollTop>180) {
-		document.getElementById('msg_form').style.display="block";
-		}else{
-		document.getElementById('msg_form').style.display="none";
-		}
-		}
-		} 
-</script>
 {% endblock %}
 {% block footer %}{% include "footer.html" %}{% endblock %}

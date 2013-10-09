@@ -199,6 +199,33 @@ $(function(){
         }
     }
 
+    function vote_up(pid){
+        if(pid>0){
+            $.post("/forums/vote",{"id":pid,"v":0},function(data){
+                if(data.status==1){
+                    var v = $("#vote_"+pid).text();
+                    $("#vote_"+pid).text(parseInt(v)+1);
+                        alert("投票成功！");
+                    }else{
+                        alert("投票失败！");
+                    }
+            },"json");
+        }
+    }
+    function vote_down(pid){
+        if(pid>0){
+            $.post("/forums/vote",{"id":pid,"v":1},function(data){
+                if(data.status==1){
+                    var v = $("#vote_"+pid).text();
+                    $("#vote_"+pid).text(v-1);
+                        alert("投票成功！");
+                }else{
+                        alert("投票失败！");
+                }
+            },"json");
+        }
+    }
+
 //邮件自动完成提示插件
 var mailArr=new Array("@qq.com","@sina.com","@163.com","@126.com","@sohu.com", "@gmail.com","@hotmail.com","@msn.com");
 (function(){

@@ -109,6 +109,8 @@ def save(request):
 def login(request,next_page="/",redirect_field_name=REDIRECT_FIELD_NAME):
     '''登陆视图'''
     if request.method == "GET":
+        if request.user.is_authenticated():
+            return HttpResponseRedirect('/')    
         if redirect_field_name in request.REQUEST:
             next_page = request.REQUEST[redirect_field_name]
             if not is_safe_url(url=next_page, host=request.get_host()):
