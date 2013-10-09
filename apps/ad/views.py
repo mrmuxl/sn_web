@@ -1,7 +1,7 @@
 #_*_coding:utf-8_*_
 
 import datetime,logging,json,os
-from models import KxSoftAd,PrinterPop
+from models import KxSoftAd,PrinterPop,FZu
 from forms import PrinterPopForm
 from apps.publish.models import KxPub
 from django.views.decorators.http import (require_POST,require_GET)
@@ -49,7 +49,7 @@ def printer(request):
     if request.method == 'GET':
         data={"title":u"打印创业计划"}
         try:
-            ins_file = KxPub.objects.filter(pub_time__isnull=False).order_by('-id')[0:1].get()
+            ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_V').order_by('-id')[0:1].get()
         except Exception as e:
             data.update(ins_file='')
             logger.debug("ins_file:%s",e)
@@ -60,12 +60,39 @@ def printer(request):
         email = request.POST.get('pop','')
         if email:
             try:
+                p = FZu.objects.create(email=email)
+                p.save()
+            except Exception as e:
+                logger.debug("printer view:%s",e)
+        try:
+            ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_V').order_by('-id')[0:1].get()
+        except Exception as e:
+            data.update(ins_file='')
+            logger.debug("ins_file:%s",e)
+        data.update(ins_file=ins_file.install_file)
+        return render(request,"ad/print_result.html",data)
+
+def fzu(request):
+    if request.method == 'GET':
+        data={"title":u"打印创业计划"}
+        try:
+            ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_V').order_by('-id')[0:1].get()
+        except Exception as e:
+            data.update(ins_file='')
+            logger.debug("ins_file:%s",e)
+        data.update(ins_file=ins_file.install_file)
+        return render(request,"ad/fzu.html",data)
+    if request.method == 'POST':
+        data={"title":u"打印创业计划"}
+        email = request.POST.get('pop','')
+        if email:
+            try:
                 p = PrinterPop.objects.create(email=email)
                 p.save()
             except Exception as e:
                 logger.debug("printer view:%s",e)
         try:
-            ins_file = KxPub.objects.filter(pub_time__isnull=False).order_by('-id')[0:1].get()
+            ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_V').order_by('-id')[0:1].get()
         except Exception as e:
             data.update(ins_file='')
             logger.debug("ins_file:%s",e)

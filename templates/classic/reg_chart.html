@@ -3,6 +3,7 @@
 {% block header %}{% include "header.html" %}{% endblock %}
 {% block content %}
 <script type="text/javascript">document.domain = '{{ domain }}';</script>
+<script src="{{STATIC_URL}}js/lib/jquery-1.7.2.min.js"></script>
 <script language="javascript" type="text/javascript" defer="defer" src="{{ STATIC_URL }}js/lib/datepicker/WdatePicker.js"></script>
 <h1 class="center">阡陌发布24小时内新注册用户统计</h1>
 <!-- <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.4.2.min.js"></script> -->

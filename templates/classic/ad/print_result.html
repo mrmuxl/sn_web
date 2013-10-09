@@ -1,28 +1,8 @@
-{% load compress %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="description" content="局域网共享 跨网段共享  windows共享 文件共享 打印共享 阡陌软件" />
-<meta name="keywords" content="局域网共享 跨网段共享  windows共享 文件共享 打印共享 阡陌软件" />
-{% if DEBUG %}
-	<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.css" type="text/css" />
-	<!-- <link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome.css" type="text/css" /> -->
-	<!--[if IE 7]>
-	<link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome-ie7.css" type="text/css" />
-	<![endif]-->
-{% else %}
-	<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.min.css" type="text/css" />
-	<!-- <link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome.min.css" type="text/css" /> -->
-	<!--[if IE 7]>
-	<link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome-ie7.min.css" type="text/css" />
-	<![endif]-->
-{% endif %}
-{% compress js %}
-<script src="{{STATIC_URL}}js/lib/jquery-1.7.2.min.js"></script>
-<script src="{{STATIC_URL}}js/lib/django_ajax.js"></script>
-<script src="{{STATIC_URL}}js/lib/bootstrap.min.js"></script>
-{% endcompress %}
+
+{% extends "base.html" %}
+{% block header %}{% include "header.html" %}{% endblock %}
+{% block content %}
+{% load split %}
 <style type="text/css">
 .container-narrow {
   margin: 0 auto;
@@ -31,65 +11,28 @@
   body {
   padding-top: 10px;
   padding-bottom: 10px;
-  background-color:#E5E8ED;
+/*  background-color:#E5E8ED;*/
   font-family: "Microsoft YaHei","Frutiger", "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif !important; 
   font-size: 14px;
   font-weight:normal;
 }
-.product_item a {
-    display: inline-block;
-    padding: 4px 12px;
-	color: #333333;
-    text-decoration: none;
-}
 
-.product_item  {
-    color: #888888;
-    font-size: 16px;
-    background-color: #F9F9F9;
-    border-left: 1px solid #DDDDDD;
-    box-shadow: 0 1px 1px rgba(255, 255, 255, 0.3) inset;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
-	border: 1px solid #DDDDDD;
-    margin: 0 0 0 20px;
-    padding: 0;
-	display: inline-block;
-    float: left;
-}
-.selected  {
-	border: 2px solid #f90;
-	background: url({{STATIC_URL}}images/alipay/9.png) no-repeat 100% 100%;
-	margin: -1px;
-}
-
-.product_title {
-	color: #8e8e8e;
-	float: left;
-	width: 32px;
-	margin-left: 0px;
-	padding: 0;
-	list-style:none;
-	margin: 5px
-}
 </style>
-</head>
-<body>
 <div class="container-narrow">
 	<div class="row-fluid" style="margin-top:20px;">
 		<div class="span2"></div>
 		<div class="span8">
-				
 			<div class="row-fluid">
 				<div class="hero	-unit text-center" style="background-color:#FDFDFD;padding:40px;margin-top:100px">
 					<p>感谢你的关注，产品发布后我们会把试用信息发至你的邮箱。</p><br>
 					<p>现在您可以先试用一下我们的团队协同软件：</p><br>
-
 					<a class="btn btn-lg" style="margin:0px 0 0 0px; padding:5px 90px; color:#333; font-size:18px;" href="{{DOWNLOAD}}/Install/{{ins_file}}" target="_blank" title="下载">下载试用</a>
-
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-</body>
-</html>
+<br><br><br><br><br><br><br><br><br>
+
+{% endblock %}
+{% block footer %}{% include "footer.html" %}{% endblock %}

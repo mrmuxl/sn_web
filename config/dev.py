@@ -146,6 +146,7 @@ INSTALLED_APPS = (
     'apps.alipay',
     #'debug_toolbar',
     'apps.spool',
+    'apps.forum',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
