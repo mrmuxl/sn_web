@@ -15,7 +15,7 @@ with conn:
     for i in msg:
         cursor.execute("select * from kx_user where uuid=%(uuid)s",{"uuid":i['user_id']})
         user = cursor.fetchone()
-        cursor.execute("select * from kx_msg_board where reply_id=%(reply_id)s",{"reply_id":i['reply_id']})
+        cursor.execute("select * from kx_msg_board where reply_id=%(reply_id)s",{"reply_id":i['id']})
         reply = cursor.fetchall()
 
         if user is None:
