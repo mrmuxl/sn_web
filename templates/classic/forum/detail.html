@@ -3,7 +3,7 @@
 {% block content %}
 {% load split %}
 <style type="text/css">
-.vote-list {
+.post-list {
 margin: 0;
 padding: 0;
 border: 0;
@@ -22,13 +22,13 @@ display: block;
 -webkit-margin-end: 0px;
 -webkit-padding-start: 40px;
 }
-.vote-body {
+.post-body {
 	margin: 0;
 	padding: 0;
 	border: 0;
 	color: #292c33;
 }
-.vote-title {
+.post-title {
 font-size: 18px;
 /*font-weight: bold;*/
 font-weight: normal;
@@ -36,7 +36,7 @@ line-height: 1em;
 margin-bottom: 10px;
 
 }
-.vote-item {
+.post-item {
 font-weight: normal;
 clear: both;
 margin: 0 0 60px 0!important;
@@ -48,14 +48,14 @@ margin-bottom: 8px;
 word-wrap: break-word;
 /*margin-bottom: 23px !important;*/
 }
-.vote-content {
+.post-content {
 	font-size: 13px;
 	margin-bottom: 10px;
 	line-height: 1.4em;
 	text-rendering: optimizeLegibility;
 	color: #292c33;
 }
-.vote-badge {
+.post-badge {
 	position: absolute;
 	top: 20px;
 	left: 0;
@@ -63,7 +63,7 @@ word-wrap: break-word;
 	vertical-align: baseline;
 	display: block;
 }
-.vote-count {
+.post-count {
 	background-color: #fcfdff;
 	border: 1px solid #cfd7e6;
 	-moz-border-radius: 3px;
@@ -80,24 +80,24 @@ word-wrap: break-word;
 	text-align: center;
 	vertical-align: baseline;
 }
-.vote-header {
-padding-top: 11px;
-word-wrap: break-word;
+.post-header {
+	padding-top: 11px;
+	word-wrap: break-word;
 }
 
-.vote-count-post {
-display: block;
-font-size: 24px;
-padding-top: 2px;
-color: #555;
+.post-count-post {
+	display: block;
+	font-size: 24px;
+	padding-top: 2px;
+	color: #555;
 }
 
-.vote-up-off, .vote-up-on, .vote-down-off, .vote-down-on{
-background-image: url('{{STATIC_URL}}images/forum/sprites.png');
-background-repeat: no-repeat;
-overflow: hidden;
+.post-up-off, .post-up-on, .post-down-off, .post-down-on{
+	background-image: url('{{STATIC_URL}}images/forum/sprites.png');
+	background-repeat: no-repeat;
+	overflow: hidden;
 }
-.vote-up-off, .vote-down-off, .vote-up-on, .vote-down-on{
+.post-up-off, .post-down-off, .post-up-on, .post-down-on{
 	text-indent: -9999em;
 	font-size: 1px;
 	cursor: pointer;
@@ -108,39 +108,212 @@ overflow: hidden;
 	/*vertical-align: baseline;*/
 	/*background: transparent;*/
 }
-.vote-up-off{
+.post-up-off{
 	background-position: 0px -265px;
 }
-.vote-down-off{
+.post-down-off{
 	background-position: 0px -300px;
 }
+.comment-body{
+	color: #292c33;
+	margin-left: 160px;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+}
+.comment-list {
+	list-style: none;
+	clear: both;	
+	font-size: 12px;
+	font-weight: normal;
+	line-height: 14px;
+	display: block;
+	-webkit-margin-before: 1em;
+	-webkit-margin-after: 1em;
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+	-webkit-padding-start: 40px;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+.comment-item {
+    line-height: 14px;
+    margin-bottom: 8px;
+    word-wrap: break-word;
+    display: list-item;
+	text-align: -webkit-match-parent;
+}
+.comment-badge {
+	border: 1px solid #FFF;
+	-moz-box-shadow: rgba(0,0,0,.25) 0 1px 1px;
+	-webkit-box-shadow: rgba(0,0,0,.25) 0 1px 1px;
+	box-shadow: rgba(0,0,0,.25) 0 1px 1px;
+	line-height: 1em;
+	margin: 0 0 0 -70px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 50px;
+}
+.comment-header {
+	font-size: 14px;
+	margin-bottom: 30px;
+	min-height: 40px;
+	position: relative;
+	color: #666f80;
+	line-height: 20px;
+}
+.comment-photo {
+	display: block;
+	height: 50px;
+	max-height: 50px;
+	width: 50px;
+	max-width: 50px;
+}
+.comment_content {
+	color: #292c33;
+	font-size: 16px;
+	margin-bottom: 10px;
+}
 
+.vcard {
+    	/*margin: -1px 0 0 !important;*/
+    	width: 20px;
+    	height: 20px;
+    	max-height: 20px;
+    	max-width: 20px;
+    	height: 20px;
+    	color: #666f80;
+	line-height: 20px;
+	margin-bottom: 5px;
+    	border: 1px solid #FFFFFF;
+    	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+    	left: 0;
+    	line-height: 1em;
+    	margin: 0 0 0 0 !important;
+    	/*position: absolute;*/
+    	top: 0;
+    	vertical-align: baseline;
+    	border: 0 none;
+    	height: auto;
+    	max-width: 100%;
+    	clear: both;
+	/*margin-bottom: 30px;*/
+	display: block;
+    font-weight: normal !important;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	margin-bottom: 10px;
+	min-height: 20px;
+	padding-left: 30px;
+	font-size: 12px;
+	margin-bottom: 30px;
+	min-height: 40px;
+	position: relative;
+	color: #666f80;
+	line-height: 20px;
+	/*margin-bottom: 5px;*/
+}
+}
 </style>
 <div class="container-narrow">
 	<div class="row">
-		<div class="vote-body">
-			<ol class="vote-list">
-				<li class="vote-item">
-					<div class="vote-header">
-						<h2 class="vote-title"><a href="#">标题</a></h2>
-						<div class="vote-content">
-							<p>哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦哦哦哦哦哦哦哦哦哦哦 <a href="http://help.hipchat.com/forums/138883-suggestions/suggestions/3589512-make-yall-or-y-all-an-alias-for-all" rel="nofollow">http://help.hipchat.com/forums/138883-suggestions/suggestions/3589512-make-yall-or-y-all-an-alias-for-all</a> but would be nice to have that granularity when notifying certain groups.</p>
-							<p>Ryan</p>
+		<div class="span12">
+<!-- 			<form>
+				<fieldset>
+					 <legend></legend>
+					 <label></label>
+					  <input class="input-block-level" type="text" placeholder=".input-block-level">
+					 <div id="comment" style="none">
+					 	<textarea class="input-block-level" rows="4"></textarea>
+					 </div>
+					  <button type="submit" class="btn">提交留言</button>
+				</fieldset>
+			</form> -->
+		<!-- <div class="send_content"> -->
+<!-- 		<div>
+		<form  action="{% url 'forum_add'%}" method="post" onsubmit="return checkMsg();">
+			{% csrf_token %}
+			<textarea id="msg_content" name="msg"></textarea>
+			<div class="comment_small_bg" id="top_comment"></div>
+			<div class="clear"></div>
+			<div class="send_btn send_btn_top">
+				<input type="hidden" id='form1' name="send_from" value="1" />
+				<input type="submit" name value="" class="btn_send"/>
+				<input type="button" name value="" class="btn_cancel btn_cancel_top"/>
+			</div>
+		</form>
+		</div> -->
+		
+		</div>
+
+		<div class="span12">
+		<div class="post-body">
+			<ul class="post-list">
+				<li class="post-item">
+					<div class="post-header">
+						<h2 class="post-title">{{post.title}}</h2>
+						<div class="post-content">
+							<p>{{post.content}}</p>
+							<!-- <p>{{post.author.nick}}</p> -->
 						</div>
-						<div class="vote-badge">
-							<div class="vote-count">
-								<a class="vote-up-off" title="This question shows research effort; it is useful and clear">up vote</a>
-								<strong strong="color:#292c33;display:block;font-size:18px	;font-weight:bold;margin-bottom:5px;font:inherit;vertical-align:baseline">345</strong>
-								<!-- <span style="vertical-align: baseline;">票</span> -->
-								<a class="vote-down-off" title="This question does not show any research effort; it is unclear or not useful">down vote</a>     
+						<div class="post-badge">
+							<div class="post-count">
+								<a class="post-up-off" title="This question shows research effort; it is useful and clear">up post</a>
+								<strong strong="color:#292c33;display:block;font-size:18px	;font-weight:bold;margin-bottom:5px;font:inherit;vertical-align:baseline">
+									{% with a=post.id b=post.id %}
+									{{ a|add:-1 }}
+									{%endwith%}</strong>
+								<a class="post-down-off" title="This question does not show any research effort; it is unclear or not useful">down vote</a>     
 							</div>
+						</div>
+						<div class="comment_header">
+							<!-- <div class="vcard">
+							<span class="comment-badge" ><img class="comment_photo" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg"></span>
+							</div> -->
+							<span>{{post.author.nick}} 的分享</span>
+							
 						</div>
 					</div>
 				</li>
-				
-			</ol>
+			</ul>
+		</div>
+		<div class="comment-body">
+			<ul class="comment-list">
+			{% for c in comments %}
+				<li class="comment-item">
+					<div class="comment-header">
+						
+						<p>{{c.author.nick}}</p>
+						<span class="comment-badge"><img class="comment_photo" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg"></span>
+						<div class="comment-content">
+							
+							<p>{{c.content}}</p>
+							
+						</div>
+					</div>
+				</li>
+				{%endfor%}
+			</ul>
+		</div>	
 		</div>
 	</div>
 </div>
+<script>
+	window.onscroll=function(){
+		if(document.getElementById('msg_form')!=null){
+		if(document.body.scrollTop>180 ||document.documentElement.scrollTop>180) {
+		document.getElementById('msg_form').style.display="block";
+		}else{
+		document.getElementById('msg_form').style.display="none";
+		}
+		}
+		} 
+</script>
 {% endblock %}
 {% block footer %}{% include "footer.html" %}{% endblock %}
