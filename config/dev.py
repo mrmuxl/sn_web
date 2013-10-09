@@ -148,7 +148,6 @@ INSTALLED_APPS = (
     'apps.spool',
     'apps.forum',
     'apps.wmd',
-    'apps.operator',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
