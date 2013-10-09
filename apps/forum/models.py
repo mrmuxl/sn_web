@@ -52,7 +52,7 @@ class ForumPost(models.Model):
     hits = models.IntegerField(default=0, editable=False, verbose_name='点击次数')
 
     def __unicode__(self):
-        return unicode(self.id)
+        return self.content
 
     def get_absolute_url(self):
         return u'/forums/post/%d/' % (self.id)
@@ -79,4 +79,4 @@ class ForumComment(models.Model):
         ordering = ['-created',]
 
     def __unicode__(self):
-        return unicode(self.id)
+        return self.content
