@@ -17,6 +17,7 @@ with conn:
         cursor.execute("select * from kx_user where uuid=%(uuid)s",{"uuid":i['user_id']})
         user = cursor.fetchone()
         if user is None:
+            user = {}
             user['id'] = 11
         print user['id']
         sql="""insert into forum_comment values(%(id)s,%(fid_id)s,%(user_id)s,%(content)s,%(ip)s,%(status)s,%(created)s)"""
