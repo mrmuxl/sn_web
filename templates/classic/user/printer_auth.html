@@ -1,0 +1,132 @@
+{% extends "user/base.html" %}
+
+{% block header %}{% include "user/header.html" %}{% endblock %}
+{% block content %}
+
+<div class="main-container container-fluid">
+			<a class="menu-toggler" id="menu-toggler" href="#">
+				<span class="menu-text"></span>
+			</a>
+
+			<div class="sidebar" id="sidebar">
+
+				{% include "user/menu.html" %}
+
+				<div class="sidebar-collapse" id="sidebar-collapse">
+					<i class="icon-double-angle-left"></i>
+				</div>
+			</div>
+
+			<div class="main-content">
+				<div class="breadcrumbs" id="breadcrumbs">
+					<ul class="breadcrumb">
+						<li>
+							<i class="icon-home home-icon"></i>
+							<a href="/user/index">首页</a>
+
+							<span class="divider">
+								<i class="icon-angle-right arrow-icon"></i>
+							</span>
+						</li>
+						<li class="active">授权好友共享打印机</li>
+					</ul>
+				</div>
+
+				<div class="page-content">
+					<h4 class="lighter">
+						<i class="icon-print"></i>
+						授权哪些好友可以共享打印机，可用授权：5，已用：3
+					</h4>
+
+
+					<div class="row-fluid">
+						<div class="span12">
+							<div class="widget-box transparent">
+
+
+
+								<div class="widget-body">
+									<div class="row-fluid">
+										<ul class="ace-thumbnails">
+											<li class="noborder">
+												<a href="" data-rel="colorbox" class="cboxElement">
+													<div class="friendbox">
+														<div class="media">
+															  <a class="pull-left" href="#">
+															    <img class="media-object img-circle" src="/static/classic/assets/avatars/user.jpg">
+															    <br>
+															    <i class="icon-print"></i>
+															  </a>
+															  <div class="media-body">
+															    <h6 class="media-heading">Media heading</h6>
+															    <!-- Nested media object -->
+															    <div class="media grey">
+															      yang0@126.com
+															    </div>
+															  </div>
+															</div>
+													</div>
+												</a>
+
+												<div class="tools tools-bottom">
+													<a href="#">
+														<i class="icon-print"></i> <small>取消授权</small>
+													</a>
+												</div>
+											</li>
+
+
+											<li class="noborder">
+												<a href="" data-rel="colorbox" class="cboxElement">
+													<div class="friendbox">
+														<div class="media">
+															  <a class="pull-left" href="#">
+															    <img class="media-object img-circle" src="/static/classic/assets/avatars/user.jpg">
+
+															  </a>
+															  <div class="media-body">
+															    <h6 class="media-heading">Media heading</h6>
+															    <!-- Nested media object -->
+															    <div class="media grey">
+															      yang0@126.com
+															    </div>
+															  </div>
+															</div>
+													</div>
+												</a>
+
+												<div class="tools tools-bottom">
+													<a href="#">
+														<i class="icon-print"></i> <small>授权</small>
+													</a>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</div><!--/widget-body-->
+							</div>
+
+
+
+
+
+
+
+
+
+							<!--PAGE CONTENT ENDS-->
+						</div><!--/.span-->
+					</div><!--/.row-fluid-->
+				</div><!--/.page-content-->
+
+
+			</div><!--/.main-content-->
+		</div>
+
+		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-small btn-inverse">
+			<i class="icon-double-angle-up icon-only bigger-110"></i>
+		</a>
+
+
+{% endblock %}
+{% block footer %}{% include "user/footer.html" %}{% endblock %}
