@@ -102,7 +102,7 @@ MIDDLEWARE_CLASSES = (
         # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'compresshtml.middleware.CompressHtmlMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 DATABASES = {
@@ -144,7 +144,7 @@ INSTALLED_APPS = (
     'apps.vipuser',
     'apps.publish',
     'apps.alipay',
-    'debug_toolbar',
+    #'debug_toolbar',
     'apps.spool',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
