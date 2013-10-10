@@ -105,6 +105,7 @@ def fzu(request):
 @login_required
 def operator_add(request):
     if request.method == 'GET':
+         #operator = operator.objects.get(user_id=request.user.pk)
         return render(request,"ad/operator_add_form.html",{})
     elif request.method == 'POST':
         form = OperatorForm(request.POST)
@@ -112,4 +113,11 @@ def operator_add(request):
             f = form.save(commit=False)
             f.user_id = request.user.pk
             f.save()
+            try:
+                data={"title":u"创业加盟"}
+                ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_V').order_by('-id')[0:1].get()
+                data.update(ins_file=ins_file.install_file)
+            except Exception as e:
+                logger.debug("ins_file:%s",e)
+            return render(request,"ad/print_result.html",data)
         return render(request,"ad/operator_add_form.html",{})
