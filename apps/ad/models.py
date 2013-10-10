@@ -53,7 +53,7 @@ class OperatorCategory(models.Model):
 
 class Operator(models.Model):
     id = models.AutoField(primary_key = True)
-    category = models.ForeignKey(OperatorCategory, verbose_name=_(u'分类'))
+    category = models.ForeignKey(OperatorCategory,default=1, verbose_name=_(u'分类'))
     user = models.OneToOneField(KxUser,verbose_name = _(u'邮箱'))
     name = models.CharField(max_length=255, verbose_name=_(u'运营商名称'))
     printer_num = models.IntegerField(default=0,verbose_name=_(u'运营商可以使用的打印机数'))
