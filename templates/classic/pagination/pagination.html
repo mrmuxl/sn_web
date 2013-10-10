@@ -18,11 +18,11 @@
                 <a href="?page={{ page }}{{ getvars }}{{ hashtag }}" class="page" style="margin-top:0px">{{ page }}</a>
             {% endifequal %}
         {% else %}
-            ...
+            <span>...</span>
         {% endif %}
     {% endfor %}
         </li>
-        <li style="padding">
+        <li>
     {% if page_obj.has_next %}
         <a href="?page={{ page_obj.next_page_number }}{{ getvars }}{{ hashtag }}" class="next">{% trans "后一页" %} &rsaquo;&rsaquo;</a>
     {% else %}
