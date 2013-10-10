@@ -16,7 +16,6 @@ urlpatterns = patterns('',
     url(r'^buy/?$','apps.kx.views.buy',name='buy'),
     url(r'^printer/?$','apps.ad.views.printer',name='printer'),
     url(r'^fzu/?$','apps.ad.views.fzu',name='fzu'),
-    #url(r'^pop/?$','apps.kx.views.buy',name='pop'),
     url(r'^admin/', include(admin.site.urls)),
 )
 urlpatterns += patterns('',

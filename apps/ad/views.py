@@ -7,6 +7,9 @@ from apps.publish.models import KxPub
 from django.views.decorators.http import (require_POST,require_GET)
 from django.http import HttpResponseRedirect,HttpResponse
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from forms import OperatorForm
+
 
 logger = logging.getLogger(__name__)
 
@@ -99,3 +102,22 @@ def fzu(request):
             logger.debug("ins_file:%s",e)
         return render(request,"ad/print_result.html",data)
 
+@login_required
+def operator_add(request):
+    if request.method == 'GET':
+         #operator = operator.objects.get(user_id=request.user.pk)
+        return render(request,"ad/operator_add_form.html",{})
+    elif request.method == 'POST':
+        form = OperatorForm(request.POST)
+        if form.is_valid():
+            f = form.save(commit=False)
+            f.user_id = request.user.pk
+            f.save()
+            try:
+                data={"title":u"创业加盟"}
+                ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_V').order_by('-id')[0:1].get()
+                data.update(ins_file=ins_file.install_file)
+            except Exception as e:
+                logger.debug("ins_file:%s",e)
+            return render(request,"ad/print_result.html",data)
+        return render(request,"ad/operator_add_form.html",{})
