@@ -6,9 +6,6 @@
 {% autopaginate posts 10 %}
 <style type="text/css">
 .post-list {
-margin: 0;
-padding: 0;
-border: 0;
 font-size: 100%;
 font: inherit;
 vertical-align: baseline;
@@ -41,12 +38,12 @@ margin-bottom: 10px;
 .post-item {
 font-weight: normal;
 clear: both;
-margin: 0 0 60px 0!important;
+/*margin: 0 0 60px 0!important;*/
 min-height: 83px;
 padding-left: 100px;
 position: relative;
 line-height: 14px;
-margin-bottom: 8px;
+margin-bottom: 30px;
 word-wrap: break-word;
 /*margin-bottom: 23px !important;*/
 }
@@ -59,9 +56,9 @@ word-wrap: break-word;
 }
 .post-badge {
 	position: absolute;
-	top: 20px;
+	top: 10px;
 	left: 0;
-	width: 70px;
+	width: 65px;
 	vertical-align: baseline;
 	display: block;
 }
@@ -77,13 +74,13 @@ word-wrap: break-word;
 	color: #8f9bb3;
 	font-size: 12px;
 	line-height: 14px;
-	margin-bottom: 3px;
-	padding: 12px 0 9px 0;
+	/*margin-bottom: 3px;*/
+	padding: 4px 0 1px 0;
 	text-align: center;
 	vertical-align: baseline;
 }
 .post-header {
-padding-top: 11px;
+padding-top: 10px;
 word-wrap: break-word;
 }
 
@@ -144,7 +141,7 @@ overflow: hidden;
 						<!-- <h2 class="post-title"><a href="{% url 'forum_post' post.id %}">{{post.title}}</a></h2> -->
 						<div class="post-content">
 							<p>{{post.content}}</p>
-							<p>{{post.user.nick}}&nbsp  <a href="{% url 'forum_post' post.id %}"> {{num}}条评论</a>&nbsp{{ post.created }}</p>
+							<p style="padding-top:10px;">{{post.user.nick}}&nbsp  <a href="{% url 'forum_post' post.id %}"> {{num}}条评论</a>&nbsp<span style="color:#717379">{{ post.created }}</span></p>
 						</div>
 						<div class="post-badge">
 							<div class="post-count">
