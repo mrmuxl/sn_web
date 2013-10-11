@@ -12,7 +12,7 @@ class KxSoftAd(models.Model):
     title       = models.CharField(max_length = 50L,verbose_name=u'标题')
     ad_url      = models.URLField(max_length = 200L,verbose_name=u'推广链接')
     exp_day     = models.DateField(verbose_name=u'过期时间')
-    creater_id  = models.CharField(max_length=32L)
+    creater_id  = models.CharField(default=datetime.now,max_length=32L)
     create_time = models.DateTimeField(verbose_name =u'创建时间')
     class Meta:
         db_table = 'kx_soft_ad'
@@ -62,8 +62,8 @@ class Operator(models.Model):
     tel = models.CharField(default='0',max_length=14,verbose_name=_(u'电话号码'))
     school  = models.CharField(max_length=255,blank=True,null=True,verbose_name=_(u'学校名称'))
     resource =  models.TextField(verbose_name=_(u'资源和优势'))
-    created = models.DateTimeField(default=datetime.now(), verbose_name=_('创建时间'))
-    modified = models.DateTimeField(default=datetime.now(), verbose_name=_('修改时间'))
+    created = models.DateTimeField(default=datetime.now, verbose_name=_('创建时间'))
+    modified = models.DateTimeField(default=datetime.now, verbose_name=_('修改时间'))
     expire = models.DateTimeField(default=datetime(1970,1,1), verbose_name=_(u'过期时间'))
     status = models.IntegerField(verbose_name=_(u'运营商状态'),default=0)
     class Meta:
@@ -77,7 +77,7 @@ class OperatorAssistant(models.Model):
     operator = models.ForeignKey(Operator,verbose_name = _(u'运营商'))
     user = models.OneToOneField(KxUser,verbose_name = _(u'运营专员邮箱'))
     name = models.CharField(max_length=255, unique=True, verbose_name=_(u'运营专员名称'))
-    created = models.DateTimeField(default=datetime.now(), verbose_name=_('创建时间'))
+    created = models.DateTimeField(default=datetime.now, verbose_name=_('创建时间'))
     status = models.IntegerField(verbose_name=_(u'运营专员状态'),default=False)
     class Meta:
         db_table = 'operator_assistant'

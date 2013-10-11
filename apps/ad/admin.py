@@ -22,7 +22,7 @@ class AdAdmin(admin.ModelAdmin):
         return super(AdAdmin, self).save_model(request, obj,ad, change)
 
 class OperatorAdmin(admin.ModelAdmin):
-    pass
+    list_display =('category','user','name','printer_num','used_num','qq','tel','school','created','expire','status')
 
 class OperatorCategoryAdmin(admin.ModelAdmin):
     pass
