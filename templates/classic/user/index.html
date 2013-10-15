@@ -1,10 +1,9 @@
 {% extends "user/base.html" %}
-
 {% block header %}{% include "user/header.html" %}{% endblock %}
 {% block content %}
 
 <div class="main-container container-fluid">
-			<a class="menu-toggler" id="menu-toggler" href="#">
+			<a class="menu-toggler" id="menu-toggler" href="{% url "index" %}">
 				<span class="menu-text"></span>
 			</a>
 
@@ -18,28 +17,29 @@
 			</div>
 
 			<div class="main-content">
-				<div class="breadcrumbs" id="breadcrumbs">
+			<!-- 	<div class="breadcrumbs" id="breadcrumbs">
 					<ul class="breadcrumb ">
 						<li  class="text-center">
 							复制链接给其他团队成员，邀请他们成为您的SimleNect好友：http://simplenect.cn/xxxxx
 							
 						</li>
-					</ul><!--.breadcrumb-->
-				</div>
+					</ul>.breadcrumb-->
+				<!-- </div> --> 
 
 				<div class="page-content">
-					<div class="page-header position-relative text-center">
-
+					<!-- <div class="page-header position-relative text-center"> -->
+<!-- 
 						<a href="" class="btn btn-warning">
 							<i class="icon-download"></i>
 							下载Windows客户端
-						</a>
-					</div><!--/.page-header-->
+						</a> -->
+					<!-- </div> -->
+					<!--/.page-header-->
 
 					<div class="row-fluid">
 						<div class="span12">
 							<!--PAGE CONTENT BEGINS-->
-
+<!-- 
 							<div class="alert alert-block alert-warn">
 								<button type="button" class="close" data-dismiss="alert">
 									<i class="icon-remove"></i>
@@ -49,9 +49,9 @@
 
 								您的注册邮箱yang0@126.com尚未认证，请在收件箱或垃圾箱查收邮件，或者
 								<a href="">点击重发认证邮件</a>
-							</div>
+							</div> -->
 
-							<div class="widget-box transparent">
+			 			<!-- 	<div class="widget-box transparent">
 								<div class="widget-header widget-header-flat">
 									<h4 class="lighter">
 										<i class="icon-group"></i>
@@ -102,12 +102,12 @@
 								                  <td>张三</td>
 								                </tr>
 											</tbody>
-										</table>
-									</div><!--/widget-main-->
-								</div><!--/widget-body-->
-							</div>
+										</table> -->
+									<!-- </div>/widget-main -->
+								<!-- </div>/widget-body -->
+							<!-- </div>  -->
 
-<div class="hr hr32 hr-dotted"></div>
+<!-- <div class="hr hr32 hr-dotted"></div> -->
 
 							<div class="row-fluid">
 
@@ -118,7 +118,7 @@
 											<h4 class="lighter">
 												<i class="icon-credit-card orange"></i>
 												购买的产品
-												<a href="" class="btn btn-small  btn-info"><i class="icon-eye-open"></i>查看产品价格</a>
+												<a href="{% url 'buy' %}" class="btn btn-small  btn-info"><i class="icon-eye-open"></i>查看产品价格</a>
 											</h4>
 
 											<div class="widget-toolbar">
@@ -160,8 +160,8 @@
 										                <tr>
 										                  <td>打印共享方案</td>
 										                  <td>5人</td>
-										                  <td>5人 [ <a href="/user/printer/auth">修改</a> ]</td>
-										                  <td>55天 	[ <a href="">续费</a> ]</td>
+										                  <td>5人 [ <a href="/User/printer/auth">修改</a> ]</td>
+										                  <td>55天 	[ <a href="{% url 'buy' %}">续费</a> ]</td>
 										                </tr>
 													</tbody>
 												</table>
@@ -178,7 +178,7 @@
 										</div>
 
 										<div class="infobox-data">
-											<span class="infobox-data-number">5人</span>
+											<span class="infobox-data-number">{{my_friends}}人</span>
 											<div class="infobox-content">我的好友</div>
 										</div>
 									</div>
@@ -190,7 +190,7 @@
 										</div>
 
 										<div class="infobox-data">
-											<span class="infobox-data-number">7个</span>
+											<span class="infobox-data-number">0个</span>
 											<div class="infobox-content">我的共享文件夹</div>
 										</div>
 									</div>
@@ -203,7 +203,7 @@
 										</div>
 
 										<div class="infobox-data">
-											<span class="infobox-data-number">3台</span>
+											<span class="infobox-data-number">0台</span>
 											<div class="infobox-content">好友的共享打印机</div>
 										</div>
 									</div>
@@ -214,7 +214,7 @@
 										</div>
 
 										<div class="infobox-data">
-											<span class="infobox-data-number">100条</span>
+											<span class="infobox-data-number">0条</span>
 											<div class="infobox-content">30天内聊天记录</div>
 										</div>
 									</div>
@@ -225,10 +225,9 @@
 										</div>
 
 										<div class="infobox-data">
-											<span class="infobox-data-number">11次</span>
+											<span class="infobox-data-number">0次</span>
 											<div class="infobox-content">30天内文件传输</div>
 										</div>
-
 									</div>
 
 									<div class="infobox infobox-pink  ">
@@ -237,17 +236,17 @@
 										</div>
 
 										<div class="infobox-data">
-											<span class="infobox-data-number">8次</span>
+											<span class="infobox-data-number">{{ print_count }}次</span>
 											<div class="infobox-content">30天内打印次数</div>
 										</div>
 									</div>
 								</div>
 							</div>
 
-<div class="hr hr32 hr-dotted"></div>
+<!-- <div class="hr hr32 hr-dotted"></div> -->
 
 
-							<div class="widget-box transparent">
+<!-- 							<div class="widget-box transparent">
 								<div class="widget-header widget-header-flat">
 									<h4 class="lighter">
 										<i class="icon-exchange"></i>
@@ -322,9 +321,9 @@
 								                </tr>
 											</tbody>
 										</table>
-									</div><!--/widget-main-->
-								</div><!--/widget-body-->
-							</div>
+									</div>/widget-main
+								</div>/widget-body
+							</div> -->
 
 
 
@@ -371,16 +370,13 @@
 											</thead>
 
 											<tbody>
+												{% for i in print_record %}
 												<tr>
-								                  <td><i class="icon-file-alt"></i>  这是一个测试资料</td>
-								                  <td>50张</td>
-								                  <td>13-09-09 12:12</td>
-								                </tr>
-								                <tr>
-								                  <td><i class="icon-file-alt"></i>  这是一个测试资料</td>
-								                  <td>50张</td>
-								                  <td>13-09-09 12:12</td>
-								                </tr>
+								                  		<td><i class="icon-file-alt"></i>{{ i.file_name }}</td>
+								                  		<td>{{ i.page_num }}</td>
+								                  		<td>{{ i.print_time }}</td>
+								                	</tr>
+								                	{% endfor %}
 								                <tr>
 								                	<td colspan="4" style="text-align:center"><a href="">查看更多记录</a></td>
 								                </tr>
@@ -393,8 +389,8 @@
 
 
 
-<div class="hr hr32 hr-dotted"></div>
-
+<!-- <div class="hr hr32 hr-dotted"></div> -->
+<!-- 
 							<div class="widget-box transparent">
 								<div class="widget-header widget-header-flat">
 									<h4 class="lighter">
@@ -477,9 +473,9 @@
 								                </tr>
 											</tbody>
 										</table>
-									</div><!--/widget-main-->
-								</div><!--/widget-body-->
-							</div>
+									</div>/widget-main
+								</div>/widget-body
+							</div> -->
 
 
 

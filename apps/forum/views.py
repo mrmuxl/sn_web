@@ -29,6 +29,7 @@ def index(request):
 @require_POST
 @login_required(redirect_field_name='forum_index')
 def add(request):
+    print request.path
     form = ForumPostForm(request.POST)
     if form.is_valid():
         f = form.save(commit=False)
@@ -38,8 +39,8 @@ def add(request):
     return HttpResponseRedirect(reverse('forum_index'))  
 
 @require_POST
-#@login_required(redirect_field_name="forum_add")
-@login_required()
+@login_required(redirect_field_name="forum_add")
+#@login_required()
 def reply(request):
     form = ForumCommentForm(request.POST)
     if form.is_valid():
