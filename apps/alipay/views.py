@@ -13,6 +13,8 @@ from models import OrderInfo,ProductInfo
 from django.http import Http404
 from apps.vipuser.models import VIPUser
 from decimal import Decimal
+from apps.alipay.models import OrderInfo
+from apps.ad.models import Operator
 
 logger = logging.getLogger(__name__)
 
@@ -122,61 +124,40 @@ def create_order(request):
     product_info = ProductInfo.objects.all()
     t = request.POST.get('type',None)
     num = request.POST.get('auth',None)
-    print_num = request.POST.get('print',None)
-    file_num = request.POST.get('file',None)
-    if print_num or file_num:
+    #查询订单表获得付款时间,如果订单的创建时间大于购买产品过期，直接创建
+    #查询operator表获得过期时间#  
+    #如果无订单，直接创建,不需要查运营商表，
+    if t and  t is not None and t.isdigit():
+        for i in product_info:
+            if int(t)== int(i.id):
+                pid = i.id
+                name = i.name
+                desc = i.desc
+                price = i.price
+            else:
+                continue
+    else:
+        return HttpResponse(u'创建失败，参数错误!')
+    if num and num is not None and num.isdigit():
+        money = Decimal(str(int(num)*15.00))
+    else:
+        money = Decimal("0.00")
+        num = 0
+    try:
         order_id = get_order_id()
         email = request.user.email
         logger.info("email:%s",email)
-        if print_num:
-            number = print_num
-            pid = 13
-            name =u'打印共享用户授权' 
-            desc =u'打印共享用户授权' 
-        else:
-            number = 0
-        if file_num:
-            num = file_num
-            pid = 13
-            name = u'文件共享用户授权' 
-            desc = u'文件共享用户授权' 
-        else:
-            num =0
-        total_fee = Decimal(str(int(number)*5.00))+Decimal(str(int(num)*5.00))
+        number =1
+        total_fee = number * price + money
         logger.info("buy_user:%s,order_id:%s,number:%s,total_fee:%s,num:%s",email,order_id,number,total_fee,num)
         OrderInfo.objects.create(order_id=order_id,create_at=now,buy_user=email,buy_product_id=pid,number=number,total_fee=total_fee,pay_status=0,trade_no='0000',auth_user_num=num)
-    else:
-        if t and  t is not None and t.isdigit():
-            for i in product_info:
-                if int(t)== int(i.id):
-                    pid = i.id
-                    name = i.name
-                    desc = i.desc
-                    price = i.price
-                else:
-                    continue
-        else:
-            return HttpResponse(u'创建失败，参数错误!')
-        if num and num is not None and num.isdigit():
-            money = Decimal(str(int(num)*5.00))
-        else:
-            money = Decimal("0.00")
-            num = 0
-        try:
-            order_id = get_order_id()
-            email = request.user.email
-            logger.info("email:%s",email)
-            number =1
-            total_fee = number * price + money
-            logger.info("buy_user:%s,order_id:%s,number:%s,total_fee:%s,num:%s",email,order_id,number,total_fee,num)
-            OrderInfo.objects.create(order_id=order_id,create_at=now,buy_user=email,buy_product_id=pid,number=number,total_fee=total_fee,pay_status=0,trade_no='0000',auth_user_num=num)
-        except Exception as e:
-            logger.debug("order_result:%s",e)
+    except Exception as e:
+        logger.debug("order_result:%s",e)
     try:
         pay_url = create_direct_pay_by_user(order_id,name,desc,total_fee)
         logger.info("pay_url:%s",pay_url)
-        #return HttpResponse('ok')
-        return HttpResponseRedirect(pay_url)
+        return HttpResponse('ok')
+        #return HttpResponseRedirect(pay_url)
     except Exception as e:
         logger.debug("pay_url_debug:%s",e)
         #raise Http404
@@ -185,25 +166,34 @@ def create_order(request):
 @login_required
 @require_GET
 def order_info(request):
+    '''#查询订单表，显示给客户曾经购买过的服务，第一点
+    #如果购买过的服务的过期时间早于现在时间，那么就不显示客户曾经购买过
+    #如果购买的服务没有过期，查询还剩余天数，计算还剩多少钱,用户应付款额度减去剩下的钱数就是实际付款额度
+    '''
+    now = datetime.datetime.now()
     c = request.GET.get('c',u'1')
     t = request.GET.get('type','')
+    order_info = OrderInfo.objects.filter(buy_user=request.user.email).filter(pay_status__exact=1).values('pay_at','buy_product_id__name','buy_product_id__price')[0:1]
+    operator = Operator.objects.filter(user__email = request.user.email).values('expire')
+    if order_info and operator:
+        expire_time = operator[0]['expire']
+        pay_time = order_info[0]['pay_at']
+        if expire_time > now:
+            remain_days = (expire_time - now).days
+        else:
+            remain_days = 0
+        remain_money = remain_days*0.50
     if t and t.isdigit() and t == u'12': #buy
         return render(request,"buy.html",{})
     if c and  c.isdigit():
         if c == u'1':#VIP
             pdt_list = ProductInfo.objects.filter(category=c).filter(slug__isnull=False).order_by('order_num').values()
-            return render(request,"alipay/order_info.html",{"pdt_list":pdt_list})
-        elif c == u'2': #打印机共享
-            pdt_list = ProductInfo.objects.filter(category=c).filter(slug__isnull=False).order_by('order_num').values()
-            return render(request,"alipay/print_share.html",{"pdt_list":pdt_list})
-        elif c == u'4': #文件共享
-            pdt_list = ProductInfo.objects.filter(category=c).filter(slug__isnull=False).order_by('order_num').values()
-            return render(request,"alipay/file_share.html",{"pdt_list":pdt_list})
+            return render(request,"alipay/printer.html",{"pdt_list":pdt_list,"remain_money":remain_money,"order_info":order_info})
         else:
             return HttpResponse(u'没有此类产品')
     else:
         return HttpResponse(u'参数错误')
 
 def access_user_buy(request):
-    return render(request,"alipay/access_user_buy.html",{})
+    return HttpResponseRedirect(reverse('buy'))
 

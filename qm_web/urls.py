@@ -14,7 +14,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^$','apps.kx.views.index',name='index'),
     #url(r'^buy/?$','apps.kx.views.buy',name='buy'),
-    url(r'^buy/?$',RedirectView.as_view(url='alipay/order_info?c=4'),name ='buy'),
+    url(r'^buy/?$',RedirectView.as_view(url='alipay/order_info?c=1'),name ='buy'),
     url(r'^printer/?$','apps.ad.views.printer',name='printer'),
     url(r'^fzu/?$','apps.ad.views.fzu',name='fzu'),
     url(r'^admin/', include(admin.site.urls)),

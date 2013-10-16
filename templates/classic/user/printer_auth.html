@@ -33,10 +33,18 @@
 				</div>
 
 				<div class="page-content">
+					{% if warning %}
+					<h4 class="lighter" style="color:red">
+						<i class="icon-print"></i>
+						{{ warning }}
+					</h4>
+
+					{% else %}
 					<h4 class="lighter">
 						<i class="icon-print"></i>
 						授权哪些好友可以共享打印机，可用授权：{{num.printer_num}}，已用：{{num.used_num}}
 					</h4>
+					{% endif %}
 
 
 	<div class="row-fluid">
@@ -104,14 +112,10 @@
 	</li>
 	{% endif %}
 {% endfor %}
-
-
 							<!--PAGE CONTENT ENDS-->
 						</div><!--/.span-->
 					</div><!--/.row-fluid-->
 				</div><!--/.page-content-->
-
-
 			</div><!--/.main-content-->
 		</div>
 

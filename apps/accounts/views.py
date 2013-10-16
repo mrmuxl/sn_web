@@ -134,7 +134,7 @@ def login(request,next_page="/",redirect_field_name=REDIRECT_FIELD_NAME):
         user = authenticate(username=email,password=password)
         if user and user.is_active:
             auth.login(request,user)
-            return HttpResponseRedirect(request.session.get('next_page','/'))    
+            return HttpResponseRedirect('/User/index')    
         else:
             data={"email":email}
             messages.add_message(request,messages.INFO,_(u'用户名或密码错误'))
@@ -620,12 +620,13 @@ def printer_auth(request):
         return render(request,"user/printer_auth.html",t)
     else:
         t = {
+                "warning":u'没有浏览权限',
                 }
         return render(request,"user/printer_auth.html",t)
 
 
 @login_required()
-@csrf_exempt
+#@csrf_exempt
 @require_POST
 def do_auth(request):
     message = {}
@@ -637,7 +638,7 @@ def do_auth(request):
         op_obj = Operator.objects.filter(user_id =uid)
         if op_obj:
             op_id = op_obj.values('id')[0]['id']
-            name = op_obj.values('user__nick')[0]['user__nick']
+            #name = op_obj.values('user__nick')[0]['user__nick']
             user_email = op_obj.values('user__email')[0]['user__email']
             used_num = op_obj.values()[0]['used_num']
             printer_num = op_obj.values()[0]['printer_num']
@@ -648,7 +649,7 @@ def do_auth(request):
                 for i in users:
                     if i in my_friends:
                         if not op:
-                            oa = OperatorAssistant.objects.create(operator_id=op_id,user_id=pid,name=name,created=now,status=1)
+                            oa = OperatorAssistant.objects.create(operator_id=op_id,user_id=pid,created=now,status=1)
                             oa.save()
                             if printer_num >= used_num and used_num >=0:
                                 new = used_num+1

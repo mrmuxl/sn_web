@@ -8,11 +8,11 @@ from apps.kx.models import KxUser
 from datetime import datetime
 
 PRODUCT_CHOICES = (
-    (1,u'VIP'),
-    (2,u'打印共享'),
-    (3,u'打印共享用户授权'),
-    (4,u'文件共享'),
-    (5,u'文件共享用户授权'),
+    (1,u'打印共享'),
+    #(2,u'打印共享'),
+    #(3,u'打印共享用户授权'),
+    #(4,u'文件共享'),
+    #(5,u'文件共享用户授权'),
 )
 
 class ProductInfo(models.Model):
