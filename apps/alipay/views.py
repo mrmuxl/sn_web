@@ -186,11 +186,15 @@ def order_info(request):
         else:
             remain_days = 0
         remain_money = remain_days*0.50
+    else:
+        order_info=[]
+        remain_money = 0
     if t and t.isdigit() and t == u'12': #buy
         return render(request,"buy.html",{})
     if c and  c.isdigit():
         if c == u'1':#VIP
             pdt_list = ProductInfo.objects.filter(category=c).filter(slug__isnull=False).order_by('order_num').values()
+            #return render(request,"alipay/printer.html",{"pdt_list":pdt_list,"remain_money":remain_money,"order_info":order_info})
             return render(request,"alipay/printer.html",{"pdt_list":pdt_list,"remain_money":remain_money,"order_info":order_info})
         else:
             return HttpResponse(u'没有此类产品')
