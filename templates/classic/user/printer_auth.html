@@ -124,8 +124,10 @@
             		$.post("/User/printer/do_auth",{"id":pid,"uid":uid},function(data){
                 		if(data.status==1){
                         		alert("授权成功！");
+                        		window.location.reload();
                 		}else{
                        		 alert("授权失败！");
+                       		 window.location.reload();
                 		}
             		},"json");
         		}

@@ -136,32 +136,51 @@ def operator_select(request):
     logger.info("email:%s",email)
     remainder_days = get_remainder_days(email)
     if email:
-        opt = Operator.objects.filter(status__exact=1).filter(expire__gt=now).filter(operatorassistant__user__email=email,operatorassistant__status__exact=1)
+        owner = Operator.objects.filter(status__exact=1).filter(expire__gt=now)
+        opt = owner.filter(operatorassistant__user__email=email,operatorassistant__status__exact=1)
+        if owner:
+            message['status']=0
+            message['is_owner']=True
+            message['is_assistant']=False
+            message['is_print']=True
+            message['dislplay']=u'你可以共享一台打印机'
+            message['printer_access']=u'http://www.simplenect.cn/User/printer/auth' #授权页面
+            message['show_printer_access']=True
+            message['buy_link']=u'http://www.simplenect.cn/buy'
+            message['show_buy_link']=False
         if opt:
             message['status']=0
+            message['is_owner']=False
             message['is_assistant']=True
             message['is_print']=True
             message['dislplay']=u'你可以共享一台打印机'
-            message['link']=u'http://www.simplenect.cn/buy'
-            message['show']=False
+            message['buy_link']=u'http://www.simplenect.cn/buy'
+            message['printer_access']=u'http://www.simplenect.cn/User/printer/auth' #授权页面
+            message['show_printer_access']=False
+            message['buy_link']=u'http://www.simplenect.cn/buy'
+            message['show_buy_link']=False
             return HttpResponse(json.dumps(message,ensure_ascii=False),content_type="application/json")
         elif remainder_days <= 15:
             message['status']=0
-            message['is_assistant']=True
+            message['is_owner']=False
             message['is_assistant']=False
             message['is_print']=True
             message['dislplay']=u'你可以共享一台打印机,试用期还有'+ (15-remainder_days) + u'天'
-            message['link']=u'http://www.simplenect.cn/buy'
-            message['show']=True
+            message['access']=u'http://www.simplenect.cn/User/printer/auth' #授权页面
+            message['show_access']=False
+            message['buy_link']=u'http://www.simplenect.cn/buy'
+            message['show_buy_link']=True
             return HttpResponse(json.dumps(message,ensure_ascii=False),content_type="application/json")
         else:
             message['status']=0
-            message['is_assistant']=True
+            message['is_owner']=False
             message['is_assistant']=False
             message['is_print']=False
             message['dislplay']=u'您目前没有权限共享打印机'
-            message['link']=u'http://www.simplenect.cn/buy'
-            message['show']=True #控制 "购买" 按钮是否显示
+            message['buy_link']=u'http://www.simplenect.cn/buy'#购买的链接这个用 buy_link比较合适
+            message['printer_access']=u'http://www.simplenect.cn/User/printer/auth' #授权页面
+            message['show_printer_access']=False#控制授权按钮显示
+            message['show_buy_link']=True #控制 "购买" 按钮是否显示或许应该用 show_link
             return HttpResponse(json.dumps(message,ensure_ascii=False),content_type="application/json")
     else:
         message['status']=1
