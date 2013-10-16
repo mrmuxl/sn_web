@@ -160,7 +160,7 @@ def create_order(request):
         pay_url = create_direct_pay_by_user(order_id,name,desc,total_fee)
         logger.info("pay_url:%s",pay_url)
         return HttpResponse('ok')
-        #return HttpResponseRedirect(pay_url)
+        return HttpResponseRedirect(pay_url)
     except Exception as e:
         logger.debug("pay_url_debug:%s",e)
         #raise Http404
