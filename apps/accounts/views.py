@@ -18,7 +18,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST,require_GET
 from django.conf import settings
 from apps.kx.models import KxUser,KxEmailInvate,KxMailingAddfriend
-from apps.kx.models import KxUserFriend
+from apps.kx.models import KxUserFriend,KxPub
 from django.http import Http404
 #from django.core.mail import send_mail,EmailMultiAlternatives
 from django.db import transaction
@@ -583,6 +583,7 @@ def index(request):
     now = datetime.datetime.now()
     print_count = Spool.objects.filter(origin_email=request.user.email).count()
     print_record = Spool.objects.filter(origin_email=request.user.email).order_by("-print_time")[0:5]
+    my_printer = Spool.objects.filter(accept_email=request.user.email).order_by("-print_time")[0:5]
     #print_count = print_record.count()
     #print_record = Spool.objects.filter(origin_email='falqs@foxmail.com')
     #buy_user = OrderInfo.objects.filter(buy_user=request.user.email)
@@ -597,15 +598,29 @@ def index(request):
         p_num =0
         used_num =0
         remain_days =0
+    try:
+        ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_V').order_by('-id')[0:1].get()
+        ins_file=ins_file.install_file
+    except Exception as e:
+        ins_file = ""
+        logger.debug("ins_file:%s",e)
         
-    q = """ select count(*) from kx_share where owner_email='mrmuxl@sina.com' and is_del=0"""
+    try:
+        q = """ select count(*) from kx_share where owner_email=%s and is_del=0"""
+        a_tuple = CustomSQL(q=q,p=[request.user.email,]).fetchone()
+        share_folder = a_tuple[0]
+    except Exception as e:
+        share_folder= 0
     t = {
             "print_record":print_record,
+            "my_printer":my_printer,
             "my_friends":my_friends,
             "print_count":print_count,
             "printer_num":p_num,
             "used_num":used_num,
             "remain_days":remain_days,
+            "ins_file":ins_file,
+            "share_filder":share_folder,
             }
     return render(request,"user/index.html",t)
 
@@ -720,3 +735,9 @@ def do_auth(request):
 def print_record(request):
     print_record = Spool.objects.filter(origin_email=request.user.email).order_by("-print_time")
     return render(request,"user/print_record.html",{"print_record":print_record})
+
+@login_required()
+@require_GET
+def my_printer(request):
+    print_record = Spool.objects.filter(accept_email=request.user.email).order_by("-print_time")
+    return render(request,"user/my_printer.html",{"print_record":print_record})
