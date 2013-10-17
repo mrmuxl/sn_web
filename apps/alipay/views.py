@@ -127,10 +127,11 @@ def create_order(request):
     '''
     now = datetime.datetime.now()
     product_info = ProductInfo.objects.all()
-    t = request.POST.get('type',None)
-    num = request.POST.get('auth',None)
-    remain_money = request.POST.get('remain_money',None)
-    if t and  t is not None and t.isdigit():
+    t = request.POST.get('type','')
+    num = request.POST.get('auth','')
+    remain_money = request.POST.get('remain_money','0')
+    print t,num,remain_money
+    if t and t.isdigit() and num and num.isdigit():
         for i in product_info:
             if int(t)== int(i.id):
                 pid = i.id
@@ -139,32 +140,25 @@ def create_order(request):
                 price = i.price
             else:
                 continue
+        try:
+            order_id = get_order_id()
+            email = request.user.email
+            logger.info("email:%s",email)
+            number =1
+            total_fee = number * price* Decimal(num) - Decimal(remain_money)
+            logger.info("buy_user:%s,order_id:%s,number:%s,total_fee:%s,num:%s",email,order_id,number,total_fee,num)
+            OrderInfo.objects.create(order_id=order_id,create_at=now,buy_user=email,buy_product_id=pid,number=number,total_fee=total_fee,pay_status=0,trade_no='0000',auth_user_num=num)
+        except Exception as e:
+            logger.debug("order_result:%s",e)
+        try:
+            pay_url = create_direct_pay_by_user(order_id,name,desc,total_fee)
+            logger.info("pay_url:%s",pay_url)
+            return HttpResponseRedirect(pay_url)
+            #return HttpResponse('ok')
+        except Exception as e:
+            logger.debug("pay_url_debug:%s",e)
     else:
-        return HttpResponse(u'创建失败，参数错误!')
-    if num and num is not None and num.isdigit():
-        money = Decimal(str(int(num)*15.00))
-    else:
-        money = Decimal("0.00")
-        num = 0
-    try:
-        order_id = get_order_id()
-        email = request.user.email
-        logger.info("email:%s",email)
-        number =1
-        total_fee = number * price + money -Decimal(remain_money)
-        logger.info("buy_user:%s,order_id:%s,number:%s,total_fee:%s,num:%s",email,order_id,number,total_fee,num)
-        OrderInfo.objects.create(order_id=order_id,create_at=now,buy_user=email,buy_product_id=pid,number=number,total_fee=total_fee,pay_status=0,trade_no='0000',auth_user_num=num)
-    except Exception as e:
-        logger.debug("order_result:%s",e)
-    try:
-        pay_url = create_direct_pay_by_user(order_id,name,desc,total_fee)
-        logger.info("pay_url:%s",pay_url)
-        #return HttpResponse('ok')
-        return HttpResponseRedirect(pay_url)
-    except Exception as e:
-        logger.debug("pay_url_debug:%s",e)
-        #raise Http404
-     
+        return HttpResponse(u'创建订单失败，请重试!')
 
 @login_required
 @require_GET
