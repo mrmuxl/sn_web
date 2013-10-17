@@ -579,8 +579,9 @@ def invite_msg(reqeust,ckey=''):
 @login_required
 @require_GET
 def index(request):
-    print_record = Spool.objects.filter(origin_email=request.user.email)
-    print_count = print_record.count()
+    print_count = Spool.objects.filter(origin_email=request.user.email).count()
+    print_record = Spool.objects.filter(origin_email=request.user.email).order_by("-print_time")[0:5]
+    #print_count = print_record.count()
     #print_record = Spool.objects.filter(origin_email='falqs@foxmail.com')
     buy_user = OrderInfo.objects.filter(buy_user=request.user.email)
     my_friends = KxUserFriend.objects.filter(user=request.user.email).count()
@@ -695,3 +696,10 @@ def do_auth(request):
         message['info']=u"失败!"
         message['data']=0
         return HttpResponse(json.dumps(message),content_type="application/json")
+
+
+@login_required()
+@require_GET
+def print_record(request):
+    print_record = Spool.objects.filter(origin_email=request.user.email).order_by("-print_time")
+    return render(request,"user/print_record.html",{"print_record":print_record})
