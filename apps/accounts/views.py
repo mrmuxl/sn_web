@@ -589,7 +589,7 @@ def index(request):
     my_friends = KxUserFriend.objects.filter(user=request.user.email).count()
     printer_num = Operator.objects.filter(user=request.user.pk).filter(status__exact=1).filter(expire__gt=now).values('printer_num','used_num','expire')
     if printer_num:
-        qexpire_days = printer_num[0]['expire']
+        expire_days = printer_num[0]['expire']
         remain_days = (expire_days - now).days
         p_num = printer_num[0]["printer_num"]
         used_num = printer_num[0]["used_num"]
