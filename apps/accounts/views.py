@@ -579,11 +579,13 @@ def invite_msg(reqeust,ckey=''):
 @login_required
 @require_GET
 def index(request):
+    now = datetime.datetime.now()
     print_record = Spool.objects.filter(origin_email=request.user.email)
     print_count = print_record.count()
     #print_record = Spool.objects.filter(origin_email='falqs@foxmail.com')
     buy_user = OrderInfo.objects.filter(buy_user=request.user.email)
     my_friends = KxUserFriend.objects.filter(user=request.user.email).count()
+    auth_num = Operator.objects.filter(user=request.user.pk).filter(status__exact=1).filter(expire__gt=now).filter(operatorassistant__status__exact=1).count()
     t = {
             "print_record":print_record,
             "my_friends":my_friends,
