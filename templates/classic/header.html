@@ -27,7 +27,7 @@
 		<div>
 			<ul class="nav nav-pills pull-right" style="color: #000000;margin-top: 35px;margin-right: 60px;">
 			{% if user.is_authenticated %}
-				<li class="disable" ><a href="{%url 'info'%}" style="text-decoration: underline;display:list-item" title="个人中心">{{ user.nick }}</a>
+				<li class="disable" ><a href="{%url 'accounts_index'%}" style="text-decoration: underline;display:list-item" title="个人中心">{{ user.nick }}</a>
 				</li>
 			{% if user.status == 0 %}
 				<li class="disable"><a href="{% url 'to_active' %}">激活账号</a>

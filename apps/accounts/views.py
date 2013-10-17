@@ -18,8 +18,9 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST,require_GET
 from django.conf import settings
 from apps.kx.models import KxUser,KxEmailInvate,KxMailingAddfriend
-from apps.kx.models import KxUserFriend
+from apps.kx.models import KxUserFriend,KxPub
 from django.http import Http404
+from django.db.models import Sum
 #from django.core.mail import send_mail,EmailMultiAlternatives
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
@@ -28,6 +29,7 @@ from django.utils.http import is_safe_url
 from apps.spool.models import Spool
 from apps.alipay.models import OrderInfo
 from apps.ad.models import OperatorAssistant,Operator
+from apps.kx.tongji.utils import CustomSQL
 
 logger = logging.getLogger(__name__)
 
@@ -134,7 +136,7 @@ def login(request,next_page="/",redirect_field_name=REDIRECT_FIELD_NAME):
         user = authenticate(username=email,password=password)
         if user and user.is_active:
             auth.login(request,user)
-            return HttpResponseRedirect('/User/index')    
+            return HttpResponseRedirect(request.session.get('next_page','/'))    
         else:
             data={"email":email}
             messages.add_message(request,messages.INFO,_(u'用户名或密码错误'))
@@ -515,16 +517,47 @@ def invite_msg(reqeust,ckey=''):
 @login_required
 @require_GET
 def index(request):
+    now = datetime.datetime.now()
     print_count = Spool.objects.filter(origin_email=request.user.email).count()
     print_record = Spool.objects.filter(origin_email=request.user.email).order_by("-print_time")[0:5]
+    my_printer = Spool.objects.filter(accept_email=request.user.email).order_by("-print_time")[0:5]
     #print_count = print_record.count()
     #print_record = Spool.objects.filter(origin_email='falqs@foxmail.com')
-    buy_user = OrderInfo.objects.filter(buy_user=request.user.email)
+    #buy_user = OrderInfo.objects.filter(buy_user=request.user.email)
     my_friends = KxUserFriend.objects.filter(user=request.user.email).count()
+    printer_num = Operator.objects.filter(user=request.user.pk).filter(status__exact=1).filter(expire__gt=now).values('printer_num','used_num','expire')
+    if printer_num:
+        expire_days = printer_num[0]['expire']
+        remain_days = (expire_days - now).days
+        p_num = printer_num[0]["printer_num"]
+        used_num = printer_num[0]["used_num"]
+    else:
+        p_num =0
+        used_num =0
+        remain_days =0
+    try:
+        ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_V').order_by('-id')[0:1].get()
+        ins_file=ins_file.install_file
+    except Exception as e:
+        ins_file = ""
+        logger.debug("ins_file:%s",e)
+        
+    try:
+        q = """ select count(*) from kx_share where owner_email=%s and is_del=0"""
+        a_tuple = CustomSQL(q=q,p=[request.user.email,]).fetchone()
+        share_folder = a_tuple[0]
+    except Exception as e:
+        share_folder= 0
     t = {
             "print_record":print_record,
+            "my_printer":my_printer,
             "my_friends":my_friends,
             "print_count":print_count,
+            "printer_num":p_num,
+            "used_num":used_num,
+            "remain_days":remain_days,
+            "ins_file":ins_file,
+            "share_filder":share_folder,
             }
     return render(request,"user/index.html",t)
 
@@ -675,4 +708,12 @@ def do_auth(request):
 @require_GET
 def print_record(request):
     print_record = Spool.objects.filter(origin_email=request.user.email).order_by("-print_time")
-    return render(request,"user/print_record.html",{"print_record":print_record})
+    pages = print_record.aggregate(pages=Sum("page_num"))
+    return render(request,"user/print_record.html",{"print_record":print_record,"pages":pages})
+
+@login_required()
+@require_GET
+def my_printer(request):
+    print_record = Spool.objects.filter(accept_email=request.user.email).order_by("-print_time")
+    pages = print_record.aggregate(pages=Sum("page_num"))
+    return render(request,"user/my_printer.html",{"print_record":print_record,"pages":pages})
