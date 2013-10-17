@@ -1,6 +1,7 @@
 #_*_coding:utf-8_*_
 
 from django.conf.urls import patterns, include, url
+from django.views.generic import TemplateView
 
 urlpatterns = patterns('',
     url(r'^$','apps.accounts.views.login',name='login'),
@@ -37,4 +38,13 @@ urlpatterns += patterns('',
     url(r'^resetPwd/verify/(.+)$','apps.accounts.views.resetPwd',name='resetPwd'),
     url(r'^rePwd/?$','apps.accounts.views.rePwd',name='rePwd'),
     url(r'^changePWD/?$','apps.accounts.views.chpasswd',name='chpasswd'),
+)
+
+urlpatterns += patterns('',
+    url(r'^index/?$', 'apps.accounts.views.index',name='accounts_index'),
+    url(r'^info_new/?$','apps.accounts.views.new_info',name='accounts_info'),
+    url(r'^friend/?$', TemplateView.as_view(template_name="user/friend.html")),
+    url(r'^friendAdd/?$', TemplateView.as_view(template_name="user/friend_add.html")),
+    url(r'^printer/auth/?$','apps.accounts.views.printer_auth',name='printer_auth'),
+    url(r'^printer/do_auth/?$','apps.accounts.views.do_auth',name='do_auth'),
 )

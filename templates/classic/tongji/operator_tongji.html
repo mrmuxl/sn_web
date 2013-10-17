@@ -1,0 +1,74 @@
+{% extends "admin_index.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block header %}{% include "admin_header.html" %}{% endblock %}
+{% block admin_left %}{% include "admin_left.html" %}{% endblock %}
+{% block content %}
+<script type="text/javascript">document.domain = '{&DOMAIN}';</script>
+<script src="{{STATIC_URL}}js/lib/jquery-1.7.2.min.js"></script>
+<script language="javascript" type="text/javascript" defer="defer" src="{{ STATIC_URL }}js/lib/datepicker/WdatePicker.js"></script>
+<style>
+.pub_list th{
+	text-align:center;
+}
+</style>
+
+<div class="manager_right">
+	<form action="">{% csrf_token %}
+		Email:<input name="email" type="text" placeholder="输入要查询的Email...">
+		开始日期: <input type="text" name="end_day" class="Wdate search_day" title="统计日期" value="{{ day }}"     onFocus="WdatePicker({minDate:'2011-11-08',startDate:'{{ day }}',dateFmt:'yyyy-MM-dd'})" readonly style="width:90px;font-size:12px;color:#555555" />
+		结束日期: <input type="text" name="end_day" class="Wdate search_day" title="统计日期" value="{{ day }}"     onFocus="WdatePicker({minDate:'2011-11-08',startDate:'{{ day }}',dateFmt:'yyyy-MM-dd'})" readonly style="width:90px;font-size:12px;color:#555555" />
+		<button type="submit" >查询</button>
+			
+			</form>
+
+
+		<br><br>
+		<h3>{{ email }}:</h3>
+		<table class="pub_list" width="860" border="1" style="border-collapse:collapse">
+			<tr>
+				<th>好友数量</th><th>打印次数</th><th>打印张数</th><th>安装包</th><th>有否补丁包</th><th>发布时间</th><th>操作</th>
+			</tr>
+			<tr align="left">
+				<td>{{ friend_count }}</td>
+				<td>{{print_count}}</td>
+				<td>{{page_count}}</td>
+
+			</tr>
+		</table>
+	</div>
+<br>
+<script>
+function doPub(id){
+	if(id>0){
+		jQuery.post("{% url "do_pub" %}",{"id":id},function(data){
+			if(data.status){
+				$("#pub_"+id).parent("td").prev("td").html(data.data);
+				$("#pub_"+id).remove();
+				$("#dpub_"+id).remove();
+			}else{
+				alert(data.info);
+			}		
+		},"json");
+	}else{
+		alert("参数错误！");
+	}
+}
+function delPub(id){
+	if(id>0){
+		if(confirm("确定要删除ID："+id+" 的发布吗？")){
+		jQuery.post("{% url 'del_pub' %}",{"id":id},function(data){
+			if(data.status){
+				$("#pub_"+id).parent("td").parent("tr").remove();
+			}else{
+				alert(data.info);
+			}		
+		},"json");
+		}
+	}else{
+		alert("参数错误！");
+	}
+}
+
+</script>
+{% endblock %}
+{% block footer %}{% include "footer.html" %}{% endblock %}

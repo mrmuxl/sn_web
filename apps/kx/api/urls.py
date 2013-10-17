@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     url(r'^send_diskfree_email/?$','apps.kx.api.views.send_diskfree_email'),
     url(r'^login_tongji/$','apps.kx.tongji.views.login_tongji',name='login_tongji'),
     url(r'^reg_tongji/?$','apps.kx.tongji.views.reg_tongji',name='reg_tongji'),
+    url(r'^operator_tongji/$','apps.kx.tongji.views.operator_tongji',name='operator_tongji'),
 )
 
 urlpatterns += patterns('',

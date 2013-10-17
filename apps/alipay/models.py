@@ -8,11 +8,12 @@ from apps.kx.models import KxUser
 from datetime import datetime
 
 PRODUCT_CHOICES = (
-    (1,u'VIP'),
-    (2,u'打印共享'),
-    (3,u'打印共享用户授权'),
-    (4,u'文件共享'),
-    (5,u'文件共享用户授权'),
+    (0,u'未分类'),
+    (1,u'打印共享'),
+    #(2,u'打印共享'),
+    #(3,u'打印共享用户授权'),
+    #(4,u'文件共享'),
+    #(5,u'文件共享用户授权'),
 )
 
 class ProductInfo(models.Model):
@@ -27,6 +28,7 @@ class ProductInfo(models.Model):
     class Meta:
         db_table = 'product_info'
         verbose_name_plural = verbose_name = _(u'产品信息')
+        ordering = ['order_num',]
     def __unicode__(self):
         return self.name
 
