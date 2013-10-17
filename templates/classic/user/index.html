@@ -1,6 +1,7 @@
 {% extends "user/base.html" %}
 {% block header %}{% include "user/header.html" %}{% endblock %}
 {% block content %}
+{% load split %}
 
 <div class="main-container container-fluid">
 			<a class="menu-toggler" id="menu-toggler" href="{% url "index" %}">
