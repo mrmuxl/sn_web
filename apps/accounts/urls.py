@@ -47,4 +47,5 @@ urlpatterns += patterns('',
     url(r'^friendAdd/?$', TemplateView.as_view(template_name="user/friend_add.html")),
     url(r'^printer/auth/?$','apps.accounts.views.printer_auth',name='printer_auth'),
     url(r'^printer/do_auth/?$','apps.accounts.views.do_auth',name='do_auth'),
+    url(r'^print_record/?$','apps.accounts.views.print_record',name='print_record'),
 )

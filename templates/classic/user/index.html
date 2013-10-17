@@ -159,9 +159,10 @@
 													<tbody>
 										                <tr>
 										                  <td>打印共享方案</td>
-										                  <td>5人</td>
-										                  <td>5人 [ <a href="/User/printer/auth">修改</a> ]</td>
-										                  <td>55天 	[ <a href="{% url 'buy' %}">续费</a> ]</td>
+										                  <td>{{printer_num}}人</td>
+										                  <td>{{used_num}}人 [ <a href="/User/printer/auth">修改</a> ]</td>
+										                  <td>
+										                  	{% if remain_days %}{{remain_days}}{% else%}0{% endif %}天[ <a href="{% url 'buy' %}">续费</a> ]</td>
 										                </tr>
 													</tbody>
 												</table>
@@ -378,7 +379,7 @@
 								                	</tr>
 								                	{% endfor %}
 								                <tr>
-								                	<td colspan="4" style="text-align:center"><a href="">查看更多记录</a></td>
+								                	<td colspan="4" style="text-align:center"><a href="{% url 'print_record' %}" target="_blank">查看更多记录</a></td>
 								                </tr>
 											</tbody>
 										</table>

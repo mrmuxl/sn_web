@@ -28,6 +28,7 @@ from django.utils.http import is_safe_url
 from apps.spool.models import Spool
 from apps.alipay.models import OrderInfo
 from apps.ad.models import OperatorAssistant,Operator
+from apps.kx.tongji.utils import CustomSQL
 
 logger = logging.getLogger(__name__)
 
@@ -580,16 +581,23 @@ def invite_msg(reqeust,ckey=''):
 @require_GET
 def index(request):
     now = datetime.datetime.now()
-    print_record = Spool.objects.filter(origin_email=request.user.email)
-    print_count = print_record.count()
+    print_count = Spool.objects.filter(origin_email=request.user.email).count()
+    print_record = Spool.objects.filter(origin_email=request.user.email).order_by("-print_time")[0:5]
+    #print_count = print_record.count()
     #print_record = Spool.objects.filter(origin_email='falqs@foxmail.com')
-    buy_user = OrderInfo.objects.filter(buy_user=request.user.email)
+    #buy_user = OrderInfo.objects.filter(buy_user=request.user.email)
     my_friends = KxUserFriend.objects.filter(user=request.user.email).count()
-    auth_num = Operator.objects.filter(user=request.user.pk).filter(status__exact=1).filter(expire__gt=now).filter(operatorassistant__status__exact=1).count()
+    printer_num = Operator.objects.filter(user=request.user.pk).filter(status__exact=1).filter(expire__gt=now).values('printer_num','used_num','expire')
+    expire_days = printer_num[0]['expire']
+    remain_days = (expire_days - now).days
+    q = """ select count(*) from kx_share where owner_email='mrmuxl@sina.com' and is_del=0"""
     t = {
             "print_record":print_record,
             "my_friends":my_friends,
             "print_count":print_count,
+            "printer_num":printer_num[0]["printer_num"],
+            "used_num":printer_num[0]["used_num"],
+            "remain_days":remain_days,
             }
     return render(request,"user/index.html",t)
 
@@ -697,3 +705,10 @@ def do_auth(request):
         message['info']=u"失败!"
         message['data']=0
         return HttpResponse(json.dumps(message),content_type="application/json")
+
+
+@login_required()
+@require_GET
+def print_record(request):
+    print_record = Spool.objects.filter(origin_email=request.user.email).order_by("-print_time")
+    return render(request,"user/print_record.html",{"print_record":print_record})

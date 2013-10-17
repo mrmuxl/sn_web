@@ -30,7 +30,6 @@ class OperatorCategoryAdmin(admin.ModelAdmin):
 class OperatorAssistantAdmin(admin.ModelAdmin):
     pass
 
-
 admin.site.register(KxSoftAd,AdAdmin)
 admin.site.register(Operator,OperatorAdmin)
 admin.site.register(OperatorCategory,OperatorCategoryAdmin)
