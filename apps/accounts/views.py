@@ -588,15 +588,23 @@ def index(request):
     #buy_user = OrderInfo.objects.filter(buy_user=request.user.email)
     my_friends = KxUserFriend.objects.filter(user=request.user.email).count()
     printer_num = Operator.objects.filter(user=request.user.pk).filter(status__exact=1).filter(expire__gt=now).values('printer_num','used_num','expire')
-    expire_days = printer_num[0]['expire']
-    remain_days = (expire_days - now).days
+    if printer_num:
+        qexpire_days = printer_num[0]['expire']
+        remain_days = (expire_days - now).days
+        p_num = printer_num[0]["printer_num"]
+        used_num = printer_num[0]["used_num"]
+    else:
+        p_num =0
+        used_num =0
+        remain_days =0
+        
     q = """ select count(*) from kx_share where owner_email='mrmuxl@sina.com' and is_del=0"""
     t = {
             "print_record":print_record,
             "my_friends":my_friends,
             "print_count":print_count,
-            "printer_num":printer_num[0]["printer_num"],
-            "used_num":printer_num[0]["used_num"],
+            "printer_num":p_num,
+            "used_num":used_num,
             "remain_days":remain_days,
             }
     return render(request,"user/index.html",t)
