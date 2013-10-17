@@ -39,7 +39,7 @@
 					<div class="widget-header widget-header-flat">
 						<h4 class="lighter">
 							<i class="icon-reorder orange"></i>
-							我的打印记录(共{{paginator.count}}条)
+							我的打印记录(共{{paginator.count}}条,累计使用{%if pages.pages %}{{ pages.pages }}{% else %}0{%endif%}张)
 							
 						</h4>
 
