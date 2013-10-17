@@ -1,7 +1,9 @@
 #_*_coding:utf-8_*_
 
 from django.conf import settings
-
+import uuid,os,datetime,json,logging,time,shutil
+from PIL import Image
+logger = logging.getLogger(__name__)
 def invite_register(from_nick,invite_content,reg_url):
     msg = u'''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
               <html xmlns="http://www.w3.org/1999/xhtml">
@@ -34,3 +36,49 @@ def invite_tip(from_nick,invite_content,site_url):
     msg += u'''<a href="''' + site_url + u'''" style="color:#0e5bbf;text-decoration:underline;">访问SimpleNect网站</a>
                </div></div><div class="content_foot" style="height:50px;"></div></div></div></body></html>'''
     return msg
+
+def avatar_edit(image):
+    if image:
+        date =datetime.date.strftime(datetime.date.today(),"%Y/%m/%d")
+        uid = uuid.UUID.time_low.fget(uuid.uuid4())
+        folder = "User/"+str(date)
+        ext = str(image.content_type).split("/")[-1:][0]
+        if ext in ('png','jpeg','gif','bmp'):
+            file_name = image.name.encode('utf-8')
+            file_size = str(image.size)
+            file_uid = str(uid) 
+            path_root = settings.MEDIA_ROOT
+            path_folder = path_root + folder
+            path_upload = path_folder + "/" + file_uid + "." +ext
+            path_save = path_folder + "/" + file_uid + ".jpg"
+            save_50 = path_folder + "/" + 'snap_50X50_' + file_uid + '.jpg'
+            save_60 = path_folder + "/" + 'snap_60X60_' + file_uid + '.jpg'
+            avatar_info = 'folder='+ folder + ',uid=' + file_uid + ',ext=jpg' + ',swidth=50,sheight=50' + ',name=' +file_name +',size=' + file_size
+            try:
+                if not os.path.isdir(path_folder):
+                    os.makedirs(path_folder)
+                try:
+                    with open(path_upload,'wb') as fd:
+                        for chunk in image.chunks():
+                            fd.write(chunk)
+                except Exception as e:
+                    logger.debug(u"图片上传失败！%s",e)
+                    return 0,"上传图片失败！"
+                size_50 = (50,50)
+                size_60 = (60,60)
+                image = Image.open(path_upload)
+                if image.format == 'GIF':
+                    image = image.convert('RGB')
+                image.save(path_save,format="jpeg",quality=100)
+                image.resize(size_50,Image.ANTIALIAS).save(save_50,format="jpeg",quality=95)
+                image.resize(size_60,Image.ANTIALIAS).save(save_60,format="jpeg",quality=95)
+                if os.path.exists(save_60) and os.path.exists(path_save):
+                    shutil.copy(save_60,path_save)
+                return 1,avatar_info
+            except Exception as e:
+                logger.debug(u"压缩图片失败！%s",e)
+                return 0,"""上传文件失败请重新上传！"""
+        else:
+            return 0,"""不是支持的文件类型！"""
+    else:
+        return 2,"""未上传图片"""
