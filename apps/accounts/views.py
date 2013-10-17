@@ -20,6 +20,7 @@ from django.conf import settings
 from apps.kx.models import KxUser,KxEmailInvate,KxMailingAddfriend
 from apps.kx.models import KxUserFriend,KxPub
 from django.http import Http404
+from django.db.models import Sum
 #from django.core.mail import send_mail,EmailMultiAlternatives
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
@@ -734,7 +735,7 @@ def do_auth(request):
 @require_GET
 def print_record(request):
     print_record = Spool.objects.filter(origin_email=request.user.email).order_by("-print_time")
-    pages = print_record.Sum(pages__page_num)
+    pages = print_record.aggregate(pages=Sum("page_num"))
     return render(request,"user/print_record.html",{"print_record":print_record,"pages":pages})
 
 @login_required()
