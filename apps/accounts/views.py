@@ -24,7 +24,7 @@ from django.db.models import Sum
 #from django.core.mail import send_mail,EmailMultiAlternatives
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
-from utils import invite_register,invite_tip
+from utils import *
 from django.utils.http import is_safe_url
 from apps.spool.models import Spool
 from apps.alipay.models import OrderInfo
@@ -148,74 +148,10 @@ def login(request,next_page="/",redirect_field_name=REDIRECT_FIELD_NAME):
 
 
 
-@login_required
-def info(request):
-    try:
-        obj_avatar = KxUser.objects.filter(email=request.user.email).values('avatar')
-        l = []
-        if obj_avatar:
-            for i in obj_avatar[0]['avatar'].split(','):
-                l.append(i.split('='))
-            avatar = dict(l)
-            logger.info('%s',avatar)
-    except Exception as e:
-        avatar = {}
-        logger.debug(u'加载用户头像失败！',e,exc_info=True)
-    return render(request,"info.html",avatar)
 
-@login_required
-@transaction.commit_on_success()
-def avatar(request):
-    date =datetime.date.strftime(datetime.date.today(),"%Y/%m/%d")
-    uid = uuid.UUID.time_low.fget(uuid.uuid4())
-    if request.method == "POST":
-        image = request.FILES.get("avatar",None)
-        folder = "User/"+str(date)
-        if image:
-            ext = str(image.content_type).split("/")[-1:][0]
-            if ext in ('png','jpeg','gif','bmp'):
-                file_name = image.name.encode('utf-8')
-                file_size = str(image.size)
-                file_uid = str(uid) 
-                path_root = settings.MEDIA_ROOT
-                path_folder = path_root + folder
-                path_upload = path_folder + "/" + file_uid + "." +ext
-                path_save = path_folder + "/" + file_uid + ".jpg"
-                save_50 = path_folder + "/" + 'snap_50X50_' + file_uid + '.jpg'
-                save_60 = path_folder + "/" + 'snap_60X60_' + file_uid + '.jpg'
-                avatar_info = 'folder='+ folder + ',uid=' + file_uid + ',ext=jpg' + ',swidth=50,sheight=50' + ',name=' +file_name +',size=' + file_size
-                try:
-                    if not os.path.isdir(path_folder):
-                        os.makedirs(path_folder)
-                    try:
-                        with open(path_upload,'wb') as fd:
-                            for chunk in image.chunks():
-                                fd.write(chunk)
-                    except Exception as e:
-                        logger.debug(u"图片上传失败！%s",e)
-                    size_50 = (50,50)
-                    size_60 = (60,60)
-                    image = Image.open(path_upload)
-                    if image.format == 'GIF':
-                        image = image.convert('RGB')
-                    image.save(path_save,format="jpeg",quality=100)
-                    image.resize(size_50,Image.ANTIALIAS).save(save_50,format="jpeg",quality=95)
-                    image.resize(size_60,Image.ANTIALIAS).save(save_60,format="jpeg",quality=95)
-                    if os.path.exists(save_60) and os.path.exists(path_save):
-                        shutil.copy2(save_60,path_save)
-                    try:
-                        avatar_obj = KxUser.objects.filter(email=request.user.email).update(avatar=avatar_info)
-                    except Exception as e:
-                        logger.debug(u"插入数据库失败！%s",e)
-                    return HttpResponseRedirect(reverse("info"))
-                except Exception as e:
-                    logger.debug(u"压缩图片失败！%s",e)
-                    return HttpResponse("""上传文件失败请重新上传！<A HREF="javascript:history.back()">返 回</A>""")
-            else:
-                return HttpResponse("""不是支持的文件类型！<A HREF="javascript:history.back()">返 回</A>""")
-        else:
-            return HttpResponse("""请上传一张图片！<A HREF="javascript:history.back()">返 回</A>""")
-    return HttpResponseRedirect(reverse("info"))
+
+
+
 
 def register(request,invate_code=''):
     '''注册视图'''
@@ -302,7 +238,7 @@ def chpasswd(request):
              'code':code,
              'oldMsg':oldMsg,
             }
-        return render(request,"changePwd.html",t_var)
+        return render(request,"user/changePwd.html",t_var)
     else:
         try:
             obj_avatar = KxUser.objects.filter(email=request.user.email).values('avatar')
@@ -315,7 +251,7 @@ def chpasswd(request):
         except Exception as e:
             avatar = {}
             logger.debug(u'加载用户头像失败！',e,exc_info=True)
-        return render(request,"changePwd.html",avatar)
+        return render(request,"user/changePwd.html",avatar)
 
 def findPwd(request):
     step = 1
@@ -626,10 +562,47 @@ def index(request):
     return render(request,"user/index.html",t)
 
 @login_required
-@require_GET
 def new_info(request):
-    t = {}
+    if request.method=="POST":
+        update_data={}
+        update_data['nick']=request.POST.get("nick")
+        update_data['mobile']=request.POST.get("mobile")
+        t={"status":0,"msg":"","nick":update_data['nick'],"mobile":update_data['mobile']}
+        try:
+            avatar_obj = KxUser.objects.filter(email=request.user.email).update(nick=update_data["nick"],mobile=update_data["mobile"])
+            t['status']=1
+            t['msg']="修改个人资料成功"
+        except Exception, e:
+            logger.debug(u"插入数据库失败！%s",e)
+            t['msg']="修改个人资料失败"
+    else:
+        t={}
     return render(request,"user/info.html",t)
+
+@login_required
+def avatar(request):
+    t={"avatar":request.user.avatar}
+    if request.method=="POST":
+        image = request.FILES.get("avatar",None)
+        upload_info=avatar_edit(image)
+        t["status"]=0
+        t["msg"]=""
+        print upload_info
+        if upload_info[0]==0:
+           t['msg']=upload_info[1]
+        elif upload_info[0]==1:
+            try:
+                avatar_obj = KxUser.objects.filter(email=request.user.email).update(avatar=upload_info[1])
+                t['status']=1
+                t['msg']="修改头像成功"
+                t['avatar']=upload_info[1]
+                #todo 清除原有头像
+            except Exception, e:
+                logger.debug(u"更新用户头像失败！%s",e)
+                t['msg']="修改个人资料失败"
+        elif upload_info[0]==2:
+             t['msg']="请上传头像"   
+    return render(request,"user/avatar.html",t)
 
 @login_required
 @require_GET
