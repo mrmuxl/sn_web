@@ -678,7 +678,7 @@ def do_auth(request):
                                     message['info']=u"授权出现错误，请重试!"
                                     message['data']=0
                                     return HttpResponse(json.dumps(message),content_type="application/json")
-                            else:
+                            elif used_num < printer_num and used_num >=0:
                                 new = used_num+1
                                 op_obj.update(used_num=new)
                                 op.update(status=1)
@@ -686,7 +686,7 @@ def do_auth(request):
                                 message['info']=u"授权成功！"
                                 message['data']=0
                                 return HttpResponse(json.dumps(message,ensure_ascii=False),content_type="application/json")
-                        elif flag == u'0' and used_num >=0:
+                        elif flag == u'0' and used_num > 0:
                             new = used_num-1
                             op_obj.update(used_num=new)
                             op.update(status=0)
