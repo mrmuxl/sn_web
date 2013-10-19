@@ -1,5 +1,5 @@
 一、表
-	1、群：group
+	1、群：groups
 	2、群用户：group_user
 	3、申请加群：group_user_verify
 	4、群用户打印权限：group_print_auth
