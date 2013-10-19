@@ -78,7 +78,7 @@
 									</div>
 								</a>
 								<div class="tools tools-bottom">
-									<a href="javascript:printer_auth({{user.id}},{{request.user.pk}})"><i class="icon-remove"></i>&nbsp&nbsp<small>取消授权</small></a>
+									<a href="javascript:cancel_auth({{user.id}},{{request.user.pk}})"><i class="icon-remove"></i>&nbsp&nbsp<small>取消授权</small></a>
 								</div>
 							</li>
 										
@@ -105,7 +105,7 @@
 			</div>
 		</a>
 		<div class="tools tools-bottom">
-			<a href="javascript:printer_auth( {{user.id}},{{request.user.pk}} )">
+			<a href="javascript:do_auth( {{user.id}},{{request.user.pk}} )">
 				<i class="icon-print"></i>&nbsp&nbsp<small>授权</small>
 			</a>
 		</div>
@@ -123,15 +123,30 @@
 			<i class="icon-double-angle-up icon-only bigger-110"></i>
 		</a>
 <script type="text/javascript">
-		function printer_auth(pid,uid){
+		function do_auth(pid,uid){
         		if(pid>0 && uid>0){
-            		$.post("/User/printer/do_auth",{"id":pid,"uid":uid},function(data){
+            		$.post("/User/printer/do_auth",{"id":pid,"uid":uid,"flag":1},function(data){
                 		if(data.status==1){
-                        		alert("授权成功！");
-                        		window.location.reload();
+                        	alert(data.info);
+                        	window.location.reload();
+                        		
                 		}else{
-                       		 alert("授权失败！");
-                       		 window.location.reload();
+                       	alert("授权失败！");
+                       	window.location.reload(); 		 
+                		}
+            		},"json");
+        		}
+    		};
+    		function cancel_auth(pid,uid){
+        		if(pid>0 && uid>0){
+            		$.post("/User/printer/do_auth",{"id":pid,"uid":uid,"flag":0},function(data){
+                		if(data.status==1){
+                        	alert(data.info);
+                        	window.location.reload();
+                        		
+                		}else{
+                       	alert("授权失败！");
+                       	window.location.reload();	
                 		}
             		},"json");
         		}
