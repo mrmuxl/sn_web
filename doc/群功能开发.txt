@@ -7,8 +7,8 @@
 	6、群管理员：group_manager
 
 二、功能
-	1、web 创建群（admin) 许
-	2、web 指定群主（admin）许
+	1、web 创建群（admin) 许  创建群需指定是高校群还是普通群，高校群的ID为10001~19999，创建高校群是因先查询ID<20000的max(id),新增的群ID为max(id)+1
+	2、web 指定群主（admin）许 
 	3、web 查看群列表（admin）许
 	4、web 设置群用户是否可以共享打印机到群（群主） 许
 	5、web 查看群用户（所有人） 许
