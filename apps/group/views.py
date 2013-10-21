@@ -10,5 +10,10 @@ from apps.group.models import *
 
 logger = logging.getLogger(__name__)
 
+@require_GET
 def user_remark(request):
-	return render(request,"group/ad_list.html",{})
+	uid = request.GET.get("uid")
+	name = request.GET.get("rname")
+	gid = request.GET.get("gid")
+
+	return HttpResponse(json.dumps({"status":0,"info":""}),content_type="application/json")
