@@ -17,12 +17,12 @@ from django.conf import settings
 class Groups(models.Model):
     id = models.AutoField(primary_key=True)  # 高校群ID 10001~19999 普通群 >=20000
     name = models.CharField(max_length=30)
-    owner_id = models.IntegerField()
+    owner_id = models.CharField(max_length=32)
     user_num = models.IntegerField()
     max_num = models.IntegerField()
     g_type = models.IntegerField(default=1)  # 1=普通群 2=高校群
     create_time = models.DateTimeField()
-    creater_id = models.IntegerField()
+    creater_id = models.CharField(max_length=32)
 
     class Meta:
         db_table = 'groups'
@@ -32,11 +32,11 @@ class Groups(models.Model):
 class GroupUser(models.Model):
     id = models.AutoField(primary_key=True)
     group_id = models.IntegerField()
-    user_id = models.IntegerField()
+    user_id = models.CharField(max_length=32)
     user_remark = models.CharField(max_length=20)  # 用户备注名
     share_print = models.BooleanField()  # 是否可以共享打印机到群 0=否
     join_time = models.DateTimeField()
-    joiner_id = models.IntegerField()
+    joiner_id = models.CharField(max_length=32)
 
     class Meta:
         db_table = "group_user"
@@ -58,8 +58,8 @@ class GroupUserVerify(models.Model):
 class GroupPrintAuth(models.Model):
     id = models.AutoField(primary_key=True)
     group_id = models.IntegerField()
-    print_user_id = models.IntegerField()  # 共享打印机的用户ID
-    user_id = models.IntegerField()  # 使用者用户ID
+    print_user_id = models.CharField(max_length=32)  # 共享打印机的用户ID
+    user_id = models.CharField(max_length=32)  # 使用者用户ID
     status = models.IntegerField()  # 审核状态 0=审核中，1=审核通过，2=拒绝
     create_time = models.DateTimeField()
 
@@ -71,7 +71,7 @@ class GroupPrintAuth(models.Model):
 class GroupPrint(models.Model):
     id = models.AutoField(primary_key=True)
     group_id = models.IntegerField()
-    print_user_id = models.IntegerField()
+    print_user_id = models.CharField(max_length=32)
     print_name = models.CharField(max_length=30)  # 打印机名称
     print_code = models.CharField(max_length=260)  # 打印机序列号
     create_time = models.DateTimeField()
@@ -84,7 +84,7 @@ class GroupPrint(models.Model):
 class GroupManager(models.Model):
     id = models.AutoField(primary_key=True)
     group_id = models.IntegerField()
-    user_id = models.IntegerField()
+    user_id = models.CharField(max_length=32)
 
     class Meta:
         db_table = "group_manager"
