@@ -356,3 +356,15 @@ var mailArr=new Array("@qq.com","@sina.com","@163.com","@126.com","@sohu.com", "
 
     }     
 })(jQuery);
+
+$(function(){
+    $("#menu").find("li").each(function(){
+        var a = $(this).find("a:first")[0];
+        if ($(a).attr("href") === location.pathname){
+            $(this).addClass("active");
+        }else{
+            $(this).removeClass("active");
+            $(this).addClass("disable");
+            }
+        });
+    });
