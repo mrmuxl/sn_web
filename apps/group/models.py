@@ -33,7 +33,7 @@ class GroupUser(models.Model):
     id = models.AutoField(primary_key=True)
     group_id = models.IntegerField()
     user_id = models.CharField(max_length=32)
-    user_remark = models.CharField(max_length=20)  # 用户备注名
+    user_remark = models.CharField(max_length=20,null=True)  # 用户备注名
     share_print = models.BooleanField()  # 是否可以共享打印机到群 0=否
     join_time = models.DateTimeField()
     joiner_id = models.CharField(max_length=32)
