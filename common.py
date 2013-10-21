@@ -133,6 +133,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'apps.accounts': {
+            'handlers': ['console','file','mail_admins' ],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
         'apps.blog': {
             'handlers': ['console','file','mail_admins' ],
             'level': 'DEBUG',

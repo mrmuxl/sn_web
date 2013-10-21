@@ -54,3 +54,6 @@ ALTER TABLE vipuser ADD create_at datetime NOT NULL  COMMENT "创建时间" AFTE
 #以上已经更新20130902
 ALTER TABLE order_info ADD auth_user_num int NOT NULL DEFAULT 0 COMMENT "购买的授权用户数" AFTER number;
 ALTER TABLE order_info ADD status tinyint(1) NOT NULL DEFAULT 0 COMMENT "订单是否处理" AFTER trade_no;
+#已经更新到服务器
+alter table kx_user add delivery_addr varchar(100) comment '配送地址';
+

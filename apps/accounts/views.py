@@ -112,17 +112,17 @@ def save(request):
     except Exception as e:
         logger.debug("%s",e)
 
-def login(request,next_page="/",redirect_field_name=REDIRECT_FIELD_NAME):
+def login(request,next_page="/User/index",redirect_field_name=REDIRECT_FIELD_NAME):
     '''登陆视图'''
     if request.method == "GET":
         if request.user.is_authenticated():
             return HttpResponseRedirect('/')    
-        if redirect_field_name in request.REQUEST:
-            next_page = request.REQUEST[redirect_field_name]
-            if not is_safe_url(url=next_page, host=request.get_host()):
-                next_page = "/"
+        #if redirect_field_name in request.REQUEST:
+        #    next_page = request.REQUEST[redirect_field_name]
+        if not is_safe_url(url=next_page, host=request.get_host()):
+            next_page = "/"
         else:
-            next_page = request.META.get("HTTP_REFERER","/")
+            next_page = request.META.get("HTTP_REFERER","/User/index/")
             # Security check -- don't allow redirection to a different host.
             if not is_safe_url(url=next_page, host=request.get_host()):
                 next_page = "/"
@@ -136,7 +136,11 @@ def login(request,next_page="/",redirect_field_name=REDIRECT_FIELD_NAME):
         user = authenticate(username=email,password=password)
         if user and user.is_active:
             auth.login(request,user)
-            return HttpResponseRedirect(request.session.get('next_page','/'))    
+            rn = request.session.get('next_page','')
+            if rn:
+                if rn.replace("http://","") == request.get_host()+"/":
+                    return HttpResponseRedirect(next_page)    
+            return HttpResponseRedirect(request.session.get('next_page','/User/index/'))    
         else:
             data={"email":email}
             messages.add_message(request,messages.INFO,_(u'用户名或密码错误'))
@@ -145,12 +149,6 @@ def login(request,next_page="/",redirect_field_name=REDIRECT_FIELD_NAME):
             else:
                 request.session.set_expiry(0)
                 return render(request, "client_login.html", data)
-
-
-
-
-
-
 
 
 def register(request,invate_code=''):
@@ -628,6 +626,7 @@ def printer_auth(request):
     else:
         t = {
                 "warning":u'没有浏览权限',
+                "url":u'<a href="http://www.simplenect.cn/buy">请升级套餐</a>',
                 }
         return render(request,"user/printer_auth.html",t)
 
@@ -735,8 +734,18 @@ def print_record(request):
     return render(request,"user/print_record.html",{"print_record":print_record,"pages":pages})
 
 @login_required()
-@require_GET
 def my_printer(request):
-    print_record = Spool.objects.filter(accept_email=request.user.email).order_by("-print_time")
-    pages = print_record.aggregate(pages=Sum("page_num"))
-    return render(request,"user/my_printer.html",{"print_record":print_record,"pages":pages})
+    if request.method == "POST":
+        email = request.POST.get('email','')
+        if email:
+            print_record = Spool.objects.filter(accept_email=request.user.email).filter(origin_email=email).order_by("-print_time")
+            pages = print_record.aggregate(pages=Sum("page_num"))
+            return render(request,"user/my_printer.html",{"print_record":print_record,"pages":pages})
+        else:
+            print_record = Spool.objects.filter(accept_email=request.user.email).order_by("-print_time")
+            pages = print_record.aggregate(pages=Sum("page_num"))
+            return render(request,"user/my_printer.html",{"print_record":print_record,"pages":pages})
+    elif request.method == "GET":
+        print_record = Spool.objects.filter(accept_email=request.user.email).order_by("-print_time")
+        pages = print_record.aggregate(pages=Sum("page_num"))
+        return render(request,"user/my_printer.html",{"print_record":print_record,"pages":pages})

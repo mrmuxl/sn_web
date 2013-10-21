@@ -130,7 +130,7 @@ def create_order(request):
     t = request.POST.get('type','')
     num = request.POST.get('auth','')
     remain_money = request.POST.get('remain_money','0')
-    print t,num,remain_money
+    logger.info(t,num,remain_money)
     if t and t.isdigit() and num and num.isdigit():
         for i in product_info:
             if int(t)== int(i.id):
@@ -196,5 +196,6 @@ def order_info(request):
         return HttpResponse(u'参数错误')
 
 def access_user_buy(request):
-    return HttpResponseRedirect(reverse('buy'))
+    return render(request,"alipay/return_url.html",{})
+    #return HttpResponseRedirect(reverse('buy'))
 

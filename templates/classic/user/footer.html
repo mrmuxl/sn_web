@@ -55,6 +55,17 @@
 		<!--inline scripts related to this page-->
 
 	<script type="text/javascript">
+		$(function(){
+			$(".nav-list").find("li").each(function(){
+				var a = $(this).find("a:first")[0];
+				if ($(a).attr("href") === location.pathname){
+					$(this).addClass("active");
+				}else{
+					$(this).removeClass("active");
+					}
+				});
+			});
+
 			$(function() {
 				$('.easy-pie-chart.percentage').each(function(){
 					var $box = $(this).closest('.infobox');
