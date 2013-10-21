@@ -734,8 +734,13 @@ def print_record(request):
     return render(request,"user/print_record.html",{"print_record":print_record,"pages":pages})
 
 @login_required()
-@require_GET
 def my_printer(request):
-    print_record = Spool.objects.filter(accept_email=request.user.email).order_by("-print_time")
-    pages = print_record.aggregate(pages=Sum("page_num"))
-    return render(request,"user/my_printer.html",{"print_record":print_record,"pages":pages})
+    if request.method == "POST":
+        email = request.POST.get("email",'request.user.email')
+        print_record = Spool.objects.filter(accept_email=email).order_by("-print_time")
+        pages = print_record.aggregate(pages=Sum("page_num"))
+        return render(request,"user/my_printer.html",{"print_record":print_record,"pages":pages})
+    elif request.method == "GET":
+        print_record = Spool.objects.filter(accept_email=request.user.email).order_by("-print_time")
+        pages = print_record.aggregate(pages=Sum("page_num"))
+        return render(request,"user/my_printer.html",{"print_record":print_record,"pages":pages})
