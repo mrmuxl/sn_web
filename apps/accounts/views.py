@@ -86,7 +86,7 @@ def save(request):
                             ver_data = email + "," + time_str + "," + chk
                             url =settings.DOMAIN + reverse('activate',args=[urlsafe_b64encode(ver_data),])
                             msg = "尊敬的" + email + "用户， ：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;请将一下链接复制粘帖到浏览器中激活您的帐号：" + url 
-                            subject = '请激活帐号完成注册!'
+                            subject = '请激活帐号!'
                             from_email = 'SimpleNect <noreply@simaplenect.cn>'
                             #mail = EmailMultiAlternatives(subject,msg,from_email,[email])
                             #mail.content_subtype = "html"
