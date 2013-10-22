@@ -85,7 +85,7 @@ def save(request):
                             chk = md5(email + "," + time_str + ",qianmo20120601").hexdigest()
                             ver_data = email + "," + time_str + "," + chk
                             url =settings.DOMAIN + reverse('activate',args=[urlsafe_b64encode(ver_data),])
-                            msg = "尊敬的SimpleNect用户，" + email + "：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;请点击以下链接激活您的账号：<a href='" + url + "'>" + url + "</a>"
+                            msg = "尊敬的" + email + "用户， ：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;请将一下链接复制粘帖到浏览器中激活您的帐号：" + url 
                             subject = '请激活帐号完成注册!'
                             from_email = 'SimpleNect <noreply@simaplenect.cn>'
                             #mail = EmailMultiAlternatives(subject,msg,from_email,[email])
