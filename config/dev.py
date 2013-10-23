@@ -27,11 +27,18 @@ COMPRESS_OUTPUT_DIR='cache'
 COMPRESS_JS_FILTERS = ['compressor.filters.jsmin.SlimItFilter']
 
 #email
-EMAIL_HOST = 'smtp.mailgun.org'
-EMAIL_PORT = 25
-EMAIL_HOST_USER ='postmaster@simplenect.com'
-EMAIL_HOST_PASSWORD = '2tuexhqw24h2'
+#EMAIL_HOST = 'smtp.mailgun.org'
+#EMAIL_PORT = 25
+#EMAIL_HOST_USER ='postmaster@simplenect.com'
+#EMAIL_HOST_PASSWORD = '2tuexhqw24h2'
 #EMAIL_BACKEND ='apps.backends.esmtp.EmailBackend'
+
+
+EMAIL_HOST = 'smtpcloud.sohu.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER ='postmaster@noreplay.sendcloud.org'
+EMAIL_HOST_PASSWORD = 'lk6LZFgM'
+
 
 STATICFILES_DIRS = (
 	os.path.join(ROOT_DIR,'static' + THEME),
@@ -112,8 +119,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'kx',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
-        'PASSWORD': 'abc123',                  # Not used with sqlite3.
-        'HOST': '192.168.18.200',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PASSWORD': 'mrmuxl',                  # Not used with sqlite3.
+        'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -151,6 +158,7 @@ INSTALLED_APPS = (
     'apps.forum',
     'apps.wmd',
     'pagination',
+    'apps.group',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )

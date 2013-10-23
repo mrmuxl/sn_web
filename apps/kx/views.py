@@ -76,6 +76,6 @@ def index(request):
         logger.debug("ins_file:%s",e)
     return render(request,"index.html",data) 
 
-def buy(request):
-    data={"title":u"价格"}
-    return render(request,"buy.html",data) 
+#def buy(request):
+#    data={"title":u"价格"}
+#    return render(request,"buy.html",data) 
