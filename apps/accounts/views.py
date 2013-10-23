@@ -30,6 +30,8 @@ from apps.spool.models import Spool
 from apps.alipay.models import OrderInfo
 from apps.ad.models import OperatorAssistant,Operator
 from apps.kx.tongji.utils import CustomSQL
+from apps.utils.json_util import *
+from apps.accounts.service import *
 
 logger = logging.getLogger(__name__)
 
@@ -749,3 +751,47 @@ def my_printer(request):
         print_record = Spool.objects.filter(accept_email=request.user.email).order_by("-print_time")
         pages = print_record.aggregate(pages=Sum("page_num"))
         return render(request,"user/my_printer.html",{"print_record":print_record,"pages":pages})
+
+
+@require_POST
+def my_issue(request):
+    """用户验证信息接口 flag=1 获取用户的验证问题，flag=2 设置用户的验证问题"""
+    flag=request.POST.get("flag","0")
+    uid=request.POST.get("uid","")
+    json_data={}
+    if flag=="1":
+        myIssue=getUserAuthIssueByUser(uid)
+        if myIssue:
+            json_data['auth']=myIssue.is_auth
+            json_data['issue']=myIssue.issue
+        else: 
+            json_data['auth']=-1
+            json_data['issue']=""
+    elif flag=="2":
+        auth=0
+        json_data['status']=0
+        issue=request.POST.get("issue","").strip()
+        try:
+            auth=int(request.POST.get("auth"))
+        except Exception,e:
+            logger.error("auth 必须是数字0或1：%s",e)
+            json_data['info']="param err01"
+            return json_return(json_data)
+        myIssue=getUserAuthIssueByUser(uid)
+        if myIssue:
+            result=updateUserAuthIssueByCondition({"user_id":uid},{"is_auth":auth,"issue":issue})
+            if result:
+                json_data['status']=1
+                json_data['info']="update ok"
+            else:
+                json_data['info']="update err"
+        else:
+            userAuth=UserAuthIssue(user_id=uid,is_auth=auth,issue=issue)
+            authId=insertUserAuthIssue(userAuth)
+            if authId:
+                json_data['status']=1
+                json_data['info']="add ok"
+            else:
+                json_data['info']="add err"
+    return json_return(json_data)
+

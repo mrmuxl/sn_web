@@ -39,6 +39,7 @@ urlpatterns += patterns('',
     url(r'^alipay/',include("apps.alipay.urls")),
     url(r'^spool/',include("apps.spool.urls")),
     url(r'^group/',include("apps.group.urls")),
+    url(r'^account/',include("apps.accounts.urls_account")),
     #url(r'^user/',include("apps.user.urls")),
 )
 
