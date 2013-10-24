@@ -768,8 +768,8 @@ def my_printer(request):
 @require_POST
 def my_issue(request):
     """用户验证信息接口 flag=1 获取用户的验证问题，flag=2 设置用户的验证问题"""
-    flag=request.POST.get("flag","0")
-    uid=request.POST.get("uid","")
+    flag=request.POST.get("flag","0").strip()
+    uid=request.POST.get("uid","").strip()
     json_data={}
     if flag=="1":
         myIssue=getUserAuthIssueByUser(uid)
@@ -789,6 +789,13 @@ def my_issue(request):
             logger.error("auth 必须是数字0或1：%s",e)
             json_data['info']="param err01"
             return json_return(json_data)
+        userCount=getUserCountByCondition({"uuid":uid})
+        if userCount is None:
+            json_data['info']="get user error"
+            return json_return(json_data)
+        if userCount==0:
+            json_data['info']="no such user"
+            return json_return(json_data)
         myIssue=getUserAuthIssueByUser(uid)
         if myIssue:
             result=updateUserAuthIssueByCondition({"user_id":uid},{"is_auth":auth,"issue":issue})
@@ -805,6 +812,9 @@ def my_issue(request):
                 json_data['info']="add ok"
             else:
                 json_data['info']="add err"
+    else:
+        json_data['status']=0
+        json_data['info']="param err02"
     return json_return(json_data)
 
 
