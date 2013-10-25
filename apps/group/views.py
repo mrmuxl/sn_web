@@ -72,8 +72,23 @@ def list_print(request):
 	printList=query_sql(sql,[gid])
 	authList=getGroupPrintAuthListByCondition({"group_id":gid,"user_id":uid})
 	authMap={} #用户的群打印机权限 组装成一个Map（dict)
+	
 	for auth in authList:
 		authMap[auth.print_user_id]=auth.status
+
+	# 群打印机的共享用户	
+	puids=""
+	for pt in printList:
+		puids+=",\'"+pt['print_user_id']+"\'"
+	issueMap={} #共享打印机的用户的验证提问
+	if puids!="":
+		puids=puids[1:]
+    	issueList=query_sql("select user_id,is_auth,issue from user_auth_issue where user_id in ("+puids+")")
+    	for se in issueList:
+    		issueMap[se['user_id']]=[]
+    		issueMap[se['user_id']].append(se['is_auth'])
+    		issueMap[se['user_id']].append(se['issue'])
+	print issueMap
 	json_data['status']=1
 	json_data['info']="ok"
 	json_data['print_list']=[]
@@ -82,7 +97,20 @@ def list_print(request):
 		status=-1
 		if puid in authMap.keys():
 			status=authMap[puid]
-		json_data['print_list'].append({"puid":puid,"name":pt['print_name'],"code":pt['print_code'],"auth":status})
+
+		#用户未提交审核申请
+		if status==-1:
+			#默认不需要验证
+			auth_type=0
+			issue=""
+			if puid in issueMap.keys():
+				auth_type=issueMap[puid][0]
+				issue=issueMap[puid][1]
+
+			json_data['print_list'].append({"puid":puid,"name":pt['print_name'],
+					"code":pt['print_code'],"auth":status,"auth_type":auth_type,"issue":issue})
+		else:	
+			json_data['print_list'].append({"puid":puid,"name":pt['print_name'],"code":pt['print_code'],"auth":status})
 	return json_return(json_data)	
 
 @require_POST
@@ -233,3 +261,9 @@ def add_user(request):
 
 	return json_return(json_data)
 
+
+def go_auth(request):
+	"""接口:用户提交打印机审核"""
+	json_data={}
+	json_data['status']=0
+	uid=request.POST.get("uid","").strip()
