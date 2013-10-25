@@ -32,6 +32,7 @@ from apps.ad.models import OperatorAssistant,Operator
 from apps.kx.tongji.utils import CustomSQL
 from apps.utils.json_util import *
 from apps.accounts.service import *
+from apps.msg_board.utils import uniqid,str_reverse,uniq
 
 logger = logging.getLogger(__name__)
 
@@ -44,68 +45,79 @@ def save(request):
             nick = request.POST.get('nick','')
             password = request.POST.get('password','')
             repassword = request.POST.get('repassword','')
-            if email and nick and password and repassword:
-                email = strip_tags(email.strip().lower())
-                nick = strip_tags(nick.strip())
-                password = strip_tags(password.strip())
-                repassword = strip_tags(repassword.strip())
-                if not email:
-                    message ="""请填写邮箱！<A HREF="javascript:history.back()">返 回</A>"""
-                    return HttpResponse(message)
-                if not is_valid_email(email):
-                    message ="""邮箱格式不正确！<A HREF="javascript:history.back()">返 回</A>"""
-                    return HttpResponse(message)
-                if not nick:
-                    message ="""请填昵称！<A HREF="javascript:history.back()">返 回</A>"""
-                    return HttpResponse(message)
-                if len(nick)<4 and len(nick)>12:
-                    message ="""昵称应为4-12个字符！<A HREF="javascript:history.back()">返 回</A>"""
-                    return HttpResponse(message)
-                if nick in word:
-                    message ="""昵称包含非法字符！<A HREF="javascript:history.back()">返 回</A>"""
-                    return HttpResponse(message)
-                if not password:
-                    message ="""请填写密码！<A HREF="javascript:history.back()">返 回</A>"""
-                    return HttpResponse(message)
-                if password != repassword:
-                    message ="""两次密码填写不一致！<A HREF="javascript:history.back()">返 回</A>"""
-                    return HttpResponse(message)
-                count = KxUser.objects.filter(email=email).count()
-                if count >0:
-                    message = """邮箱已存在！<A HREF="javascript:history.back()">返 回</A>"""
-                    return HttpResponse(message)
-                with transaction.commit_on_success():
-                    try:
-                        uid = md5(email).hexdigest()
-                        create_user=KxUser.objects.create_user(uuid=uid,email=email,nick=nick,password=password,status=0)
-                        create_user.save()
-                        user = authenticate(username=email,password=password)
-                        if user is not None and user.status == 0:
-                            auth.login(request,user)
-                            time_str = str(time.time())
-                            email = str(email)
-                            chk = md5(email + "," + time_str + ",qianmo20120601").hexdigest()
-                            ver_data = email + "," + time_str + "," + chk
-                            url =settings.DOMAIN + reverse('activate',args=[urlsafe_b64encode(ver_data),])
-                            msg = "尊敬的SimpleNect用户，" + email + "：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;请点击以下链接激活您的账号：<a href='" + url + "'>" + url + "</a>"
-                            subject = '请激活帐号完成注册!'
-                            from_email = 'SimpleNect <noreply@simaplenect.cn>'
-                            #mail = EmailMultiAlternatives(subject,msg,from_email,[email])
-                            #mail.content_subtype = "html"
-                            #mail.send(fail_silently=True)
-                            try:
-                                send_mail_thread(subject,msg,from_email,[email],html=msg)
-                                logger.info("active account:%s",email)
-                            except Exception as e:
-                                logger.debug("active account:%s",e)
-                            return HttpResponseRedirect('/User/account_verify/?email='+email)
-                        else:
-                            message = """创建用户出现错误！<A HREF="javascript:history.back()">返 回</A>"""
+            send_from = request.POST.get("send_from")
+            if send_from != u'1':
+                uniq_id = str_reverse(send_from[0:13])[0:6]
+                uiq = uniq()[0:6]
+                if uniq_id == uiq:
+                    if email and nick and password and repassword:
+                        email = strip_tags(email.strip().lower())
+                        nick = strip_tags(nick.strip())
+                        password = strip_tags(password.strip())
+                        repassword = strip_tags(repassword.strip())
+                        if not email:
+                            message ="""请填写邮箱！<A HREF="javascript:history.back()">返 回</A>"""
                             return HttpResponse(message)
-                    except Exception as e:
-                        logger.debug("%s",e)
-                        message = """邮件发送错误！<A HREF="javascript:history.back()">返 回</A>"""
+                        if not is_valid_email(email):
+                            message ="""邮箱格式不正确！<A HREF="javascript:history.back()">返 回</A>"""
+                            return HttpResponse(message)
+                        if not nick:
+                            message ="""请填昵称！<A HREF="javascript:history.back()">返 回</A>"""
+                            return HttpResponse(message)
+                        if len(nick)<4 and len(nick)>12:
+                            message ="""昵称应为4-12个字符！<A HREF="javascript:history.back()">返 回</A>"""
+                            return HttpResponse(message)
+                        if nick in word:
+                            message ="""昵称包含非法字符！<A HREF="javascript:history.back()">返 回</A>"""
+                            return HttpResponse(message)
+                        if not password:
+                            message ="""请填写密码！<A HREF="javascript:history.back()">返 回</A>"""
+                            return HttpResponse(message)
+                        if password != repassword:
+                            message ="""两次密码填写不一致！<A HREF="javascript:history.back()">返 回</A>"""
+                            return HttpResponse(message)
+                        count = KxUser.objects.filter(email=email).count()
+                        if count >0:
+                            message = """邮箱已存在！<A HREF="javascript:history.back()">返 回</A>"""
+                            return HttpResponse(message)
+                        with transaction.commit_on_success():
+                            try:
+                                uid = md5(email).hexdigest()
+                                create_user=KxUser.objects.create_user(uuid=uid,email=email,nick=nick,password=password,status=0)
+                                create_user.save()
+                                user = authenticate(username=email,password=password)
+                                if user is not None and user.status == 0:
+                                    auth.login(request,user)
+                                    time_str = str(time.time())
+                                    email = str(email)
+                                    chk = md5(email + "," + time_str + ",qianmo20120601").hexdigest()
+                                    ver_data = email + "," + time_str + "," + chk
+                                    url =settings.DOMAIN + reverse('activate',args=[urlsafe_b64encode(ver_data),])
+                                    msg = "尊敬的SimpleNect用户，" + email + "：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;请点击以下链接激活您的账号：<a href='" + url + "'>" + url + "</a>"
+                                    subject = '请激活帐号完成注册!'
+                                    from_email = 'SimpleNect <noreply@simaplenect.cn>'
+                                    #mail = EmailMultiAlternatives(subject,msg,from_email,[email])
+                                    #mail.content_subtype = "html"
+                                    #mail.send(fail_silently=True)
+                                    try:
+                                        send_mail_thread(subject,msg,from_email,[email],html=msg)
+                                        logger.info("active account:%s",email)
+                                    except Exception as e:
+                                        logger.debug("active account:%s",e)
+                                    return HttpResponseRedirect('/User/account_verify/?email='+email)
+                                else:
+                                    message = """创建用户出现错误！<A HREF="javascript:history.back()">返 回</A>"""
+                                    return HttpResponse(message)
+                            except Exception as e:
+                                logger.debug("%s",e)
+                                message = """邮件发送错误！<A HREF="javascript:history.back()">返 回</A>"""
+                                return HttpResponse(message)
+                    else:
+                        message = """出现错误！?<A HREF="javascript:history.back()">返 回</A>"""
                         return HttpResponse(message)
+                else:
+                    message = """出现错误！?<A HREF="javascript:history.back()">返 回</A>"""
+                    return HttpResponse(message)
             else:
                 message = """出现错误！?<A HREF="javascript:history.back()">返 回</A>"""
                 return HttpResponse(message)
@@ -805,3 +817,7 @@ def my_issue(request):
         json_data['info']="param err02"
     return json_return(json_data)
 
+
+def show_group_users(request):
+    t={}
+    return render(request,"user/printer_auth.html",t)

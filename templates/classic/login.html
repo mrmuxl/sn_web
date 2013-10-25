@@ -47,6 +47,7 @@
 		<tr>
 			<td></td>
 			<td>
+				<input type="hidden" id='form1' name="send_from" value="1" />
 				<input name="" type="submit" value="" class="login_btn" style="width=99px"/>
 				&nbsp;&nbsp;<a href="{% url 'findPwd' %}" style=" color: #007EFF;">忘记密码？</a>
 			</td>
@@ -62,6 +63,8 @@
 <script>
 	function checkForm(){
 		var val=$.trim($("#email").val());
+		$.ajax({type:"post",url:"/MsgBoard/check_msg",async:false,dataType:"json",
+            success:function(data){document.getElementById('form1').value =data.id;}});
 		if(val==""){
 			alert("请填写电子邮箱");
 			return false;
