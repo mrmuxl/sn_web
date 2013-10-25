@@ -42,7 +42,7 @@ class GroupUser(models.Model):
     user_remark = models.CharField(max_length=20,null=True,blank=True,verbose_name=_(u'用户备注名'))  # 用户备注名
     share_print = models.BooleanField(verbose_name=_(u'是否可以共享打印机到群'),help_text=_(u'0:不能添加共享打印机到群'))  # 是否可以共享打印机到群 0=否
     join_time = models.DateTimeField(default=datetime.now,verbose_name=_(u'加入群的时间'))
-    joiner_id = models.CharField(max_length=32) # 谁被加进来的
+    joiner_id = models.CharField(null=True,max_length=32) # 谁被加进来的
 
     class Meta:
         db_table = "group_user"

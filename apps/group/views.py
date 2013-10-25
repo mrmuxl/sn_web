@@ -11,6 +11,7 @@ from apps.group.models import *
 from apps.utils.json_util import *
 from apps.utils.db_util import *
 from apps.group.service import *
+from apps.accounts.service import getUserCountByCondition
 
 logger = logging.getLogger(__name__)
 
@@ -189,5 +190,46 @@ def del_print(request):
 	delGroupPrintByCondition({"group_id":gid,"printer_id":userPrint.id})
 	json_data['status']=1
 	json_data['info']="ok"
+	return json_return(json_data)
+
+@require_POST
+def add_user(request):
+	"""接口:用户加群 (包括高校用户自动加群) 目前只支持高校，普通群不支持"""
+	json_data={}
+	json_data['status']=0
+	uid=request.POST.get("uid","").strip()
+	try:
+		gid=int(request.POST.get("gid",0))
+	except Exception,e:
+		json_data['info']="param err01"
+		return json_return(json_data)
+	if gid <= 10000:
+		json_data['info']="param err02"
+		json_return(json_data)
+
+	groupNum=getGroupsCountByCondition({"id":gid})
+	if not groupNum>0:
+		json_data['info']="the group is not exists"
+		return json_return(json_data)
+
+	userCount=getUserCountByCondition({"uuid":uid})
+	if not userCount>0:
+		json_data['info']="the user is not exists"
+		return json_return(json_data)
+
+	if gid>=10001 and gid<20000:
+		userNum=getGroupUserCountByCondition({"group_id":gid,"user_id":uid})
+		if userNum>0:
+			json_data['info']="the group user is already exists"
+			return json_return(json_data)
+		result=insertGroupUser(GroupUser(group_id=gid,user_id=uid,share_print=0))
+		if not result>0:
+			json_data['info']="add group user err"
+		else:
+			json_data['status']=1
+			json_data['info']="ok"
+	else:
+		json_data['info']="this group user are not allowed to add"
+
 	return json_return(json_data)
 

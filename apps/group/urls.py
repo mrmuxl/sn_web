@@ -9,4 +9,5 @@ urlpatterns = patterns('',
     url(r'^list_print/?$','apps.group.views.list_print', name='list_print'),
     url(r'^save_print/?$','apps.group.views.save_print', name='save_print'),
     url(r'^del_print/?$','apps.group.views.del_print', name='del_print'),
+    url(r'^add_user/?$','apps.group.views.add_user', name='group_add_user'),
 )
