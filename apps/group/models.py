@@ -73,6 +73,7 @@ class GroupPrintAuth(models.Model):
     status = models.IntegerField(verbose_name=_(u'审核状态'),help_text=_(u'0=审核中，1=审核通过，2=拒绝'))  # 审核状态 0=审核中，1=审核通过，2=拒绝
     answer = models.CharField(null=True,max_length=30,verbose_name=_(u'提问回答'))
     create_time = models.DateTimeField(default=datetime.now,verbose_name=_(u'创建时间'))
+    auth_time = models.DateTimeField(null=True) # 审核时间
 
     class Meta:
         db_table = "group_print_auth"

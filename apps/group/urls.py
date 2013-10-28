@@ -10,4 +10,8 @@ urlpatterns = patterns('',
     url(r'^save_print/?$','apps.group.views.save_print', name='save_print'),
     url(r'^del_print/?$','apps.group.views.del_print', name='del_print'),
     url(r'^add_user/?$','apps.group.views.add_user', name='group_add_user'),
+    url(r'^go_auth/?$','apps.group.views.go_auth', name='group_go_auth'),
+    url(r'^my_auth/?$','apps.group.views.my_auth', name='group_my_auth'),
+    url(r'^list_auth/?$','apps.group.views.list_auth', name='group_list_auth'),
+    url(r'^deal_auth/?$','apps.group.views.deal_auth', name='group_deal_auth'),
 )
