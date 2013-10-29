@@ -1,116 +1,101 @@
 {% extends "user/base.html" %}
-{% block header %}{% include "user/header.html" %}{% endblock %}
 {% block content %}
 {% load split %}
-<div class="main-container container-fluid">
-	<a class="menu-toggler" id="menu-toggler" href="#">
-		<span class="menu-text"></span>
-	</a>
+<div class="main-content">
+	<div class="breadcrumbs" id="breadcrumbs">
+		<ul class="breadcrumb">
+			<li>
+				<i class="icon-home home-icon"></i>
+				<a href="/User/index">首页</a>
 
-	<div class="sidebar" id="sidebar">
-
-		{% include "user/menu.html" %}
-
-		<div class="sidebar-collapse" id="sidebar-collapse">
-			<i class="icon-double-angle-left"></i>
-		</div>
+				<span class="divider">
+					<i class="icon-angle-right arrow-icon"></i>
+				</span>
+			</li>
+			<li class="active">个人资料</li>
+		</ul>
 	</div>
-
-	<div class="main-content">
-		<div class="breadcrumbs" id="breadcrumbs">
-			<ul class="breadcrumb">
-				<li>
-					<i class="icon-home home-icon"></i>
-					<a href="/User/index">首页</a>
-
-					<span class="divider">
-						<i class="icon-angle-right arrow-icon"></i>
-					</span>
-				</li>
-				<li class="active">个人资料</li>
-			</ul>
-		</div>
-		<div class="page-content">
-			<h4 class="lighter">
-				<i class="icon-user"></i>
-				个人资料 <a href="{% url 'accounts_info' %}" class="btn btn-small  btn-info">
-				<i class="icon-edit">个人资料</i></a>
-			</h4>
+	<div class="page-content">
+		<h4 class="lighter">
+			<i class="icon-user"></i>
+			个人资料 <a href="{% url 'accounts_info' %}" class="btn btn-small  btn-info">
+			<i class="icon-edit">个人资料</i></a>
+		</h4>
 
 
-			<div class="row-fluid">
+		<div class="row-fluid">
 
-				<div class="span2">{{msg}}</div>
+			<div class="span2">{{msg}}</div>
 
-				<div class="span10">
-					<div class="widget-box transparent">
-						<div class="widget-body">
-						<form action="{% url 'chpasswd' %}" method="post" enctype="multipart/form-data" onsubmit="return checkForm();">
-							{% csrf_token %}
-							<table class="register">
-								{% if code %}
-								<tr>
-									<td class="register_left">&nbsp;</td>
-									<td class="reg_input">
-										{% if code == 1 %}
-											更新密码成功！
-										{% else %}
-											 <span style='color:red;'>更新密码失败</span> 
+			<div class="span10">
+				<div class="widget-box transparent">
+					<div class="widget-body">
+					<form action="{% url 'chpasswd' %}" method="post" enctype="multipart/form-data" onsubmit="return checkForm();">
+						{% csrf_token %}
+						<table class="register">
+							{% if code %}
+							<tr>
+								<td class="register_left">&nbsp;</td>
+								<td class="reg_input">
+									{% if code == 1 %}
+										更新密码成功！
+									{% else %}
+										 <span style='color:red;'>更新密码失败</span> 
+									{% endif %}
+								</td>
+								<td class="">&nbsp;</td>
+							</tr>
+							{% endif %}
+							<tr>
+								<td class="register_left">旧&nbsp;密&nbsp;码：</td>
+								<td class="reg_input"><input id="oldPwd" name="oldPwd" type="password" value="" class="input-len" /></td>
+								<td class="reg_msg_old">
+									{% if oldMsg %}
+										{% if oldMsg == 1 %}
+											<span style='color:red;'>请填写旧密码</span>
+											{% else %}
+											<span style='color:red;'>旧密码错误</span>
 										{% endif %}
-									</td>
-									<td class="">&nbsp;</td>
-								</tr>
-								{% endif %}
-								<tr>
-									<td class="register_left">旧&nbsp;密&nbsp;码：</td>
-									<td class="reg_input"><input id="oldPwd" name="oldPwd" type="password" value="" class="input-len" /></td>
-									<td class="reg_msg_old">
-										{% if oldMsg %}
-											{% if oldMsg == 1 %}
-												<span style='color:red;'>请填写旧密码</span>
-												{% else %}
-												<span style='color:red;'>旧密码错误</span>
-											{% endif %}
-										{% else %}
-											请输入最近一次的登录密码
-										{% endif %}
-									</td>
-								</tr>
-								<tr>
-									<td class="register_left">新&nbsp;密&nbsp;码：</td>
-									<td class="reg_input"><input id="pwd" name="password" type="password" value="" class="input-len" /></td>
-									<td class="reg_msg_pwd">
-										{% if pwd == 0 %}
-											<span style='color:red;'>请填写新密码</span>
-										{% else %}
-											6-20个字符（区分大小写）
-										{% endif %}</td>
-								</tr>
-								<tr>
-									<td class="register_left">确认密码：</td>
-									<td class="reg_input"><input id="repwd" name="repassword" type="password" value="" class="input-len" /></td>
-									<td class="reg_msg_repwd">
-										{% if repwd == 0 %}
-											<span style='color:red;'>二次密码输入不一致</span>
-										{% else %}
-											请重复输入密码
-										{% endif %}
-									</td>
-								</tr>
-								<tr>
-									<td></td>
-									<td><input name="" type="submit" value="保存" class="update_btn btn btn-info btn-small"/></td>
-									<td></td>
-								</tr>
-							</table>
-						</form>
-						</div>
+									{% else %}
+										请输入最近一次的登录密码
+									{% endif %}
+								</td>
+							</tr>
+							<tr>
+								<td class="register_left">新&nbsp;密&nbsp;码：</td>
+								<td class="reg_input"><input id="pwd" name="password" type="password" value="" class="input-len" /></td>
+								<td class="reg_msg_pwd">
+									{% if pwd == 0 %}
+										<span style='color:red;'>请填写新密码</span>
+									{% else %}
+										6-20个字符（区分大小写）
+									{% endif %}</td>
+							</tr>
+							<tr>
+								<td class="register_left">确认密码：</td>
+								<td class="reg_input"><input id="repwd" name="repassword" type="password" value="" class="input-len" /></td>
+								<td class="reg_msg_repwd">
+									{% if repwd == 0 %}
+										<span style='color:red;'>二次密码输入不一致</span>
+									{% else %}
+										请重复输入密码
+									{% endif %}
+								</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td><input name="" type="submit" value="保存" class="update_btn btn btn-info btn-small"/></td>
+								<td></td>
+							</tr>
+						</table>
+					</form>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
 
 <script>
 $(".input-len").blur(function(){
@@ -163,5 +148,3 @@ $(".input-len").blur(function(){
 	}
 </script>
 {% endblock %}
-
-{% block footer %}{% include "footer.html" %}{% endblock %}

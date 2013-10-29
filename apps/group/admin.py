@@ -8,7 +8,7 @@ from models import GroupPrint,GroupManager
 
 
 class GroupsAdmin(admin.ModelAdmin):
-    list_display =('id','name','owner_id','user_num','max_num','g_type','create_time','creater_id')
+    list_display =('id','name','owner_id','user_num','max_num','g_type','create_time')
     def save_model(self,request,obj,forum,change):
         obj.creater_id =request.user
         if obj.g_type == 1:#普通群

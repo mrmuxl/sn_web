@@ -1,127 +1,112 @@
 {% extends "user/base.html" %}
-{% block header %}{% include "user/header.html" %}{% endblock %}
 {% block content %}
 {% load split %}
 
-<div class="main-container container-fluid">
-			<a class="menu-toggler" id="menu-toggler" href="#">
-				<span class="menu-text"></span>
-			</a>
+<div class="main-content">
+	<div class="breadcrumbs" id="breadcrumbs">
+		<ul class="breadcrumb">
+			<li>
+				<i class="icon-home home-icon"></i>
+				<a href="/User/index">首页</a>
 
-			<div class="sidebar" id="sidebar">
+				<span class="divider">
+					<i class="icon-angle-right arrow-icon"></i>
+				</span>
+			</li>
+			<li class="active">授权好友共享打印机</li>
+		</ul>
+	</div>
 
-				{% include "user/menu.html" %}
+	<div class="page-content">
+		{% if warning %}
+		<h4 class="lighter" style="color:red">
+			<i class="icon-print"></i>
+			{{ warning }}，{{url|safe}}
+		</h4>
 
-				<div class="sidebar-collapse" id="sidebar-collapse">
-					<i class="icon-double-angle-left"></i>
-				</div>
-			</div>
-
-			<div class="main-content">
-				<div class="breadcrumbs" id="breadcrumbs">
-					<ul class="breadcrumb">
-						<li>
-							<i class="icon-home home-icon"></i>
-							<a href="/User/index">首页</a>
-
-							<span class="divider">
-								<i class="icon-angle-right arrow-icon"></i>
-							</span>
-						</li>
-						<li class="active">授权好友共享打印机</li>
-					</ul>
-				</div>
-
-				<div class="page-content">
-					{% if warning %}
-					<h4 class="lighter" style="color:red">
-						<i class="icon-print"></i>
-						{{ warning }}，{{url|safe}}
-					</h4>
-
-					{% else %}
-					<h4 class="lighter">
-						<i class="icon-print"></i>
-						授权哪些好友可以共享打印机，可用授权：{{num.printer_num}}，已用：{{num.used_num}}
-					</h4>
-					{% endif %}
+		{% else %}
+		<h4 class="lighter">
+			<i class="icon-print"></i>
+			授权哪些好友可以共享打印机，可用授权：{{num.printer_num}}，已用：{{num.used_num}}
+		</h4>
+		{% endif %}
 
 
-	<div class="row-fluid">
-		<div class="span12">
-			<div class="widget-box transparent">
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="widget-box transparent">
 
-				<div class="widget-body">
-					<div class="row-fluid">
-						<ul class="ace-thumbnails">
-							{% for user in users %}
-								{% if user.email in oa %}
-							<li class="noborder">
-								<a href="" data-rel="colorbox" class="cboxElement">
-									<div class="friendbox">
-										<div class="media">
-											  <a class="pull-left" href="{% url "accounts_info" %}">
-											  	{% if user.avatar %}
-											    <img class="media-object img-circle" src="{{ MEDIA_URL }}{{ user.avatar|split:","|first|join:""|split:"="|last }}/snap_50X50_{{ user.avatar|split:","|slice:"2"|join:""|split:"="|last }}.jpg">
-											    {% else %}
-											    <img class="media-object img-circle" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg">
-											    {% endif %}
-											    <br>
-											    <i class="icon-print"></i>
-											  </a>
-											  <div class="media-body">
-											    <h6 class="media-heading">{{user.nick}}</h6>
-											    <!-- Nested media object -->
-											    <div class="media grey">{{ user.email }}</div>
-											  </div>
+					<div class="widget-body">
+						<div class="row-fluid">
+							<ul class="ace-thumbnails">
+								{% for user in users %}
+									{% if user.email in oa %}
+								<li class="noborder">
+									<a href="" data-rel="colorbox" class="cboxElement">
+										<div class="friendbox">
+											<div class="media">
+												  <a class="pull-left" href="{% url "accounts_info" %}">
+												  	{% if user.avatar %}
+												    <img class="media-object img-circle" src="{{ MEDIA_URL }}{{ user.avatar|split:","|first|join:""|split:"="|last }}/snap_50X50_{{ user.avatar|split:","|slice:"2"|join:""|split:"="|last }}.jpg">
+												    {% else %}
+												    <img class="media-object img-circle" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg">
+												    {% endif %}
+												    <br>
+												    <i class="icon-print"></i>
+												  </a>
+												  <div class="media-body">
+												    <h6 class="media-heading">{{user.nick}}</h6>
+												    <!-- Nested media object -->
+												    <div class="media grey">{{ user.email }}</div>
+												  </div>
+											</div>
 										</div>
+									</a>
+									<div class="tools tools-bottom">
+										<a href="javascript:cancel_auth({{user.id}},{{request.user.pk}})"><i class="icon-remove"></i>&nbsp&nbsp<small>取消授权</small></a>
 									</div>
-								</a>
-								<div class="tools tools-bottom">
-									<a href="javascript:cancel_auth({{user.id}},{{request.user.pk}})"><i class="icon-remove"></i>&nbsp&nbsp<small>取消授权</small></a>
-								</div>
-							</li>
-										
-							{% else %}
+								</li>
+											
+								{% else %}
 
 
-	<li class="noborder">
-		<a href="" data-rel="colorbox" class="cboxElement">
-			<div class="friendbox">
-				<div class="media">
-					<a class="pull-left" href="#">
-						{% if user.avatar %}
-							<img class="media-object img-circle" src="{{ MEDIA_URL }}{{ user.avatar|split:","|first|join:""|split:"="|last }}/snap_50X50_{{ user.avatar|split:","|slice:"2"|join:""|split:"="|last }}.jpg">
-						{% else %}
-							<img class="media-object img-circle" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg">
-						{% endif %}
-					</a>
-					<div class="media-body">
-						<h6 class="media-heading">{{user.nick}}</h6>
-						<!-- Nested media object -->
-						<div class="media grey">{{ user.email }}</div>
+								<li class="noborder">
+									<a href="" data-rel="colorbox" class="cboxElement">
+										<div class="friendbox">
+											<div class="media">
+												<a class="pull-left" href="#">
+													{% if user.avatar %}
+														<img class="media-object img-circle" src="{{ MEDIA_URL }}{{ user.avatar|split:","|first|join:""|split:"="|last }}/snap_50X50_{{ user.avatar|split:","|slice:"2"|join:""|split:"="|last }}.jpg">
+													{% else %}
+														<img class="media-object img-circle" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg">
+													{% endif %}
+												</a>
+												<div class="media-body">
+													<h6 class="media-heading">{{user.nick}}</h6>
+													<!-- Nested media object -->
+													<div class="media grey">{{ user.email }}</div>
+												</div>
+											</div>
+										</div>
+									</a>
+									<div class="tools tools-bottom">
+										<a href="javascript:do_auth( {{user.id}},{{request.user.pk}} )">
+											<i class="icon-print"></i>&nbsp&nbsp<small>授权</small>
+										</a>
+									</div>
+								</li>
+								{% endif %}
+								{% endfor %}
+					<!--PAGE CONTENT ENDS-->
+							</ul>
+						</div>
 					</div>
 				</div>
-			</div>
-		</a>
-		<div class="tools tools-bottom">
-			<a href="javascript:do_auth( {{user.id}},{{request.user.pk}} )">
-				<i class="icon-print"></i>&nbsp&nbsp<small>授权</small>
-			</a>
-		</div>
-	</li>
-	{% endif %}
-{% endfor %}
-							<!--PAGE CONTENT ENDS-->
-						</div><!--/.span-->
-					</div><!--/.row-fluid-->
-				</div><!--/.page-content-->
-			</div><!--/.main-content-->
-		</div>
+				</div><!--/.span-->
+			</div><!--/.row-fluid-->
+	</div><!--/.page-content-->
+</div><!--/.main-content-->
 
-		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-small btn-inverse">
-			<i class="icon-double-angle-up icon-only bigger-110"></i>
-		</a>
 <script type="text/javascript">
 		function do_auth(pid,uid){
         		if(pid>0 && uid>0){
@@ -153,4 +138,3 @@
     		};
 </script>
 {% endblock %}
-{% block footer %}{% include "user/footer.html" %}{% endblock %}

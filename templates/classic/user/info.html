@@ -1,120 +1,98 @@
 {% extends "user/base.html" %}
-
-{% block header %}{% include "user/header.html" %}{% endblock %}
 {% block content %}
 {% load split %}
-<div class="main-container container-fluid">
-	<a class="menu-toggler" id="menu-toggler" href="#">
-		<span class="menu-text"></span>
-	</a>
+<div class="main-content">
+	<div class="breadcrumbs" id="breadcrumbs">
+		<ul class="breadcrumb">
+			<li>
+				<i class="icon-home home-icon"></i>
+				<a href="/User/index">首页</a>
 
-	<div class="sidebar" id="sidebar">
-
-		{% include "user/menu.html" %}
-
-		<div class="sidebar-collapse" id="sidebar-collapse">
-			<i class="icon-double-angle-left"></i>
-		</div>
+				<span class="divider">
+					<i class="icon-angle-right arrow-icon"></i>
+				</span>
+			</li>
+			<li class="active">个人资料</li>
+		</ul>
 	</div>
 
-	<div class="main-content">
-		<div class="breadcrumbs" id="breadcrumbs">
-			<ul class="breadcrumb">
-				<li>
-					<i class="icon-home home-icon"></i>
-					<a href="/User/index">首页</a>
-
-					<span class="divider">
-						<i class="icon-angle-right arrow-icon"></i>
-					</span>
-				</li>
-				<li class="active">个人资料</li>
-			</ul>
-		</div>
-
-		<div class="page-content">
-			<h4 class="lighter">
-				<i class="icon-user"></i>
-				个人资料 <a href="{% url 'chpasswd' %}" class="btn btn-small  btn-info">
-				<i class="icon-edit">修改密码</i></a>
-			</h4>
+	<div class="page-content">
+		<h4 class="lighter">
+			<i class="icon-user"></i>
+			个人资料 <a href="{% url 'chpasswd' %}" class="btn btn-small  btn-info">
+			<i class="icon-edit">修改密码</i></a>
+		</h4>
 
 
-			<div class="row-fluid">
+		<div class="row-fluid">
 
-				<div class="span2"></div>
+			<div class="span2"></div>
 
 
 
-				<div class="span10">
-					<div class="widget-box transparent">
-						<div class="widget-body">
-							{% if msg %}
-							<div class="msg_tip">{{msg}}</div>
+			<div class="span10">
+				<div class="widget-box transparent">
+					<div class="widget-body">
+						{% if msg %}
+						<div class="msg_tip">{{msg}}</div>
+						{% endif %}
+						<form id="infoForm" action="{% url 'accounts_info' %}" method="post" enctype="multipart/form-data">
+						{% csrf_token %}
+						<div class="row-fluid">
+							<label for="form-field-8">用户名：</label>
+							{% if nick %}
+							<input type="text" id="form-field-1" name="nick" placeholder="用户名" value="{{ nick }}">
+							{% else %}
+							<input type="text" id="form-field-1" name="nick" placeholder="用户名" value="{{ request.user.nick }}">
 							{% endif %}
-							<form id="infoForm" action="{% url 'accounts_info' %}" method="post" enctype="multipart/form-data">
-							{% csrf_token %}
-							<div class="row-fluid">
-								<label for="form-field-8">用户名：</label>
-								{% if nick %}
-								<input type="text" id="form-field-1" name="nick" placeholder="用户名" value="{{ nick }}">
-								{% else %}
-								<input type="text" id="form-field-1" name="nick" placeholder="用户名" value="{{ request.user.nick }}">
-								{% endif %}
-							</div>
+						</div>
 
-							<div class="row-fluid">
-								<label for="form-field-8">邮箱：</label>
+						<div class="row-fluid">
+							<label for="form-field-8">邮箱：</label>
 
-								<input readonly type="text" id="form-field-1"  value="{{request.user.email}}" readonly>
-								{% if user.status == 0 %}
-								<a href="{% url 'to_active' %}" target="_blank">点击重发认证邮件</a>
-								{% endif %}
-							</div>
+							<input readonly type="text" id="form-field-1"  value="{{request.user.email}}" readonly>
+							{% if user.status == 0 %}
+							<a href="{% url 'to_active' %}" target="_blank">点击重发认证邮件</a>
+							{% endif %}
+						</div>
 
-							<div class="row-fluid">
-								<label for="form-field-8">手机号码：</label>
-								{% if mobile %}
-								<input type="text" id="form-field-1" placeholder="手机号码" name="mobile" value="{{request.user.mobile}}">
-								{% else %}
-								<input type="text" id="form-field-1" placeholder="手机号码" name="mobile" value="{{mobile}}">
-								{% endif %}
-							</div>
+						<div class="row-fluid">
+							<label for="form-field-8">手机号码：</label>
+							{% if mobile %}
+							<input type="text" id="form-field-1" placeholder="手机号码" name="mobile" value="{{request.user.mobile}}">
+							{% else %}
+							<input type="text" id="form-field-1" placeholder="手机号码" name="mobile" value="{{mobile}}">
+							{% endif %}
+						</div>
 
-							<div class="row-fluid">
-								<label for="form-field-8">头像：</label>
-								{% if request.user.avatar %}
-								<img class="nav-user-photo" src="{{ MEDIA_URL }}{{ request.user.avatar|split:","|first|join:""|split:"="|last }}/snap_50X50_{{ request.user.avatar|split:","|slice:"2"|join:""|split:"="|last }}.jpg" alt="{{ request.user.nick }}">
-								{% else %}
-								 <img class="nav-user-photo" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg">
-								{% endif %}
-								<a href="{% url 'avatar' %}">编辑</a>
-							</div>
-					
-							<div class="row-fluid" style="margin-top:15px;">
-								<button onclick="return false;" class="infoSave btn btn-info btn-small">
-									<i class="icon-save bigger-110"></i>
-									保存
-								</button> 
-							</div>
-						</form>
-						</div><!--/widget-body-->
-					</div>
+						<div class="row-fluid">
+							<label for="form-field-8">头像：</label>
+							{% if request.user.avatar %}
+							<img class="nav-user-photo" src="{{ MEDIA_URL }}{{ request.user.avatar|split:","|first|join:""|split:"="|last }}/snap_50X50_{{ request.user.avatar|split:","|slice:"2"|join:""|split:"="|last }}.jpg" alt="{{ request.user.nick }}">
+							{% else %}
+							 <img class="nav-user-photo" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg">
+							{% endif %}
+							<a href="{% url 'avatar' %}">编辑</a>
+						</div>
+				
+						<div class="row-fluid" style="margin-top:15px;">
+							<button onclick="return false;" class="infoSave btn btn-info btn-small">
+								<i class="icon-save bigger-110"></i>
+								保存
+							</button> 
+						</div>
+					</form>
+					</div><!--/widget-body-->
+				</div>
 
-					<!--PAGE CONTENT ENDS-->
-				</div><!--/.span-->
+				<!--PAGE CONTENT ENDS-->
+			</div><!--/.span-->
 
-			</div><!--/.row-fluid-->
-		</div><!--/.page-content-->
+		</div><!--/.row-fluid-->
+	</div><!--/.page-content-->
 
 
-	</div><!--/.main-content-->
-</div>
-
-<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-small btn-inverse">
-	<i class="icon-double-angle-up icon-only bigger-110"></i>
-</a>
-
+</div><!--/.main-content-->
 <script>
 
 $(document).ready(function(){
@@ -134,4 +112,3 @@ $(document).ready(function(){
 
 </script>
 {% endblock %}
-{% block footer %}{% include "user/footer.html" %}{% endblock %}

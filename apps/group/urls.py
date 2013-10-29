@@ -1,7 +1,6 @@
 #_*_coding:utf-8_*_
 
 from django.conf.urls import patterns, include, url
-from django.views.generic import TemplateView
 
 urlpatterns = patterns('',
     # url(r'^$','apps.group.views.login',name='login'),
@@ -14,4 +13,6 @@ urlpatterns = patterns('',
     url(r'^my_auth/?$','apps.group.views.my_auth', name='group_my_auth'),
     url(r'^list_auth/?$','apps.group.views.list_auth', name='group_list_auth'),
     url(r'^deal_auth/?$','apps.group.views.deal_auth', name='group_deal_auth'),
+    url(r'^group_list/?$','apps.group.views.group_list', name='group_group_list'),
+    url(r'^group_add/?$','apps.group.views.group_add', name='group_group_add'),
 )

@@ -7,11 +7,13 @@ from django.views.decorators.http import (require_POST,require_GET)
 from django.http import HttpResponseRedirect,HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
+from django.db.models import Max
 from apps.group.models import *
 from apps.utils.json_util import *
 from apps.utils.db_util import *
 from apps.group.service import *
-from apps.accounts.service import getUserCountByCondition
+from apps.accounts.service import getUserCountByCondition,getUserObjByCondition
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +68,7 @@ def list_print(request):
 	if uid=="" or gid<=0 :
 		json_data['info']="param err02"
 		return json_return(json_data)
-	sql="select g.id,g.printer_id,p.print_name,p.print_user_id,p.print_code from group_print g"\
+	sql="select g.id,g.printer_id,p.print_name,p.print_user_id,p.print_code,p.print_mid from group_print g"\
 		" left join user_printer p on g.printer_id=p.id and g.group_id=%s"	
 	
 	printList=query_sql(sql,[gid])
@@ -88,7 +90,7 @@ def list_print(request):
     		issueMap[se['user_id']]=[]
     		issueMap[se['user_id']].append(se['is_auth'])
     		issueMap[se['user_id']].append(se['issue'])
-	print issueMap
+	
 	json_data['status']=1
 	json_data['info']="ok"
 	json_data['print_list']=[]
@@ -108,9 +110,9 @@ def list_print(request):
 				issue=issueMap[puid][1]
 
 			json_data['print_list'].append({"puid":puid,"name":pt['print_name'],
-					"code":pt['print_code'],"auth":status,"auth_type":auth_type,"issue":issue})
+					"code":pt['print_code'],"mid":pt['print_mid'],"auth":status,"auth_type":auth_type,"issue":issue})
 		else:	
-			json_data['print_list'].append({"puid":puid,"name":pt['print_name'],"code":pt['print_code'],"auth":status})
+			json_data['print_list'].append({"puid":puid,"name":pt['print_name'],"code":pt['print_code'],"mid":pt['print_mid'],"auth":status})
 	return json_return(json_data)	
 
 @require_POST
@@ -119,6 +121,7 @@ def save_print(request):
 	uid=request.POST.get("uid","").strip()
 	name=request.POST.get("name","").strip()
 	code=request.POST.get("code","").strip()
+	mid=request.POST.get("mid","").strip()
 	remark=request.POST.get("remark","").strip()
 	json_data={}
 	json_data['status']=0
@@ -126,21 +129,22 @@ def save_print(request):
 	try:
 		gid=int(request.POST.get("gid","0"))
 	except Exception,e:
+		logger.error("群ID必须为数字：%s",e)
 		json_data['info']="param err01"
 		return json_return(json_data)
-	if uid=="" or name=="" or code=="":
+	if uid=="" or name=="" or code=="" or mid=="":
 		json_data['info']="param err02"
 		return json_return(json_data)
 	#添加群打印机
 	if gid>0:
-		json_data=add_group_print(json_data,gid,uid,name,code,remark)
+		json_data=add_group_print(json_data,gid,uid,name,code,mid,remark)
 	else : 
 		#修改群打印机名称备注等
-		json_data=edit_group_print(json_data,uid,name,code,remark)	
+		json_data=edit_group_print(json_data,uid,name,code,mid,remark)	
 	return json_return(json_data)	
 
 
-def add_group_print(json_data,gid,uid,name,code,remark):
+def add_group_print(json_data,gid,uid,name,code,mid,remark):
 	guser=getGroupUserObjByCondition({"group_id":gid,"user_id":uid})
 	if guser is None:
 		json_data['info']="the group user not exists"
@@ -149,10 +153,10 @@ def add_group_print(json_data,gid,uid,name,code,remark):
 		json_data['info']="the user can not share printer"
 		return json_data
 
-	userPrint=getUserPrinterObj(uid,code)
+	userPrint=getUserPrinterObj(uid,code,mid)
 	if userPrint is None:
 		#用户打印机未上传过
-		printerId=insertUserPrinter(UserPrinter(print_user_id=uid,print_name=name,print_code=code,remark=remark))
+		printerId=insertUserPrinter(UserPrinter(print_user_id=uid,print_name=name,print_code=code,print_mid=mid,remark=remark))
 		if not printerId>0:
 			json_data['info']="add group printer err01"
 			return json_data
@@ -163,7 +167,7 @@ def add_group_print(json_data,gid,uid,name,code,remark):
 		json_data['status']=1
 		json_data['info']="ok"
 	else:
-		#用户打印机未上传过
+		#用户打印机已上传过
 		printerId=userPrint.id
 		gPrintNum=getGroupPrintCountByCondition({"printer_id":printerId,"group_id":gid})
 		if gPrintNum is None:
@@ -182,12 +186,12 @@ def add_group_print(json_data,gid,uid,name,code,remark):
 	return json_data
 
 
-def edit_group_print(json_data,uid,name,code,remark):
+def edit_group_print(json_data,uid,name,code,mid,remark):
 	userPrint=getUserPrinterObj(uid,code)
 	if userPrint is None:
 		json_data['info']="the user printer not exists"
 	else:
-		result=updateUserPrinterByCondition({"print_user_id":uid,"print_code":code},{"print_name":name,"remark":remark})
+		result=updateUserPrinterByCondition({"print_user_id":uid,"print_code":code,"print_mid":mid},{"print_name":name,"remark":remark})
 		if not result>0:
 			json_data['info']="update user printer err01"
 		else:
@@ -200,18 +204,20 @@ def del_print(request):
 	"""接口：删除群打印机"""
 	uid=request.POST.get("uid","").strip()
 	code=request.POST.get("code","").strip()
+	mid=request.POST.get("mid","").strip()
 	gid=0
 	json_data={}
 	json_data['status']=0
 	try:
 		gid=int(request.POST.get("gid",0))
 	except Exception,e:
+		logger.error("群ID必须为数字：%s",e)
 		json_data['info']="param err01"
 		return json_return(json_data)
-	if uid=="" or code=="" or gid<=0:
+	if uid=="" or code=="" or gid<=0 or mid=="":
 		json_data['info']="param err02"
 		return json_return(json_data)
-	userPrint=getUserPrinterObj(uid,code)
+	userPrint=getUserPrinterObj(uid,code,mid)
 	if userPrint is None:
 		json_data['info']="the user printer is not exists"
 		return json_return(json_data)
@@ -229,6 +235,7 @@ def add_user(request):
 	try:
 		gid=int(request.POST.get("gid",0))
 	except Exception,e:
+		logger.error("群ID必须为数字：%s",e)
 		json_data['info']="param err01"
 		return json_return(json_data)
 	if gid <= 10000:
@@ -273,6 +280,7 @@ def go_auth(request):
 	try:
 		gid=int(request.POST.get("gid",0))
 	except Exception,e:
+		logger.error("群ID必须为数字：%s",e)
 		json_data['info']="param err01"
 		return json_return(json_data)
 	if uid=="" or puid=="" or gid<=0 :
@@ -303,6 +311,7 @@ def my_auth(request):
 	try:
 		gid=int(request.POST.get("gid",0))
 	except Exception,e:
+		logger.error("群ID必须为数字：%s",e)
 		json_data['info']="param err01"
 		return json_return(json_data)
 	if uid=="" or gid<=0:
@@ -326,6 +335,7 @@ def list_auth(request):
 	try:
 		gid=int(request.POST.get("gid",0))
 	except Exception,e:
+		logger.error("群ID必须为数字：%s",e)
 		json_data['info']="param err01"
 		return json_return(json_data)
 	num=getGroupUserCountByCondition({"user_id":puid,"share_print":1})
@@ -355,6 +365,7 @@ def deal_auth(request):
 		gid=int(request.POST.get("gid",0))
 		status=int(request.POST.get("verify",-1))
 	except Exception,e:
+		logger.error("gid and verify 必须为数字：%s",e)
 		json_data['info']="param err01"
 		return json_return(json_data)
 	if uid=="" or puid=="" or gid<=0 or status<0 or status>2:
@@ -365,12 +376,81 @@ def deal_auth(request):
 		json_data['info']="this printer is not exists or allowed to share"
 		return json_return(json_data)
 	result=updateGroupPrintAuthByCondition({"group_id":gid,"print_user_id":puid,"user_id":uid},
-											{"status":status})
+											{"status":status,"auth_time":datetime.now()})
 	if not result>0:
 		json_data['info']="update  group print auth err01"
 	else:
 		json_data['info']="ok"
 		json_data['status']=1
 	return json_return(json_data)
+
+
+@require_GET
+@login_required
+def group_list(request):
+	if not request.user.is_superuser:
+		return HttpResponseRedirect(reverse("login"))
+	groupList=getGroupsListAll()
+	return render(request,"group/group_list.html",{"groupList":groupList})
+
+@login_required
+def group_add(request):
+	if not request.user.is_superuser:
+		return HttpResponseRedirect(reverse("login"))
+	if request.method=="POST":
+		name=request.POST.get("group_name","").strip()
+		ownerEmail=request.POST.get("owner_email","").strip()
+		res={}
+		try:
+			gType=int(request.POST.get("g_type",0))
+		except Exception, e:
+			gType=0
+		try:
+			maxNum=int(request.POST.get("max_num",0))
+		except Exception, e:
+			maxNum=0	
+		errorMsg={}
+		if name=="":
+			errorMsg['group_name']="请填写群名！"
+		else:
+			res['group_name']=name
+		if gType<=0 or gType>2:
+			errorMsg['g_type']="请选择群类型！"
+		else:
+			res['g_type']=gType
+		if maxNum<=0:
+			errorMsg['max_num']="请填写群用户上限数（大于0的整数）！"
+		else:
+			res['max_num']=maxNum
+		ownerId=""
+		if ownerEmail=="":
+			errorMsg['owner_email']="请填写群主email！"
+		else:
+			owner=getUserObjByCondition({"email":ownerEmail})
+			if owner is None:
+				errorMsg['owner_email']="该群主邮箱不存在！"
+			else:
+				ownerId=owner.uuid
+			res['owner_email']=ownerEmail
+
+		if errorMsg:
+			res['error']=errorMsg
+			return render(request,"group/group_add.html",res)
+		group=Groups(name=name,owner_id=ownerId,max_num=maxNum,g_type=gType,creater_id=request.user.uuid)
+		if gType==2:
+			maxId=Groups.objects.filter(id__gte=10001).filter(id__lte=19999).aggregate(max_id=Max('id'))
+			print maxId
+			if maxId['max_id'] is None:
+				group.id=10001
+			else:
+				group.id=maxId['max_id']+1
+		gid=insertGroups(group)
+		if not gid is None:
+			return HttpResponseRedirect(reverse("group_group_list"))
+		else:
+			res['add_error']="新增群失败！"
+
+	return render(request,"group/group_add.html",{})
+
 
 
