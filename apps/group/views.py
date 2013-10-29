@@ -17,6 +17,7 @@ from apps.accounts.service import getUserCountByCondition,getUserObjByCondition
 
 logger = logging.getLogger(__name__)
 
+@csrf_exempt
 @require_POST
 def user_remark(request):
 	"""接口：修改用户备注"""
@@ -52,6 +53,7 @@ def user_remark(request):
 		json_data['info']="param err02"
 		return json_return(json_data)
 
+@csrf_exempt
 @require_POST
 def list_print(request):
 	"""接口：群打印机列表"""
@@ -115,6 +117,7 @@ def list_print(request):
 			json_data['print_list'].append({"puid":puid,"name":pt['print_name'],"code":pt['print_code'],"mid":pt['print_mid'],"auth":status})
 	return json_return(json_data)	
 
+@csrf_exempt
 @require_POST
 def save_print(request):
 	"""接口：添加群/编辑打印机 gid不传递表示修改打印机信息"""
@@ -199,6 +202,7 @@ def edit_group_print(json_data,uid,name,code,mid,remark):
 			json_data['status']=1
 	return json_data
 
+@csrf_exempt
 @require_POST
 def del_print(request):
 	"""接口：删除群打印机"""
@@ -226,6 +230,7 @@ def del_print(request):
 	json_data['info']="ok"
 	return json_return(json_data)
 
+@csrf_exempt
 @require_POST
 def add_user(request):
 	"""接口:用户加群 (包括高校用户自动加群) 目前只支持高校，普通群不支持"""
@@ -269,6 +274,7 @@ def add_user(request):
 	return json_return(json_data)
 
 
+@csrf_exempt
 @require_POST
 def go_auth(request):
 	"""接口:用户提交打印机审核"""
@@ -301,7 +307,7 @@ def go_auth(request):
 		json_data['info']="add auth error"
 	return json_return(json_data)
 
-
+@csrf_exempt
 @require_POST
 def my_auth(request):
 	"""接口:用户获取审核状态"""
@@ -326,6 +332,7 @@ def my_auth(request):
 	return json_return(json_data)
 
 
+@csrf_exempt
 @require_POST
 def list_auth(request):
 	"""接口:用户获取审核状态"""
@@ -353,7 +360,7 @@ def list_auth(request):
 									   "time":str(gp['create_time'])})
 	return json_return(json_data)
 
-
+@csrf_exempt
 @require_POST
 def deal_auth(request):
 	"""接口：处理审核状态"""
@@ -397,10 +404,10 @@ def group_list(request):
 def group_add(request):
 	if not request.user.is_superuser:
 		return HttpResponseRedirect(reverse("login"))
+	res={}
 	if request.method=="POST":
 		name=request.POST.get("group_name","").strip()
 		ownerEmail=request.POST.get("owner_email","").strip()
-		res={}
 		try:
 			gType=int(request.POST.get("g_type",0))
 		except Exception, e:
@@ -408,7 +415,11 @@ def group_add(request):
 		try:
 			maxNum=int(request.POST.get("max_num",0))
 		except Exception, e:
-			maxNum=0	
+			maxNum=0
+		try:
+			gid=int(request.POST.get("gid",0))
+		except Exception, e:
+			gid=0
 		errorMsg={}
 		if name=="":
 			errorMsg['group_name']="请填写群名！"
@@ -436,21 +447,60 @@ def group_add(request):
 		if errorMsg:
 			res['error']=errorMsg
 			return render(request,"group/group_add.html",res)
-		group=Groups(name=name,owner_id=ownerId,max_num=maxNum,g_type=gType,creater_id=request.user.uuid)
-		if gType==2:
-			maxId=Groups.objects.filter(id__gte=10001).filter(id__lte=19999).aggregate(max_id=Max('id'))
-			print maxId
-			if maxId['max_id'] is None:
-				group.id=10001
+		if gid>0:
+			#编辑群
+			result=updateGroupsByCondition({"id":gid},{"name":name,"owner_id":ownerId,"max_num":maxNum})
+			if result>0:
+				return HttpResponseRedirect(reverse("group_group_list"))
 			else:
-				group.id=maxId['max_id']+1
-		gid=insertGroups(group)
-		if not gid is None:
-			return HttpResponseRedirect(reverse("group_group_list"))
+				res['tip_error']="编辑群失败！"
 		else:
-			res['add_error']="新增群失败！"
+			group=Groups(name=name,owner_id=ownerId,max_num=maxNum,g_type=gType,creater_id=request.user.uuid)
+			if gType==2:
+				maxId=Groups.objects.filter(id__gte=10001).filter(id__lte=19999).aggregate(max_id=Max('id'))
+				print maxId
+				if maxId['max_id'] is None:
+					group.id=10001
+				else:
+					group.id=maxId['max_id']+1
+			gid=insertGroups(group)
+			if not gid is None:
+				return HttpResponseRedirect(reverse("group_group_list"))
+			else:
+				res['tip_error']="新增群失败！"
+	else:
+		gid=request.GET.get("gid")
+		if not gid is None and gid.strip()!="":
+			res=edit_group(request,gid,res)
 
-	return render(request,"group/group_add.html",{})
+	return render(request,"group/group_add.html",res)
+
+def edit_group(request,gid,res):
+	res['gid']=gid
+	try:
+		gid=int(gid)
+	except Exception,e:
+		# 去错误提示页面
+		logger.error("invalid gid : %s",e)
+		res['tip_error']="该群不存在或已删除！"	
+	else:
+		group=getGroupsObjById(gid)
+		if group is None:
+			res['tip_error']="该群不存在或已删除！"	
+			# 去错误提示页面
+		else:
+			owner=getUserObjByCondition({"uuid":group.owner_id})
+			if owner is None:
+				res['owner_email']=""
+			else:
+				res['owner_email']=owner.email
+			res['group_name']=group.name
+			res['g_type']=group.g_type
+			res['max_num']=group.max_num	
+	return res	
 
 
+def group_user(request):
+	res={}
 
+	return render(request,"group/group_user.html",res)

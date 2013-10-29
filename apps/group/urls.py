@@ -15,4 +15,5 @@ urlpatterns = patterns('',
     url(r'^deal_auth/?$','apps.group.views.deal_auth', name='group_deal_auth'),
     url(r'^group_list/?$','apps.group.views.group_list', name='group_group_list'),
     url(r'^group_add/?$','apps.group.views.group_add', name='group_group_add'),
+    url(r'^group_user/?$','apps.group.views.group_user', name='group_group_user'),
 )

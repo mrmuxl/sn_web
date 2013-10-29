@@ -765,6 +765,7 @@ def my_printer(request):
         return render(request,"user/my_printer.html",{"print_record":print_record,"pages":pages})
 
 
+@csrf_exempt
 @require_POST
 def my_issue(request):
     """用户验证信息接口 flag=1 获取用户的验证问题，flag=2 设置用户的验证问题"""

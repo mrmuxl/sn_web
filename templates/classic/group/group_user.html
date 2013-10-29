@@ -1,0 +1,49 @@
+{% extends "user/base.html" %}
+{% block content %}
+{% load pagination_tags %}
+
+<div class="main-content">
+	<div class="breadcrumbs" id="breadcrumbs">
+		<ul class="breadcrumb">
+			<li>
+				<i class="icon-home home-icon"></i>
+				<a href="{% url 'accounts_index' %}">首页</a>
+				<span class="divider">
+					<i class="icon-angle-right arrow-icon"></i>
+				</span>
+			</li>
+			<li>
+				<a href="{% url 'group_group_list' %}">群</a>
+				<span class="divider">
+					<i class="icon-angle-right arrow-icon"></i>
+				</span>
+			</li>
+			<li class="active">群用户</li>
+		</ul>
+	</div>
+	<div class="page-content">
+		<div class="page-header position-relative" style="clear:both">
+			<h1 class="pull-left">新增群用户<small><i class="icon-double-angle-right"></i></small></h1>
+			<div class="control-group pull-left">
+					<label for="form-field-1" class="control-label">Text Field</label>
+					<div class="controls">
+						<input type="text" placeholder="Username" id="form-field-1">
+						<button type="button" class="btn btn-info btn-small">
+							<i class="icon-ok bigger-110"></i>
+							Submit
+						</button>
+					</div>
+				</div>
+		</div><!--/.page-header-->
+		<div class="row-fluid">
+			<div class="span12">
+			<!--PAGE CONTENT BEGINS-->
+				<div class="row-fluid"> 
+	
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+{% endblock %}

@@ -4,8 +4,16 @@ from apps.group.models import *
 logger = logging.getLogger(__name__)
 
 def getGroupsListAll():
-	return Groups.objects.all().order_by("-id")
+	"""获取群列表"""
+	return Groups.objects.all().order_by("-create_time")
 
+def getGroupsObjById(gid):
+	"""根据ID获取群信息"""
+	try:
+		return Groups.objects.get(id=gid)
+	except Exception,e:
+		logger.warn("Groups not exists：gid="+str(gid)+" %s",e)
+		return None
 def getGroupPrintAuthListByCondition(condition):
 	"""获取用户打印权限列表"""
 	if isinstance(condition, dict):
@@ -127,6 +135,15 @@ def updateGroupPrintAuthByCondition(condition,data):
 	else:
 		logger.error("the param of condition and data must be the class dict")
 		return None
+
+def updateGroupsByCondition(condition,data):
+	"""更新群信息"""
+	if isinstance(condition, dict) and isinstance(data,dict):
+		return Groups.objects.filter(**condition).update(**data)
+	else:
+		logger.error("the param of condition and data must be the class dict")
+		return None
+
 def delGroupPrintByCondition(condition):
 	if isinstance(condition, dict) :
 		return GroupPrint.objects.filter(**condition).delete()
