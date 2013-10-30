@@ -617,11 +617,13 @@ def print_share(request):
 
 @require_POST
 def guser_del(request):
-	"""Ajax 更改群用户打印权限"""
+	"""Ajax 删除群用户"""
 	json_data={}
 	json_data['status']=0
 	json_data,group,user=valid_group_user(request,json_data)
 	if user is None:
 		return json_return(json_data)
-	
+	delGroupUserByCondition({"group_id":group.id,"user_id":user.uuid})
+	json_data['status']=1
+	json_data['info']="ok"
 	return json_return(json_data)
