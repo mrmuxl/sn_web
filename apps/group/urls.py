@@ -16,4 +16,7 @@ urlpatterns = patterns('',
     url(r'^group_list/?$','apps.group.views.group_list', name='group_group_list'),
     url(r'^group_add/?$','apps.group.views.group_add', name='group_group_add'),
     url(r'^group_user/?$','apps.group.views.group_user', name='group_group_user'),
+    url(r'^guser_add/?$','apps.group.views.guser_add', name='group_guser_add'),
+    url(r'^guser_del/?$','apps.group.views.guser_del', name='group_guser_del'),
+    url(r'^print_share/?$','apps.group.views.print_share', name='group_print_share'),
 )
