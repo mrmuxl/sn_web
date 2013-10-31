@@ -5,6 +5,8 @@ register = template.Library()
 
 @register.filter
 def getDict(d,key):
+	if not isinstance(d, dict):
+		return settings.TEMPLATE_STRING_IF_INVALID
 	try:
 		value=d[key]
 	except KeyError:
