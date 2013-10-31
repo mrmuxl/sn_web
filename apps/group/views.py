@@ -83,7 +83,7 @@ def list_print(request):
 	# 群打印机的共享用户	
 	puids=""
 	for pt in printList:
-		puids+=",\'"+pt['print_user_id']+"\'"
+		puids+=",'"+pt['print_user_id']+"'"
 	issueMap={} #共享打印机的用户的验证提问
 	if puids!="":
 		puids=puids[1:]
@@ -563,13 +563,14 @@ def guser_add(request):
 	if count>0:
 		json_data['info']="该用户已加入群里！"
 		return json_return(json_data)
-	guId=insertGroupUser(GroupUser(group_id=group.id,user_id=user.uuid,joiner_id=request.user.uuid))
+	uremark=request.POST.get("remark","")
+	guId=insertGroupUser(GroupUser(group_id=group.id,user_id=user.uuid,user_remark=uremark,joiner_id=request.user.uuid))
 	if guId>0:
 		json_data['status']=1
 		json_data['info']="ok"
 		json_data['email']=user.email
 		json_data['nick']=user.nick
-		json_data['remark']="--"
+		json_data['remark']=uremark
 	else:
 		json_data['info']="添加群用户失败！"
 	return json_return(json_data)
