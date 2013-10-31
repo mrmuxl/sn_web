@@ -70,11 +70,11 @@ def list_print(request):
 	if uid=="" or gid<=0 :
 		json_data['info']="param err02"
 		return json_return(json_data)
-	sql="select g.id,g.printer_id,p.print_name,p.print_user_id,p.print_code,p.print_mid from group_print g"\
+	sql="select g.id,g.printer_id,g.p_type,p.print_name,p.print_user_id,p.print_code,p.print_mid,p.remark,p.c_type from group_print g"\
 		" left join user_printer p on g.printer_id=p.id and g.group_id=%s"	
 	
 	printList=query_sql(sql,[gid])
-	authList=getGroupPrintAuthListByCondition({"group_id":gid,"user_id":uid})
+	authList=getPrintAuthListByCondition({"user_id":uid})
 	authMap={} #用户的群打印机权限 组装成一个Map（dict)
 	
 	for auth in authList:
@@ -112,9 +112,11 @@ def list_print(request):
 				issue=issueMap[puid][1]
 
 			json_data['print_list'].append({"puid":puid,"name":pt['print_name'],
-					"code":pt['print_code'],"mid":pt['print_mid'],"auth":status,"auth_type":auth_type,"issue":issue})
+					"code":pt['print_code'],"mid":pt['print_mid'],"remark":pt['remark'],"color":pt['c_type'],
+					"type":pt['p_type'],"auth":status,"auth_type":auth_type,"issue":issue})
 		else:	
-			json_data['print_list'].append({"puid":puid,"name":pt['print_name'],"code":pt['print_code'],"mid":pt['print_mid'],"auth":status})
+			json_data['print_list'].append({"puid":puid,"name":pt['print_name'],"code":pt['print_code'],"mid":pt['print_mid'],
+					"remark":pt['remark'],"color":pt['c_type'],"type":pt['p_type'],"auth":status})
 	return json_return(json_data,False)	
 
 @csrf_exempt
@@ -126,28 +128,41 @@ def save_print(request):
 	code=request.POST.get("code","").strip()
 	mid=request.POST.get("mid","").strip()
 	remark=request.POST.get("remark","").strip()
+	flag=request.POST.get("flag","").strip()
 	json_data={}
 	json_data['status']=0
 	gid=0
+	pType=0
+	cType=-1
 	try:
 		gid=int(request.POST.get("gid","0"))
+		pType=int(request.POST.get("type","0"))
+		cType=int(request.POST.get("color","-1"))
 	except Exception,e:
-		logger.error("群ID必须为数字：%s",e)
+		logger.error("群ID、打印机类型和色彩类型必须为数字：%s",e)
 		json_data['info']="param err01"
 		return json_return(json_data)
 	if uid=="" or name=="" or code=="" or mid=="":
 		json_data['info']="param err02"
 		return json_return(json_data)
-	#添加群打印机
-	if gid>0:
-		json_data=add_group_print(json_data,gid,uid,name,code,mid,remark)
-	else : 
+	#添加群打印机 或编辑打印机的类型
+	if flag=="1":
+		if gid<=0 or pType<=0 or pType>2 or cType<0 or cType>1:
+			json_data['info']="param err03"
+			return json_return(json_data)
+		json_data=add_group_print(json_data,gid,uid,name,code,mid,remark,pType,cType)
+	elif flag=="2" : 
 		#修改群打印机名称备注等
-		json_data=edit_group_print(json_data,uid,name,code,mid,remark)	
+		if cType<0 or cType>1:
+			json_data['info']="param err04"
+			return json_return(json_data)
+		json_data=edit_group_print(json_data,uid,name,code,mid,remark,cType,pType,gid)	
+	else :
+		json_data['info']="param err05"
 	return json_return(json_data)	
 
 
-def add_group_print(json_data,gid,uid,name,code,mid,remark):
+def add_group_print(json_data,gid,uid,name,code,mid,remark,pType,cType):
 	guser=getGroupUserObjByCondition({"group_id":gid,"user_id":uid})
 	if guser is None:
 		json_data['info']="the group user not exists"
@@ -159,11 +174,11 @@ def add_group_print(json_data,gid,uid,name,code,mid,remark):
 	userPrint=getUserPrinterObj(uid,code,mid)
 	if userPrint is None:
 		#用户打印机未上传过
-		printerId=insertUserPrinter(UserPrinter(print_user_id=uid,print_name=name,print_code=code,print_mid=mid,remark=remark))
+		printerId=insertUserPrinter(UserPrinter(print_user_id=uid,print_name=name,print_code=code,print_mid=mid,remark=remark,c_type=cType))
 		if not printerId>0:
 			json_data['info']="add group printer err01"
 			return json_data
-		result=insertGroupPrint(GroupPrint(group_id=gid,printer_id=printerId))
+		result=insertGroupPrint(GroupPrint(group_id=gid,printer_id=printerId,p_type=pType))
 		if not result>0:
 			json_data['info']="add group printer err02"
 			return json_data
@@ -179,7 +194,7 @@ def add_group_print(json_data,gid,uid,name,code,mid,remark):
 			json_data['status']=1
 			json_data['info']="ok the group printer already exists "
 		else:
-			result=insertGroupPrint(GroupPrint(group_id=gid,printer_id=printerId))
+			result=insertGroupPrint(GroupPrint(group_id=gid,printer_id=printerId,p_type=pType))
 			if not result>0:
 				json_data['info']="add group printer err04"
 				return json_data
@@ -189,17 +204,27 @@ def add_group_print(json_data,gid,uid,name,code,mid,remark):
 	return json_data
 
 
-def edit_group_print(json_data,uid,name,code,mid,remark):
+def edit_group_print(json_data,uid,name,code,mid,remark,cType,pType,gid):
 	userPrint=getUserPrinterObj(uid,code)
 	if userPrint is None:
 		json_data['info']="the user printer not exists"
 	else:
-		result=updateUserPrinterByCondition({"print_user_id":uid,"print_code":code,"print_mid":mid},{"print_name":name,"remark":remark})
+		result=updateUserPrinterByCondition({"print_user_id":uid,"print_code":code,"print_mid":mid},
+											{"print_name":name,"remark":remark,"c_type":cType})
 		if not result>0:
 			json_data['info']="update user printer err01"
-		else:
-			json_data['info']="ok"
-			json_data['status']=1
+			return json_data
+		if gid>0 and pType>0 and pType<=2:
+			userPrint=getUserPrinterObj(uid,code,mid)
+			if userPrint is None:
+				json_data['info']="update user printer err02"
+				return json_data
+			result=updateGroupPrintByCondition({"group_id":gid,"printer_id":userPrint.id},{"p_type":pType})
+			if not result>0:
+				json_data['info']="update user printer err03"
+				return json_data
+		json_data['info']="ok"
+		json_data['status']=1
 	return json_data
 
 @csrf_exempt
@@ -283,23 +308,17 @@ def go_auth(request):
 	uid=request.POST.get("uid","").strip()
 	puid=request.POST.get("puid","").strip()
 	answer=request.POST.get("answer","").strip()
-	try:
-		gid=int(request.POST.get("gid",0))
-	except Exception,e:
-		logger.error("群ID必须为数字：%s",e)
+	if uid=="" or puid=="" :
 		json_data['info']="param err01"
-		return json_return(json_data)
-	if uid=="" or puid=="" or gid<=0 :
-		json_data['info']="param err02"
 		return json_return(json_data)
 	num=getGroupUserCountByCondition({"user_id":puid,"share_print":1})
 	if not num>0:
 		json_data['info']="the printer is not exists or allowed to share"
 		return json_return(json_data)
-	gpObj=getGroupPrintAuthObjByCondition({"group_id":gid,"print_user_id":puid,"user_id":uid})
+	gpObj=getPrintAuthObjByCondition({"print_user_id":puid,"user_id":uid})
 	if not gpObj is None:
 		json_data['info']="the user is already submitted"
-	result=insertGroupPrintAuth(GroupPrintAuth(group_id=gid,print_user_id=puid,user_id=uid,status=0,answer=answer))
+	result=insertPrintAuth(PrintAuth(print_user_id=puid,user_id=uid,status=0,answer=answer))
 	if result>0:
 		json_data['status']=1
 		json_data['info']="ok"
@@ -314,16 +333,10 @@ def my_auth(request):
 	json_data={}
 	json_data['status']=0
 	uid=request.POST.get("uid","").strip()
-	try:
-		gid=int(request.POST.get("gid",0))
-	except Exception,e:
-		logger.error("群ID必须为数字：%s",e)
+	if uid=="":
 		json_data['info']="param err01"
 		return json_return(json_data)
-	if uid=="" or gid<=0:
-		json_data['info']="param err02"
-		return json_return(json_data)
-	gpList=getGroupPrintAuthListByCondition({"group_id":gid,"user_id":uid})
+	gpList=getPrintAuthListByCondition({"user_id":uid})
 	json_data['status']=1
 	json_data['info']="ok"
 	json_data['auth_list']=[]
@@ -339,10 +352,7 @@ def list_auth(request):
 	json_data={}
 	json_data['status']=0
 	puid=request.POST.get("puid","").strip()
-	try:
-		gid=int(request.POST.get("gid",0))
-	except Exception,e:
-		logger.error("群ID必须为数字：%s",e)
+	if puid=="":
 		json_data['info']="param err01"
 		return json_return(json_data)
 	num=getGroupUserCountByCondition({"user_id":puid,"share_print":1})
@@ -350,8 +360,8 @@ def list_auth(request):
 		json_data['info']="this printer is not exists or allowed to share"
 		return json_return(json_data)
 	sql="select a.*,u.email,u.nick from group_print_auth a left join kx_user u on a.user_id=u.uuid where a.status=0 and"\
-		" a.group_id=%s and a.print_user_id=%s"
-	gpList=query_sql(sql,[gid,puid])
+		"a.print_user_id=%s"
+	gpList=query_sql(sql,[puid])
 	json_data['status']=1
 	json_data['info']="ok"
 	json_data['auth_list']=[]
@@ -369,23 +379,22 @@ def deal_auth(request):
 	uid=request.POST.get("uid","").strip()
 	puid=request.POST.get("puid","").strip()
 	try:
-		gid=int(request.POST.get("gid",0))
 		status=int(request.POST.get("verify",-1))
 	except Exception,e:
-		logger.error("gid and verify 必须为数字：%s",e)
+		logger.error("verify 必须为数字：%s",e)
 		json_data['info']="param err01"
 		return json_return(json_data)
-	if uid=="" or puid=="" or gid<=0 or status<0 or status>2:
+	if uid=="" or puid=="" or status<0 or status>2:
 		json_data['info']="param err02"
 		return json_return(json_data)
 	num=getGroupUserCountByCondition({"user_id":puid,"share_print":1})
 	if not num>0:
 		json_data['info']="this printer is not exists or allowed to share"
 		return json_return(json_data)
-	result=updateGroupPrintAuthByCondition({"group_id":gid,"print_user_id":puid,"user_id":uid},
+	result=updatePrintAuthByCondition({"print_user_id":puid,"user_id":uid},
 											{"status":status,"auth_time":datetime.now()})
 	if not result>0:
-		json_data['info']="update  group print auth err01"
+		json_data['info']="update  print auth err01"
 	else:
 		json_data['info']="ok"
 		json_data['status']=1
@@ -538,6 +547,7 @@ def group_user(request):
    			userMap[user.uuid]['nick']=user.nick
    			userMap[user.uuid]['email']=user.email
    		res['userMap']=userMap
+  
 	res['guList']=guList
 	return render(request,"group/group_user.html",res)
 
@@ -549,7 +559,7 @@ def guser_add(request):
 	json_data,group,user=valid_group_user(request,json_data)
 	if user is None:
 		return json_return(json_data)
-	count=getGroupUserCountByCondition({"group_id":gid,"user_id":user.uuid})
+	count=getGroupUserCountByCondition({"group_id":group.id,"user_id":user.uuid})
 	if count>0:
 		json_data['info']="该用户已加入群里！"
 		return json_return(json_data)
@@ -557,7 +567,9 @@ def guser_add(request):
 	if guId>0:
 		json_data['status']=1
 		json_data['info']="ok"
-		json_data['guid']=guId
+		json_data['email']=user.email
+		json_data['nick']=user.nick
+		json_data['remark']="--"
 	else:
 		json_data['info']="添加群用户失败！"
 	return json_return(json_data)

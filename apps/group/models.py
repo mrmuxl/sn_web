@@ -65,9 +65,8 @@ class GroupUserVerify(models.Model):
 
 
 # 群用户打印权限
-class GroupPrintAuth(models.Model):
+class PrintAuth(models.Model):
     id = models.AutoField(primary_key=True)
-    group_id = models.IntegerField(verbose_name=_(u'群ID'))
     print_user_id = models.CharField(max_length=32,verbose_name=_(u'共享打印机的用户ID'))  # 共享打印机的用户ID
     user_id = models.CharField(max_length=32,verbose_name=_(u'使用这用户ID'))  # 使用者用户ID
     status = models.IntegerField(verbose_name=_(u'审核状态'),help_text=_(u'0=审核中，1=审核通过，2=拒绝'))  # 审核状态 0=审核中，1=审核通过，2=拒绝
@@ -76,8 +75,8 @@ class GroupPrintAuth(models.Model):
     auth_time = models.DateTimeField(null=True) # 审核时间
 
     class Meta:
-        db_table = "group_print_auth"
-        verbose_name_plural = verbose_name = _(u'群用户打印权限')
+        db_table = "print_auth"
+        verbose_name_plural = verbose_name = _(u'用户打印权限')
 
 
 # 打印机
@@ -88,6 +87,7 @@ class UserPrinter(models.Model):
     print_code = models.CharField(max_length=260,verbose_name=_(u'打印机序列号'))  # 打印机序列号
     print_mid = models.CharField(max_length=50) #机器码
     remark = models.CharField(null=True,max_length=100) #打印机备注
+    c_type = models.IntegerField() #打印机色彩类型 0=黑白 1=色彩
     create_time = models.DateTimeField(auto_now_add=True)
     update_time = models.DateTimeField(auto_now=True)
 
@@ -99,6 +99,7 @@ class GroupPrint(models.Model):
     id = models.AutoField(primary_key=True)
     group_id = models.IntegerField()
     printer_id = models.IntegerField()
+    p_type = models.IntegerField()
     create_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
