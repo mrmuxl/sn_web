@@ -85,13 +85,14 @@ def list_print(request):
 	for pt in printList:
 		puids+=",'"+pt['print_user_id']+"'"
 	issueMap={} #共享打印机的用户的验证提问
-	if puids!="":
+	issueList=[]
+	if puids != "":
 		puids=puids[1:]
-    	issueList=query_sql("select user_id,is_auth,issue from user_auth_issue where user_id in ("+puids+")")
-    	for se in issueList:
-    		issueMap[se['user_id']]=[]
-    		issueMap[se['user_id']].append(se['is_auth'])
-    		issueMap[se['user_id']].append(se['issue'])
+		issueList=query_sql("select user_id,is_auth,issue from user_auth_issue where user_id in ("+puids+")")
+     	for se in issueList :
+     		issueMap[se['user_id']]=[]
+     	 	issueMap[se['user_id']].append(se['is_auth'])
+     		issueMap[se['user_id']].append(se['issue'])	
 	
 	json_data['status']=1
 	json_data['info']="ok"
@@ -272,11 +273,13 @@ def add_user(request):
 		json_data['info']="param err02"
 		json_return(json_data)
 
-	groupNum=getGroupsCountByCondition({"id":gid})
-	if not groupNum>0:
+	group=getGroupsObjById(gid)
+	if group is None:
 		json_data['info']="the group is not exists"
 		return json_return(json_data)
-
+	if group.user_num>=group.max_num:
+		json_data['info']="the group user limit is reached"
+		return json_return(json_data)
 	userCount=getUserCountByCondition({"uuid":uid})
 	if not userCount>0:
 		json_data['info']="the user is not exists"
@@ -290,14 +293,17 @@ def add_user(request):
 		result=insertGroupUser(GroupUser(group_id=gid,user_id=uid,share_print=0))
 		if not result>0:
 			json_data['info']="add group user err"
-		else:
-			json_data['status']=1
-			json_data['info']="ok"
+			return json_return(json_data)
+		result=updateGroupsByCondition({"id":gid},{"user_num":(group.user_num+1)})
+		if not result>0:
+			json_data['info']="add group user err02"
+			return json_return(json_data)
+		json_data['status']=1
+		json_data['info']="ok"
 	else:
 		json_data['info']="this group user are not allowed to add"
 
 	return json_return(json_data)
-
 
 @csrf_exempt
 @require_POST
@@ -407,7 +413,18 @@ def group_list(request):
 	if not request.user.is_superuser:
 		return HttpResponseRedirect(reverse("login"))
 	groupList=getGroupsListAll()
-	return render(request,"group/group_list.html",{"groupList":groupList})
+	perNum=50
+   	page=1
+   	try:
+   		page=int(request.GET.get("page"))
+   	except Exception:
+   		page=1
+   	uids=[]
+   	for group in groupList[(page-1)*perNum:page*perNum]:
+   		#uids+=",'"+gu.user_id+"'"
+   		uids.append(group.owner_id)
+   	userMap=getUserMapByIds(uids)
+	return render(request,"group/group_list.html",{"groupList":groupList,"userMap":userMap})
 
 @login_required
 def group_add(request):
@@ -528,7 +545,7 @@ def group_user(request):
 		return render(request,"group/group_user.html",res)
 	res['group']=group
    	guList=getGroupUserListByCondition({"group_id":gid})
-   	perNum=2
+   	perNum=50
    	page=1
    	try:
    		page=int(request.GET.get("page"))
@@ -538,18 +555,22 @@ def group_user(request):
    	for gu in guList[(page-1)*perNum:page*perNum]:
    		#uids+=",'"+gu.user_id+"'"
    		uids.append(gu.user_id)
-   	if len(uids)>0:
-   		userList=KxUser.objects.filter(uuid__in=uids)
-   		userMap={}
-   		for user in userList:
-   			userMap[user.uuid]={}
-   			userMap[user.uuid]['uuid']=user.uuid
-   			userMap[user.uuid]['nick']=user.nick
-   			userMap[user.uuid]['email']=user.email
-   		res['userMap']=userMap
-  		print userMap
+   	res['userMap']=getUserMapByIds(uids)
 	res['guList']=guList
 	return render(request,"group/group_user.html",res)
+
+def getUserMapByIds(uids):
+	"""根据uids 列表获取用户信息map"""
+	userMap={}
+	if len(uids)>0:
+		userList=KxUser.objects.filter(uuid__in=uids)
+		for user in userList:
+			userMap[user.uuid]={}
+			userMap[user.uuid]['uuid']=user.uuid
+			userMap[user.uuid]['nick']=user.nick
+			userMap[user.uuid]['email']=user.email
+			userMap[user.uuid]['avatar']=user.avatar
+	return userMap
 
 @require_POST
 def guser_add(request):
@@ -559,20 +580,31 @@ def guser_add(request):
 	json_data,group,user=valid_group_user(request,json_data)
 	if user is None:
 		return json_return(json_data)
+
+	if group.user_num>=group.max_num:
+		json_data['info']="添加群用户失败！群用户数已达上限！"
+		return json_return(json_data)
 	count=getGroupUserCountByCondition({"group_id":group.id,"user_id":user.uuid})
 	if count>0:
 		json_data['info']="该用户已加入群里！"
 		return json_return(json_data)
 	uremark=request.POST.get("remark","")
 	guId=insertGroupUser(GroupUser(group_id=group.id,user_id=user.uuid,user_remark=uremark,joiner_id=request.user.uuid))
-	if guId>0:
-		json_data['status']=1
-		json_data['info']="ok"
-		json_data['email']=user.email
-		json_data['nick']=user.nick
-		json_data['remark']=uremark
-	else:
+	if not guId>0:
 		json_data['info']="添加群用户失败！"
+		return json_return(json_data)
+	
+	result=updateGroupsByCondition({"id":group.id},{"user_num":(group.user_num+1)})
+	if not result>0:
+		json_data['info']="添加群用户失败！err02"
+		return json_return(json_data)
+		
+	json_data['status']=1
+	json_data['info']="ok"
+	json_data['email']=user.email
+	json_data['nick']=user.nick
+	json_data['remark']=uremark
+
 	return json_return(json_data)
 
 def valid_group_user(request,json_data):
@@ -597,7 +629,7 @@ def valid_group_user(request,json_data):
 		json_data['info']="该群不存在或已删除！"
 		return json_data,None,None
 	if (not request.user.is_superuser) and (group.owner_id!=request.user.uuid):
-		json_data['info']="您无权限添加群用户！"
+		json_data['info']="您无权限管理群用户！"
 		return json_data,None,None
 	user=getUserObjByCondition({"email":email})
 	if user is None:
@@ -637,6 +669,27 @@ def guser_del(request):
 	if user is None:
 		return json_return(json_data)
 	delGroupUserByCondition({"group_id":group.id,"user_id":user.uuid})
+	result=updateGroupsByCondition({"id":group.id},{"user_num":(group.user_num-1)})
+	if not result>0:
+		json_data['info']="删除群用户失败！"
+		return json_return(json_data)
 	json_data['status']=1
 	json_data['info']="ok"
+	return json_return(json_data)
+
+@require_POST
+def guser_remark(request):
+	"""Ajax 更改群用户备注"""
+	json_data={}
+	json_data['status']=0
+	json_data,group,user=valid_group_user(request,json_data)
+	if user is None:
+		return json_return(json_data)
+	uremark=request.POST.get("remark","")
+	result=updateGroupUserByCondition({"group_id":group.id,"user_id":user.uuid},{"user_remark":uremark})
+	if result:
+		json_data['status']=1
+		json_data['info']="ok"
+	else:
+		json_data['info']="更改群用户备注失败！"
 	return json_return(json_data)

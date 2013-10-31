@@ -1,7 +1,7 @@
 {% extends "user/base.html" %}
 {% block content %}
 {% load pagination_tags %}
-{% autopaginate guList 2 %}
+{% autopaginate guList 50 %}
 {% load my_filter %}
 <div class="main-content">
 	<div class="breadcrumbs" id="breadcrumbs">
@@ -74,7 +74,7 @@
 													<i>@</i>
 													邮箱
 												</th>
-												<th>
+												<th class="span3">
 													<i class="icon-credit-card"></i>
 													备注名
 												</th>
@@ -90,7 +90,17 @@
 											<tr id="user_clone" style="display:none;">
 												<td class=""></td>
 												<td></td>
-												<td></td>
+												<td>
+													<span>
+												
+													</span> 
+													<input type="text" name="new_remark" value="" class="span8" style="display:none;margin-bottom:0;" />
+													<div class="action-buttons pull-right">
+													<a class="green remark_user" style="cursor:pointer;">
+														<i class="icon-pencil bigger-120"></i>
+													</a>
+													</div>
+												</td>
 												<td>
 													<label>
 													<input type="checkbox" class="ace-switch ace-switch-5" name="p_share">
@@ -107,20 +117,28 @@
 											{% if guList %}
 											{% for gu in guList %}
 	
-											<tr>
-												<td class="">{{userMap|getDict:gu.user_id|getDict:'email'}}</td>
+											<tr class="ace-nav">
+												<td class="">
+													{% with avatar=userMap|getDict:gu.user_id|getDict:'avatar' %}
+													{% if avatar %}
+													<img alt="头像" src="{{ MEDIA_URL }}{{avatar|getAvatar:'50X50'}}" class="nav-user-photo">
+													{% else %}
+													<img class="nav-user-photo" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg">
+													{% endif %}
+													{% endwith %}
+													{{userMap|getDict:gu.user_id|getDict:'nick'}}
+												</td>
 
 												<td>
-													{{userMap|getDict:gu.user_id|getDict:'nick'}}
+													{{userMap|getDict:gu.user_id|getDict:'email'}}
 												</td>
 												<td>
 													<span>
 													{% if gu.user_remark %}
 													{{gu.user_remark}}
-													{% else %}
-													--	
 													{% endif %}
 													</span> 
+													<input type="text" name="new_remark" value="" class="span8" style="display:none;margin-bottom:0;" />
 													<div class="action-buttons pull-right">
 													<a class="green remark_user" style="cursor:pointer;">
 														<i class="icon-pencil bigger-120"></i>
@@ -176,7 +194,7 @@ $("#add_user").click(function(){
 			userTr.show();
 			userTr.children("td").eq(0).text(data.nick);
 			userTr.children("td").eq(1).text(data.email);
-			userTr.children("td").eq(2).text(data.remark);
+			userTr.children("td").eq(2).children("span").text(data.remark);
 			$("#user_clone").after(userTr);
 		}else{
 			alert(data.info)
@@ -184,7 +202,7 @@ $("#add_user").click(function(){
 	},"json");
 });
 $(".del_user").click(function(){
-	var email=$(this).parent("td").parent("tr").children("td").eq(0).html();
+	var email=$.trim($(this).parent("td").parent("tr").children("td").eq(1).html());
 	var delTr=$(this).parent("td").parent("tr");
 	if (confirm("确定删除群用户："+email+" 吗？")){
 		$.post("{% url 'group_guser_del' %}",{"gid":gid,"email":email},function(data){
@@ -199,7 +217,7 @@ $(".del_user").click(function(){
 	return false;
 });
 $("input[name=p_share]").click(function(){
-	var email=$(this).parent().parent("td").parent("tr").children("td").eq(0).html();
+	var email=$.trim($(this).parent().parent("td").parent("tr").children("td").eq(1).html());
 	var checked=$(this).is(":checked");
 	var obj=$(this);
 	$.post("{% url 'group_print_share' %}",{"gid":gid,"email":email},function(data){
@@ -213,8 +231,31 @@ $("input[name=p_share]").click(function(){
 });
 
 $(".remark_user").click(function(){
+	var uremark=$.trim($(this).parent().prev("input").prev("span").text());
+	$(this).parent().prev("input").val(uremark);
+	$(this).parent().prev("input").prev("span").hide();
+	$(this).parent().prev("input").show();
+});
+$("input[name=new_remark]").blur(function(){
 	var obj=$(this);
-	remark
+	var newRemark=$.trim(obj.val());
+	var oldRemark=$.trim(obj.prev("span").text());
+	var email=$.trim($(this).parent("td").parent("tr").children("td").eq(1).html());
+	if (newRemark==oldRemark){
+		obj.prev("span").show();
+		obj.hide();
+	}else{
+		$.post("{% url 'group_guser_remark' %}",{"gid":gid,"email":email,"remark":newRemark},function(data){
+			if(data.status){
+				obj.prev("span").text(newRemark);
+				obj.prev("span").show();
+				obj.hide();
+			}else{
+				alert(data.info);
+			}
+			
+		},"json")
+	}
 });
 </script>
 {% endblock %}

@@ -1,7 +1,8 @@
 {% extends "user/base.html" %}
 {% block content %}
 {% load pagination_tags %}
-{% autopaginate groupList 2 %}
+{% autopaginate groupList 50 %}
+{% load my_filter %}
 <div class="main-content">
 	<div class="breadcrumbs" id="breadcrumbs">
 		<ul class="breadcrumb">
@@ -75,7 +76,7 @@
 									<tr>
 										<td>{{ group.id}}</td>
 				                  		<td>{{ group.name}}</td>
-				                  		<td>{{ group.owner_id }}</td>
+				                  		<td>{{ userMap|getDict:group.owner_id|getDict:'nick' }}({{ userMap|getDict:group.owner_id|getDict:'email' }})</td>
 				                  		<td>
 				                  			{% if group.g_type == 1 %}
 				                  			<span class="label label-warning">普通群</span>
