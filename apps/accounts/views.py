@@ -133,27 +133,31 @@ def login(request,next_page="/User/index",redirect_field_name=REDIRECT_FIELD_NAM
             return HttpResponseRedirect('/')    
         #if redirect_field_name in request.REQUEST:
         #    next_page = request.REQUEST[redirect_field_name]
-        if not is_safe_url(url=next_page, host=request.get_host()):
-            next_page = "/"
-        else:
-            next_page = request.META.get("HTTP_REFERER","/User/index/")
-            # Security check -- don't allow redirection to a different host.
-            if not is_safe_url(url=next_page, host=request.get_host()):
-                next_page = "/"
-        if next_page:
-            request.session['next_page'] = next_page
+        # if not is_safe_url(url=next_page, host=request.get_host()):
+        #     next_page = "/"
+        # else:
+        #     next_page = request.META.get("HTTP_REFERER","/User/index/")
+        #     print 'next_page',next_page
+        #     # Security check -- don't allow redirection to a different host.
+        #     if not is_safe_url(url=next_page, host=request.get_host()):
+        #         next_page = "/"
+        next_page=request.GET.get(redirect_field_name,"") # 默认 next
+        if next_page=="":
+            next_page="/User/index"
+        if not is_safe_url(url=next_page,host=request.get_host()):
+            next_page = "/User/index"
+        request.session['next_page'] = next_page
         return render(request,"login.html",{})
     elif request.method == "POST":
         email = strip_tags(request.POST.get("email",'').lower().strip())
         password = request.POST.get("password").strip()
-        refer = request.POST.get("refer","")
         user = authenticate(username=email,password=password)
         if user and user.is_active:
             auth.login(request,user)
             rn = request.session.get('next_page','')
             if rn:
                 if rn.replace("http://","") == request.get_host()+"/":
-                    return HttpResponseRedirect(next_page)    
+                    return HttpResponseRedirect(next_page)  
             return HttpResponseRedirect(request.session.get('next_page','/User/index/'))    
         else:
             data={"email":email}
