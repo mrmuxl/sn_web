@@ -366,7 +366,7 @@ def list_auth(request):
 	if not num>0:
 		json_data['info']="this printer is not exists or allowed to share"
 		return json_return(json_data)
-	sql="select a.*,u.email,u.nick from group_print_auth a left join kx_user u on a.user_id=u.uuid where a.status=0 and"\
+	sql="select a.*,u.email,u.nick from print_auth a left join kx_user u on a.user_id=u.uuid where a.status=0 and"\
 		" a.print_user_id=%s"
 	gpList=query_sql(sql,[puid])
 	json_data['status']=1
@@ -406,6 +406,49 @@ def deal_auth(request):
 		json_data['info']="ok"
 		json_data['status']=1
 	return json_return(json_data)
+
+@csrf_exempt
+@require_POST
+def print_verify(request):
+	"""接口：验证用户是否可以打印"""
+	json_data={}
+	json_data['status']=0
+	json_data['info']=""
+	uid=request.POST.get("uid","").strip()
+	puid=request.POST.get("puid","").strip()
+	mid=request.POST.get("mid","").strip()
+	code=request.POST.get("code","").strip()
+	if uid=="" or puid=="" or mid=="" or code=="":
+		json_data['info']="param err01"
+		return json_return(json_data)
+	sql="select group_id,printer_id,p_type from group_print where printer_id = (select id from user_printer where " \
+		" print_user_id=%s and print_code=%s and print_mid=%s)  order by p_type"
+	gpList=query_sql(sql,[puid,code,mid])
+	gIds=[]
+	for gp in gpList:
+		gIds.append(gp['group_id'])
+	if len(gIds)==0:
+		json_data['info']="no group has the print"
+		return json_return(json_data)
+	#打印用户在是否在指定的群里
+	guList=GroupUser.objects.filter(user_id=uid,group_id__in=gIds)
+	if len(guList)==0:
+		json_data['info']="no group has the print"
+		return json_return(json_data)
+	guMap={}
+	#print guList
+	for gu in guList:
+		guMap[gu.group_id]=gu.user_id
+	for gp in gpList:
+		gid=gp['group_id']
+		#print "=========="
+		if gid in guMap.keys():
+			json_data['status']=1
+			json_data['info']='ok'
+			json_data['type']=gp['p_type']
+			return json_return(json_data)		
+	return json_return(json_data)
+
 
 
 @require_GET

@@ -13,6 +13,8 @@ urlpatterns = patterns('',
     url(r'^my_auth/?$','apps.group.views.my_auth', name='group_my_auth'),
     url(r'^list_auth/?$','apps.group.views.list_auth', name='group_list_auth'),
     url(r'^deal_auth/?$','apps.group.views.deal_auth', name='group_deal_auth'),
+    url(r'^print_verify/?$','apps.group.views.print_verify', name='group_print_verify'),
+
     url(r'^group_list/?$','apps.group.views.group_list', name='group_group_list'),
     url(r'^group_add/?$','apps.group.views.group_add', name='group_group_add'),
     url(r'^group_user/?$','apps.group.views.group_user', name='group_group_user'),
