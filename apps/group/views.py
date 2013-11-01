@@ -111,7 +111,7 @@ def list_print(request):
 		json_data['print_list'].append({"puid":puid,"name":pt['print_name'],
 					"code":pt['print_code'],"mid":pt['print_mid'],"remark":pt['remark'],"color":pt['c_type'],
 					"type":pt['p_type'],"auth":status,"auth_type":auth_type,"issue":issue})
-		
+
 	return json_return(json_data,False)	
 
 @csrf_exempt
@@ -300,7 +300,7 @@ def add_user(request):
 	return json_return(json_data)
 
 @csrf_exempt
-@require_POST
+@require_GET
 def go_auth(request):
 	"""接口:用户提交打印机审核"""
 	json_data={}
@@ -311,14 +311,31 @@ def go_auth(request):
 	if uid=="" or puid=="" :
 		json_data['info']="param err01"
 		return json_return(json_data)
+	if uid==puid:
+		json_data['info']="self not need to auth"
+		return json_return(json_data)
 	num=getGroupUserCountByCondition({"user_id":puid,"share_print":1})
 	if not num>0:
 		json_data['info']="the printer is not exists or allowed to share"
 		return json_return(json_data)
+	userNum=getUserCountByCondition({"uuid":uid})
+	if userNum==0:
+		json_data['info']="the user is not exists"
+		return json_return(json_data)
 	gpObj=getPrintAuthObjByCondition({"print_user_id":puid,"user_id":uid})
 	if not gpObj is None:
-		json_data['info']="the user is already submitted"
-		return json_return(json_data)
+		#审核拒绝后 用户再次提交审核请求，更新审核状态为0
+		if gpObj.status==2:
+			result=updatePrintAuthByCondition({"print_user_id":puid,"user_id":uid},{"status":0})
+			if result>0:
+				json_data['status']=1
+				json_data['info']="ok"
+			else:
+				json_data['info']="update auth error"
+			return json_return(json_data)
+		else:
+			json_data['info']="the user is already submitted"
+			return json_return(json_data)
 	result=insertPrintAuth(PrintAuth(print_user_id=puid,user_id=uid,status=0,answer=answer))
 	if result>0:
 		json_data['status']=1
@@ -415,6 +432,12 @@ def print_verify(request):
 	if uid=="" or puid=="" or mid=="" or code=="":
 		json_data['info']="param err01"
 		return json_return(json_data)
+	#自己跟自己无需验证
+	if uid==puid:
+		json_data['status']=1
+		json_data['info']='ok'
+		json_data['type']=1 #直接打印
+		return json_return(json_data)	
 	sql="select group_id,printer_id,p_type from group_print where printer_id = (select id from user_printer where " \
 		" print_user_id=%s and print_code=%s and print_mid=%s)  order by p_type"
 	gpList=query_sql(sql,[puid,code,mid])

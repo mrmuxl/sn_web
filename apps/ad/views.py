@@ -83,7 +83,7 @@ def fzu(request):
     if request.method == 'GET':
         data={"title":u"打印创业计划"}
         try:
-            ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_V').order_by('-id')[0:1].get()
+            ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(is_publish=1).order_by('-id')[0:1].get()
             data.update(ins_file=ins_file.install_file)
         except Exception as e:
             data.update(ins_file='')
@@ -99,12 +99,23 @@ def fzu(request):
             except Exception as e:
                 logger.debug("printer view:%s",e)
         try:
-            ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_V').order_by('-id')[0:1].get()
+            ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(is_publish=1).order_by('-id')[0:1].get()
             data.update(ins_file=ins_file.install_file)
         except Exception as e:
             data.update(ins_file='')
             logger.debug("ins_file:%s",e)
         return render(request,"ad/print_result.html",data)
+
+@require_GET
+def jxxy(request):
+     data={"title":u"打印创业计划"}
+     try:
+        ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(is_publish=1).order_by('-id')[0:1].get()
+        data.update(ins_file=ins_file.install_file)
+     except Exception as e:
+        data.update(ins_file='')
+        logger.debug("ins_file:%s",e)
+     return render(request,"ad/jxxy.html",data)
 
 @login_required
 def operator_add(request):
