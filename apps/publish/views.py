@@ -13,6 +13,7 @@ from forms import PublishAdd
 from utils import handle_uploaded_file,update_download_link
 from django.conf import settings
 from utils import publish_message
+from apps.utils.db_util import *
 
 logger = logging.getLogger(__name__)
 
@@ -141,6 +142,13 @@ def do_pub(request):
                             logger.debug("%s",e)
                             message['status']=0
                             message['info']=u"更新发布链接失败！"
+                            message['data']=0
+                            return HttpResponse(json.dumps(message),content_type="application/json")
+                        sql="update publish_user set ver=%s where email !='simplenect@simplenect.com' "
+                        result=execute_sql(sql,[pub_id])
+                        if  result is None:
+                            message['status']=0
+                            message['info']=u"更新发布链接失败err02！"
                             message['data']=0
                             return HttpResponse(json.dumps(message),content_type="application/json")
                         message['status']=1
