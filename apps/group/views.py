@@ -99,25 +99,19 @@ def list_print(request):
 	json_data['print_list']=[]
 	for pt in printList:
 		puid=pt['print_user_id']
-		status=-1
+		status=-1 #用户未提交审核申请
 		if puid in authMap.keys():
 			status=authMap[puid]
+		auth_type=0   #默认不需要验证
+		issue=""
+		if puid in issueMap.keys():
+			auth_type=issueMap[puid][0]
+			issue=issueMap[puid][1]
 
-		#用户未提交审核申请
-		if status==-1:
-			#默认不需要验证
-			auth_type=0
-			issue=""
-			if puid in issueMap.keys():
-				auth_type=issueMap[puid][0]
-				issue=issueMap[puid][1]
-
-			json_data['print_list'].append({"puid":puid,"name":pt['print_name'],
+		json_data['print_list'].append({"puid":puid,"name":pt['print_name'],
 					"code":pt['print_code'],"mid":pt['print_mid'],"remark":pt['remark'],"color":pt['c_type'],
 					"type":pt['p_type'],"auth":status,"auth_type":auth_type,"issue":issue})
-		else:	
-			json_data['print_list'].append({"puid":puid,"name":pt['print_name'],"code":pt['print_code'],"mid":pt['print_mid'],
-					"remark":pt['remark'],"color":pt['c_type'],"type":pt['p_type'],"auth":status})
+		
 	return json_return(json_data,False)	
 
 @csrf_exempt
@@ -355,7 +349,7 @@ def my_auth(request):
 @csrf_exempt
 @require_POST
 def list_auth(request):
-	"""接口:用户获取审核状态"""
+	"""接口:共享用户获取审核列表"""
 	json_data={}
 	json_data['status']=0
 	puid=request.POST.get("puid","").strip()
