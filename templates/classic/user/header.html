@@ -14,7 +14,7 @@
 
 
 					<ul class="nav ace-nav pull-right">
-						<li class="light-blue">
+						<li class="light-blue" style="padding:6px 0 3px 0;">
 							<a data-toggle="dropdown" href="{% url "accounts_info" %}" class="dropdown-toggle">
 								{% if request.user.avatar %}
 								<img class="nav-user-photo" src="{{ MEDIA_URL }}{{ request.user.avatar|split:","|first|join:""|split:"="|last }}/snap_50X50_{{ request.user.avatar|split:","|slice:"2"|join:""|split:"="|last }}.jpg" alt="{{ request.user.nick }}">
