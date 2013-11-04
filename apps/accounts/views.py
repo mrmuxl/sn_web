@@ -32,6 +32,7 @@ from apps.ad.models import OperatorAssistant,Operator
 from apps.kx.tongji.utils import CustomSQL
 from apps.utils.json_util import *
 from apps.accounts.service import *
+from apps.group.service import getGroupsCountByCondition
 from apps.msg_board.utils import uniqid,str_reverse,uniq
 
 logger = logging.getLogger(__name__)
@@ -154,6 +155,11 @@ def login(request,next_page="/User/index",redirect_field_name=REDIRECT_FIELD_NAM
         refer = request.POST.get("refer","")
         user = authenticate(username=email,password=password)
         if user and user.is_active:
+            groupNum=getGroupsCountByCondition({"owner_id":user.uuid})
+            if groupNum>0:
+                request.session['group_owner']=1
+            else:
+                request.session['group_owner']=0
             auth.login(request,user)
             rn = request.session.get('next_page','')
             if rn:

@@ -26,7 +26,9 @@
 						群列表(共{{paginator.count}}条)
 					</h4>
 					<div class="pull-right" style="margin-right:20px;">
+						{% if user.is_superuser %}
 						<a href="{% url 'group_group_add' %}" class=""><i class="icon-plus"></i>新增群</a>
+						{% endif %}
 					</div>
 		
 				</div>
@@ -88,10 +90,12 @@
 				                  		<td>{{ group.max_num }}</td>
 				                  		<td>{{ group.create_time }}</td>
 				                  		<td>
+				                  			{% if user.is_superuser %}
 				                  			<a class="btn btn-mini btn-info" href="{% url 'group_group_add' %}?gid={{group.id}}">
 												<i class="icon-edit bigger-120"></i>
 												编辑
 											</a>
+											{% endif %}
 											<a class="btn btn-mini btn-warning" href="{% url 'group_group_user' %}?gid={{group.id}}" target="_blank">
 												<i class="icon-group bigger-120"></i>
 												群用户

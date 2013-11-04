@@ -1,7 +1,6 @@
 {% extends "user/base.html" %}
 {% block content %}
 {% load pagination_tags %}
-{% autopaginate guList 50 %}
 {% load my_filter %}
 <div class="main-content">
 	<div class="breadcrumbs" id="breadcrumbs">
@@ -27,6 +26,7 @@
 	{{error}}
 	</div>
 	{% else %}
+	{% autopaginate guList 50 %}
 	<div class="page-content">
 		<div class="page-header position-relative">
 			<h1 class="pull-left">新增群用户<small><i class="icon-double-angle-right"></i></small></h1>

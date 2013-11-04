@@ -28,10 +28,10 @@
 			<li>
 				<a href="/User/printer/auth/">
 					<i class="icon-print"></i>
-					<span class="menu-text"> 打印共享授权 </span>
+					<span class="menu-text"> 打印共享授权</span>
 				</a>
 			</li>
-			{% if user.is_superuser %}
+			{% if user.is_superuser or request.session.group_owner %}
 			<li>
 				<a href="/group/group_list">
 					<i class="icon-group"></i>
