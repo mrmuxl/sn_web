@@ -150,16 +150,20 @@
 										<i class="icon-reorder orange"></i>
 										我的打印记录
 									</h4>
-									<!--
+									
 									<h5 class="lighter pull-left" style="margin-left:10px;">
 										<i class="icon-twitter blue"></i>
-										配送地址 我的配送地址
-										<a href="#" data-rel="tooltip" data-original-title="需要打印店配送资料的请填写！">
+										<span class="editDep" style="cursor:pointer;" data-rel="tooltip" data-original-title="点击编辑配送地址">
+										配送地址：<span>{{user.department}}</span>
+										</span>
+										<input type="text" name="dep" value="" style="display:none;width:500px;" />
+										<a href="javascript:;"  data-rel="tooltip" data-original-title="需要打印店配送资料的请填写！" style="padding:10px;">
 											<i class="icon-bullhorn  orange2"></i>
 										</a>
+										
 									</h5>
-									-->
-									<div class="widget-toolbar">
+					
+									<div class="widget-toolbar" style="margin-top:10px;">
 										<a href="#" data-action="collapse">
 											<i class="icon-chevron-up"></i>
 										</a>
@@ -325,7 +329,49 @@
 				<!--/#ace-settings-container-->
 			</div><!--/.main-content-->
 
+
 <script type="text/javascript">
-	//$('[data-rel=tooltip]').tooltip();
+$('[data-rel=tooltip]').hover(function() {  
+  $(this).tooltip('show')  
+},function(){
+	$(this).tooltip('hide')  
+}); 
+
+$(".editDep").click(function(){
+	editDep($(this));
+});
+function editDep(obj){
+	if($("input[name=dep]").is(":visible")){
+		return false;
+	}
+	var dep=$.trim(obj.children("span").text());
+	$("input[name=dep]").val(dep);
+	obj.children("span").hide();
+	$("input[name=dep]").show();
+	$("input[name=dep]").focus();
+	obj.unbind("click");
+}
+$("input[name=dep]").on("blur",function(){
+	 var obj=$(this);
+	 var dep=$.trim($(".editDep").children("span").text());
+	 var newDep=$.trim(obj.val());
+	 if (newDep==dep){
+	 	obj.hide();
+	 	obj.prev("span").children("span").show();
+	 	$(".editDep").bind("click",function(){editDep($(this))});
+	 }else{
+	 	$.post("{% url 'change_dep' %}",{"dep":newDep},function(data){
+	 		if(data.status){
+	 			obj.prev("span").children("span").text(newDep);
+	 			obj.hide();
+	 			obj.prev("span").children("span").show();
+	 		}else{
+	 			alert(data.info);
+	 		}
+	 	},"json");
+	 	$(".editDep").bind("click",function(){editDep($(this))});
+	 }
+
+})
 </script>
 {% endblock %}
