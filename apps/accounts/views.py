@@ -184,7 +184,8 @@ def login(request,next_page="/User/index",redirect_field_name=REDIRECT_FIELD_NAM
         if not is_safe_url(url=next_page,host=request.get_host()):
             next_page = "/User/index"
         request.session['next_page'] = next_page
-        return render(request,"login.html",{})
+        email=request.GET.get("email","")
+        return render(request,"login.html",{"email":email})
     elif request.method == "POST":
         email = strip_tags(request.POST.get("email",'').lower().strip())
         password = request.POST.get("password").strip()
