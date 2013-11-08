@@ -125,7 +125,7 @@ class GroupUserInvite(models.Model):
     email = models.CharField(max_length=50)
     is_reg = models.BooleanField() # 邀请用户是否已注册
     status = models.IntegerField() # 0 邀请中 1=接受 2=拒绝
-    creater_id = models.IntegerField()
+    creater_id = models.CharField(max_length=32)
     create_time = models.DateTimeField(auto_now_add=True)
     deal_time = models.DateTimeField(null=True)  # 邀请处理时间 表示已处理过邀请
 
