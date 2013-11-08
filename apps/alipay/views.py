@@ -1,6 +1,7 @@
 #_*_coding:utf-8_*_
 
-import logging,uuid,time,datetime,random
+import logging,uuid,time,random
+from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import (require_POST,require_GET)
@@ -31,7 +32,7 @@ def get_order_id():
 
 @require_GET
 def return_url_handler(request):
-    now = datetime.datetime.now()
+    now = datetime.now()
     out_trade_no = request.GET.get('out_trade_no','')
     trade_no = request.GET.get('trade_no','')
     trade_status = request.GET.get('trade_status','')
@@ -77,7 +78,7 @@ def return_url_handler(request):
 @csrf_exempt
 @require_POST
 def notify_url_handler(request):
-    now = datetime.datetime.now()
+    now = datetime.now()
     if notify_verify(request.POST):
         out_trade_no = request.POST.get('out_trade_no','')
         trade_no = request.POST.get('trade_no','')
@@ -125,7 +126,7 @@ def create_order(request):
     #查询operator表获得过期时间#  
     #如果无订单，直接创建,不需要查运营商表，
     '''
-    now = datetime.datetime.now()
+    now = datetime.now()
     product_info = ProductInfo.objects.all()
     t = request.POST.get('type','')
     num = request.POST.get('auth','')
@@ -167,7 +168,7 @@ def order_info(request):
     #如果购买过的服务的过期时间早于现在时间，那么就不显示客户曾经购买过
     #如果购买的服务没有过期，查询还剩余天数，计算还剩多少钱,用户应付款额度减去剩下的钱数就是实际付款额度
     '''
-    now = datetime.datetime.now()
+    now = datetime.now()
     c = request.GET.get('c',u'1')
     t = request.GET.get('type','')
     order_info = OrderInfo.objects.filter(buy_user=request.user.email).filter(pay_status__exact=1).values('pay_at','buy_product_id__name','buy_product_id__price')[0:1]

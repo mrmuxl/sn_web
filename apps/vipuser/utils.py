@@ -8,7 +8,7 @@ from apps.kx.models import KxUser
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import (require_POST,require_GET)
 from django.http import HttpResponseRedirect,HttpResponse
-from apps.kx.utils import is_valid_email,send_mail_thread
+from apps.utils.sendmail import send_mail_thread
 from django.utils.html import strip_tags
 from mail_text import vipuser_tip
 from pprint import pprint

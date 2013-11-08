@@ -1,0 +1,111 @@
+<div class="widget-header header-color-blue">
+	<h5 class="bigger lighter">
+		<i class="icon-table"></i>
+		{{group.name}}&nbsp;群邀请用户
+	</h5>
+
+	<div class="widget-toolbar widget-toolbar-light no-border">
+
+	</div>
+</div>
+
+<div class="widget-body">
+	<div class="widget-main no-padding">
+		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+					<th class="span5">
+						<i>@</i>
+						邮箱
+					</th>
+					<th class="span3">
+						邀请时间
+					</th>
+			
+					<th class="hidden-480">&nbsp;</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr id="user_clone" style="display:none;">
+
+					<td></td>
+					<td>
+					
+					</td>
+					<td class="hidden-480">
+						<button class="btn btn-mini btn-info del_invite">
+							<i class="icon-envelope-alt bigger-120"></i>
+							再次邀请
+						</button>
+						<button class="btn btn-mini btn-danger del_invite" style="margin-left:5px;">
+							<i class="icon-trash bigger-120"></i>
+							删除
+						</button>
+					</td>
+				</tr>
+				{% if guList %}
+				{% for gu in guList %}
+
+				<tr class="ace-nav">
+
+
+					<td>
+						{{gu.email}}
+					</td>
+					<td>
+						{{gu.create_time}}
+					</td>
+					<td class="hidden-480">
+						<button class="btn btn-mini btn-info invite_again">
+							<i class="icon-envelope-alt bigger-120"></i>
+							再次邀请
+						</button>
+						<button class="btn btn-mini btn-danger del_invite" style="margin-left:5px;">
+							<i class="icon-trash bigger-120"></i>
+							删除
+						</button>
+						
+					</td>
+				</tr>
+				
+				{% endfor %}
+				{% endif %}
+			</tbody>
+		</table>
+	</div>
+</div>
+<script>
+$(".del_invite").on("click",function(){
+	$(this).hide();
+	if ($(this).next("span").length==0){
+		$(this).after('<span style="margin-left:5px;">请确定<button class="btn btn-mini btn-danger del_ok" style="line-height:15px;">删除</button>或<a href="javascript:;" class="del_keep">继续保留</a></span>');
+		$(".del_ok").on("click",function(){delInvite($(this));});
+		$(".del_keep").on("click",function(){keepInvite($(this));});
+	}
+});
+function delInvite(obj){
+	var uemail=$.trim(obj.parent("span").parent("td").parent("tr").children("td").eq(0).text());
+	$.post("{% url 'group_invite_del' %}",{"uemail":uemail,"gid":gid},function(data){
+		if(data.status){
+			obj.parent("span").parent("td").parent("tr").remove();
+		}else{
+			alert(data.info);
+		}
+	},"json");
+}
+function keepInvite(obj){
+	obj.parent("span").prev("button").show();
+	obj.parent("span").remove();
+}
+$(".invite_again").on("click",function(){
+	var uemail=$.trim($(this).parent("td").parent("tr").children("td").eq(0).text());
+	$.post("{% url 'group_invite_again' %}",{"gid":gid,"uemail":uemail},function(data){
+		if(data.status){
+			alert("发送邀请成功！");
+		}else{
+			alert(data.info);
+		}
+	},"json");
+});
+</script>

@@ -1,6 +1,7 @@
 #_*_coding:utf-8_*_
 
-import datetime,logging,json
+import logging,json
+from datetime import datetime
 from django.conf import settings
 from models import VIPUser,Print,Shared,PrintAccess,SharedAccess
 from apps.kx.models import KxUserFriend
@@ -9,7 +10,8 @@ from models import Print,Shared
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import (require_POST,require_GET)
 from django.http import HttpResponseRedirect,HttpResponse
-from apps.kx.utils import is_valid_email,send_mail_thread
+from apps.utils.sendmail import send_mail_thread
+from apps.utils.verify import check_email
 from django.utils.html import strip_tags
 from mail_text import vipuser_tip
 from pprint import pprint
@@ -19,8 +21,8 @@ logger = logging.getLogger(__name__)
 
 
 def get_remainder_days(email):
-    now = datetime.datetime.now()
-    Dday = datetime.datetime(2013,8,20) #1944-06-06
+    now = datetime.now()
+    Dday = datetime(2013,8,20) #1944-06-06
     ctime = KxUser.objects.filter(email=email).values('create_time')
     if ctime:
         ctime = ctime[0]['create_time']
@@ -37,7 +39,7 @@ def get_remainder_days(email):
 @require_POST
 def vipuser_api(request):
     message = {}
-    now = datetime.datetime.now()
+    now = datetime.now()
     email = request.POST.get('email','')
     logger.info("email:%s",email)
     if email:
@@ -130,7 +132,7 @@ def vipuser_test(reqeust,ckey,email):
     from_email =u"SimpleNect"
     if ckey and email and key == ckey:
         email = strip_tags(email.strip().strip('/').lower())
-        if not is_valid_email(email):
+        if not check_email(email):
             message ="""邮箱格式不正确！<A HREF="javascript:history.back()">返 回</A>"""
         subject = u'SimpleNect文件仓库3.3.6.4版本发布！'
         msg = vipuser_tip(download_url)
@@ -149,7 +151,7 @@ def vipuser_test(reqeust,ckey,email):
 def nonvipuser(request):
     '''这个接口已经不使用'''
     message = {}
-    now = datetime.datetime.now()
+    now = datetime.now()
     email = request.POST.get('email','')
     logger.info("email:%s",email)
     if email:
@@ -213,7 +215,7 @@ def nonvipuser(request):
 @require_POST
 def access_user(request):
     message = {}
-    now = datetime.datetime.now()
+    now = datetime.now()
     email = request.POST.get('email','')
     tp = request.POST.get('type','')
     users = request.POST.getlist('users','')

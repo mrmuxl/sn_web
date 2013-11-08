@@ -13,12 +13,53 @@
 				<!-- </div> --> 
 
 				<div class="page-content">
-					<div class="page-header position-relative text-center">
-
-						<a href="{{DOWNLOAD}}/Install/{{ins_file}}" class="btn btn-warning">
+					<div class="page-header position-relative text-center clearfix">
+						<span class="span3">
+						<a href="{{DOWNLOAD}}/Install/{{ins_file}}" class="btn btn-warning" style="margin-top:12px;">
 							<i class="icon-download"></i>
 							下载Windows客户端
 						</a>
+						</span>
+						<div class="span7 infobox-container">
+
+
+							<div class="infobox infobox-orange2  " >
+								<div class="infobox-icon">
+									<i class="icon-group"></i>
+								</div>
+
+								<div class="infobox-data">
+									<span class="infobox-data-number">{{my_friends}}人</span>
+									<div class="infobox-content">我的好友</div>
+								</div>
+							</div>
+							
+
+							<div class="infobox infobox-red  ">
+								<div class="infobox-icon">
+									<i class="icon-folder-close-alt"></i>
+								</div>
+
+								<div class="infobox-data">
+									<span class="infobox-data-number">{% if share_folder %}{{share_folder}}{% else %}0{% endif %}个</span>
+									<div class="infobox-content">我的共享文件夹</div>
+								</div>
+							</div>
+
+							
+
+
+							<div class="infobox infobox-pink  ">
+								<div class="infobox-icon">
+									<i class="icon-reorder"></i>
+								</div>
+
+								<div class="infobox-data">
+									<span class="infobox-data-number">{{ print_count }}次</span>
+									<div class="infobox-content">30天内打印次数</div>
+								</div>
+							</div>
+						</div>
 					</div><!--/.page-header-->
 
 					<div class="row-fluid">
@@ -37,8 +78,8 @@
 							</div>
 							{% endif %}
 							<div class="row-fluid">
-
-								<div class="span5">
+								{% if print_num %}
+								<div class="">
 									
 									<div class="widget-box transparent">
 										<div class="widget-header widget-header-flat">
@@ -93,50 +134,12 @@
 										                </tr>
 													</tbody>
 												</table>
-											</div><!--/widget-main-->
-										</div><!--/widget-body-->
-									</div>
-								</div>
-								<div class="span7 infobox-container">
-
-
-									<div class="infobox infobox-orange2  ">
-										<div class="infobox-icon">
-											<i class="icon-group"></i>
-										</div>
-
-										<div class="infobox-data">
-											<span class="infobox-data-number">{{my_friends}}人</span>
-											<div class="infobox-content">我的好友</div>
-										</div>
-									</div>
-									
-
-									<div class="infobox infobox-red  ">
-										<div class="infobox-icon">
-											<i class="icon-folder-close-alt"></i>
-										</div>
-
-										<div class="infobox-data">
-											<span class="infobox-data-number">{% if share_folder %}{{share_folder}}{% else %}0{% endif %}个</span>
-											<div class="infobox-content">我的共享文件夹</div>
-										</div>
-									</div>
-
-									
-
-
-									<div class="infobox infobox-pink  ">
-										<div class="infobox-icon">
-											<i class="icon-reorder"></i>
-										</div>
-
-										<div class="infobox-data">
-											<span class="infobox-data-number">{{ print_count }}次</span>
-											<div class="infobox-content">30天内打印次数</div>
+											</div>
 										</div>
 									</div>
 								</div>
+								{% endif %}
+				
 							</div>
 
 <!-- <div class="hr hr32 hr-dotted"></div> -->
@@ -152,13 +155,13 @@
 									</h4>
 									
 									<h5 class="lighter pull-left" style="margin-left:10px;">
-										<i class="icon-twitter blue"></i>
+										<i class="icon-truck blue"></i>
 										<span class="editDep" style="cursor:pointer;" data-rel="tooltip" data-original-title="点击编辑配送地址">
-										配送地址：<span>{{user.department}}</span>
+										配送地址：<span>{% if user.department %}{{user.department}} {% endif %}</span>
 										</span>
 										<input type="text" name="dep" value="" style="display:none;width:500px;" />
 										<a href="javascript:;"  data-rel="tooltip" data-original-title="需要打印店配送资料的请填写！" style="padding:10px;">
-											<i class="icon-bullhorn  orange2"></i>
+											<i class="icon-info-sign  orange2"></i>
 										</a>
 										
 									</h5>

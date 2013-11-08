@@ -49,6 +49,7 @@ urlpatterns += patterns('',
     url(r'^print_record/?$','apps.accounts.views.print_record',name='print_record'),
     url(r'^my_printer/?$','apps.accounts.views.my_printer',name='my_printer'),
     url(r'^user/my_issue/?$','apps.accounts.views.my_issue',name='my_issue'),
+    url(r'^printer/is_auth/?$','apps.accounts.views.authed_printer',name='accounts_authed_printer'),
 
 )
 

@@ -3,14 +3,14 @@
 from django.contrib import admin
 from models import KxSoftAd
 from forms import AdForm
-import datetime
+from datetime import datetime
 from models import Operator,OperatorAssistant,OperatorCategory
 
 class OperatorInline(admin.StackedInline):
     model = Operator
 
 class AdAdmin(admin.ModelAdmin):
-    now = datetime.datetime.now()
+    now = datetime.now()
     ad = AdForm
     list_display =('title','ad_url','exp_day','create_time')
     fieldsets = (

@@ -1,6 +1,8 @@
 #_*_coding:utf-8_*_
-import logging,json,sys,datetime,time,uuid
-from apps.kx.utils import is_valid_email,send_mail_thread
+import logging,json,sys,time,uuid
+from datetime import datetime,date
+from apps.utils.sendmail import send_mail_thread
+from apps.utils.verify import check_email
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
@@ -19,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 @csrf_exempt
 def record(request):
-    now = datetime.datetime.now()
+    now = datetime.now()
     message = {}
     info = "record success"
     is_uninstall = 0
@@ -76,7 +78,7 @@ def record(request):
 
 @csrf_exempt
 def uninstall(request):
-    now = datetime.datetime.now()
+    now = datetime.now()
     message = {}
     info = "uninstall success"
     try:
@@ -130,7 +132,7 @@ def lan_record(request):
     '''
     局域网数据统计,软件启动后提交数据
     '''
-    now = datetime.datetime.now()
+    now = datetime.now()
     lan = {} 
     message = {}
     info = "lan_record success"
@@ -144,7 +146,7 @@ def lan_record(request):
                 logger.info("pc:%d,qm:%d",pc,qm)
                 if pc >0 and qm > 0:
                     ip = request.META.get('REMOTE_ADDR','')
-                    tongji_day = datetime.date.today()
+                    tongji_day = date.today()
                     #ip = '118.77.168.132'
                     #tongji_day = '2013-04-12'
                     try:
@@ -220,7 +222,7 @@ def pub_record(request):
     '''
     发布24小时内统计数据记录
     '''
-    now = datetime.datetime.now()
+    now = datetime.now()
     message = {}
     info = "Data save success"
     try:
@@ -278,7 +280,7 @@ def utime(request):
     '''
     登陆时长
     '''
-    now = datetime.datetime.now()
+    now = datetime.now()
     message = {}
     info = "utime success"
     try:
@@ -347,7 +349,7 @@ def cadd(request):
     '''
     客户端注册接口
     '''
-    now = datetime.datetime.now()
+    now = datetime.now()
     message = {}
     word = [u'simplenect',u'运营',u'管理',u'系统']
     try:
@@ -363,7 +365,7 @@ def cadd(request):
                     message['message']=u'请填写邮箱email!'
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
-                if not is_valid_email(email):
+                if not check_email(email):
                     message['message']=u'email邮箱格式不正确!'
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
@@ -423,7 +425,7 @@ def invate(request):
     '''邀请接口'''
     message = {}
     info = "invate success"
-    now = datetime.datetime.now()
+    now = datetime.now()
     if request.method =="POST":
         my_email = request.POST.get('my_email','')
         invate_email = request.POST.get('invate_email','')
@@ -434,7 +436,7 @@ def invate(request):
         if my_email and invate_email and my_name and invate_name and group_id and group_name:
             my_email = my_email.strip()
             invate_name = invate_name.strip()
-            if is_valid_email(my_email) and is_valid_email(invate_email):
+            if check_email(my_email) and check_email(invate_email):
                 message['message']="check email"
                 message['status']="ok"
                 message['create_time']=str(now)
@@ -490,7 +492,7 @@ def invate(request):
 @require_POST
 def send_diskfree_email(request):
     message = {}
-    now = datetime.datetime.now()
+    now = datetime.now()
     mail_type = request.POST.get('type','1')
     uuid = request.POST.get('uuid','')
     disk_info = request.POST.get('disk_info','')

@@ -3,6 +3,7 @@
 </a>
 
 <div class="sidebar" id="sidebar">
+		{% if user.is_authenticated %}
 		<ul class="nav nav-list">
 			<li class="active">
 				<a href="/User/index">
@@ -19,18 +20,20 @@
 			</li> -->
 
 
-			<li>
+			<li id="menu_user_info">
 				<a href="/User/info_new">
 					<i class="icon-user"></i>
 					<span class="menu-text"> 个人资料 </span>
 				</a>
 			</li>
+			{% if not request.session.print_auth and  request.session.print_auth > 0 %}
 			<li>
 				<a href="/User/printer/auth/">
 					<i class="icon-print"></i>
 					<span class="menu-text"> 打印共享授权</span>
 				</a>
 			</li>
+			{% endif %}
 			{% if user.is_superuser or request.session.group_owner %}
 			<li>
 				<a href="/group/group_list">
@@ -63,5 +66,16 @@
 		</ul><!--/.nav-list-->
 		<div class="sidebar-collapse" id="sidebar-collapse">
 		<i class="icon-double-angle-left"></i>
-	</div>
+		</div>
+			{% if request.session.print_auth == None %}
+			<script>
+			$.post("{% url 'accounts_authed_printer' %}",{"aa":1},function(data){
+				if(data.status){
+					$("#menu_user_info").after('<li><a href="/User/printer/auth/"><i class="icon-print"></i><span class="menu-text"> 打印共享授权</span></a></li>');
+				}
+			},"json");
+			</script>
+			{% endif %}
+		{% endif %}
 </div>
+

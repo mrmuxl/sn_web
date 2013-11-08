@@ -369,7 +369,7 @@ class KxUser(AbstractBaseUser,PermissionsMixin):
     avatar              = models.CharField(max_length = 200L, null = True,blank = True)
     last_ip             = models.CharField(max_length = 50L,  null = True,blank = True)
     mobile              = models.CharField(max_length = 20L,  null = True,blank = True)
-    department          = models.CharField(max_length = 50L,  null = True,blank = True)
+    department          = models.CharField(max_length = 100L,  null = True,blank = True)
     login_status        = models.IntegerField(default = False,null = False)
     qianmo_dot          = models.IntegerField(u'现有阡陌点',default = 0,null = False)
     con_qianmo_dot      = models.IntegerField(u'累计消费阡陌点',default = 0)

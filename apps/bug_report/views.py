@@ -9,7 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from models import KxSoftBug
 from hashlib import md5
-import datetime,logging,json,os
+import logging,json,os
+from datetime import datetime,date
 from django.utils.encoding import smart_unicode,smart_str
 from django.utils.http import urlquote
 from django.views.decorators.http import require_POST
@@ -20,8 +21,8 @@ logger = logging.getLogger(__name__)
 @require_POST
 def upload_bug(request):
     message = {} 
-    date =datetime.date.strftime(datetime.date.today(),"%Y/%m/%d")
-    now = datetime.datetime.now()
+    date =date.strftime(date.today(),"%Y/%m/%d")
+    now = datetime.now()
     mac = request.POST.get('mac','')
     upload_file = request.FILES.get("file",None)
     if upload_file and mac:
@@ -66,7 +67,7 @@ def upload_bug(request):
 @require_POST
 def soft_bug(request):
     message = {} 
-    now = datetime.datetime.now()
+    now = datetime.now()
     email = request.POST.get('email','')
     ver = request.POST.get('ver','')
     client = request.POST.get('clientIdentifie','')
@@ -100,8 +101,8 @@ def soft_bug(request):
 @require_POST
 def bug_log(request):
     message = {} 
-    now = datetime.datetime.now()
-    date =datetime.date.strftime(datetime.date.today(),"%Y-%m-%d")
+    now = datetime.now()
+    date =date.strftime(date.today(),"%Y-%m-%d")
     path_root = settings.MEDIA_ROOT
     folder = "/BugLog/"  
     path_folder = path_root + folder

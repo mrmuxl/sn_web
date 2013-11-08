@@ -13,7 +13,8 @@ from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.utils.html import strip_tags
 from django.contrib.auth.decorators import login_required
-import datetime,logging
+import logging
+from datetime import datetime,date
 
 logger = logging.getLogger(__name__)
 
@@ -67,7 +68,7 @@ def index(request):
     #         ul=[]
     #     data.update(user_list=u_dict)
     try:
-        ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_V').order_by('-id')[0:1].get()
+        ins_file = KxPub.objects.filter(is_publish=1).order_by('-id')[0:1].get()
         # repo_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_S').order_by('-id')[0:1].get()
         # data.update(repo_file=repo_file.install_file,ins_file=ins_file.install_file)
         data.update(ins_file=ins_file.install_file)

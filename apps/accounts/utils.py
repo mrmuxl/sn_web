@@ -1,7 +1,8 @@
 #_*_coding:utf-8_*_
 
 from django.conf import settings
-import uuid,os,datetime,json,logging,time,shutil
+import uuid,os,json,logging,time,shutil
+from datetime import datetime,date
 from PIL import Image
 logger = logging.getLogger(__name__)
 def invite_register(from_nick,invite_content,reg_url):
@@ -39,7 +40,7 @@ def invite_tip(from_nick,invite_content,site_url):
 
 def avatar_edit(image):
     if image:
-        date =datetime.date.strftime(datetime.date.today(),"%Y/%m/%d")
+        date =date.strftime(date.today(),"%Y/%m/%d")
         uid = uuid.UUID.time_low.fget(uuid.uuid4())
         folder = "User/"+str(date)
         ext = str(image.content_type).split("/")[-1:][0]

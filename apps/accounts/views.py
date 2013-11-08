@@ -1,6 +1,7 @@
 #_*_coding:utf-8_*_
 
-import uuid,os,datetime,json,logging,time,shutil
+import uuid,os,json,logging,time,shutil
+from datetime import datetime,date
 from hashlib import md5
 from base64 import urlsafe_b64encode,urlsafe_b64decode
 from PIL import Image
@@ -8,7 +9,8 @@ from django.contrib.auth import authenticate,REDIRECT_FIELD_NAME
 from django.contrib import auth
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from apps.kx.utils import is_valid_email,send_mail_thread
+from apps.utils.sendmail import send_mail_thread
+from apps.utils.verify import check_email
 from django.utils.html import strip_tags
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
@@ -17,12 +19,12 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST,require_GET
 from django.conf import settings
+from django.db import transaction 
 from apps.kx.models import KxUser,KxEmailInvate,KxMailingAddfriend
 from apps.kx.models import KxUserFriend,KxPub
 from django.http import Http404
 from django.db.models import Sum
 #from django.core.mail import send_mail,EmailMultiAlternatives
-from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 from utils import *
 from django.utils.http import is_safe_url
@@ -32,13 +34,14 @@ from apps.ad.models import OperatorAssistant,Operator
 from apps.kx.tongji.utils import CustomSQL
 from apps.utils.json_util import *
 from apps.accounts.service import *
-from apps.group.service import getGroupsCountByCondition
+from apps.group.service import *
+from apps.group.models import GroupUser
 from apps.msg_board.utils import uniqid,str_reverse,uniq
 
 logger = logging.getLogger(__name__)
 
 def save(request):
-    now = datetime.datetime.now()
+    now = datetime.now()
     word = [u'simplenect',u'运营',u'管理',u'系统']
     try:
         if request.method == "POST":
@@ -57,38 +60,51 @@ def save(request):
                         password = strip_tags(password.strip())
                         repassword = strip_tags(repassword.strip())
                         if not email:
-                            message ="""请填写邮箱！<A HREF="javascript:history.back()">返 回</A>"""
-                            return HttpResponse(message)
-                        if not is_valid_email(email):
-                            message ="""邮箱格式不正确！<A HREF="javascript:history.back()">返 回</A>"""
-                            return HttpResponse(message)
+                            message ="""请填写邮箱！"""
+                            return render(request, "user/register_msg.html", {"message":message})
+                        if not check_email(email):
+                            message ="""邮箱格式不正确！"""
+                            return render(request, "user/register_msg.html", {"message":message})
                         if not nick:
-                            message ="""请填昵称！<A HREF="javascript:history.back()">返 回</A>"""
-                            return HttpResponse(message)
+                            message ="""请填昵称！"""
+                            return render(request, "user/register_msg.html", {"message":message})
                         if len(nick)<4 and len(nick)>12:
-                            message ="""昵称应为4-12个字符！<A HREF="javascript:history.back()">返 回</A>"""
-                            return HttpResponse(message)
+                            message ="""昵称应为4-12个字符！"""
+                            return render(request, "user/register_msg.html", {"message":message})
                         if nick in word:
-                            message ="""昵称包含非法字符！<A HREF="javascript:history.back()">返 回</A>"""
-                            return HttpResponse(message)
+                            message ="""昵称包含非法字符！"""
+                            return render(request, "user/register_msg.html", {"message":message})
                         if not password:
-                            message ="""请填写密码！<A HREF="javascript:history.back()">返 回</A>"""
-                            return HttpResponse(message)
+                            message ="""请填写密码！"""
+                            return render(request, "user/register_msg.html", {"message":message})
                         if password != repassword:
-                            message ="""两次密码填写不一致！<A HREF="javascript:history.back()">返 回</A>"""
-                            return HttpResponse(message)
+                            message ="""两次密码填写不一致！"""
+                            return render(request, "user/register_msg.html", {"message":message})
                         count = KxUser.objects.filter(email=email).count()
                         if count >0:
-                            message = """邮箱已存在！<A HREF="javascript:history.back()">返 回</A>"""
-                            return HttpResponse(message)
+                            message = """邮箱已存在！"""
+                            return render(request, "user/register_msg.html", {"message":message})
                         with transaction.commit_on_success():
-                            try:
-                                uid = md5(email).hexdigest()
-                                create_user=KxUser.objects.create_user(uuid=uid,email=email,nick=nick,password=password,status=0)
-                                create_user.save()
-                                user = authenticate(username=email,password=password)
-                                if user is not None and user.status == 0:
-                                    auth.login(request,user)
+                            gInviteCode=[]
+                            
+                            if 'g_invite_code' in request.session.keys():
+                                gInviteCode=request.session.get('g_invite_code').split(",")
+                            uid = md5(email).hexdigest()
+                            ustatus=0
+                            gid=0
+                            iemail=""
+                            ginvite=False  #是否是群邀请注册的
+                            if len(gInviteCode)==2:
+                                gid=gInviteCode[0]
+                                iemail=gInviteCode[1].strip()
+                                if iemail==email:
+                                    ustatus=1
+                                    ginvite=True
+                            create_user=KxUser.objects.create_user(uuid=uid,email=email,nick=nick,password=password,status=ustatus)
+                            create_user.save()
+                            user = authenticate(username=email,password=password)
+                            if not user is None :
+                                if ustatus==0:
                                     time_str = str(time.time())
                                     email = str(email)
                                     chk = md5(email + "," + time_str + ",qianmo20120601").hexdigest()
@@ -105,27 +121,47 @@ def save(request):
                                         logger.info("active account:%s",email)
                                     except Exception as e:
                                         logger.debug("active account:%s",e)
+                                    auth.login(request,user) #设置登录 登录必须放在成功返回之前，不然g_invite_code的session失效
                                     return HttpResponseRedirect('/User/account_verify/?email='+email)
                                 else:
-                                    message = """创建用户出现错误！<A HREF="javascript:history.back()">返 回</A>"""
-                                    return HttpResponse(message)
-                            except Exception as e:
-                                logger.debug("%s",e)
-                                message = """邮件发送错误！<A HREF="javascript:history.back()">返 回</A>"""
-                                return HttpResponse(message)
+                                    # 已通过验证 跳转到个人中心首页
+                                    if ginvite:
+                                        gui=getGroupUserInviteObjByCondition({"group_id":gid,"email":email,"status":0})
+                                        # 邀请信息不存在或已处理
+                                        if gui is None:
+                                             return HttpResponseRedirect(reverse("accounts_index")) 
+                                        group=getGroupsObjById(gid)
+                                        if group is None:
+                                            return HttpResponseRedirect(reverse("accounts_index")) 
+                                       
+                                        insertGroupUser(GroupUser(group_id=gid,user_id=uid,joiner_id=gui.creater_id))
+                                        updateGroupsByCondition({"id":gid},{"user_num":(group.user_num+1)})
+                                        updateGroupUserInviteByCondition({"group_id":gid,"email":email},{"status":1,"deal_time":now})
+                                        #更新其他 邀请中的当前用户注册状态
+                                        updateGroupUserInviteByCondition({"email":email,"status":0},{"is_reg":1})
+                                        del request.session['g_invite_code']
+                                        # @todo 社区完善的时候跳转到加入的社区
+                                        auth.login(request,user) #设置登录
+                                        return HttpResponseRedirect(reverse("accounts_index"))
+                                    else:
+                                        auth.login(request,user) #设置登录
+                                        return HttpResponseRedirect(reverse("accounts_index"))
+                            else:
+                                message = """创建用户出现错误！"""
+
+                        message="""创建用户出现错误err01！"""
                     else:
-                        message = """出现错误！?<A HREF="javascript:history.back()">返 回</A>"""
-                        return HttpResponse(message)
+                        message = """出现错误err01！?"""
                 else:
-                    message = """出现错误！?<A HREF="javascript:history.back()">返 回</A>"""
-                    return HttpResponse(message)
+                    message = """出现错误err02！?"""
             else:
-                message = """出现错误！?<A HREF="javascript:history.back()">返 回</A>"""
-                return HttpResponse(message)
+                message = """出现错误err03！?"""
         else:
             return HttpResponseRedirect(reverse("index"))    
     except Exception as e:
         logger.debug("%s",e)
+        message = """创建用户出现错误err05！"""
+    return render(request, "user/register_msg.html", {"message":message})
 
 def login(request,next_page="/User/index",redirect_field_name=REDIRECT_FIELD_NAME):
     '''登陆视图'''
@@ -188,19 +224,20 @@ def register(request,invate_code=''):
         try:
             invate_obj = KxEmailInvate.objects.get(invate_code=invate_code)
             if invate_obj.id:
-                email = invate_obj.invate_email
+                uemail = invate_obj.invate_email
             logger.info("%s",invate_obj)
         except Exception as e:
-            email = ''
+            uemail = ''
             invate_obj = []
             logger.debug("%s",e)
         t_var = {
                     'invate_code':invate_code,
-                    'email':email,
+                    'email':uemail,
                 }
         return render(request,"register.html",t_var)
     else:
-        return render(request,"register.html",{})
+        email=request.GET.get("email","").strip()
+        return render(request,"register.html",{"email":email})
         
 def check(request):
     if request.method =="POST":
@@ -445,7 +482,7 @@ def account_verify(request):
 def activate(request,ver_data):
     if ver_data:
         now = time.time()
-        active_time = datetime.datetime.now()
+        active_time = datetime.now()
         ver_data = urlsafe_b64decode(str(ver_data)).split(',')
         email = ver_data[0]
         time_str = ver_data[1]
@@ -540,7 +577,7 @@ def invite_msg(reqeust,ckey=''):
 @login_required
 @require_GET
 def index(request):
-    now = datetime.datetime.now()
+    now = datetime.now()
     print_count = Spool.objects.filter(origin_email=request.user.email).count()
     print_record = Spool.objects.filter(origin_email=request.user.email).order_by("-print_time")[0:5]
     my_printer = Spool.objects.filter(accept_email=request.user.email).order_by("-print_time")[0:5]
@@ -630,7 +667,7 @@ def avatar(request):
 @login_required
 @require_GET
 def printer_auth(request):
-    now = datetime.datetime.now()
+    now = datetime.now()
     #operator = Operator.objects.filter(user=request.user.pk).filter(status__exact=1).filter(expire__gt=now).filter(operatorassistant__status__exact=1)
     operator = Operator.objects.filter(user=request.user.pk).filter(status__exact=1).filter(expire__gt=now)
     num = operator.values('printer_num','used_num')
@@ -661,7 +698,7 @@ def printer_auth(request):
 @require_POST
 def do_auth(request):
     message = {}
-    now = datetime.datetime.now()
+    now = datetime.now()
     pid = request.POST.get("id","")
     uid = request.POST.get("uid","")
     flag = request.POST.get("flag","")
@@ -846,4 +883,23 @@ def change_dep(request):
             json_data['info']="ok"
         else:
             json_data['info']="更改配送地址失败！"
+    return json_return(json_data)
+
+@csrf_exempt
+@require_POST
+def authed_printer(request):
+    """是否购买了打印服务"""
+    json_data={}
+    json_data['status']=0
+    json_data['info']="no"
+    if not request.user.is_authenticated:
+        json_data['info']="未登录！"
+    now=datetime.now()
+    printer_num = Operator.objects.filter(user=request.user.pk).filter(status__exact=1).filter(expire__gt=now).values('printer_num','used_num','expire')
+    if printer_num:
+        request.session['print_auth']=1
+        json_data['status']=1
+        json_data['info']="yes"
+    else:
+        request.session['print_auth']=0
     return json_return(json_data)

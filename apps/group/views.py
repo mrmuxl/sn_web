@@ -1,17 +1,21 @@
 #_*_coding:utf-8_*_
 
-import datetime,logging,json,os
+import logging,json,os
+from datetime import datetime
 from django.conf import settings
+from base64 import urlsafe_b64encode,urlsafe_b64decode
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import (require_POST,require_GET)
-from django.http import HttpResponseRedirect,HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db.models import Max
 from apps.group.models import *
 from apps.utils.json_util import *
-from apps.utils.db_util import *
+from apps.utils.db import *
+from apps.utils.verify import check_email
+from apps.utils.sendmail import send_mail_thread
 from apps.group.service import *
 from apps.accounts.service import getUserCountByCondition,getUserObjByCondition
 
@@ -384,7 +388,7 @@ def list_auth(request):
 	json_data['auth_list']=[]
 	for gp in gpList:
 		json_data['auth_list'].append({"uid":gp['user_id'],"email":gp['email'],"nick":gp['nick'],"answer":gp['answer'],
-									   "time":str(gp['create_time'])})
+									   "time":gp['create_time'].strftime('%Y-%m-%d %H:%M:%S')})
 	return json_return(json_data,False)
 
 @csrf_exempt
@@ -551,7 +555,6 @@ def group_add(request):
 			group=Groups(name=name,owner_id=ownerId,max_num=maxNum,g_type=gType,creater_id=request.user.uuid)
 			if gType==2:
 				maxId=Groups.objects.filter(id__gte=10001).filter(id__lte=19999).aggregate(max_id=Max('id'))
-				print maxId
 				if maxId['max_id'] is None:
 					group.id=10001
 				else:
@@ -596,6 +599,8 @@ def edit_group(request,gid,res):
 @require_GET
 def group_user(request):
 	res={}
+	flag=request.GET.get("flag","in")
+	res['flag']=flag
 	try:
 		gid=int(request.GET.get("gid",0))
 	except Exception,e:
@@ -612,19 +617,25 @@ def group_user(request):
 		res['error']="您无法查看该群成员信息！"
 		return render(request,"group/group_user.html",res)
 	res['group']=group
-   	guList=getGroupUserListByCondition({"group_id":gid})
-   	perNum=50
+	perNum=50
    	page=1
    	try:
    		page=int(request.GET.get("page"))
    	except Exception,e:
    		page=1
-   	uids=[]
-   	for gu in guList[(page-1)*perNum:page*perNum]:
-   		#uids+=",'"+gu.user_id+"'"
-   		uids.append(gu.user_id)
-   	res['userMap']=getUserMapByIds(uids)
-	res['guList']=guList
+	if flag=="in":
+	   	guList=getGroupUserListByCondition({"group_id":gid})
+	   	uids=[]
+	   	for gu in guList[(page-1)*perNum:page*perNum]:
+	   		#uids+=",'"+gu.user_id+"'"
+	   		uids.append(gu.user_id)
+	   	res['userMap']=getUserMapByIds(uids)
+		res['guList']=guList
+	elif flag=="out":
+		guList=getGroupUserInviteListByCondition({"group_id":gid,"status":0})
+		res['guList']=guList
+	else: 
+		return HttpResponseRedirect(reverse("group_group_user")+"?gid=%s"%gid)
 	return render(request,"group/group_user.html",res)
 
 def getUserMapByIds(uids):
@@ -642,38 +653,124 @@ def getUserMapByIds(uids):
 
 @require_POST
 def guser_add(request):
-	"""Ajax 增加群用户"""
+	"""Ajax 邀请群用户"""
 	json_data={}
 	json_data['status']=0
-	json_data,group,user=valid_group_user(request,json_data)
-	if user is None:
+	emails=request.POST.get("emails","")
+	if emails=="":
+		json_data['info']="请至少邀请一个用户！";
+	json_data,group=valid_group(request,json_data)
+	if group is None:
 		return json_return(json_data)
-
-	if group.user_num>=group.max_num:
-		json_data['info']="添加群用户失败！群用户数已达上限！"
+	emailList=emails.split(",")
+	if (group.user_num+len(emailList))>group.max_num:
+		json_data['info']="邀请群用户失败！群用户数已达上限！"
 		return json_return(json_data)
-	count=getGroupUserCountByCondition({"group_id":group.id,"user_id":user.uuid})
-	if count>0:
-		json_data['info']="该用户已加入群里！"
-		return json_return(json_data)
-	uremark=request.POST.get("remark","")
-	guId=insertGroupUser(GroupUser(group_id=group.id,user_id=user.uuid,user_remark=uremark,joiner_id=request.user.uuid))
-	if not guId>0:
-		json_data['info']="添加群用户失败！"
-		return json_return(json_data)
-	
-	result=updateGroupsByCondition({"id":group.id},{"user_num":(group.user_num+1)})
-	if not result>0:
-		json_data['info']="添加群用户失败！err02"
-		return json_return(json_data)
-		
-	json_data['status']=1
-	json_data['info']="ok"
-	json_data['email']=user.email
-	json_data['nick']=user.nick
-	json_data['remark']=uremark
-
+	emailMap={}
+	for email in emailList:
+		if check_email(email):
+			emailMap[email]=0 #0表示用户未注册，1=已注册
+	# 已注册的用户
+	regList=KxUser.objects.only("id","uuid","email").filter(email__in=emailList)
+	regEmailMap={} #已注册过的用户
+	regUidMap={}
+	for reg in regList:
+		regEmailMap[reg.email]=reg.uuid
+		regUidMap[reg.uuid]=reg.email
+	regUids=regEmailMap.values()
+	if len(regUids)>0:
+		#已经是群成员的用户
+		guList=GroupUser.objects.only("id","group_id","user_id").filter(group_id=group.id,user_id__in=regUids)
+		for gu in guList:
+			uid=gu.user_id
+			if uid in regUids:
+				# 删除已是群用户的成员EMAIL
+				uemail=regUidMap[uid]
+				del emailMap[uemail]
+	emailKeys=emailMap.keys()
+	if len(emailKeys)>0:
+		# 已经邀请的成员，其中已拒绝的可以再次邀请，已接受的已经在群成员中筛选过了，故此处只要筛选status=0的即可
+		#若后面从群成员中删除，在这里也可以再次邀请
+		gueList=GroupUserInvite.objects.only("id","email").filter(status=0,group_id=group.id,email__in=emailKeys)
+		for gue in gueList:
+			uemail=gue.email
+			if uemail in emailKeys:
+				del emailMap[uemail]
+	emailKeys=emailMap.keys()
+	if len(emailKeys)==0:
+		json_data['status']=1
+		json_data['info']="ok"
+		json_data['num']=0;
+	else:
+		guiList=[]
+		createrId=request.user.uuid
+		for uemail in emailKeys:
+			gui=GroupUserInvite(group_id=group.id,email=uemail,status=0,is_reg=0,creater_id=createrId)
+			if uemail in regEmailMap.keys():
+				gui.is_reg=1
+				emailMap[uemail]=1
+			guiList.append(gui)
+		guiObjs=GroupUserInvite.objects.bulk_create(guiList)
+		if not guiObjs is None:
+			json_data['status']=1
+			json_data['info']="ok"
+			json_data['num']=len(emailKeys)
+			json_data['users']=[]
+			for gui in guiObjs:
+				json_data['users'].append({"email":gui.email,"time":gui.create_time.strftime('%Y-%m-%d %H:%M:%S')})
+			# 发送邮件
+			userName=""
+			if request.user.uuid==group.owner_id:
+				userName=request.user.nick
+			else:
+				userObj=getUserObjByCondition({"uuid":group.owner_id})
+				if not userObj is None:
+					userName=userObj.nick
+			send_invite_email(userName,group.name,group.id,emailMap)
+		else:
+			json_data['info']="邀请群用户是失败！请重试！"
 	return json_return(json_data)
+
+def send_invite_email(userName,groupName,gid,emailMap):
+	"""发送邀请邮件 @param emailMap key 邮箱 value 是否注册"""
+	from_email = 'SimpleNect <noreply@simaplenect.cn>'
+	subject=u"SimpleNect["+groupName+u"]邀请您加入！"
+	for email,reg in emailMap.items():
+		code=str(gid)+","+email
+		url=settings.DOMAIN + reverse('group_invite_active')+"?code="+urlsafe_b64encode(code)
+		body=userName+u"邀请您加入：SimpleNect["+groupName+u"]，"
+		if reg:
+			body+=u"请点击以下链接接受邀请："
+		else:
+			body+=u"请点击以下链接完成注册："
+		body+=u"<br /><br /><a href='"+url+"'>"+url+u"</a><br /><br />"\
+			u"SimpleNect是一款团队协同软件，安装完成后您可以在家直接使用公司或者打印店的打印服务，还可以和社团内的"\
+			u"其他成员进行聊天及文件共享。"
+		send_mail_thread(subject,body,from_email,[email],html=body)
+
+
+def valid_group(request,json_data):
+	"""验证群及群主用户权限"""
+	if not request.user.is_authenticated():
+		json_data['info']="请先登录!"
+		return json_data,None
+	try:
+		gid=int(request.POST.get("gid"))
+	except Exception,e:
+		gid=0
+		logger.error("invalid gid  %s",e)
+	if gid<=0:
+		json_data['info']="无效的群"
+		return json_data,None
+	group=getGroupsObjById(gid)
+	if group is None:
+		json_data['info']="该群不存在或已删除！"
+		return json_data,None
+	if (not request.user.is_superuser) and (group.owner_id!=request.user.uuid):
+		json_data['info']="您无权限管理群用户！"
+		return json_data,None
+	return json_data,group
+
 
 def valid_group_user(request,json_data):
 	#判断用户是否登录
@@ -682,7 +779,7 @@ def valid_group_user(request,json_data):
 		return json_data,None,None
 	email=request.POST.get("email","").strip()
 	if email=="":
-		json_data['info']="请填写用户邮箱！"
+		json_data['info']="请选择一个群用户！"
 		return json_data,None,None
 	try:
 		gid=int(request.POST.get("gid"))
@@ -764,4 +861,98 @@ def guser_remark(request):
 		json_data['info']="ok"
 	else:
 		json_data['info']="更改群用户备注失败！"
+	return json_return(json_data)
+
+
+@require_POST
+def invite_del(request):
+	"""Ajax 删除群邀请用户"""
+	json_data={}
+	json_data['status']=0
+	email=request.POST.get("uemail","")
+	if email=="":
+		json_data['info']="请选择要删除的邀请用户！"
+		return json_return(json_data)
+	json_data,group=valid_group(request,json_data)
+	if group is None:
+		return json_return(json_data)
+	delGroupUserInviteByCondition({"group_id":group.id,"email":email})
+	json_data['status']=1
+	json_data['info']="ok"
+	return json_return(json_data)
+
+@require_GET
+def invite_active(request):
+	res={}
+	code=request.GET.get("code","")
+	if code=="":
+		return HttpResponseRedirect(reverse("index"))
+	codeList=urlsafe_b64decode(str(code)).split(",")
+	if len(codeList)!=2:
+		return HttpResponseRedirect(reverse("index"))
+	email=codeList[1].strip()
+	gid=codeList[0]
+	gui=getGroupUserInviteObjByCondition({"group_id":gid,"email":email,"status":0})
+	if gui is None:
+		res['error']="您的邀请信息不存在或已处理！"
+		return render(request,"group/invite_active.html",res)
+	if gui.is_reg:
+		#如果是已注册用户
+		#用户未登录
+		if not request.user.is_authenticated():
+			return HttpResponseRedirect(reverse("login")+"?email="+email+"&next="+reverse("group_invite_active")+"?code="+code)
+		elif request.user.email==email:
+			#用户已用此Email登录
+			group=getGroupsObjById(gid)
+			if group is None:
+				res['error']="该群不存在或已删除！"
+				return render(request,"group/invite_active.html",res)
+			guId=insertGroupUser(GroupUser(group_id=gid,user_id=request.user.uuid,joiner_id=gui.creater_id))
+			if not guId>0:
+				res['error']="加入群失败err01！"
+				return render(request,"group/invite_active.html",res)
+			result=updateGroupsByCondition({"id":gid},{"user_num":(group.user_num+1)})
+			if not result>0:
+				res['error']="加入群失败err02！"
+				return render(request,"group/invite_active.html",res)
+			now=datetime.now()
+			result=updateGroupUserInviteByCondition({"group_id":gid,"email":email},{"status":1,"deal_time":now})
+			if result >0 :
+				res['info']="您已成功加入["+group.name+"]！"
+			else:
+				res['error']="加入群失败err03！"
+		else:
+			#用户用其他帐号登录
+			res['error']="您已经登录了其他帐号，请先退出并用 "+email+" 帐号登录，点击邀请链接加入！"
+	else:
+		request.session['g_invite_code']=str(gid)+","+email
+		return HttpResponseRedirect(reverse("register")+"?email="+email)
+
+	return render(request,"group/invite_active.html",res)
+
+def invite_again(request):
+	"""AJAX 再次发送邀请邮件"""
+	json_data={}
+	json_data['status']=0
+	email=request.POST.get("uemail","")
+	if email=="":
+		json_data['info']="请选择要再次邀请的用户！"
+		return json_return(json_data)
+	json_data,group=valid_group(request,json_data)
+	if group is None:
+		return json_return(json_data)
+	gui=getGroupUserInviteObjByCondition({"group_id":group.id,"email":email,"status":0})
+	if gui is None:
+		json_data['info']="邀请的用户不存在！"
+		return json_return(json_data)
+	userName=""
+	if request.user.uuid==group.owner_id:
+		userName=request.user.nick
+	else:
+		userObj=getUserObjByCondition({"uuid":group.owner_id})
+		if not userObj is None:
+			userName=userObj.nick
+	send_invite_email(userName,group.name,group.id,{email:gui.is_reg})	
+	json_data['status']=1
+	json_data['info']="ok"
 	return json_return(json_data)

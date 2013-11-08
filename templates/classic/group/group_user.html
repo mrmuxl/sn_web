@@ -1,7 +1,5 @@
 {% extends "user/base.html" %}
 {% block content %}
-{% load pagination_tags %}
-{% load my_filter %}
 <div class="main-content">
 	<div class="breadcrumbs" id="breadcrumbs">
 		<ul class="breadcrumb">
@@ -26,16 +24,38 @@
 	{{error}}
 	</div>
 	{% else %}
-	{% autopaginate guList 50 %}
 	<div class="page-content">
 		<div class="page-header position-relative">
-			<h1 class="pull-left">新增群用户<small><i class="icon-double-angle-right"></i></small></h1>
+			<h1 class="pull-left">邀请群用户<small><i class="icon-double-angle-right"></i></small></h1>
 			<div class="form-horizontal">
 				<div class="control-group" style="margin-bottom:0;padding-top:5px;">
 					<div class="controls">
-						<input type="text" placeholder="邮箱" id="form-field-1" name="gu_email" value="" />
+						<span class="gu_add_user">
+							<span class="input-icon input-icon-right" style="margin-top:5px;">
+							<input type="text" placeholder="邮箱" class="span3" style="padding-right:24px;" name="gu_email" value="" />
+							<i></i>
+							</span>
+							<span class="help-inline red"></span>
+						</span>
+						<!--
 						&nbsp;&nbsp;<input type="text" placeholder="备注名" id="form-field-1" name="gu_remark" value="" />
-						<button type="button" id="add_user" class="btn btn-info btn-small">
+						-->
+						<span class="gu_email_clone" style="display:none;">
+							<span class="input-icon input-icon-right" style="margin-top:5px;">
+							<input type="text" placeholder="邮箱" class="span3" name="gu_email" value="" />
+							<i class="icon-remove-sign gu_email_remove" style="cursor:pointer;" title="删除"></i>
+							</span>
+							<span class="help-inline red"></span>
+						</span>
+						<br />
+						<span class="gu_add_user" >
+							<span class="input-icon input-icon-right" style="margin-top:5px;">
+							<input type="text" placeholder="邮箱" class="span3" name="gu_email" value="" />
+							<i class="icon-remove-sign gu_email_remove" style="cursor:pointer;" title="删除"></i>
+							</span>
+							<span class="help-inline red"></span>
+						</span>
+						<button type="button" id="add_user" class="btn btn-info btn-small" style="margin-left:5px;">
 							<i class="icon-ok bigger-110"></i>
 							确定
 						</button>
@@ -49,127 +69,24 @@
 				<div class="row-fluid"> 
 					<div class="span6 widget-container-span ui-sortable" style="width:100%">
 						<div class="widget-box">
-							<div class="widget-header header-color-blue">
-								<h5 class="bigger lighter">
-									<i class="icon-table"></i>
-									{{group.name}}&nbsp;群用户
-								</h5>
+							<ul id="myTab" class="nav nav-tabs">
+								<li class="">
+									<a href="{% url 'group_group_user' %}" data-toggle="tab" style="padding-left:20px;padding-right:20px;">
+										已邀请
+									</a>
+								</li>
 
-								<div class="widget-toolbar widget-toolbar-light no-border">
-							
-								</div>
-							</div>
-
-							<div class="widget-body">
-								<div class="widget-main no-padding">
-									<table class="table table-striped table-bordered table-hover">
-										<thead>
-											<tr>
-												<th>
-													<i class="icon-user"></i>
-													昵称
-												</th>
-
-												<th>
-													<i>@</i>
-													邮箱
-												</th>
-												<th class="span3">
-													<i class="icon-credit-card"></i>
-													备注名
-												</th>
-												<th class="span3">
-													<i class="icon-print"></i>
-													打印机共享到群
-												</th>
-												<th class="hidden-480">&nbsp;</th>
-											</tr>
-										</thead>
-
-										<tbody>
-											<tr id="user_clone" style="display:none;">
-												<td class=""></td>
-												<td></td>
-												<td>
-													<span>
-												
-													</span> 
-													<input type="text" name="new_remark" value="" class="span8" style="display:none;margin-bottom:0;" />
-													<div class="action-buttons pull-right">
-													<a class="green remark_user" style="cursor:pointer;">
-														<i class="icon-pencil bigger-120"></i>
-													</a>
-													</div>
-												</td>
-												<td>
-													<label>
-													<input type="checkbox" class="ace-switch ace-switch-5" name="p_share">
-													<span class="lbl"></span>
-													</label>
-												</td>
-												<td class="hidden-480">
-													<button class="btn btn-mini btn-danger del_user">
-														<i class="icon-trash bigger-120"></i>
-														删除
-													</button>
-												</td>
-											</tr>
-											{% if guList %}
-											{% for gu in guList %}
-	
-											<tr class="ace-nav">
-												<td class="">
-													{% with avatar=userMap|getDict:gu.user_id|getDict:'avatar' %}
-													{% if avatar %}
-													<img alt="头像" src="{{ MEDIA_URL }}{{avatar|getAvatar:'50X50'}}" class="nav-user-photo">
-													{% else %}
-													<img class="nav-user-photo" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg">
-													{% endif %}
-													{% endwith %}
-													{{userMap|getDict:gu.user_id|getDict:'nick'}}
-												</td>
-
-												<td>
-													{{userMap|getDict:gu.user_id|getDict:'email'}}
-												</td>
-												<td>
-													<span>
-													{% if gu.user_remark %}
-													{{gu.user_remark}}
-													{% endif %}
-													</span> 
-													<input type="text" name="new_remark" value="" class="span8" style="display:none;margin-bottom:0;" />
-													<div class="action-buttons pull-right">
-													<a class="green remark_user" style="cursor:pointer;">
-														<i class="icon-pencil bigger-120"></i>
-													</a>
-													</div>
-												</td>
-												<td>
-													<label>
-													{% if gu.share_print == 1 %}	
-													<input type="checkbox" class="ace-switch ace-switch-5" name="p_share" checked>
-													{% else %}
-													<input type="checkbox" class="ace-switch ace-switch-5" name="p_share">
-													{% endif %}
-													<span class="lbl"></span>
-													</label>
-												</td>
-												<td class="hidden-480">
-													<button class="btn btn-mini btn-danger del_user">
-														<i class="icon-trash bigger-120"></i>
-														删除
-													</button>
-												</td>
-											</tr>
-											
-											{% endfor %}
-											{% endif %}
-										</tbody>
-									</table>
-								</div>
-							</div>
-							<div style="text-align:center;">{% paginate %}</div>
+								<li>
+									<a href="{% url 'group_group_user' %}?flag=out" data-toggle="tab" style="padding-left:20px;padding-right:20px;">
+										邀请中
+									</a>
+								</li>
+							</ul>
+							{% if flag == "in" %}
+							{% include "group/group_user_in.html" %}
+							{% else %}
+							{% include "group/group_user_invite.html" %}
+							{% endif %}
 						</div>
 					</div>
 				</div>
@@ -180,82 +97,93 @@
 </div>
 <script>
 var gid={{group.id}}
+var flag="{{flag}}"
+var email_eg = /^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/;
+if(flag=="in"){
+	$("#myTab li").eq(0).addClass("active");
+}else{
+	$("#myTab li").eq(1).addClass("active");
+}
 $("#add_user").click(function(){
-	var uemail=$.trim($("input[name=gu_email]").val());
-	if(uemail==""){
-		alert("请填写用户邮箱！");
-		return false;
+	var uemails="";
+	var eobjs=$(".gu_add_user input[name=gu_email]");
+	var len=eobjs.length;
+	var uemail="";
+	var submit=true;
+	for (var i=0;i<len;i++){
+		uemail=$.trim(eobjs.eq(i).val());
+		if(uemail!=""){
+			uemails+=","+uemail;
+			if(!email_eg.test(uemail)){
+				eobjs.eq(i).parent().next('span').text('请填写有效的邮箱！');
+				submit=false;
+			}
+		}
 	}
-	var uremark=$.trim($("input[name=gu_remark]").val());
-	$.post("{% url 'group_guser_add' %}",{"gid":gid,"email":uemail,"remark":uremark},function(data){
+	if(uemails==""){
+		alert("请至少填写一个邮箱！");
+		return;
+	}
+	if(!submit)
+		return;
+	uemails=uemails.substr(1);
+	$.post("{% url 'group_guser_add' %}",{"gid":gid,"emails":uemails},function(data){
 		if(data.status){
-			var userTr=$("#user_clone").clone(true);
-			userTr.attr("id","");
-			userTr.show();
-			userTr.children("td").eq(0).text(data.nick);
-			userTr.children("td").eq(1).text(data.email);
-			userTr.children("td").eq(2).children("span").text(data.remark);
-			$("#user_clone").after(userTr);
+			if (flag=="in"){
+				window.location.href="{% url 'group_group_user' %}?flag=out&gid="+gid;
+			}else{
+				if(data.num>0){
+					var users=data.users;
+					for(var i=0;i<users.length;i++){
+						var userTr=$("#user_clone").clone(true);
+						userTr.attr("id","");
+						userTr.show();
+						userTr.children("td").eq(0).text(users[i].email);
+						userTr.children("td").eq(1).text(users[i].time);
+						$("#user_clone").after(userTr);
+					}
+					$("input[name=gu_email]").val("");
+				}else{
+					alert("已在邀请列表中！")
+				}
+			}
+
 		}else{
 			alert(data.info)
 		}
 	},"json");
 });
-$(".del_user").click(function(){
-	var email=$.trim($(this).parent("td").parent("tr").children("td").eq(1).html());
-	var delTr=$(this).parent("td").parent("tr");
-	if (confirm("确定删除群用户："+email+" 吗？")){
-		$.post("{% url 'group_guser_del' %}",{"gid":gid,"email":email},function(data){
-			if(data.status){
-				alert("删除成功！");
-				delTr.remove();
-			}else{
-				alert(data.info);
-			}
-		},"json");
+
+$("input[name=gu_email]").focus(function(){
+	var len=$("input[name=gu_email]").length;
+	var cur=$("input[name=gu_email]").index($(this));
+	if(len==(cur+1)){
+		var emailInput=$(".gu_email_clone").clone(true);
+		emailInput.removeClass("gu_email_clone");
+		emailInput.addClass("gu_add_user");
+		emailInput.children("span").children("input").val("");
+		emailInput.css({"display":"inline-block"});
+		$("#add_user").before("<br />");
+		$("#add_user").before(emailInput);
 	}
-	return false;
-});
-$("input[name=p_share]").click(function(){
-	var email=$.trim($(this).parent().parent("td").parent("tr").children("td").eq(1).html());
-	var checked=$(this).is(":checked");
-	var obj=$(this);
-	$.post("{% url 'group_print_share' %}",{"gid":gid,"email":email},function(data){
-		if(data.status){	
-			return true;
-		}else{
-			alert(data.info);
-		}
-	},"json");
-	//return false;
 });
 
-$(".remark_user").click(function(){
-	var uremark=$.trim($(this).parent().prev("input").prev("span").text());
-	$(this).parent().prev("input").val(uremark);
-	$(this).parent().prev("input").prev("span").hide();
-	$(this).parent().prev("input").show();
-});
-$("input[name=new_remark]").blur(function(){
-	var obj=$(this);
-	var newRemark=$.trim(obj.val());
-	var oldRemark=$.trim(obj.prev("span").text());
-	var email=$.trim($(this).parent("td").parent("tr").children("td").eq(1).html());
-	if (newRemark==oldRemark){
-		obj.prev("span").show();
-		obj.hide();
+$(".gu_add_user input[name=gu_email]").blur(function(){
+	var uemail=$.trim($(this).val());
+	if(uemail==""){
+		$(this).parent().next("span").text("");
+	}else if(!email_eg.test(uemail)){
+		$(this).parent().next("span").text("请填写有效的邮箱！");
 	}else{
-		$.post("{% url 'group_guser_remark' %}",{"gid":gid,"email":email,"remark":newRemark},function(data){
-			if(data.status){
-				obj.prev("span").text(newRemark);
-				obj.prev("span").show();
-				obj.hide();
-			}else{
-				alert(data.info);
-			}
-			
-		},"json")
+		$(this).parent().next("span").text("");
 	}
 });
+
+$(".gu_email_remove").click(function(){
+	$(this).parent("span").prev("br").remove();
+	$(this).parent("span").remove();
+});
+
+
 </script>
 {% endblock %}

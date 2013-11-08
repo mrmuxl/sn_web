@@ -1,0 +1,25 @@
+{% extends "user/base.html" %}
+{% block content %}
+<div class="main-content">
+	<div class="breadcrumbs" id="breadcrumbs">
+		<ul class="breadcrumb">
+			<li>
+				<i class="icon-home home-icon"></i>
+				<a href="{% url 'accounts_index' %}">首页</a>
+				<span class="divider">
+					<i class="icon-angle-right arrow-icon"></i>
+				</span>
+			</li>
+			<li class="active">邀请加入群</li>
+		</ul>
+	</div>
+	<div class="page-content">
+		{% if error %}
+		{{error}}
+		{% else %}
+		{{info}}
+		{% endif %}
+	</div>
+
+</div>
+{% endblock %}

@@ -8,11 +8,11 @@
 # Also note: You'll have to insert the output of 'django-admin.py sqlcustom [appname]'
 # into your database.
 from __future__ import unicode_literals
+from datetime import datetime
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import (AbstractBaseUser, PermissionsMixin)
 from django.conf import settings
-from datetime import datetime
 from apps.kx.models import KxUser
 
 
@@ -42,7 +42,7 @@ class GroupUser(models.Model):
     user_remark = models.CharField(max_length=20,null=True,blank=True,verbose_name=_(u'用户备注名'))  # 用户备注名
     share_print = models.BooleanField(verbose_name=_(u'是否可以共享打印机到群'),help_text=_(u'0:不能添加共享打印机到群'))  # 是否可以共享打印机到群 0=否
     join_time = models.DateTimeField(default=datetime.now,verbose_name=_(u'加入群的时间'))
-    joiner_id = models.CharField(null=True,max_length=32) # 谁被加进来的
+    joiner_id = models.CharField(null=True,max_length=32) # 被谁加进来的
 
     class Meta:
         db_table = "group_user"
@@ -116,3 +116,18 @@ class GroupManager(models.Model):
     class Meta:
         db_table = "group_manager"
         verbose_name_plural = verbose_name = _(u'群管理员')
+
+
+# 群用户邀请
+class GroupUserInvite(models.Model):
+    id = models.AutoField(primary_key=True)
+    group_id = models.IntegerField()
+    email = models.CharField(max_length=50)
+    is_reg = models.BooleanField() # 邀请用户是否已注册
+    status = models.IntegerField() # 0 邀请中 1=接受 2=拒绝
+    creater_id = models.IntegerField()
+    create_time = models.DateTimeField(auto_now_add=True)
+    deal_time = models.DateTimeField(null=True)  # 邀请处理时间 表示已处理过邀请
+
+    class Meta:
+        db_table = "group_user_invite"

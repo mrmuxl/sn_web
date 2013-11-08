@@ -1,0 +1,156 @@
+{% load pagination_tags %}
+{% load my_filter %}
+{% autopaginate guList 50 %}
+<div class="widget-header header-color-blue">
+	<h5 class="bigger lighter">
+		<i class="icon-table"></i>
+		{{group.name}}&nbsp;群用户
+	</h5>
+
+	<div class="widget-toolbar widget-toolbar-light no-border">
+
+	</div>
+</div>
+
+<div class="widget-body">
+	<div class="widget-main no-padding">
+		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>
+						<i class="icon-user"></i>
+						昵称
+					</th>
+
+					<th>
+						<i>@</i>
+						邮箱
+					</th>
+					<th class="span3">
+						<i class="icon-credit-card"></i>
+						备注名
+					</th>
+					<th class="span3">
+						<i class="icon-print"></i>
+						打印机共享到群
+					</th>
+					<th class="hidden-480">&nbsp;</th>
+				</tr>
+			</thead>
+
+			<tbody>
+
+				{% if guList %}
+				{% for gu in guList %}
+
+				<tr class="ace-nav">
+					<td class="">
+						{% with avatar=userMap|getDict:gu.user_id|getDict:'avatar' %}
+						{% if avatar %}
+						<img alt="头像" src="{{ MEDIA_URL }}{{avatar|getAvatar:'50X50'}}" class="nav-user-photo">
+						{% else %}
+						<img class="nav-user-photo" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg">
+						{% endif %}
+						{% endwith %}
+						{{userMap|getDict:gu.user_id|getDict:'nick'}}
+					</td>
+
+					<td>
+						{{userMap|getDict:gu.user_id|getDict:'email'}}
+					</td>
+					<td>
+						<span>
+						{% if gu.user_remark %}
+						{{gu.user_remark}}
+						{% endif %}
+						</span> 
+						<input type="text" name="new_remark" value="" class="span8" style="display:none;margin-bottom:0;" />
+						<div class="action-buttons pull-right">
+						<a class="green remark_user" style="cursor:pointer;">
+							<i class="icon-pencil bigger-120"></i>
+						</a>
+						</div>
+					</td>
+					<td>
+						<label>
+						{% if gu.share_print == 1 %}	
+						<input type="checkbox" class="ace-switch ace-switch-5" name="p_share" checked>
+						{% else %}
+						<input type="checkbox" class="ace-switch ace-switch-5" name="p_share">
+						{% endif %}
+						<span class="lbl"></span>
+						</label>
+					</td>
+					<td class="hidden-480">
+						<button class="btn btn-mini btn-danger del_user">
+							<i class="icon-trash bigger-120"></i>
+							删除
+						</button>
+					</td>
+				</tr>
+				
+				{% endfor %}
+				{% endif %}
+			</tbody>
+		</table>
+	</div>
+</div>
+<div style="text-align:center;">{% paginate %}</div>
+<script>
+$(".del_user").click(function(){
+	var email=$.trim($(this).parent("td").parent("tr").children("td").eq(1).html());
+	var delTr=$(this).parent("td").parent("tr");
+	if (confirm("确定删除群用户："+email+" 吗？")){
+		$.post("{% url 'group_guser_del' %}",{"gid":gid,"email":email},function(data){
+			if(data.status){
+				alert("删除成功！");
+				delTr.remove();
+			}else{
+				alert(data.info);
+			}
+		},"json");
+	}
+	return false;
+});
+$("input[name=p_share]").click(function(){
+	var email=$.trim($(this).parent().parent("td").parent("tr").children("td").eq(1).html());
+	var checked=$(this).is(":checked");
+	var obj=$(this);
+	$.post("{% url 'group_print_share' %}",{"gid":gid,"email":email},function(data){
+		if(data.status){	
+			return true;
+		}else{
+			alert(data.info);
+		}
+	},"json");
+	//return false;
+});
+
+$(".remark_user").click(function(){
+	var uremark=$.trim($(this).parent().prev("input").prev("span").text());
+	$(this).parent().prev("input").val(uremark);
+	$(this).parent().prev("input").prev("span").hide();
+	$(this).parent().prev("input").show();
+});
+$("input[name=new_remark]").blur(function(){
+	var obj=$(this);
+	var newRemark=$.trim(obj.val());
+	var oldRemark=$.trim(obj.prev("span").text());
+	var email=$.trim($(this).parent("td").parent("tr").children("td").eq(1).html());
+	if (newRemark==oldRemark){
+		obj.prev("span").show();
+		obj.hide();
+	}else{
+		$.post("{% url 'group_guser_remark' %}",{"gid":gid,"email":email,"remark":newRemark},function(data){
+			if(data.status){
+				obj.prev("span").text(newRemark);
+				obj.prev("span").show();
+				obj.hide();
+			}else{
+				alert(data.info);
+			}
+			
+		},"json")
+	}
+});
+</script>
