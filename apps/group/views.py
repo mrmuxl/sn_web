@@ -918,7 +918,7 @@ def invite_active(request):
 			now=datetime.now()
 			result=updateGroupUserInviteByCondition({"group_id":gid,"email":email},{"status":1,"deal_time":now})
 			if result >0 :
-				res['info']="您已成功加入["+group.name+"]！"
+				res['info']=u"您已成功加入["+group.name+u"]！"
 			else:
 				res['error']="加入群失败err03！"
 		else:
