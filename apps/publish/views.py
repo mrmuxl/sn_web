@@ -239,11 +239,14 @@ def published(request):
         except Exception as e:
             logger.debug("define publish:%s",e)
             try:
-                user_obj = KxUser.objects.get(email=email)
-                if user_obj.create_time >= Dday:
-                    email = 'update@simplenect.com'
-                else:
-                    email = 'simplenect@simplenect.com'
+                # 2013-11-11 发布免费，更新所有版本（包括3.3.5.7)
+                # user_obj = KxUser.objects.get(email=email)
+                # 
+                # if user_obj.create_time >= Dday:
+                #     email = 'update@simplenect.com'
+                # else:
+                #     email = 'simplenect@simplenect.com'
+                email='update@simplenect.com'
                 publish_user = PublishUser.objects.get(email=email)
                 publish_info = KxPub.objects.get(pk=publish_user.ver_id)
             except Exception as e:
