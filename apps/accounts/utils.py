@@ -40,9 +40,9 @@ def invite_tip(from_nick,invite_content,site_url):
 
 def avatar_edit(image):
     if image:
-        date =date.strftime(date.today(),"%Y/%m/%d")
+        datePath =date.strftime(date.today(),"%Y/%m/%d")
         uid = uuid.UUID.time_low.fget(uuid.uuid4())
-        folder = "User/"+str(date)
+        folder = "User/"+str(datePath)
         ext = str(image.content_type).split("/")[-1:][0]
         if ext in ('png','jpeg','gif','bmp'):
             file_name = image.name.encode('utf-8')
