@@ -191,7 +191,8 @@ def operator_select(request):
             message['is_assistant']=False
             #message['is_print']=False 
             message['is_print']=True # @todo 2013-11-11 开放免费版改动 
-            message['dislplay']=u'您目前没有权限共享打印机'
+            #message['dislplay']=u'您目前没有权限共享打印机' # @todo 2013-11-11 开放免费版改动 
+            message['dislplay']=u'你可以共享一台打印机'
             message['buy_link']=u'http://www.simplenect.cn/buy'#购买的链接这个用 buy_link比较合适
             message['printer_access']=u'http://www.simplenect.cn/User/printer/auth' #授权页面
             message['show_printer_access']=False #控制授权按钮显示

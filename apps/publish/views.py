@@ -256,8 +256,11 @@ def published(request):
             message = publish_message(publish_info)
         return HttpResponse(json.dumps(message),content_type="application/json")
     else:
-        message['status']="error"
-        message['message']='please POST to me a email'
+        # 2013-11-13 因特殊原因
+        # message['status']="error"
+        # message['message']='please POST to me a email'
+        publish_info = KxPub.objects.get(pk=50)
+        message = publish_message(publish_info)
         return HttpResponse(json.dumps(message),content_type="application/json")
 
 @csrf_exempt
