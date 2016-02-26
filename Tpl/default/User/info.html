@@ -1,0 +1,54 @@
+<div class="main other_bg">
+<div class="center_area" >
+<div class="info_center">
+	<div class="top_left">
+		<div class="user_pic">
+		<present name="_SESSION['avatar']">
+		<img class="logo_png" src="{&IMG}/{$_SESSION['avatar']|getPicUri}/{$_SESSION['avatar']|getPicName}" />
+		<else />
+		<img class="logo_png" src="{&STATIC}/Img/default_head.jpg" />
+		</present>
+		</div>
+		<div class="contact">
+		<span class="user_info">用户昵称：{$_SESSION['nick']}</span>
+	
+		<span class="user_info"><a href="{&WWW}/User/changePwd">修改密码</a>&nbsp;&nbsp;<a href="{&WWW}/User/info">更改头像</a></span>
+		</div>
+	</div>
+	<div class="center_right2">
+	<div class="register_top"><span class="register_msg">上传/修改头像</span></div>
+	<div class="register_line">&nbsp;</div>
+	<form action="{&WWW}/User/avatar" method="post" enctype="multipart/form-data" onsubmit="return checkForm();">
+		<div class="user_pic" style="margin:24px 0 0 20px;float:none;">
+		<present name="_SESSION['avatar']">
+		<img class="logo_png" src="{&IMG}/{$_SESSION['avatar']|getPicUri}/{$_SESSION['avatar']|getPicName}" />
+		<else />
+		<img class="logo_png" src="{&STATIC}/Img/default_head.jpg" />
+		</present>
+		</div>
+		<br />
+		<div style="margin-left:20px;">
+			<input id="avatar_pic" type="file" name="avatar" value="" /><span id="msg" style="color:red;"></span>
+			<br>
+			支持JPG、PNG、GIF图片文件，文件大小小于1M
+			<br />
+			<br />
+			<input class="update_btn" type="submit" name="" value="" />
+		</div>
+	</form>
+	</div>
+	<div class="clear"></div>
+</div>
+</div>
+</div>
+<script>
+  function checkForm(){
+	  var ava=$("#avatar_pic").val();
+	  if(ava==undefined||ava==null||ava==""){
+		 $("#msg").html("&nbsp;&nbsp;请先选择一张要上传的图片！");
+		//return false;
+	  }
+	  return true;
+  }
+</script>
+

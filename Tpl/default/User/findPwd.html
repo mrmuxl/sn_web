@@ -1,0 +1,80 @@
+<div class="center_area" >
+<div class="login_top_title">忘记密码？</div>
+<div class="center_register">
+	<div class="register_area">
+		<switch name="step" >
+		<case value="1">
+		<form method="post" action="/User/findPwd">
+		<table class="register">
+		<tr>
+			<td class="register_left reg_name" >忘记密码？</td>
+			<td class="reg_input">&nbsp;</td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="register_left" >邮箱地址&nbsp;&nbsp;</td>
+			<td class="reg_input">
+				<present name="email">
+				<input type="text" value="{$email}" name="email" class="input-len"/>
+				<else />
+				<input type="text" value="" name="email" class="input-len"/>
+				</present>
+			</td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+			<present name="code">
+			<eq name="code" value="0">
+			<tr>
+				<td class="register_left" ></td>
+				<td class="reg_input"><font color="red">注册邮箱地址不存在：{$email}</font></td>
+				<td class="reg_msg_email">&nbsp;</td>
+			</tr>
+			</eq>
+			<eq name="code" value="2">
+			<tr>
+				<td class="register_left" ></td>
+				<td class="reg_input"><font color="red">邮件发送失败！</font></td>
+				<td class="reg_msg_email">&nbsp;</td>
+			</tr>
+			</eq>
+			</present>
+			<tr>
+				<td class="register_left" ></td>
+				<td class="reg_input" style="font-size:14px;color:#696969;">请填写你的注册邮箱，系统会通过邮箱帮您找回密码</td>
+				<td class="reg_msg_email">&nbsp;</td>
+			</tr>
+			<tr>
+				<td class="register_left" ></td>
+				<td class="reg_input"></td>
+				<td class="reg_msg_email">&nbsp;</td>
+			</tr>
+			<tr>
+				<td class="register_left" ></td>
+				<td class=""><input class="findpwd_btn" type="submit" value="" name=""></td>
+				<td class="reg_msg_email">&nbsp;</td>
+			</tr>
+		</table>
+		</form>
+		</case>
+		<case value="2">
+		<table class="register">
+			<tr>
+				<td class="register_left reg_name" >忘记密码？</td>
+				<td class="reg_input">&nbsp;</td>
+				<td class="reg_msg_email">&nbsp;</td>
+			</tr>
+			<tr>
+				<td class="register_left" ></td>
+				<td class="reg_input">请登录您的邮箱，点击链接重置密码。</td>
+				<td class="reg_msg_email">&nbsp;</td>
+			</tr>
+		</table>
+		</case>
+		<default />
+		</switch>
+		
+		</present>
+
+	</div>
+</div>
+</div>

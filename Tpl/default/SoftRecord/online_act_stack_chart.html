@@ -1,0 +1,226 @@
+<script type="text/javascript">document.domain = '{&DOMAIN}';</script>
+<script language="javascript" type="text/javascript" defer="defer" src="{&STATIC}/Js/datepicker/WdatePicker.js"></script>
+<h1 class="center">阡陌上线用户行为统计</h1>
+<h3 style="text-align:right;margin-right:150px;">
+查询日期 <input type="text" name="day" class="Wdate search_day" title="统计日期" value="{$day}"     onFocus="WdatePicker({minDate:'2011-11-08',startDate:'{$day}',dateFmt:'yyyy-MM-dd'})" readonly style="width:90px;font-size:12px;color:#555555" />
+&nbsp;&nbsp;<input type="button" name="" value="确定" class="day_search" />
+</h3>
+<script type="text/javascript" src="{&STATIC}/Js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript">
+$(function () {
+    var chart;
+    $(document).ready(function() {
+        chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'container',
+                type: 'area'
+            },
+            title: {
+                text:'{$typeName}'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: [
+							<volist name="day_array" id="day">
+							'{$day}'
+							<lt name="i" value="30">
+							,
+							</lt>
+							</volist>
+							],
+                tickmarkPlacement: 'on',
+                title: {
+                    enabled: false
+                }
+            },
+            yAxis: {
+                title: {
+                    text: '用户数%'
+                },
+                labels: {
+                    formatter: function() {
+                        return this.value;
+                    }
+                }
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                    this.x +': '+ Highcharts.numberFormat(this.percentage, 1) +'% ('+
+                    Highcharts.numberFormat(this.y, 0, ',') +' 个用户)';
+                }
+            },
+            plotOptions: {
+                area: {
+                    stacking: 'percent',
+                    lineColor: '#ffffff',
+                    lineWidth: 1,
+                    marker: {
+                        lineWidth: 1,
+                        lineColor: '#ffffff'
+                    }
+                }
+            },
+            series: [
+   			<in name="type" value="1,2,3,4,6">   
+             {
+                name: '{$typeName}0',
+                data: [
+					<volist name="day_array" id="day">
+					<present name="dataMap.$day.num0">
+					{$dataMap.$day.num0}
+					<else />
+					0
+					</present>
+					<lt name="i" value="30">
+					,
+					</lt>
+					</volist>
+					]
+            }, {
+                name: '{$typeName}1',
+                data: [
+					<volist name="day_array" id="day">
+					<present name="dataMap.$day.num1">
+					{$dataMap.$day.num1}
+					<else />
+					0
+					</present>
+					<lt name="i" value="30">
+					,
+					</lt>
+					</volist>
+					]
+            }, {
+                name: '{$typeName}2-4',
+                data: [
+					<volist name="day_array" id="day">
+					<present name="dataMap.$day.num2">
+					{$dataMap.$day.num2}
+					<else />
+					0
+					</present>
+					<lt name="i" value="30">
+					,
+					</lt>
+					</volist>
+					]
+            }, {
+                name: '{$typeName}5及以上',
+                data: [
+						<volist name="day_array" id="day">
+						<present name="dataMap.$day.num3">
+						{$dataMap.$day.num3}
+						<else />
+						0
+						</present>
+						<lt name="i" value="30">
+						,
+						</lt>
+						</volist>
+					]
+            }
+			</in>
+   			<in name="type" value="5">   
+            {
+               name: '{$typeName}0',
+               data: [
+					<volist name="day_array" id="day">
+					<present name="dataMap.$day.num0">
+					{$dataMap.$day.num0}
+					<else />
+					0
+					</present>
+					<lt name="i" value="30">
+					,
+					</lt>
+					</volist>
+					]
+           }, {
+               name: '{$typeName}1',
+               data: [
+					<volist name="day_array" id="day">
+					<present name="dataMap.$day.num1">
+					{$dataMap.$day.num1}
+					<else />
+					0
+					</present>
+					<lt name="i" value="30">
+					,
+					</lt>
+					</volist>
+					]
+           }, {
+               name: '{$typeName}2-3',
+               data: [
+					<volist name="day_array" id="day">
+					<present name="dataMap.$day.num2">
+					{$dataMap.$day.num2}
+					<else />
+					0
+					</present>
+					<lt name="i" value="30">
+					,
+					</lt>
+					</volist>
+					]
+           }, {
+               name: '{$typeName}4-5',
+               data: [
+					<volist name="day_array" id="day">
+					<present name="dataMap.$day.num3">
+					{$dataMap.$day.num3}
+					<else />
+					0
+					</present>
+					<lt name="i" value="30">
+					,
+					</lt>
+					</volist>
+					]
+           },{
+               name: '{$typeName}6及以上',
+               data: [
+						<volist name="day_array" id="day">
+						<present name="dataMap.$day.num4">
+						{$dataMap.$day.num4}
+						<else />
+						0
+						</present>
+						<lt name="i" value="30">
+						,
+						</lt>
+						</volist>
+					]
+           }
+			</in>
+			
+            ]
+        });
+    });
+    
+});
+</script>
+
+<script src="{&STATIC}/Js/highcharts/highcharts.js"></script>
+<script src="{&STATIC}/Js/highcharts/modules/exporting.js"></script>
+
+<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+
+<script>
+$(".day_search").click(function(){
+	var sDay=$(".search_day").val();
+	if(null==sDay||sDay==""){
+		alert("请选择查询日期！");
+		return;
+	}
+	var url="{&WWW}/SoftRecord/online_act_stack_chart?day="+sDay+"&type={$type}";
+	window.location.href=url;
+});
+</script>
+
+
+
+

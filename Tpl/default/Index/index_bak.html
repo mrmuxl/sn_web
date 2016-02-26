@@ -1,0 +1,333 @@
+<div class="top_left">
+	<div class="logo"><img class="logo_png" src="{&STATIC}/Img/qianmo.gif" /></div>
+	<div class="download_area">
+		<a href="{&DOWNLOAD}/Install/Qianmo_V1.3.6.1.zip" title="下载" ><img src="{&STATIC}/Img/qianmo_download.gif" /></a>
+	</div>
+	<div class="contact">
+	<br />
+
+	<span class="contact_span">新浪微博：<a href="http://weibo.com/u/2261976797">阡陌软件-开发团队</a></span>
+	<br />
+	<span class="contact_span">阡陌软件用户QQ群：205528924</span>
+	<br />
+	<span class="contact_span">邮箱：falqs@foxmail.com</span>
+	</div>
+</div>
+<div class="top_right">
+<div class="pic_turn">
+	<div id="bimg" class="pic_position">
+		<div class="dis" name="f"><a href="javascript:void(0);" target=_blank><img alt="阡陌 banner1-1" src="{&STATIC}/Img/qianmo_banner_1.jpg" /></a></div>
+		<div class="undis" name="f"><a href="javascript:void(0);" target=_blank><img alt="阡陌 banner1-2"  src="{&STATIC}/Img/qianmo_banner_2.jpg" /></a></div>
+		<div class="undis" name="f"><a href="javascript:void(0);" target=_blank><img alt="阡陌 banner2-1"  src="{&STATIC}/Img/qianmo_banner_3.jpg" /></a></div>
+		<div class="undis" name="f"><a href="javascript:void(0);" target=_blank><img alt="阡陌 banner2-2"  src="{&STATIC}/Img/qianmo_banner_4.jpg" /></a></div>
+	</div>
+	<div class="pic_guide">
+		<ul id="simg">
+			<li class="pic_guide_first"><a href="javascript:void(0);" onclick="play(x[0],0)" name="s"><span  class="pic_guide_current"></span></a></li>
+			<li><a onclick="play(x[1],1)" href="javascript:void(0);" name="s"><span  class="pic_guide_no"></span></a></li>
+			<li><a onclick="play(x[2],2)" href="javascript:void(0);" name="s"><span  class="pic_guide_no"></span></a></li>
+			<li><a onclick="play(x[3],3)" href="javascript:void(0);" name="s"><span  class="pic_guide_no"></span></a></li>
+		</ul>
+	</div>
+</div>
+<div class="center_right">
+	<ul class="msg_board">
+			<li>
+			<!--  
+			<div class="send_board">
+				<present name="_SESSION['avatar']">
+				<img src="{&IMG}/{$_SESSION['avatar']|getPicUri}/snap_50X50_{$_SESSION['avatar']|getPicName}" />
+				<else />
+				<img src="{&STATIC}/Img/snap_50X50_default_head.jpg" />
+				</present>
+				<span class="send_u"> 用户名：<present name="_SESSION['UID']">{$_SESSION['nick']}<else />阡陌游客</present></span>
+				<span class="board_more"><a href="{&WWW}/MsgBoard/msg_index">更多评论&gt;&gt;</a></span>
+				<br /><br />
+				<span class="send_login">
+				 <present name="_SESSION['UID']">
+				 
+				 <else />
+				<a href="{&WWW}/User/login">登录</a> | <a href="{&WWW}/User/register">注册</a>
+				</present>	
+				</span>
+			</div>
+			-->
+			<div class="send_content">
+			<form  action="{&WWW}/MsgBoard/add_msg" method="post" onsubmit="return checkMsg();">
+				<textarea name="msg" id="msg_content"></textarea>
+				<input type="hidden" name="send_from" value="1" />
+				<input type="submit" value="留言" class="send_button"/>
+			</form>
+			</div>
+		</li>
+		
+	<present name="msgList">
+	<present name="_SESSION['RID']">
+	<eq name="_SESSION['RID']" value="1">
+		<volist name="msgList" id="msg">
+		<li id="msg_id_{$msg.id}">
+			<div class="board_img">
+				<gt name="msg.user_id" value="0">
+				<assign name="uid" value="$msg.user_id" />
+				<neq name="userList.$uid" value="">
+					<img src="{&IMG}/{$userList.$uid|getPicUri}/snap_50X50_{$userList.$uid|getPicName}" />
+				<else />
+				<img src="{&STATIC}/Img/snap_50X50_default_head.jpg" />
+				</neq>
+				
+				<else />
+					<img src="{&STATIC}/Img/snap_50X50_default_head.jpg" />
+				</gt>
+				
+			</div>
+			<div class="board_right">
+			<div class="board_user"><span class="board_uname" id="user_{$msg.id}"><gt name="msg.user_id" value="0">{$msg.user_nick} <else /> {$msg.ip|getBeforeIp}</gt></span><span class="board_time">{$msg.create_time}</span><span class="board_reply"><a href="javascript:replyMsg({$msg.id});">回复</a> | <a href="javascript:delMsg({$msg.id});">删除</a></span></div>
+			<gt name="msg.reply_id" value="0">
+			<assign name="rid" value="$msg.reply_id" />
+			<div class="reply_area">
+				<div class="board_body">
+				<span>“</span>{$replyList.$rid}<span>”</span>
+				</div>
+			</div>
+			</gt>
+			<div class="board_content">
+				<div class="board_body">
+				{$msg.msg}
+				</div>
+			</div>
+			</div>
+		</li>
+	</volist>
+	
+	<else />
+	<volist name="msgList" id="msg">
+		<li>
+			<div class="board_img">
+				<gt name="msg.user_id" value="0">
+				<assign name="uid" value="$msg.user_id" />
+				<neq name="userList.$uid" value="">
+					<img src="{&IMG}/{$userList.$uid|getPicUri}/snap_50X50_{$userList.$uid|getPicName}" />
+				<else />
+				<img src="{&STATIC}/Img/snap_50X50_default_head.jpg" />
+				</neq>
+				
+				<else />
+					<img src="{&STATIC}/Img/snap_50X50_default_head.jpg" />
+				</gt>
+				
+			</div>
+			<div class="board_right">
+			<div class="board_user"><span class="board_uname" id="user_{$msg.id}"><gt name="msg.user_id" value="0">{$msg.user_nick} <else /> {$msg.ip|getBeforeIp}</gt></span><span class="board_time">{$msg.create_time}</span><span class="board_reply"><a href="javascript:replyMsg({$msg.id});">回复</a></span></div>
+			<gt name="msg.reply_id" value="0">
+			<assign name="rid" value="$msg.reply_id" />
+			<div class="reply_area">
+				<div class="board_body">
+				<span>“</span>{$replyList.$rid}<span>”</span>
+				</div>
+			</div>
+			</gt>
+			<div class="board_content">
+				<div class="board_body">
+				{$msg.msg}
+				</div>
+			</div>
+			</div>
+		</li>
+	</volist>
+	</eq>
+	<else />
+		<volist name="msgList" id="msg">
+		<li>
+			<div class="board_img">
+				<gt name="msg.user_id" value="0">
+				<assign name="uid" value="$msg.user_id" />
+				<neq name="userList.$uid" value="">
+					<img src="{&IMG}/{$userList.$uid|getPicUri}/snap_50X50_{$userList.$uid|getPicName}" />
+				<else />
+				<img src="{&STATIC}/Img/snap_50X50_default_head.jpg" />
+				</neq>
+				
+				<else />
+					<img src="{&STATIC}/Img/snap_50X50_default_head.jpg" />
+				</gt>
+				
+			</div>
+			<div class="board_right">
+			<div class="board_user"><span class="board_uname" id="user_{$msg.id}"><gt name="msg.user_id" value="0">{$msg.user_nick} <else /> {$msg.ip|getBeforeIp}</gt></span><span class="board_time">{$msg.create_time}</span><span class="board_reply"><a href="javascript:replyMsg({$msg.id});">回复</a></span></div>
+			<gt name="msg.reply_id" value="0">
+			<assign name="rid" value="$msg.reply_id" />
+			<div class="reply_area">
+				<div class="board_body">
+				<span>“</span>{$replyList.$rid}<span>”</span>
+				</div>
+			</div>
+			</gt>
+			<div class="board_content">
+				<div class="board_body">
+				{$msg.msg}
+				</div>
+			</div>
+			</div>
+		</li>
+	</volist>
+	</present>
+	</present>
+	<li><span class="board_more"><a href="{&WWW}/MsgBoard/msg_index">更多评论&gt;&gt;</a></span> </li>
+	</ul>
+</div>
+</div>
+<div style="margin-bottom:20px;">&nbsp;</div>
+<div class="reply_form" style="display:none;">
+<div class="send_board">
+<span class="send_u" id="reply_u"> 回复“阡陌游客”：</span><span class="reply_close"><a href="javascript:replyClose()">X</a></span>
+</div>
+<div class="send_content" >
+<form  action="{&WWW}/MsgBoard/add_msg" method="post" onsubmit="return checkMsg2();">
+	<textarea name="msg" id="msg_content2"></textarea>
+	<input type="hidden" name="send_from" value="1" />
+	<input id="reply_msg" type="hidden" name="reply" value="" />
+	<input type="submit" value="回复" class="send_button"/>
+</form>
+</div>
+</div>
+<script>
+	function checkMsg(){
+		var msg=$("#msg_content").val().trim();
+		if(msg=="")
+			return false;
+		return true;
+	}
+	function checkMsg2(){
+		var msg=$("#msg_content2").val().trim();
+		if(msg=="")
+			return false;
+		return true;
+	}
+	function replyMsg(mid){
+		if(mid>0){
+			$("#reply_msg").val(mid);
+			var reply_u=$("#user_"+mid).html();
+			$("#reply_u").html("回复“"+reply_u+"”：");
+			var _reply=$("#user_"+mid).parent(".board_user").parent(".board_right");
+			var _left=_reply.offset().left-58; //左绝对距离 
+			var _top=_reply.offset().top+_reply.outerHeight(); //上绝对距离,此处要加上div的高度 
+			$(".reply_form").css({'position':'absolute','left':_left+'px','top':_top+'px'});
+			$(".reply_form").show(); 
+		}
+	
+	}
+	function replyClose(){
+		$(".reply_form").hide(); 
+	}
+
+	function delMsg(mid){
+		if(mid>0){
+			if(confirm("确定要删除此留言吗？")){
+				jQuery.post("{&WWW}/MsgBoard/del_msg",{"id":mid},function(data){
+					if(data.status==1){
+						$("#msg_id_"+mid).remove();
+					}else{
+						alert("删除留言失败！");
+					}
+				},"json");
+			}
+
+		}
+	}
+</script>
+<script>
+function getid(o){ return (typeof o == "object")?o:document.getElementById(o);}
+function getNames(obj,name,tij)
+{
+	var plist = getid(obj).getElementsByTagName(tij);
+	var rlist = new Array();
+	for(i=0;i<plist.length; ++i){if(plist[i].getAttribute("name") == name){rlist[rlist.length] = plist[i];}}
+	return rlist;
+}
+
+function fiterplay(obj,num,t,name,c1,c2)
+{
+	var fitlist = getNames(obj,name,t);
+	for(i=0;i<fitlist.length;i++)
+	{
+		if(i == num)
+		{
+			fitlist[i].className = c1;
+		}
+		else
+		{
+			fitlist[i].className = c2;
+		}
+	}
+}
+
+function s_fiterplay(obj,num,t,name,c1,c2)
+{
+
+	var fitlist = getNames(obj,name,t);
+	for(i=0;i<fitlist.length;i++)
+	{
+		if(i == num)
+		{
+			//alert("c1--"+c1);
+			//alert($(fitlist[i]).html());
+		
+			var cur=$(fitlist[i]).children("span");
+			cur.removeClass();
+			cur.addClass(c1);
+			//fitlist[i].className = c1;
+		}
+		else
+		{
+			var cur=$(fitlist[i]).children("span");
+			cur.removeClass();
+			cur.addClass(c2);
+			//fitlist[i].className = c2;
+		}
+	}
+}
+
+function play(obj,num)
+{
+	var s = getid('simg');		
+	var b = getid('bimg');
+	try	
+	{
+		with(b)
+		{
+			filters[0].Apply();	
+			fiterplay(b,num,"div","f","dis","undis");	
+			s_fiterplay(s,num,"a","s","pic_guide_current","pic_guide_no");				
+			filters[0].play();
+		}
+	}
+	catch(e)
+	{
+			fiterplay(b,num,"div","f","dis","undis");
+			s_fiterplay(s,num,"a","s","pic_guide_current","pic_guide_no");	
+			
+	}
+}
+
+var autoStart = 0;
+var n = 0;		
+var s = getid("simg");
+var x = getNames(s,"s","a");
+
+function clearAuto() {clearInterval(autoStart);};	
+function setAuto(){autoStart=setInterval("auto(n)", 2000)}
+function auto() {
+	
+	if(n>(x.length-1)){
+		n = 0;
+		clearAuto();
+		setAuto();
+	}
+	play(x[n],n);
+	n++  ;
+}
+function toPlay(){
+	setAuto();	
+}
+toPlay();
+</script>

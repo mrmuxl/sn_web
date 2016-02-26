@@ -1,0 +1,33 @@
+<present name="pList">
+<ul>
+		<volist name="pList" id="posts" >
+		<assign name="uid"  value="$posts.user_id" />
+		<li>
+			<div class="c_uhead">
+			<neq name="uList.$uid" value="">
+				<img src="{&IMG}/{$uList.$uid.avatar|getPicUri}/snap_50X50_{$uList.$uid.avatar|getPicName}" />
+			<else />
+				<img src="{&STATIC}/Img/snap_50X50_default_head.jpg" />
+			</neq>
+			</div>
+		
+			<div class="c_uname">
+			<gt name="posts.user_id" value="0">
+			{$uList.$uid.nick}&nbsp;&nbsp;说：
+			<else />
+			{$posts.user_ip|getBeforeIp}&nbsp;&nbsp;说：
+			</gt>
+			</div>
+			<div class="c_time">{$posts.create_time}</div>
+			<div class="c_content">
+			{$posts.content}	
+			</div>
+			<div class="clear"></div>
+		</li>
+		</volist>
+		
+</ul>
+<else />
+{$error}
+
+</present>

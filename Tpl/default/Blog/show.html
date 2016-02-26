@@ -1,0 +1,74 @@
+<div class="blog">
+	<volist name="mainList" id="posts">
+	<div class="blog_view">
+		<div class="blog_title">
+			{$posts.title}
+		</div>
+		<div class="blog_time">
+			{$posts.create_time}
+		</div>
+		<div class="blog_text">
+			{$posts.content}
+		</div>
+		<div class="blog_ctop">
+			<span><a href="javascript:showSend({$posts.id});">评论</a> <a href="javascript:showComment({$posts.id});">({$posts.reply_num})</a></span>
+		</div>
+		<div class="blog_comment">
+			<div  class="blog_send blog_send_{$posts.id}">
+				<textarea name="msg"></textarea>
+				<div class="clear"></div>
+				<div class="blog_cbtn">
+					<input class="btn_csend" type="button" onclick="sendComment({$posts.id});" value="" name="">
+					<input class="btn_cancel" type="button" value="" name="">
+				</div>
+			</div>
+			<div class="comment_{$posts.id}">
+			{//评论加载区}
+			</div>
+
+		</div>
+	</div>
+	</volist>
+</div>
+<script>
+
+$(function(){
+	$(".menu_guide").css({"color":"#000000"});
+});
+function showSend(id){
+	if(id!=null&&id>0){
+		$(".blog_send_"+id).show();
+	}
+}
+function showComment(id){
+	if(id!=null&&id>0){
+		$(".comment_"+id).load("{&WWW}/Blog/c_list?id="+id);
+	}
+}
+
+function sendComment(id){
+	if(id!=null&&id>0){
+		var msg=$(".blog_send_"+id+" textarea").val();
+		msg=$.trim(msg);
+		if(msg==""){
+			alert("请填写评论内容！");
+		}
+		jQuery.post("{&WWW}/Blog/add_comment",{"id":id,"msg":msg},function(data){
+				if(data.status==0){
+					alert("评论失败，请重试");
+				}else{
+					$(".comment_"+id+" ul").prepend(data.data);
+					$(".blog_send_"+id+" textarea").val("");
+					$(".blog_send_"+id).hide();
+					
+				}
+			},"json");
+	}else{
+		alert("参数有误！");
+	}
+}
+$(".btn_cancel").click(function(){
+	$(this).parent().parent().hide();
+});
+
+</script>

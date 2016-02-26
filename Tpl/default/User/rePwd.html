@@ -1,0 +1,91 @@
+<div class="center_area" >
+<div class="login_top_title">忘记密码？</div>
+<div class="center_register">
+	<div class="register_area">
+		<present name="code">
+		<switch name="code" >
+		<case value="0">
+		<table class="register">
+		<tr>
+			<td class="register_left reg_name" >忘记密码？</td>
+			<td class="reg_input">&nbsp;</td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="register_left" ></td>
+			<td class="reg_input"><font color="red">密码重置失败！请使用重置链接再次重置或点击<a href="/User/findPwd">这里</a>重新生成重置链接！</font></td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		</table>
+		</case>
+		<case value="1">
+		<table class="register">
+		<tr>
+			<td class="register_left reg_name" >忘记密码？</td>
+			<td class="reg_input">&nbsp;</td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="register_left" ></td>
+			<td class="reg_input"><font color="green">密码重置成功！&nbsp;&nbsp;<a href="{&WWW}/User/login">点此登录</a></font></td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		</table>
+		</case>
+		<case value="2">
+		<form method="post" action="/User/rePwd" onsubmit="return chkPwd();">
+		<table class="register">
+		<tr>
+			<td class="register_left reg_name" >忘记密码？</td>
+			<td class="reg_input">&nbsp;</td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="register_left" >注册邮箱地址：</td>
+			<td class="reg_input">{$email}<input type="hidden" value="{$email}" name="email" /></td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="register_left" >新密码：</td>
+			<td class="reg_input"><input id="pwd" type="password" name="password" value="" class="input-len" /></td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="register_left" >确认密码：</td>
+			<td class="reg_input"><input id="repwd" type="password" name="repassword" value="" class="input-len" /></td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="register_left" ></td>
+			<td class=""><input class="resetpwd_btn" type="submit" value="" name=""></td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		</table>
+		</form>
+		</case>
+		<default />
+		</switch>
+		</present>
+	</div>
+</div>
+
+</div>
+<script>
+ function chkPwd(){
+	var pwd=$("#pwd").val();
+	var repwd=$("#repwd").val();
+	if(null==pwd||""==$.trim(pwd){
+		alert("请填写密码！");
+		return false;
+	}
+	if(null==repwd||""==$.trim(repwd)){
+		alert("请填写确认密码！");
+		return false;
+	}
+	if(pwd!=repwd){
+		alert("新密码与确认密码不一致！");
+		return false;
+	}
+	return true;
+}
+</script>

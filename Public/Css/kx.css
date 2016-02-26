@@ -1,0 +1,66 @@
+@CHARSET "UTF-8";
+body{
+	width:100%;
+	padding:0;
+	margin:0;
+}
+img{
+	border:0 none;
+}
+a{
+	text-decoration: none;
+}
+a:hover{
+	text-decoration: underline;
+}
+.main{
+	background:url("../Img/background.jpg") no-repeat;
+	width:1000px;
+	margin:0 auto;
+	height:750px;
+}
+
+.logo{
+	height:150px;
+	width:231px;
+	padding:42px 0 0 66px;
+}
+.download{
+	width:318px;
+	height:225px;
+	padding:18px 0 0 506px;
+}
+.down1{
+	background:url("../Img/down_1.jpg") no-repeat;
+	width:93px;
+	height:106px;
+	margin-left:108px;
+}
+.contact{
+	width:262px;
+	height:68px;
+	margin:187px 0 0 372px;
+	font-size:16px;
+	text-align:center;
+	color:#6c6c6c;
+}
+.contact a{
+	color:#6c6c6c;
+}
+
+.weibo_c{
+	color:#6c6c6c;
+	padding:10px 0 0 0;
+	margin:0;
+}
+.qq_c{
+	margin-top:8px;
+}
+.record{
+	width:658px;
+	height:59px;
+	margin-left:171px;
+	text-align:center;
+	line-height:59px;
+	color:#6c6c6c;
+}
