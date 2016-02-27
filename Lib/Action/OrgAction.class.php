@@ -172,7 +172,7 @@ class OrgAction extends CommonAction{
 //			//传递的ID是其他企业的ID时，虽然返回删除成功，但DB中没有删除
 //			$result=$Org->where("id=".$id." and ent_id=".$entId)->delete();
 			
-			$sql="update kx_user_org set org_id=-1 ,update_time=now(),updater_id=".get_cuser_id()." where ent_id=".$entId." and org_id not in (select id from kx_org where ent_id=".$entId.")";
+			$sql="update kx_user_org set org_id=-1 ,update_time=now(),updater_id='".get_cuser_id()."' where ent_id=".$entId." and org_id not in (select id from kx_org where ent_id=".$entId.")";
 			$UserOrg=M("UserOrg");
 			$result=$UserOrg->query($sql);
 			if($result!==false){

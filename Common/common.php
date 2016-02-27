@@ -7,6 +7,7 @@ define ( 'DEFAULT_DISPLAY', "Layout:default" );
 define ( 'DEFAULT_ERROR', ":error" );
 define ( 'DEFAULT_ADMIN', "Layout:admin_index" );
 
+define ('ROOT_EMAIL',"admin@kx.com");
 //角色定义
 //中央服务器管理员ID
 define ( 'ROLE_ROOT', 1 );
@@ -54,7 +55,7 @@ function setSession($status=1, $user) {
 		if($user['avatar']!=null&&trim($user['avatar'])!=""){
 			Session::set("avatar",$user['avatar']);
 		}
-		if ($user ['id'] == ROLE_ROOT) {
+		if ($user ['email'] == ROOT_EMAIL) {
 			Session::set ( "RID", ROLE_ROOT );
 		} else {
 			//TODO 判断企业管理员及普通用户

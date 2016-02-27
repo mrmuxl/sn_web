@@ -25,7 +25,7 @@ class UserAction extends CommonAction {
 				$sval=trim($_GET['search_value']);
 				$map['search_value']=$sval;
 				switch ($skey){
-					case 1:{$con.=" and id=".$sval;break;}
+					case 1:{$con.=" and id='".$sval."'";break;}
 					case 2:{$con.=" and nick='".$sval."'";break;}
 					case 3:{$con.=" and email='".$sval."'";break;}
 					default:;
@@ -43,7 +43,7 @@ class UserAction extends CommonAction {
 			$Page->parameter   .=   "$key=".urlencode($val)."&";
 	   	}
 	   	$page=$Page->show();
-		$uList=$User->where($con)->order("id desc")->field("id,nick,email,qianmo_dot,con_qianmo_dot,status")->page($p.",".PAGE_NUM_DEFAULT)->select();
+		$uList=$User->where($con)->order("create_time desc")->field("id,nick,email,qianmo_dot,con_qianmo_dot,status")->page($p.",".PAGE_NUM_DEFAULT)->select();
 
 		$this->assign("uList",$uList);
 		$this->assign("page",$page);
@@ -172,6 +172,7 @@ class UserAction extends CommonAction {
 				}
 			}
 			$data['email']=$email;
+			$data['id']=md5($email);
 			$data['nick']=$nick;
 			$data['password']=md5($pwd);
 			$data['status']=0;
@@ -185,7 +186,7 @@ class UserAction extends CommonAction {
 //				$user['nick']=$nick;
 //				setSession(SESSION_NEW, $user);
 //				redirect(C("WWW"));//TODO 到激活页面
-				$uid=$result;
+				$uid=$data['id'];
 				$invateCode="";//邮箱邀请码
 				$invateId=0;//邀请链接
 				if(isset($_POST['invate_code'])&&trim($_POST['invate_code'])!=""){
@@ -206,7 +207,7 @@ class UserAction extends CommonAction {
 							$User->rollback();
 							exit('注册失败！[ <A HREF="javascript:history.back()">返 回</A> ]');
 						}
-						$result=$User->setInc("invites","id=".$invate['user_id']);
+						$result=$User->setInc("invites","id='".$invate['user_id']."'");
 						if($result===false){
 							$User->rollback();
 							exit('注册失败！[ <A HREF="javascript:history.back()">返 回</A> ]');
@@ -224,7 +225,7 @@ class UserAction extends CommonAction {
 				}else if(Cookie::is_set("invite_email")){
 					$inviteEmail=trim(Cookie::get("invite_email"));
 					$user=$User->where("email='".strtolower($inviteEmail)."'")->find();
-					if(isset($user['id'])&&$user['id']>0){
+					if(isset($user['id'])){
 						$InvateRecord=M("InvateRecord");
 						$data=array();
 						$data['user_id']=$uid;
@@ -296,7 +297,7 @@ class UserAction extends CommonAction {
 			redirect(C("WWW")."/User/login");
 		}
 		$User=M("User");
-		$user=$User->find(get_user_id());
+		$user=$User->where("id='".get_user_id()."'")->find();
 		if(isset($user['id'])){
 			if($user['status']==1){
 				$this->assign("error","该账号已激活！");
@@ -408,7 +409,7 @@ class UserAction extends CommonAction {
 								}
 							}else if($dataArray[4]==2){
 								$invateId=$dataArray[3];
-								$result=$User->setInc("invites","id=".$invateId);
+								$result=$User->setInc("invites","id='".$invateId."'");
 								if($result!==false){
 									if(Cookie::is_set("invite_email")){
 										Cookie::delete("invite_email");
@@ -495,7 +496,7 @@ class UserAction extends CommonAction {
 				$map ['email'] = $email;
 				$map ['password'] = md5 ( $password );
 				$user = $User->where ( $map )->find();
-				if(isset($user['id'])&&$user['id']>0){
+				if(isset($user['id'])&&$user['id']!=""){
 					$this->assign("user",$user);
 					$status=1;
 					$desc="OK";
@@ -536,9 +537,9 @@ class UserAction extends CommonAction {
 		if($_FILES['avatar']['error']!=4){
 			$fileInfo=saveFile(true,50,50,"User");
 			$data['id']=get_user_id();
-			$data['avatar']=$fileInfo[0]['saveContent'];
 			$User=M("User");
-			$user=$User->find(get_user_id());
+			$user=$User->where($data)->find();
+			$data['avatar']=$fileInfo[0]['saveContent'];
 			$result=$User->save($data);
 			if($result!==false){
 				if($user['avatar']!=null&&trim($user['avatar'])!=""){
@@ -583,7 +584,7 @@ class UserAction extends CommonAction {
 			}
 			if($status){
 				$User=M("User");
-				$user=$User->find(get_user_id());
+				$user=$User->where("id='".get_user_id()."'")->find();
 				if(md5($oldPwd)==$user['password']){
 					$data['id']=get_user_id();
 					$data['password']=md5($pwd);
@@ -637,7 +638,7 @@ class UserAction extends CommonAction {
 			//print_r( $user['id']);
 			//$this->display();
 			//return ;
-			if (isset ( $user ['id'] ) && $user ['id'] > 0) {
+			if (isset ( $user ['id'] ) && trim($user ['id'])!="") {
 				if ($user ['status'] == 1||$user['status']==0) {
 					//设置登录用户SESSION
 					
@@ -684,7 +685,7 @@ class UserAction extends CommonAction {
 			$User=M("User");
 			$email=trim($_POST['email']);
 			$user=$User->where("email='".$email."'")->find();
-			if(isset($user['id'])&&$user['id']>0){
+			if(isset($user['id'])&&$user['id']!=""){
 				$timeStr=time();
 				$chk=md5($email.",".$timeStr.",kx2011");
 				$data=$email.",".$timeStr.",".$chk;
@@ -800,7 +801,7 @@ class UserAction extends CommonAction {
 				$map ['password'] = md5 ( $password );
 				$user = $User->where ( $map )
 					->find ();
-				if (isset ( $user ['id'] ) && $user ['id'] > 0) {
+				if (isset ( $user ['id'] ) && $user ['id']!= "") {
 					if ($user ['status'] == 1) {
 						//设置登录用户SESSION
 						//更新登录时间
@@ -813,7 +814,7 @@ class UserAction extends CommonAction {
 							//企业列表
 							$Ent = M ( "Ent" );
 							//根据用户ID查询是否是某些企业的管理员
-							$ueList1 = $Ent->where ( "ent_master_id=" . $user ['id'] . " and ent_status=1" )
+							$ueList1 = $Ent->where ( "ent_master_id='" . $user ['id'] . "' and ent_status=1" )
 								->findAll ();
 							$entIds = "";
 							if (count ( $ueList1 ) > 0) {
@@ -828,7 +829,7 @@ class UserAction extends CommonAction {
 								}
 								$entIds = $entIds . ")";
 							}
-							$sql_o = "select distinct e.id as ent_id ,e.ent_name as ent_name from kx_ent e,kx_user_org uo where e.ent_status=1 and uo.ent_id=e.id and uo.user_id=" . $user ['id'];
+							$sql_o = "select distinct e.id as ent_id ,e.ent_name as ent_name from kx_ent e,kx_user_org uo where e.ent_status=1 and uo.ent_id=e.id and uo.user_id='" . $user ['id']."'";
 							if ("" != $entIds) {
 								$sql_o = $sql_o . " and e.id not in " . $entIds;
 							}
@@ -874,7 +875,7 @@ class UserAction extends CommonAction {
 					
 					//判断企业用户状态
 					$EntUser=M("EntUser");
-					$num=$EntUser->where("status=1 and user_id=".$_SESSION['UID']." and ent_id=".$_POST['id'])->count();
+					$num=$EntUser->where("status=1 and user_id='".$_SESSION['UID']."' and ent_id=".$_POST['id'])->count();
 					if($num==0){
 					
 						$this->assign ( "desc", "login ent failed ,your account in this ent is forbidden" );
@@ -884,7 +885,7 @@ class UserAction extends CommonAction {
 						return;
 					}
 					
-					$count = $Ent->where ( "id=" . $_POST ['id'] . " and ent_master_id=" . $_SESSION ['UID'] )
+					$count = $Ent->where ( "id=" . $_POST ['id'] . " and ent_master_id='" . $_SESSION ['UID']."'" )
 						->count ();
 					if ($count > 0) {
 						$count = 1;
@@ -1077,7 +1078,7 @@ class UserAction extends CommonAction {
 			$this->returnList ( $status, $desc );
 			return;
 		}
-		if (isset ( $_POST ['id'] ) && $_POST ['id'] > 0 && isset ( $_POST ['nick'] ) && "" != trim ( $_POST ['nick'] )) {
+		if (isset ( $_POST ['id'] ) && trim($_POST ['id'])!="" && isset ( $_POST ['nick'] ) && "" != trim ( $_POST ['nick'] )) {
 			$id = $_POST ['id'];
 			$nick = $_POST ['nick'];
 			$orgId = 0;
@@ -1169,10 +1170,10 @@ class UserAction extends CommonAction {
 			$this->returnList ( $status, $desc );
 			return;
 		}
-		if (isset ( $_POST ['id'] ) && $_POST ['id'] > 0 && isset ( $_POST ['password'] ) && null != $_POST ['password'] && "" != trim ( $_POST ['password'] )) {
+		if (isset ( $_POST ['id'] ) && trim($_POST ['id']) != "" && isset ( $_POST ['password'] ) && null != $_POST ['password'] && "" != trim ( $_POST ['password'] )) {
 			if ( get_cuser_id () == $_POST ['id']) {
 			//if (is_ent_master () || get_cuser_id () == $_POST ['id']) {
-				$id = $_POST ['id'];
+				$id = trim($_POST ['id']);
 				
 				$password = trim ( $_POST ['password'] );
 				$entId = Cookie::get ( "ent_id" );
@@ -1187,8 +1188,8 @@ class UserAction extends CommonAction {
 //					}
 //				}
 				$User = M ( "User" ); //更改的用户要是这个企业的用户
-				$user = $User->find ( $id );
-				if (isset ( $user ['id'] ) && $user ['id'] > 0) {
+				$user = $User->where("id='".$id."'")->find ();
+				if (isset ( $user ['id'] ) && $user ['id'] != "") {
 //					if (is_ent_master ()) {
 //						$data ['id'] = $user ['id'];
 //						$data ['password'] = md5 ( $password );
@@ -1351,6 +1352,10 @@ class UserAction extends CommonAction {
 		$this->display ( DEFAULT_DISPLAY );
 	}
 	
+	/**
+	 * 
+	 * 早期的邀请好友注册（加入团队等）
+	 */
 	public function invate(){
 		$status = 0;
 		$desc = "error parameters";
@@ -1485,7 +1490,7 @@ class UserAction extends CommonAction {
 			        			continue;
 			        		}
 			        		$data['nick']=trim($strArr[1]);
-			        		if(preg_match ( "/(阡陌|运营|管理|系统|,|#)/", $data['nick'] )){
+			        		if(preg_match ( "/(simplenect|阡陌|运营|管理|系统|,|#)/", $data['nick'] )){
 			        			$num=count($errorMsg);
 			        			$errorMsg[$num]="用户名包含非法字符，注册邮箱：".$data['email'];
 			        			
@@ -1768,7 +1773,10 @@ class UserAction extends CommonAction {
 //	}
 	
 	
-	
+	/**
+	 * 
+	 * 客户端用户注册接口
+	 */
 	public function cadd(){
 		$status=0;
 		$desc="error param";

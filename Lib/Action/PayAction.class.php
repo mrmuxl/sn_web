@@ -258,7 +258,7 @@ class PayAction extends CommonAction{
 		$AlipayOrder=M("AlipayOrder");
 		$condition="pay_status=1";
 		if(!isRoot()){
-			$condition.=" and user_id=".get_user_id();
+			$condition.=" and user_id='".get_user_id()."'";
 		}
 		$p=1;
 		if(isset($_GET['p'])&&intval($_GET['p'])>0){
@@ -277,9 +277,9 @@ class PayAction extends CommonAction{
 					$uids[$i]=$tList[$i]['user_id'];
 				}
 				if(count($uids)>0){
-					$uidsStr=implode(",", array_unique($uids));
+					$uidsStr=implode("','", array_unique($uids));
 					$User=M("User");
-					$uList=$User->where("id in (".$uidsStr.")")->getField("id,nick");
+					$uList=$User->where("id in ('".$uidsStr."')")->getField("id,nick");
 					$this->assign("uList",$uList);
 				}
 			}
@@ -305,7 +305,7 @@ class PayAction extends CommonAction{
 					$data=array();
 					$User=M("User");
 					$addDot=$order['qianmo_dot']+$order['add_qianmo_dot'];
-					$sql="update kx_user set qianmo_dot=qianmo_dot+".$addDot." where id=".$order['user_id'];
+					$sql="update kx_user set qianmo_dot=qianmo_dot+".$addDot." where id='".$order['user_id']."'";
 					$result=$User->execute($sql);
 					if($result===false){
 						$status=3;//订单在增加用户阡陌点的时候处理失败

@@ -213,7 +213,7 @@ class BlogAction extends  CommonAction {
 				//$result=$this->dealAttachTemp($postsId, $tid, $rPosts['attach'], $uid, $msg);
 				//if($result!==false){
 					$ForumMpost=M("ForumMpost");
-					$sql="update kx_forum_mpost set reply_num=reply_num+1,last_uid=".$uid.",last_time='".$data['create_time']."' where id=".$tid;
+					$sql="update kx_forum_mpost set reply_num=reply_num+1,last_uid='".$uid."',last_time='".$data['create_time']."' where id=".$tid;
 					$result=$ForumMpost->execute($sql);
 					if($result!==false){
 						$ForumPosts->commit();
@@ -274,7 +274,7 @@ class BlogAction extends  CommonAction {
 			if($result!==false){
 				$postsId=$result;
 				$ForumMpost=M("ForumMpost");
-				$sql="update kx_forum_mpost set reply_num=reply_num+1,last_uid=".$uid.",last_time='".$data['create_time']."' where id=".$tid;
+				$sql="update kx_forum_mpost set reply_num=reply_num+1,last_uid='".$uid."',last_time='".$data['create_time']."' where id=".$tid;
 				$result=$ForumMpost->execute($sql);
 				if($result!==false){
 					$ForumPosts->commit();
@@ -686,7 +686,7 @@ class BlogAction extends  CommonAction {
 		$uList=array();
 		if(count($uids)>0){
 			$User=M("User");
-			$uList2=$User->where("id in (".implode(",", $uids).")")->field("id,email,nick,avatar")->select();
+			$uList2=$User->where("id in ('".implode("','", $uids)."')")->field("id,email,nick,avatar")->select();
 			for($i=0;$i<count($uList2);$i++){
 				$uid=$uList2[$i]['id'];
 				$uList[$uid]=$uList2[$i];
@@ -734,87 +734,12 @@ class BlogAction extends  CommonAction {
 		}
 
 	}
-	/**
-	 * 
-	 * 我的帖子
-	 * 
-	 */
-	public function post_list(){
-		$user_id=0;
-		if(isset($_GET['user_id'])&&intval($_GET['user_id'])>0){
-			$user_id=intval($_GET['user_id']);
-			if($user_id==get_user_id()){
-				$this->assign("is_personal_set",1);
-			}
-		}elseif(isset($_GET['nick'])&&trim($_GET['nick'])!=""){
-			$nick=trim($_GET['nick']);
-			$User=M("User");
-			$user_id=$User->where("nick_name='".$nick."'")->getField("id");
-			if($user_id==get_user_id()){
-				$this->assign("is_personal_set",1);
-			}
-		}else{
-			$user_id=get_user_id();
-			$this->assign("is_personal_set",1);
-		}
-		if(empty($user_id)){
-			//$this->error_msg("访问的页面不存在或已删除！");
-			redirect(C("WWW")."/User/login");
-		}
-		
-		$User=M("User");
-		$userOne=$User->find($user_id);
-		$this->assign("userOne",$userOne);
-		$p=1;
-		if(isset($_GET['p'])&&intval($_GET['p'])>0){
-			$p=intval($_GET['p']);
-		}
-		$perPageNum=20;
-		$ForumMpost=M("ForumMpost");
-//		$sql="select fm.*,ff.name as forum_name,u.nick_name
-//				from oujia_forum_mpost as fm,oujia_forum_forum as ff,oujia_user as u
-//					where fm.forum_id=ff.id and fm.user_id=".$user_id." and fm.last_uid=u.id order by fm.id desc limit ".($p-1)*$perPageNum.",".$perPageNum;
-		$sql="select fm.*,ff.name as forum_name
-				from oujia_forum_mpost as fm,oujia_forum_forum as ff
-					where fm.forum_id=ff.id and fm.user_id=".$user_id." order by fm.id desc limit ".($p-1)*$perPageNum.",".$perPageNum;
-		$forum_posts=$ForumMpost->query($sql);
-		if(!empty($forum_posts)){
-			$uids="";
-			for($i=0;$i<count($forum_posts);$i++){
-				$uids.=",".$forum_posts[$i]['last_uid'];
-			}
-			$uids=substr($uids, 1);//里面可能有重复的uid，是否要考虑去重
-			$User=M("User");
-			$uList2=$User->where("id in (".$uids.")")->field("id,email,nick_name,portrait")->select();
-			for($i=0;$i<count($uList2);$i++){
-				$uid=$uList2[$i]['id'];
-				$uList[$uid]=$uList2[$i]['nick_name'];
-			}
-			$this->assign("uList",$uList);
-			$this->assign("forum_posts",$forum_posts);
-		}	
-		$count=$ForumMpost->where("user_id=".$user_id)->count();
-		$Page=new Page($count, $perPageNum);
-		$show=$Page->show();
-		$this->assign("page",$show);
-		//判断是否有品牌馆
-		$BrandHall = M("BrandHall");
-		$bhOne=$BrandHall->where("user_id=".$user_id)->find();
-		if(count($bhOne)>0){
-			$this->assign("bhOne",$bhOne);
-		}
-		$this->assign("count_bh",count($bhOne));
-		$sql="select domain_name,banner_pic,name from oujia_brand_hall where user_id=".$user_id." 
-					or user_id in ( select brand_user_id from oujia_brand_auth where user_id=".$user_id.")";
-		$brandHall_exits=$BrandHall->query($sql);
-		$this->assign("brandHall_exits",$brandHall_exits);//是否显示Ipad管理
-		$this->display(DEFAULT_NO_LEFT);
-	}
+
 	
 	
 	/**
 	 * 
-	 * 将oujia_forum_posts中的content转换为html格式
+	 * 将forum_posts中的content转换为html格式
 	 */
 	public function content2html(){
 		 ini_set('max_execution_time', 0);

@@ -5,7 +5,7 @@
 			{
 			<eq name="status" value="1">
 			<present name="user">
-			  "id": {$user.id},
+			  "id": "{$user.id}",
 			  "nick_name": {$user.nick|json_encode},
 			  "head_pic": "{&IMG}/{$user.avatar|getPicUri}/{$user.avatar|getPicName}"
 			</present>
