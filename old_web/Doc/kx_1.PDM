@@ -2766,7 +2766,7 @@ TableComment 0 新宋体,8,N</a:FontList>
 <o:TableSymbol Id="o12">
 <a:CreationDate>1309875740</a:CreationDate>
 <a:ModificationDate>1310522451</a:ModificationDate>
-<a:Rect>((11797,7691), (22327,14413))</a:Rect>
+<a:Rect>((11218,7691), (22906,14413))</a:Rect>
 <a:LineColor>12615680</a:LineColor>
 <a:FillColor>16570034</a:FillColor>
 <a:ShadowColor>12632256</a:ShadowColor>
@@ -2814,7 +2814,7 @@ TableComment 0 新宋体,8,N</a:FontList>
 <o:TableSymbol Id="o16">
 <a:CreationDate>1311519945</a:CreationDate>
 <a:ModificationDate>1311524210</a:ModificationDate>
-<a:Rect>((-4065,-211), (6465,6511))</a:Rect>
+<a:Rect>((-4644,-211), (7044,6511))</a:Rect>
 <a:LineColor>12615680</a:LineColor>
 <a:FillColor>16570034</a:FillColor>
 <a:ShadowColor>12632256</a:ShadowColor>
@@ -3266,10 +3266,10 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>id</a:Code>
 <a:CreationDate>1309873378</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1309875513</a:ModificationDate>
+<a:ModificationDate>1362030282</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
-<a:DataType>integer</a:DataType>
-<a:Identity>1</a:Identity>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 <o:Column Id="o52">
@@ -3802,10 +3802,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>ent_master_id</a:Code>
 <a:CreationDate>1310401326</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1310401326</a:ModificationDate>
+<a:ModificationDate>1362029634</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>企业管理员ID</a:Comment>
-<a:DataType>integer</a:DataType>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 <o:Column Id="o91">
@@ -4016,10 +4017,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>updater_id</a:Code>
 <a:CreationDate>1309875307</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1309875415</a:ModificationDate>
+<a:ModificationDate>1362030091</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>最后修改人（管理员）ID user.id</a:Comment>
-<a:DataType>integer</a:DataType>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 </c:Columns>
@@ -4093,9 +4095,10 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>user_id</a:Code>
 <a:CreationDate>1309875740</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1310993056</a:ModificationDate>
+<a:ModificationDate>1362030214</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
-<a:DataType>integer</a:DataType>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 <o:Column Id="o113">
@@ -4140,10 +4143,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>updater_id</a:Code>
 <a:CreationDate>1309876028</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1309876031</a:ModificationDate>
+<a:ModificationDate>1362030214</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>修改人</a:Comment>
-<a:DataType>integer</a:DataType>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 </c:Columns>
@@ -4237,10 +4241,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>user_id</a:Code>
 <a:CreationDate>1310483097</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1310993120</a:ModificationDate>
+<a:ModificationDate>1362030077</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>用户ID</a:Comment>
-<a:DataType>integer</a:DataType>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 <o:Column Id="o124">
@@ -4249,10 +4254,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>target_user_id</a:Code>
 <a:CreationDate>1310483097</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1310993120</a:ModificationDate>
+<a:ModificationDate>1362030077</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>用户可以查看的其他用户ID</a:Comment>
-<a:DataType>integer</a:DataType>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 <o:Column Id="o125">
@@ -4295,10 +4301,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>updater_id</a:Code>
 <a:CreationDate>1310483097</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1310483097</a:ModificationDate>
+<a:ModificationDate>1362030077</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>最后修改人（管理员）ID user.id</a:Comment>
-<a:DataType>integer</a:DataType>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 </c:Columns>
@@ -4392,9 +4399,10 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>user_id</a:Code>
 <a:CreationDate>1311519945</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1311519945</a:ModificationDate>
+<a:ModificationDate>1362029602</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
-<a:DataType>integer</a:DataType>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 <o:Column Id="o136">
@@ -4439,10 +4447,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>updater_id</a:Code>
 <a:CreationDate>1311519945</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1311520107</a:ModificationDate>
+<a:ModificationDate>1362029602</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>修改人</a:Comment>
-<a:DataType>integer</a:DataType>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 </c:Columns>
@@ -4768,11 +4777,12 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>user_id</a:Code>
 <a:CreationDate>1330269646</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1330269661</a:ModificationDate>
+<a:ModificationDate>1362030305</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>留言用户ID</a:Comment>
 <a:DefaultValue>0</a:DefaultValue>
-<a:DataType>integer</a:DataType>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 <o:Column Id="o165">
@@ -4915,9 +4925,10 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>creater_id</a:Code>
 <a:CreationDate>1335275362</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1335275739</a:ModificationDate>
+<a:ModificationDate>1362030462</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
-<a:DataType>integer</a:DataType>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 <o:Column Id="o176">
@@ -5049,9 +5060,10 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>user_id</a:Code>
 <a:CreationDate>1337841347</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1337949329</a:ModificationDate>
+<a:ModificationDate>1362030158</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
-<a:DataType>integer</a:DataType>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 <o:Column Id="o186">
@@ -5169,10 +5181,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>user_id</a:Code>
 <a:CreationDate>1338126129</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1338126448</a:ModificationDate>
+<a:ModificationDate>1362030137</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>注册用户ID</a:Comment>
-<a:DataType>integer</a:DataType>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 <o:Column Id="o195">
@@ -5181,10 +5194,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>invate_id</a:Code>
 <a:CreationDate>1338126129</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1338126461</a:ModificationDate>
+<a:ModificationDate>1362030137</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>推广ID</a:Comment>
-<a:DataType>integer</a:DataType>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 <o:Column Id="o196">
@@ -5311,10 +5325,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>user_id</a:Code>
 <a:CreationDate>1339696455</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1339696867</a:ModificationDate>
+<a:ModificationDate>1362030486</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>邀请人用户ID</a:Comment>
-<a:DataType>integer</a:DataType>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 <o:Column Id="o206">
@@ -5895,10 +5910,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>user_id</a:Code>
 <a:CreationDate>1354802908</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1354802908</a:ModificationDate>
+<a:ModificationDate>1362030340</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>发帖用户</a:Comment>
-<a:DataType>integer</a:DataType>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 <o:Column Id="o252">
@@ -6034,10 +6050,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>last_uid</a:Code>
 <a:CreationDate>1354802908</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1354802908</a:ModificationDate>
+<a:ModificationDate>1362030350</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>最新回帖用户</a:Comment>
-<a:DataType>integer</a:DataType>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 </c:Columns>
@@ -6193,10 +6210,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>updater_id</a:Code>
 <a:CreationDate>1354802946</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1354802946</a:ModificationDate>
+<a:ModificationDate>1362030437</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>更新用户</a:Comment>
-<a:DataType>integer</a:DataType>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 <o:Column Id="o276">
@@ -6333,10 +6351,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>user_id</a:Code>
 <a:CreationDate>1354802979</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1354802979</a:ModificationDate>
+<a:ModificationDate>1362030419</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>发帖用户</a:Comment>
-<a:DataType>integer</a:DataType>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 <o:Column Id="o287">
