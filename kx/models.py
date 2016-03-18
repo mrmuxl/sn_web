@@ -8,9 +8,10 @@
 # Also note: You'll have to insert the output of 'django-admin.py sqlcustom [appname]'
 # into your database.
 from __future__ import unicode_literals
-
 from django.db import models
-from django.contrib.auth.models import (BaseUserManager, AbstractBaseUser)
+from django.contrib.auth.models import (AbstractBaseUser,PermissionsMixin)
+from kx.kxmanager import KxUserManager
+from django.conf import settings
 
 class GroupGrade(models.Model):
     grade = models.IntegerField(null=True, blank=True)
@@ -405,38 +406,15 @@ class KxTongjiRecord(models.Model):
     class Meta:
         db_table = 'kx_tongji_record'
 
-
-class KxUserManager(BaseUserManager):
-    def create_user(self, email,nick,password=None):
-        """
-        创建一个用户，用户名是email，和密码
-        """
-        if not email:
-            raise ValueError(u'用户名必须是email地址')
-
-        user = self.model(email=KxUserManager.normalize_email(email),nick=nick)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-    def create_superuser(self,email,password,nick):
-        """
-        创建一个超级用户
-        """
-        user = self.create_user(email,nick=nick,password=password)
-        user.is_admin = True
-        user.save(using=self._db)
-        return user
-
-
-class KxUser(AbstractBaseUser):
+class KxUser(AbstractBaseUser,PermissionsMixin):
     id                  = models.AutoField(primary_key = True)
-    email               = models.EmailField(verbose_name='email address', max_length=255, unique=True, db_index=True,)
+    #email               = models.EmailField(verbose_name='email address', max_length=255, unique=True, db_index=True,)
+    email               = models.EmailField(verbose_name=u'邮件地址', max_length=255, unique=True)
     #email               = models.CharField(u'用户名为邮箱',max_length  = 50L, unique = True)
-    nick                = models.CharField(u'用户昵称',max_length  = 20L)
-    #password            = models.CharField(u'密码',max_length  = 50L)
+    username            = models.CharField(u'用户昵称',max_length  = 20L)
+   #password            = models.CharField(u'密码',max_length  = 50L)
     status              = models.BooleanField(u'0=表示未激活，1=正常，2=封禁',default  = 1)
-    create_time         = models.DateTimeField(auto_now_add=True,verbose_name=u'注册时间')
-    #last_login          = models.DateTimeField()
+    create_time         = models.DateTimeField(verbose_name=u'注册时间')
     update_time         = models.DateTimeField()
     avatar              = models.CharField(max_length = 200L, null = True,blank = True)
     last_ip             = models.CharField(max_length = 50L,  null = True,blank = True)
@@ -453,40 +431,46 @@ class KxUser(AbstractBaseUser):
     user_share          = models.IntegerField(default = 0)
     share_begin_time    = models.DateField(null = True, blank = True)
     active_time         = models.DateTimeField(u'激活时间',null = True, blank = True)
+    is_active           = models.BooleanField(default=True)
     is_admin            = models.BooleanField(default=False)
+    is_staff            = models.BooleanField(default=False)
 
-    object = KxUserManager()
+    class Meta:
+        db_table = 'kx_user'
+        verbose_name = (u'用户')
+        verbose_name_plural = (u'用户')
+        #swappable = 'AUTH_USER_MODEL'
+
+    objects = KxUserManager()
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = 'nick'
-
+    REQUIRED_FIELDS = ['username']
+ 
     def get_full_name(self):
         # The user is identified by their email address
         return self.email
-
+ 
     def get_short_name(self):
         # The user is identified by their email address
         return self.email
-
     def __unicode__(self):
         return self.email
-
-    def has_perm(self, perm, obj=None):
-        "Does the user have a specific permission?"
-        # Simplest possible answer: Yes, always
-        return True
-
-    def has_module_perms(self, app_label):
-        "Does the user have permissions to view the app `app_label`?"
-        # Simplest possible answer: Yes, always
-        return True
-
-    @property
-    def is_staff(self):
-        "Is the user a member of staff?"
-        # Simplest possible answer: All admins are staff
+#    def has_perm(self, perm, obj=None):
+#        "Does the user have a specific permission?"
+#        # Simplest possible answer: Yes, always
+#        return True
+#        
+#    def has_module_perms(self, app_label):
+#        "Does the user have permissions to view the app `app_label`?"
+#        # Simplest possible answer: Yes, always
+#        return True
+    #@property
+    #def is_staff(self):
+#        "Is the user a member of staff?"
+#        # Simplest possible answer: All admins are staff
         return self.is_admin
-    class Meta:
-        db_table = 'kx_user'
+#    @property
+#    def is_superuser(self):
+#        return self.is_admin
 
 
 class KxUserFriend(models.Model):

@@ -696,7 +696,7 @@ img{
 	display:block;
 	width:42px;
 	height:22px;
-	background:url(../Img/reply_btn_small.jpg) no-repeat scroll 0 0 transparent;
+	background:url({{ STATIC_URL }}images/reply_btn_small.jpg) no-repeat scroll 0 0 transparent;
 	overflow:hidden;
 }
 .reply_small a:hover{
@@ -721,12 +721,12 @@ img{
 .register_area{
 	width:715px;
 	height:456px;
-	background:url("../Img/login_bg2.jpg") no-repeat;
+	background:url("{{ STATIC_URL }}images/login_bg2.jpg") no-repeat;
 }
 .login_area{
 	width:715px;
 	height:456px;
-	background:url("../Img/login_bg2.jpg") no-repeat;
+	background:url("{{ STATIC_URL}}images/login_bg2.jpg") no-repeat;
 }
 .register tr{
 	height:50px;
@@ -793,7 +793,7 @@ img{
 	border: 1px solid #e5e5e5;
 }
 .register_btn{
-	background:url("../Img/register_btn.jpg") no-repeat;
+	background:url("../images/register_btn.jpg") no-repeat;
 	border:none;
 	width:99px;
 	height:43px;
