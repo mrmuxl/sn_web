@@ -128,10 +128,10 @@ img{
 	width:100%;
 }
 .index_banner{
-	background:url(../Img/index_bg.jpg) no-repeat scroll center top;
+	background:url(../images/index_bg.jpg) no-repeat scroll center top;
 }
 .other_bg{
-	background: url("../Img/qianmo_bg.jpg") repeat scroll 0 0 transparent;
+	background: url("../images/qianmo_bg.jpg") repeat scroll 0 0 transparent;
 }
 
 .main_in{
@@ -273,13 +273,13 @@ img{
 
 }
 .file_share span{
-	background:url(../Img/fun_area.jpg) no-repeat scroll 0 0 transparent;
+	background:url(../images/fun_area.jpg) no-repeat scroll 0 0 transparent;
 }
 .print_share span{
-	background:url(../Img/fun_area.jpg) no-repeat scroll -38px 0 transparent;
+	background:url(../images/fun_area.jpg) no-repeat scroll -38px 0 transparent;
 }
 .chat_share span{
-	background:url(../Img/fun_area.jpg) no-repeat scroll -76px 0 transparent;
+	background:url(../images/fun_area.jpg) no-repeat scroll -76px 0 transparent;
 }
 .fun_right{
 	width:710px;
@@ -327,7 +327,7 @@ img{
 	height:40px;
 	width:488px;
 	margin-left:272px;
-	background:url(../Img/new_guide_bg.jpg) no-repeat;
+	background:url(../images/new_guide_bg.jpg) no-repeat;
 }
 .new_guide_entrance div img{
 	margin-left:198px;
@@ -368,7 +368,7 @@ img{
 	font-size:18px;
 	margin-left:93px;
 	overflow:hidden;
-	background:url(../Img/comment_bg.jpg) no-repeat;
+	background:url(../images/comment_bg.jpg) no-repeat;
 }
 .comment_title span{
 	display:block;
@@ -379,7 +379,7 @@ img{
 	width:677px;
 	height:33px;
 	_height:32px;
-	background:url("../Img/comment_input.jpg") no-repeat scroll 0 0 #FFFFFF;
+	background:url("../images/comment_input.jpg") no-repeat scroll 0 0 #FFFFFF;
 	left: 2px;
     position: relative;
     top: -34px;
@@ -394,7 +394,7 @@ img{
 }
 .send_area_top{
 	height:54px;
-	background:url(../Img/comment_tip.jpg) no-repeat;
+	background:url(../images/comment_tip.jpg) no-repeat;
 }
 .send_area_text{
 	color:#4e4e4e;
@@ -415,7 +415,7 @@ img{
     padding: 0;
 }
 .btn_send2{
-	background: url("../Img/comment_btn2.jpg") no-repeat scroll 0 0 transparent;
+	background: url("../images/comment_btn2.jpg") no-repeat scroll 0 0 transparent;
 	width:65px;
 	height:31px;
 	border:none;
@@ -453,7 +453,7 @@ img{
     
 }
 .avatar_img{
-	background: url("../Img/avatar_bg.gif") no-repeat scroll 0 0 transparent;
+	background: url("../images/avatar_bg.gif") no-repeat scroll 0 0 transparent;
     height: 52px;
     width: 52px;
     margin:7px 34px 0 0;
@@ -468,7 +468,7 @@ img{
 	margin-top:-1px;
 }
 .btn_send{
-	background: url("../Img/comment_btn.jpg") no-repeat scroll 0 0 transparent;
+	background: url("../images/comment_btn.jpg") no-repeat scroll 0 0 transparent;
 	width:64px;
 	height:28px;
 	border:none;
@@ -479,7 +479,7 @@ img{
 	cursor: pointer;
 }
 .btn_cancel{
-	background: url("../Img/cancel_btn.jpg") no-repeat scroll 0 0 transparent;
+	background: url("../images/cancel_btn.jpg") no-repeat scroll 0 0 transparent;
 	width:64px;
 	height:28px;
 	border:none;
@@ -696,7 +696,7 @@ img{
 	display:block;
 	width:42px;
 	height:22px;
-	background:url({{ STATIC_URL }}images/reply_btn_small.jpg) no-repeat scroll 0 0 transparent;
+	background:url(../images/reply_btn_small.jpg) no-repeat scroll 0 0 transparent;
 	overflow:hidden;
 }
 .reply_small a:hover{
@@ -721,12 +721,12 @@ img{
 .register_area{
 	width:715px;
 	height:456px;
-	background:url("{{ STATIC_URL }}images/login_bg2.jpg") no-repeat;
+	background:url("../images/login_bg2.jpg") no-repeat;
 }
 .login_area{
 	width:715px;
 	height:456px;
-	background:url("{{ STATIC_URL}}images/login_bg2.jpg") no-repeat;
+	background:url("../images/login_bg2.jpg") no-repeat;
 }
 .register tr{
 	height:50px;
@@ -753,10 +753,10 @@ img{
 	margin-left:40px;
 }
 .reg_title{
-	background:url("../Img/reg_title.gif") no-repeat;
+	background:url("../images/reg_title.gif") no-repeat;
 }
 .login_title{
-	background:url("../Img/login_title.gif") no-repeat;
+	background:url("../images/login_title.gif") no-repeat;
 }
 .register_msg{
 	font-size:18px;
@@ -801,7 +801,7 @@ img{
 	color:#ffffff;
 }
 .login_btn{
-	background:url("../Img/login_btn2.jpg") no-repeat;
+	background:url("../images/login_btn2.jpg") no-repeat;
 	border:none;
 	width:99px;
 	height:43px;
@@ -858,14 +858,14 @@ img{
 	text-decoration: underline;
 }
 .update_btn{
-	background: url("../Img/update_btn.jpg") no-repeat scroll 0 0 transparent;
+	background: url("../images/update_btn.jpg") no-repeat scroll 0 0 transparent;
     border: medium none;
     cursor: pointer;
     height: 39px;
     width: 160px;
 }
 .send_button{
-	background: url("../Img/reply_btn.jpg") no-repeat scroll 0 0 transparent;
+	background: url("../images/reply_btn.jpg") no-repeat scroll 0 0 transparent;
 	border: medium none;
     cursor: pointer;
     float: right;
@@ -876,7 +876,7 @@ img{
     width: 64px
 }
 .reply_close{
-	background: url("../Img/cancel_btn.jpg") no-repeat scroll 0 0 transparent;
+	background: url("../images/cancel_btn.jpg") no-repeat scroll 0 0 transparent;
 	border: medium none;
     cursor: pointer;
     float: right;
@@ -987,7 +987,7 @@ img{
 .blog_ctop span{
 	padding-left:42px;
 	font-size:14px;
-	background:url(../Img/blog_ctop.jpg) no-repeat;
+	background:url(../images/blog_ctop.jpg) no-repeat;
 }
 .blog_ctop span a{
 	color:#ff0000;
@@ -1053,7 +1053,7 @@ img{
     width:679px;
 }
 .btn_csend{
-	background: url("../Img/blog_cbtn.jpg") no-repeat scroll 0 0 transparent;
+	background: url("../images/blog_cbtn.jpg") no-repeat scroll 0 0 transparent;
     border: medium none;
     cursor: pointer;
     float: right;
@@ -1127,7 +1127,7 @@ img{
 
 
 .findpwd_btn{
-	background: url("../Img/findpwd_btn.jpg") no-repeat scroll 0 0 transparent;
+	background: url("../images/findpwd_btn.jpg") no-repeat scroll 0 0 transparent;
     border: medium none;
     color: #FFFFFF;
     cursor: pointer;
@@ -1135,7 +1135,7 @@ img{
     width: 99px;
 }
 .resetpwd_btn{
-	background: url("../Img/resetpwd_btn.jpg") no-repeat scroll 0 0 transparent;
+	background: url("../images/resetpwd_btn.jpg") no-repeat scroll 0 0 transparent;
     border: medium none;
     color: #FFFFFF;
     cursor: pointer;

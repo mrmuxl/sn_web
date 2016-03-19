@@ -1,11 +1,11 @@
 #_*_coding:utf-8_*_
 # Create your views here.
 
+from django.views.decorators.csrf import requires_csrf_token
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-import datetime
 from django.contrib.auth import get_user_model
 from kx.forms import RegisterForm
 from kx.models import KxUser
@@ -15,6 +15,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 import json
+import datetime
+from django.views.decorators.csrf import csrf_exempt
 
 
 def index(request):
@@ -99,30 +101,59 @@ def register(request):
 #            return HttpResponseRedirect(reverse("index"))    
 #    template_var["form"]=form        
     #print request
-    return render_to_response("register.html",template_var,context_instance=RequestContext(request))
-    if request.method =="POST":
-        username=request.POST["nick"]
-        email=request.POST["nick"]
+    return render_to_response("register.html",'',context_instance=RequestContext(request))
         
 
+#@requires_csrf_token
+#@csrf_exempt
 def check(request):
-    print request
     if request.method =="POST":
         email = request.POST.get("email")
         email = email.strip() 
-        print email
         if not email:
             return HttpResponse(json.dumps({"data":0,"info":"","status":0}),content_type="application/json")
         else:
             count = KxUser.objects.filter(email=email).count()
-            print count
             if count == 0:
                 return HttpResponse(json.dumps({"data":1,"info":"OK","status":1}),content_type="application/json")
     return HttpResponse(json.dumps({"data":0,"info":"","status":0}),content_type="application/json")
 
  
 def save(request):
-    pass
+    if request.method == "POST":
+        email = request.POST.get("email").lower().strip()
+        nick = request.POST.get("nick").strip()
+        password = request.POST.get("password").strip()
+        repassword = request.POST.get("repassword").strip()
+        raw_email ="""请填写邮箱！<A HREF="javascript:history.back()">返 回</A>"""
+        raw_nick ="""请填昵称！<A HREF="javascript:history.back()">返 回</A>"""
+        raw_nick_length ="""昵称应为4-12个字符！<A HREF="javascript:history.back()">返 回</A>"""
+        raw_password ="""请填写密码！<A HREF="javascript:history.back()">返 回</A>"""
+        raw_repassword ="""两次密码填写不一致！<A HREF="javascript:history.back()">返 回</A>"""
+        raw_has_email= """邮箱已存在！<A HREF="javascript:history.back()">返 回</A>"""
+        if not email:
+            return HttpResponse(raw_email)
+        if not nick:
+            return HttpResponse(raw_nick)
+        if len(nick)<4 and len(nick)>12:
+            return HttpResponse(raw_nick_length)
+        if not password:
+            return HttpResponse(raw_password)
+        if password != repassword:
+            return HttpResponse(raw_nick_length)
+        count = KxUser.objects.filter(email=email).count()
+        if count >0:
+            return HttpResponse(raw_has_email)
+        now = timezone.now()
+        user=KxUser.objects.create_user(email=email,nick=nick,password=password,status=0)
+        user.save()
+        _login(request,nick,password)#注册完毕 直接登陆
+        return HttpResponseRedirect(reverse("index"))    
+
+
+
+
+            
 
 
 #def login(request):
@@ -132,16 +163,16 @@ def save(request):
 #
 #def info(request):
 #    pass
-#def _login(request,username,password):
-#    '''登陆核心方法'''
-#    ret=False
-#    user=authenticate(username=username,password=password)
-#    if user:
-#        if user.is_active:
-#            auth_login(request,user)
-#            ret=True
-#        else:
-#            messages.add_message(request, messages.INFO, _(u'用户没有激活'))
-#    else:
-#        messages.add_message(request, messages.INFO, _(u'用户不存在'))
-#    return ret
+def _login(request,nick,password):
+    '''登陆核心方法'''
+    ret=False
+    user=authenticate(username=nick,password=password)
+    if user:
+        if user.status == 0:
+            auth_login(request,user)
+            ret=True
+        else:
+            messages.add_message(request, messages.INFO, _(u'用户没有激活'))
+    else:
+        messages.add_message(request, messages.INFO, _(u'用户不存在'))
+    return ret
