@@ -411,7 +411,7 @@ class KxUser(AbstractBaseUser,PermissionsMixin):
     #email               = models.EmailField(verbose_name='email address', max_length=255, unique=True, db_index=True,)
     email               = models.EmailField(verbose_name=u'邮件地址', max_length=255, unique=True)
     #email               = models.CharField(u'用户名为邮箱',max_length  = 50L, unique = True)
-    username            = models.CharField(u'用户昵称',max_length  = 20L)
+    nick                = models.CharField(u'用户昵称',max_length  = 20L)
    #password            = models.CharField(u'密码',max_length  = 50L)
     status              = models.BooleanField(u'0=表示未激活，1=正常，2=封禁',default  = 1)
     create_time         = models.DateTimeField(verbose_name=u'注册时间')
@@ -423,7 +423,7 @@ class KxUser(AbstractBaseUser,PermissionsMixin):
     login_status        = models.IntegerField(default = 0,null = False)
     qianmo_dot          = models.IntegerField(u'现有阡陌点',default = 0,null = False)
     con_qianmo_dot      = models.IntegerField(u'累计消费阡陌点',default = 0)
-    invate_init         = models.BooleanField(u'0 = 未登录,1 = 邀请用户登录并初始化成功，2 = 非邀请用',default = 0)
+    invate_init         = models.BooleanField(u'登陆状态：0 = 未登录,1 = 邀请用户登录并初始化成功，2 = 非邀请用',default = 0)
     login_counts        = models.IntegerField(default = 0)
     create_group_counts = models.IntegerField(default = 0)
     online_time         = models.IntegerField(default = 0)
@@ -431,19 +431,17 @@ class KxUser(AbstractBaseUser,PermissionsMixin):
     user_share          = models.IntegerField(default = 0)
     share_begin_time    = models.DateField(null = True, blank = True)
     active_time         = models.DateTimeField(u'激活时间',null = True, blank = True)
-    is_active           = models.BooleanField(default=True)
-    is_admin            = models.BooleanField(default=False)
-    is_staff            = models.BooleanField(default=False)
+    #is_active           = models.BooleanField(default=True)
+    is_staff            = models.BooleanField(u'后台登陆',default=False)
 
     class Meta:
         db_table = 'kx_user'
         verbose_name = (u'用户')
         verbose_name_plural = (u'用户')
-        #swappable = 'AUTH_USER_MODEL'
 
     objects = KxUserManager()
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = ['nick']
  
     def get_full_name(self):
         # The user is identified by their email address
@@ -454,23 +452,6 @@ class KxUser(AbstractBaseUser,PermissionsMixin):
         return self.email
     def __unicode__(self):
         return self.email
-#    def has_perm(self, perm, obj=None):
-#        "Does the user have a specific permission?"
-#        # Simplest possible answer: Yes, always
-#        return True
-#        
-#    def has_module_perms(self, app_label):
-#        "Does the user have permissions to view the app `app_label`?"
-#        # Simplest possible answer: Yes, always
-#        return True
-    #@property
-    #def is_staff(self):
-#        "Is the user a member of staff?"
-#        # Simplest possible answer: All admins are staff
-        return self.is_admin
-#    @property
-#    def is_superuser(self):
-#        return self.is_admin
 
 
 class KxUserFriend(models.Model):

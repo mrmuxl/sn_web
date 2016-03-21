@@ -4,7 +4,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
-#from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.forms import AdminPasswordChangeForm
 
 from kx.models import KxUser
 from kx.admin_forms import (UserChangeForm,UserCreationForm)
@@ -17,22 +17,22 @@ class KxUserAdmin(UserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('email','username')
-    list_filter = ('is_staff','is_superuser')
+    list_display = ('email','nick','last_login')
+    list_filter = ('is_staff','is_superuser','status')
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('username',)}),
-        ('Important dates', {'fields': ('last_login',)}),
+        (u'基本信息', {'fields': ('email', 'password')}),
+        (u'用户详细信息', {'fields': ('nick','status','active_time')}),
+        (u'时间', {'fields': ('last_login','create_time',)}),
     )
     add_fieldsets = (
-        (None, {
+        (u'添加用户', {
             'classes': ('wide',),
-            'fields': ('email', 'username', 'password1', 'password2')}
+            'fields': ('email', 'nick', 'password1', 'password2')}
         ),
     )
     search_fields = ('email',)
     ordering = ('email',)
-    filter_horizontal = ()
+    #filter_horizontal = ()
 
 # Now register the new UserAdmin...
 admin.site.register(KxUser, KxUserAdmin)
