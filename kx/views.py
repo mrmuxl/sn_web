@@ -2,15 +2,12 @@
 # Create your views here.
 
 from django.views.decorators.csrf import requires_csrf_token
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response,render
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
-from django.contrib.auth import get_user_model
-from kx.forms import RegisterForm
 from kx.models import KxUser
 from django.contrib.auth import authenticate
-from django.contrib import messages
+from django.contrib import auth,messages
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.utils import timezone
@@ -73,21 +70,24 @@ class myforms(forms.Form):
 
 def msg_board(request):
     req=request.session
-    print type(req)
-    print dir(req)
-    print req.keys()
-    print req.items()
+    #print type(req)
+    #print dir(req)
+    #print req.keys()
+    #print req.items()
     p=request.path
     u=request.user
+    print dir(u)
+    #print u.email
+
 
     return render(request,'msg_index.html',{'req':req,'p':p,'u':u}) 
 
-def  add_msg(request):
-    pass
+def add_msg(request):
+    return render(request,'msg_index.html',{}) 
 def register(request):
     '''注册视图'''
 #    now = timezone.now()
-    template_var={}
+#    template_var={}
 #    form = RegisterForm()    
 #    if request.method=="POST":
 #        form=RegisterForm(request.POST.copy())
@@ -101,7 +101,7 @@ def register(request):
 #            return HttpResponseRedirect(reverse("index"))    
 #    template_var["form"]=form        
     #print request
-    return render_to_response("register.html",'',context_instance=RequestContext(request))
+    return render_to_response("register.html",{},context_instance=RequestContext(request))
         
 
 #@requires_csrf_token
@@ -145,31 +145,42 @@ def save(request):
         if count >0:
             return HttpResponse(raw_has_email)
         now = timezone.now()
-        user=KxUser.objects.create_user(email=email,nick=nick,password=password,status=0)
-        user.save()
-        _login(request,nick,password)#注册完毕 直接登陆
-        return HttpResponseRedirect(reverse("index"))    
+        create_user=KxUser.objects.create_user(email=email,nick=nick,password=password,status=1)
+        create_user.save()
+        user = authenticate(username=email,password=password)
+        if user is not None and user.is_active:
+            auth.login(request,user)
+            return HttpResponseRedirect(reverse("index"))    
 
+def login(request):
+    if request.method == "POST":
+        email = request.POST.get("email").lower().strip()
+        password = request.POST.get("password").strip()
+        user = authenticate(username=email,password=password)
+        if user is not None and user.is_active:
+            auth.login(request,user)
+            return HttpResponseRedirect(reverse("index"))    
+        else:
+            data={"email":email}
+            messages.add_message(request,messages.INFO,_(u'用户名或密码错误'))
+            return render(request,"login.html",data)
+    return render(request,"login.html",{})
 
+def logout(request):
+    '''注销视图'''
+    auth.logout(request)
+    return HttpResponseRedirect(reverse('index'))
 
-
-            
-
-
-#def login(request):
-#    pass
-#def logout(request):
-#    pass
-#
 #def info(request):
 #    pass
-def _login(request,nick,password):
+
+def _login(request,email,password):
     '''登陆核心方法'''
     ret=False
-    user=authenticate(username=nick,password=password)
-    if user:
-        if user.status == 0:
-            auth_login(request,user)
+    user=authenticate(username=email,password=password)
+    if user is not None:
+        if user.is_active:
+            a=auth_login(request,user)
             ret=True
         else:
             messages.add_message(request, messages.INFO, _(u'用户没有激活'))
