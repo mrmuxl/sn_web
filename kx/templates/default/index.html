@@ -1,6 +1,13 @@
-{% extends "header.html" %}
+{% extends "base.html" %}
 {% block title %}{{title}}{% endblock %}
-{% block index %}
+
+{% block header %} 
+
+{% include "header.html" %}
+
+{% endblock %}
+
+{% block content %}
 <div class="main index_banner">
 	<div class="main_in">
 		<div class="top_node">
@@ -496,4 +503,9 @@ var swfLeft=$(".main_in").offset().left;
 	*/
 </script>
 {% endblock %}
-{% include "index_2.html" %}
+
+{% block footer %} 
+
+{% include "footer.html" %}
+
+{% endblock %}

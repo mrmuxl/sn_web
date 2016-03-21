@@ -14,218 +14,218 @@ from kx.kxmanager import KxUserManager
 from django.conf import settings
 
 class GroupGrade(models.Model):
-    grade = models.IntegerField(null=True, blank=True)
-    begin_time = models.IntegerField(null=True, blank=True)
-    end_time = models.IntegerField(null=True, blank=True)
+    grade      = models.IntegerField(null = True, blank = True)
+    begin_time = models.IntegerField(null = True, blank = True)
+    end_time   = models.IntegerField(null = True, blank = True)
     class Meta:
         db_table = 'group_grade'
 
 class KxActTongji(models.Model):
-    id = models.AutoField(default=None,primary_key=True)
-    tongji_day = models.DateField(default=None,unique=True)
-    on_num = models.IntegerField(default=0)
-    act_num = models.IntegerField(default=0)
-    un_num = models.IntegerField(default=0)
-    vc_val = models.DecimalField(default=0.00,max_digits=2, decimal_places=2)
-    trans0 = models.IntegerField(default=0)
-    trans1 = models.IntegerField(default=0)
-    trans2 = models.IntegerField(default=0)
-    trans3 = models.IntegerField(default=0)
-    print0 = models.IntegerField(default=0)
-    print1 = models.IntegerField(default=0)
-    print2 = models.IntegerField(default=0)
-    print3 = models.IntegerField(default=0)
-    chat0 = models.IntegerField(default=0)
-    chat1 = models.IntegerField(default=0)
-    chat2 = models.IntegerField(default=0)
-    chat3 = models.IntegerField(default=0)
-    friend0 = models.IntegerField(default=0)
-    friend1 = models.IntegerField(default=0)
-    friend2 = models.IntegerField(default=0)
-    friend3 = models.IntegerField(default=0)
-    invite0 = models.IntegerField(default=0)
-    invite1 = models.IntegerField(default=0)
-    invite2 = models.IntegerField(default=0)
-    invite3 = models.IntegerField(default=0)
-    invite4 = models.IntegerField(default=0)
-    friend_all0 = models.IntegerField(default=0)
-    friend_all1 = models.IntegerField(default=0)
-    friend_all2 = models.IntegerField(default=0)
-    friend_all3 = models.IntegerField(default=0)
+    id          = models.AutoField(default = None,primary_key = True)
+    tongji_day  = models.DateField(default = None,unique = True)
+    on_num      = models.IntegerField(default = 0)
+    act_num     = models.IntegerField(default = 0)
+    un_num      = models.IntegerField(default = 0)
+    vc_val      = models.DecimalField(default = 0.00,max_digits  = 2, decimal_places = 2)
+    trans0      = models.IntegerField(default = 0)
+    trans1      = models.IntegerField(default = 0)
+    trans2      = models.IntegerField(default = 0)
+    trans3      = models.IntegerField(default = 0)
+    print0      = models.IntegerField(default = 0)
+    print1      = models.IntegerField(default = 0)
+    print2      = models.IntegerField(default = 0)
+    print3      = models.IntegerField(default = 0)
+    chat0       = models.IntegerField(default = 0)
+    chat1       = models.IntegerField(default = 0)
+    chat2       = models.IntegerField(default = 0)
+    chat3       = models.IntegerField(default = 0)
+    friend0     = models.IntegerField(default = 0)
+    friend1     = models.IntegerField(default = 0)
+    friend2     = models.IntegerField(default = 0)
+    friend3     = models.IntegerField(default = 0)
+    invite0     = models.IntegerField(default = 0)
+    invite1     = models.IntegerField(default = 0)
+    invite2     = models.IntegerField(default = 0)
+    invite3     = models.IntegerField(default = 0)
+    invite4     = models.IntegerField(default = 0)
+    friend_all0 = models.IntegerField(default = 0)
+    friend_all1 = models.IntegerField(default = 0)
+    friend_all2 = models.IntegerField(default = 0)
+    friend_all3 = models.IntegerField(default = 0)
     class Meta:
         db_table = 'kx_act_tongji'
 
 class KxAlipayOrder(models.Model):
-    order_id = models.CharField(max_length=14L, primary_key=True)
-    title = models.CharField(max_length=200L)
-    pay_money = models.DecimalField(max_digits=10, decimal_places=2)
-    qianmo_dot = models.IntegerField()
+    order_id       = models.CharField(max_length = 14L, primary_key = True)
+    title          = models.CharField(max_length = 200L)
+    pay_money      = models.DecimalField(max_digits = 10, decimal_places = 2)
+    qianmo_dot     = models.IntegerField()
     add_qianmo_dot = models.IntegerField()
-    user_id = models.IntegerField()
-    trade_no = models.CharField(max_length=16L, blank=True)
-    pay_status = models.IntegerField()
-    create_time = models.DateTimeField()
-    finish_time = models.DateTimeField(null=True, blank=True)
+    user_id        = models.IntegerField()
+    trade_no       = models.CharField(max_length = 16L, blank = True)
+    pay_status     = models.IntegerField()
+    create_time    = models.DateTimeField()
+    finish_time    = models.DateTimeField(null = True, blank = True)
     class Meta:
         db_table = 'kx_alipay_order'
 
 class KxCscRecord(models.Model):
-    id = models.AutoField(primary_key=True)
-    email = models.CharField(max_length=50L,null=True,blank=True)
-    mac = models.CharField(max_length=100L,null=True, blank=True)
-    called_email = models.CharField(max_length=50L,null=True, blank=True)
-    called_mac = models.CharField(max_length=100L,null=True, blank=True)
-    start_time = models.DateTimeField(null=True, blank=True)
-    end_time = models.DateTimeField(null=True, blank=True)
-    transferd_size = models.BigIntegerField(default=0,null=True, blank=True)
-    status = models.IntegerField(default=0,null=True, blank=True)
+    id             = models.AutoField(primary_key = True)
+    email          = models.CharField(max_length = 50L, null = True, blank = True)
+    mac            = models.CharField(max_length = 100L,null = True, blank = True)
+    called_email   = models.CharField(max_length = 50L, null = True, blank = True)
+    called_mac     = models.CharField(max_length = 100L,null = True, blank = True)
+    start_time     = models.DateTimeField(null = True, blank = True)
+    end_time       = models.DateTimeField(null = True, blank = True)
+    transferd_size = models.BigIntegerField(default = 0,null = True, blank = True)
+    status         = models.IntegerField(default    = 0,null = True, blank = True)
     class Meta:
         db_table = 'kx_csc_record'
 
 class KxEmailInvate(models.Model):
-    id = models.IntegerField(primary_key=True)
-    user_id = models.IntegerField()
-    user_name = models.CharField(max_length=20L)
-    invate_email = models.CharField(max_length=50L)
-    invate_name = models.CharField(max_length=20L)
-    group_id = models.IntegerField()
-    group_name = models.CharField(max_length=50L)
-    invate_code = models.CharField(max_length=50L, unique=True)
-    qianmo_dot = models.IntegerField()
-    create_time = models.DateTimeField()
-    status = models.IntegerField()
-    register_email = models.CharField(max_length=50L, blank=True)
+    id             = models.IntegerField(primary_key = True)
+    user_id        = models.IntegerField()
+    user_name      = models.CharField(max_length = 20L)
+    invate_email   = models.CharField(max_length = 50L)
+    invate_name    = models.CharField(max_length = 20L)
+    group_id       = models.IntegerField()
+    group_name     = models.CharField(max_length = 50L)
+    invate_code    = models.CharField(max_length = 50L, unique = True)
+    qianmo_dot     = models.IntegerField()
+    create_time    = models.DateTimeField()
+    status         = models.IntegerField()
+    register_email = models.CharField(max_length = 50L, blank = True)
     class Meta:
         db_table = 'kx_email_invate'
 
 class KxEnt(models.Model):
-    id = models.IntegerField(primary_key=True)
-    ent_name = models.CharField(max_length=40L)
-    ent_country = models.CharField(max_length=15L, blank=True)
-    ent_province = models.CharField(max_length=15L, blank=True)
-    ent_city = models.CharField(max_length=15L, blank=True)
-    ent_address = models.CharField(max_length=70L, blank=True)
-    ent_zipcode = models.CharField(max_length=7L, blank=True)
-    ent_contact1_nick = models.CharField(max_length=10L, blank=True)
-    ent_contact1_tel = models.CharField(max_length=40L, blank=True)
-    ent_contact1_phone = models.CharField(max_length=40L, blank=True)
-    ent_contact2_nick = models.CharField(max_length=10L, blank=True)
-    ent_contact2_tel = models.CharField(max_length=40L, blank=True)
-    ent_contact2_phone = models.CharField(max_length=40L, blank=True)
-    ent_reg_date = models.DateTimeField()
-    ent_status = models.IntegerField()
-    ent_setup_indexmaxfilesize = models.IntegerField(db_column='ent_setup_indexMaxFileSize') # Field name made lowercase.
-    ent_user_num = models.IntegerField()
-    ent_master_id = models.IntegerField()
-    create_time = models.DateTimeField()
-    update_time = models.DateTimeField()
-    version = models.IntegerField()
+    id                         = models.IntegerField(primary_key = True)
+    ent_name                   = models.CharField(max_length = 40L)
+    ent_country                = models.CharField(max_length = 15L, blank = True)
+    ent_province               = models.CharField(max_length = 15L, blank = True)
+    ent_city                   = models.CharField(max_length = 15L, blank = True)
+    ent_address                = models.CharField(max_length = 70L, blank = True)
+    ent_zipcode                = models.CharField(max_length = 7L,  blank = True)
+    ent_contact1_nick          = models.CharField(max_length = 10L, blank = True)
+    ent_contact1_tel           = models.CharField(max_length = 40L, blank = True)
+    ent_contact1_phone         = models.CharField(max_length = 40L, blank = True)
+    ent_contact2_nick          = models.CharField(max_length = 10L, blank = True)
+    ent_contact2_tel           = models.CharField(max_length = 40L, blank = True)
+    ent_contact2_phone         = models.CharField(max_length = 40L, blank = True)
+    ent_reg_date               = models.DateTimeField()
+    ent_status                 = models.IntegerField()
+    ent_setup_indexmaxfilesize = models.IntegerField(db_column ='ent_setup_indexMaxFileSize') # Field name made lowercase.
+    ent_user_num               = models.IntegerField()
+    ent_master_id              = models.IntegerField()
+    create_time                = models.DateTimeField()
+    update_time                = models.DateTimeField()
+    version                    = models.IntegerField()
     class Meta:
         db_table = 'kx_ent'
 
 class KxEntUser(models.Model):
-    id = models.IntegerField(primary_key=True)
-    user_id = models.IntegerField()
-    ent_id = models.IntegerField()
-    status = models.IntegerField()
+    id          = models.IntegerField(primary_key = True)
+    user_id     = models.IntegerField()
+    ent_id      = models.IntegerField()
+    status      = models.IntegerField()
     update_time = models.DateTimeField()
-    updater_id = models.IntegerField()
+    updater_id  = models.IntegerField()
     class Meta:
         db_table = 'kx_ent_user'
 
 class KxForumForum(models.Model):
-    id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=20L)
-    posts_num = models.IntegerField()
-    order_num = models.IntegerField()
-    updater_id = models.IntegerField()
+    id          = models.IntegerField(primary_key = True)
+    name        = models.CharField(max_length = 20L)
+    posts_num   = models.IntegerField()
+    order_num   = models.IntegerField()
+    updater_id  = models.IntegerField()
     update_time = models.DateTimeField()
     class Meta:
         db_table = 'kx_forum_forum'
 
 class KxForumMpost(models.Model):
-    id = models.IntegerField(primary_key=True)
-    forum_id = models.IntegerField()
-    title = models.CharField(max_length=100L)
-    user_id = models.IntegerField()
-    reply_num = models.IntegerField()
-    view_num = models.IntegerField()
-    top_num = models.IntegerField()
-    is_fine = models.IntegerField()
-    attach = models.IntegerField()
-    posts_type = models.IntegerField()
-    is_del = models.IntegerField()
+    id          = models.IntegerField(primary_key = True)
+    forum_id    = models.IntegerField()
+    title       = models.CharField(max_length = 100L)
+    user_id     = models.IntegerField()
+    reply_num   = models.IntegerField()
+    view_num    = models.IntegerField()
+    top_num     = models.IntegerField()
+    is_fine     = models.IntegerField()
+    attach      = models.IntegerField()
+    posts_type  = models.IntegerField()
+    is_del      = models.IntegerField()
     create_time = models.DateTimeField()
     update_time = models.DateTimeField()
-    last_time = models.DateTimeField()
-    last_uid = models.IntegerField()
+    last_time   = models.DateTimeField()
+    last_uid    = models.IntegerField()
     class Meta:
         db_table = 'kx_forum_mpost'
 
 class KxForumPosts(models.Model):
-    id = models.IntegerField(primary_key=True)
-    forum_id = models.IntegerField()
-    tid = models.IntegerField()
-    title = models.CharField(max_length=100L)
-    content = models.TextField()
-    user_id = models.IntegerField()
-    reply_id = models.IntegerField()
-    is_main = models.IntegerField()
-    user_ip = models.CharField(max_length=15L)
-    is_del = models.IntegerField()
+    id          = models.IntegerField(primary_key = True)
+    forum_id    = models.IntegerField()
+    tid         = models.IntegerField()
+    title       = models.CharField(max_length = 100L)
+    content     = models.TextField()
+    user_id     = models.IntegerField()
+    reply_id    = models.IntegerField()
+    is_main     = models.IntegerField()
+    user_ip     = models.CharField(max_length = 15L)
+    is_del      = models.IntegerField()
     create_time = models.DateTimeField()
     update_time = models.DateTimeField()
     class Meta:
         db_table = 'kx_forum_posts'
 
 class KxGroup(models.Model):
-    groupid = models.IntegerField(primary_key=True)
-    groupname = models.CharField(max_length=50L)
-    founder = models.CharField(max_length=50L)
-    eff = models.IntegerField()
-    eff_date = models.DateField()
+    groupid     = models.IntegerField(primary_key = True)
+    groupname   = models.CharField(max_length = 50L)
+    founder     = models.CharField(max_length = 50L)
+    eff         = models.IntegerField()
+    eff_date    = models.DateField()
     create_date = models.DateField()
-    mem_nums = models.IntegerField()
-    max_members = models.IntegerField(null=True, blank=True)
-    grade = models.IntegerField()
+    mem_nums    = models.IntegerField()
+    max_members = models.IntegerField(null = True, blank = True)
+    grade       = models.IntegerField()
     class Meta:
         db_table = 'kx_group'
 
 class KxGroupmembers(models.Model):
-    groupid = models.IntegerField()
-    email = models.CharField(max_length=50L)
+    groupid   = models.IntegerField()
+    email     = models.CharField(max_length = 50L)
     join_time = models.DateField()
     indentity = models.IntegerField()
     class Meta:
         db_table = 'kx_groupmembers'
 
 class KxInvateRecord(models.Model):
-    id = models.IntegerField(primary_key=True)
-    user_id = models.IntegerField()
-    invate_id = models.IntegerField()
-    qianmo_dot = models.IntegerField()
+    id          = models.IntegerField(primary_key = True)
+    user_id     = models.IntegerField()
+    invate_id   = models.IntegerField()
+    qianmo_dot  = models.IntegerField()
     create_time = models.DateTimeField()
     class Meta:
         db_table = 'kx_invate_record'
 
 class KxLanDay(models.Model):
-    id = models.IntegerField(primary_key=True)
-    tongji_day = models.DateField(unique=True)
-    lan_num = models.IntegerField()
-    pc1 = models.IntegerField()
-    pc2 = models.IntegerField()
-    pc3 = models.IntegerField()
-    pc4 = models.IntegerField()
-    pc5 = models.IntegerField()
-    pc6 = models.IntegerField()
-    pc7 = models.IntegerField()
-    qm1 = models.IntegerField()
-    qm2 = models.IntegerField()
-    qm3 = models.IntegerField()
-    qm4 = models.IntegerField()
-    qm5 = models.IntegerField()
-    qm6 = models.IntegerField()
-    qm7 = models.IntegerField()
+    id         = models.IntegerField(primary_key = True)
+    tongji_day = models.DateField(unique         = True)
+    lan_num    = models.IntegerField()
+    pc1        = models.IntegerField()
+    pc2        = models.IntegerField()
+    pc3        = models.IntegerField()
+    pc4        = models.IntegerField()
+    pc5        = models.IntegerField()
+    pc6        = models.IntegerField()
+    pc7        = models.IntegerField()
+    qm1        = models.IntegerField()
+    qm2        = models.IntegerField()
+    qm3        = models.IntegerField()
+    qm4        = models.IntegerField()
+    qm5        = models.IntegerField()
+    qm6        = models.IntegerField()
+    qm7        = models.IntegerField()
     class Meta:
         db_table = 'kx_lan_day'
 
@@ -246,93 +246,93 @@ class KxLoginRecord(models.Model):
         db_table = 'kx_login_record'
 
 class KxMailingAddfriend(models.Model):
-    id = models.IntegerField(primary_key=True)
-    user = models.CharField(max_length=50L)
-    friend = models.CharField(max_length=50L)
-    invite_msg = models.CharField(max_length=200L)
-    create_time = models.DateTimeField()
-    is_sendemail = models.IntegerField()
-    send_who = models.IntegerField()
+    id               = models.IntegerField(primary_key = True)
+    user             = models.CharField(max_length = 50L)
+    friend           = models.CharField(max_length = 50L)
+    invite_msg       = models.CharField(max_length = 200L)
+    create_time      = models.DateTimeField()
+    is_sendemail     = models.IntegerField()
+    send_who         = models.IntegerField()
     send_reason_type = models.IntegerField()
-    invite_content = models.CharField(max_length=200L, blank=True)
-    is_del = models.IntegerField()
+    invite_content   = models.CharField(max_length = 200L, blank = True)
+    is_del           = models.IntegerField()
     class Meta:
         db_table = 'kx_mailing_addfriend'
 
 class KxMsgBoard(models.Model):
-    id = models.IntegerField(primary_key=True)
-    ip = models.CharField(max_length=15L)
-    msg = models.CharField(max_length=500L)
+    id          = models.IntegerField(primary_key = True)
+    ip          = models.CharField(max_length = 15L)
+    msg         = models.CharField(max_length = 500L)
     create_time = models.DateTimeField()
-    reply_id = models.IntegerField()
-    is_del = models.IntegerField()
-    user_id = models.IntegerField()
-    user_nick = models.CharField(max_length=50L)
+    reply_id    = models.IntegerField()
+    is_del      = models.IntegerField()
+    user_id     = models.IntegerField()
+    user_nick   = models.CharField(max_length = 50L)
     class Meta:
         db_table = 'kx_msg_board'
 
 class KxOrg(models.Model):
-    id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=20L)
-    parent_id = models.IntegerField()
-    ent_id = models.IntegerField()
+    id          = models.IntegerField(primary_key = True)
+    name        = models.CharField(max_length     = 20L)
+    parent_id   = models.IntegerField()
+    ent_id      = models.IntegerField()
     create_time = models.DateTimeField()
     update_time = models.DateTimeField()
-    updater_id = models.IntegerField()
+    updater_id  = models.IntegerField()
     class Meta:
         db_table = 'kx_org'
 
 class KxOrgSelf(models.Model):
-    id = models.IntegerField(primary_key=True)
-    user_id = models.IntegerField()
+    id             = models.IntegerField(primary_key = True)
+    user_id        = models.IntegerField()
     target_user_id = models.IntegerField()
-    ent_id = models.IntegerField()
-    create_time = models.DateTimeField()
-    update_time = models.DateTimeField()
-    updater_id = models.IntegerField()
+    ent_id         = models.IntegerField()
+    create_time    = models.DateTimeField()
+    update_time    = models.DateTimeField()
+    updater_id     = models.IntegerField()
     class Meta:
         db_table = 'kx_org_self'
 
 class KxPub(models.Model):
-    id = models.IntegerField(primary_key=True)
-    ver = models.CharField(max_length=30L, unique=True)
-    pub_desc = models.CharField(max_length=600L)
-    install_file = models.CharField(max_length=100L, blank=True)
-    patch_file = models.CharField(max_length=100L, blank=True)
-    create_time = models.DateTimeField()
-    pub_time = models.DateTimeField(null=True, blank=True)
-    is_tongji = models.IntegerField()
+    id           = models.IntegerField(primary_key = True)
+    ver          = models.CharField(max_length     = 30L, unique = True)
+    pub_desc     = models.CharField(max_length     = 600L)
+    install_file = models.CharField(max_length     = 100L, blank = True)
+    patch_file   = models.CharField(max_length     = 100L, blank = True)
+    create_time  = models.DateTimeField()
+    pub_time     = models.DateTimeField(null       = True, blank = True)
+    is_tongji    = models.IntegerField()
     class Meta:
         db_table = 'kx_pub'
 
 class KxPubRecord(models.Model):
-    id = models.IntegerField(primary_key=True)
-    email = models.CharField(max_length=50L)
+    id          = models.IntegerField(primary_key = True)
+    email       = models.CharField(max_length     = 50L)
     tongji_time = models.DateTimeField()
-    obj = models.IntegerField()
-    obj_val = models.IntegerField()
+    obj         = models.IntegerField()
+    obj_val     = models.IntegerField()
     class Meta:
         db_table = 'kx_pub_record'
 
 class KxPubTongji(models.Model):
-    id = models.IntegerField(primary_key=True)
-    pub_id = models.IntegerField(unique=True)
+    id      = models.IntegerField(primary_key = True)
+    pub_id  = models.IntegerField(unique      = True)
     reg_num = models.IntegerField()
     act_num = models.IntegerField()
-    un_num = models.IntegerField()
-    vc_val = models.DecimalField(max_digits=4, decimal_places=2)
-    trans0 = models.IntegerField()
-    trans1 = models.IntegerField()
-    trans2 = models.IntegerField()
-    trans3 = models.IntegerField()
-    print0 = models.IntegerField()
-    print1 = models.IntegerField()
-    print2 = models.IntegerField()
-    print3 = models.IntegerField()
-    chat0 = models.IntegerField()
-    chat1 = models.IntegerField()
-    chat2 = models.IntegerField()
-    chat3 = models.IntegerField()
+    un_num  = models.IntegerField()
+    vc_val  = models.DecimalField(max_digits  = 4, decimal_places = 2)
+    trans0  = models.IntegerField()
+    trans1  = models.IntegerField()
+    trans2  = models.IntegerField()
+    trans3  = models.IntegerField()
+    print0  = models.IntegerField()
+    print1  = models.IntegerField()
+    print2  = models.IntegerField()
+    print3  = models.IntegerField()
+    chat0   = models.IntegerField()
+    chat1   = models.IntegerField()
+    chat2   = models.IntegerField()
+    chat3   = models.IntegerField()
     friend0 = models.IntegerField()
     friend1 = models.IntegerField()
     friend2 = models.IntegerField()
@@ -346,45 +346,45 @@ class KxPubTongji(models.Model):
         db_table = 'kx_pub_tongji'
 
 class KxSoftAd(models.Model):
-    id = models.IntegerField(primary_key=True)
-    title = models.CharField(max_length=50L)
-    ad_url = models.CharField(max_length=200L)
-    exp_day = models.DateField()
-    creater_id = models.IntegerField()
+    id          = models.IntegerField(primary_key = True)
+    title       = models.CharField(max_length     = 50L)
+    ad_url      = models.CharField(max_length     = 200L)
+    exp_day     = models.DateField()
+    creater_id  = models.IntegerField()
     create_time = models.DateTimeField()
     class Meta:
         db_table = 'kx_soft_ad'
 
 class KxSoftBug(models.Model):
-    id = models.IntegerField(primary_key=True)
-    client_identifie = models.CharField(max_length=32L)
-    version = models.CharField(max_length=10L)
-    upload_time = models.DateTimeField()
-    os = models.CharField(max_length=50L)
-    auto_start = models.IntegerField()
-    lan_num = models.IntegerField()
-    u_email = models.CharField(max_length=50L, blank=True)
+    id               = models.IntegerField(primary_key = True)
+    client_identifie = models.CharField(max_length     = 32L)
+    version          = models.CharField(max_length     = 10L)
+    upload_time      = models.DateTimeField()
+    os               = models.CharField(max_length     = 50L)
+    auto_start       = models.IntegerField()
+    lan_num          = models.IntegerField()
+    u_email          = models.CharField(max_length     = 50L, blank = True)
     class Meta:
         db_table = 'kx_soft_bug'
 
 class KxSoftRecord(models.Model):
-    id = models.IntegerField(primary_key=True)
-    client_identifie = models.CharField(max_length=32L)
-    version = models.CharField(max_length=10L)
-    login_time = models.DateTimeField()
-    is_new = models.IntegerField()
-    is_uninstall = models.IntegerField()
+    id               = models.IntegerField(primary_key = True)
+    client_identifie = models.CharField(max_length = 32L)
+    version          = models.CharField(max_length = 10L)
+    login_time       = models.DateTimeField()
+    is_new           = models.IntegerField()
+    is_uninstall     = models.IntegerField()
     class Meta:
         db_table = 'kx_soft_record'
 
 class KxSoftUtime(models.Model):
-    id = models.IntegerField(primary_key=True)
-    client_identifie = models.CharField(max_length=32L)
-    tongji_day = models.DateField()
-    utime = models.IntegerField()
-    create_time = models.DateTimeField()
+    id               = models.IntegerField(primary_key = True)
+    client_identifie = models.CharField(max_length = 32L)
+    tongji_day       = models.DateField()
+    utime            = models.IntegerField()
+    create_time      = models.DateTimeField()
     class Meta:
-        db_table = 'kx_soft_utime'
+        db_table     = 'kx_soft_utime'
 
 class KxSystemInfo(models.Model):
     info_name = models.CharField(max_length=20L, primary_key=True)
@@ -408,30 +408,27 @@ class KxTongjiRecord(models.Model):
 
 class KxUser(AbstractBaseUser,PermissionsMixin):
     id                  = models.AutoField(primary_key = True)
-    #email               = models.EmailField(verbose_name='email address', max_length=255, unique=True, db_index=True,)
-    email               = models.EmailField(verbose_name=u'邮件地址', max_length=255, unique=True)
-    #email               = models.CharField(u'用户名为邮箱',max_length  = 50L, unique = True)
+    email               = models.EmailField(verbose_name=u'邮件地址', max_length=50, unique=True)
     nick                = models.CharField(u'用户昵称',max_length  = 20L)
-   #password            = models.CharField(u'密码',max_length  = 50L)
-    status              = models.BooleanField(u'0=表示未激活，1=正常，2=封禁',default  = 1)
+    status              = models.BooleanField(u'0=未激活，1=正常，2=封禁',default  =True)
     create_time         = models.DateTimeField(verbose_name=u'注册时间')
     update_time         = models.DateTimeField()
     avatar              = models.CharField(max_length = 200L, null = True,blank = True)
     last_ip             = models.CharField(max_length = 50L,  null = True,blank = True)
     mobile              = models.CharField(max_length = 20L,  null = True,blank = True)
     department          = models.CharField(max_length = 50L,  null = True,blank = True)
-    login_status        = models.IntegerField(default = 0,null = False)
+    login_status        = models.IntegerField(default = False,null = False)
     qianmo_dot          = models.IntegerField(u'现有阡陌点',default = 0,null = False)
     con_qianmo_dot      = models.IntegerField(u'累计消费阡陌点',default = 0)
-    invate_init         = models.BooleanField(u'登陆状态：0 = 未登录,1 = 邀请用户登录并初始化成功，2 = 非邀请用',default = 0)
-    login_counts        = models.IntegerField(default = 0)
-    create_group_counts = models.IntegerField(default = 0)
-    online_time         = models.IntegerField(default = 0)
-    invites             = models.IntegerField(default = 0)
-    user_share          = models.IntegerField(default = 0)
+    invate_init         = models.BooleanField(u'登陆状态：0 = 未登录,1 = 邀请用户登录并初始化成功，2 = 非邀请用',default = False)
+    login_counts        = models.IntegerField(default = False)
+    create_group_counts = models.IntegerField(default = False)
+    online_time         = models.IntegerField(default = False)
+    invites             = models.IntegerField(default = False)
+    user_share          = models.IntegerField(default = False)
     share_begin_time    = models.DateField(null = True, blank = True)
     active_time         = models.DateTimeField(u'激活时间',null = True, blank = True)
-    #is_active           = models.BooleanField(default=True)
+    is_active           = models.BooleanField(u'用户状态',default=True)
     is_staff            = models.BooleanField(u'后台登陆',default=False)
 
     class Meta:
@@ -452,37 +449,40 @@ class KxUser(AbstractBaseUser,PermissionsMixin):
         return self.email
     def __unicode__(self):
         return self.email
+    #@property
+    #def is_active(self):
+    #    return self.status
+
 
 
 class KxUserFriend(models.Model):
-    user = models.CharField(max_length=50L, blank=True)
-    friend = models.CharField(max_length=50L, blank=True)
+    user        = models.CharField(max_length = 50L, blank = True)
+    friend      = models.CharField(max_length = 50L, blank = True)
     create_time = models.DateTimeField()
-    id = models.IntegerField(primary_key=True)
+    id          = models.IntegerField(primary_key = True)
     class Meta:
         db_table = 'kx_user_friend'
 
 class KxUserOrg(models.Model):
-    id = models.IntegerField(primary_key=True)
-    user_id = models.IntegerField()
-    org_id = models.IntegerField()
-    ent_id = models.IntegerField()
+    id          = models.IntegerField(primary_key = True)
+    user_id     = models.IntegerField()
+    org_id      = models.IntegerField()
+    ent_id      = models.IntegerField()
     update_time = models.DateTimeField()
-    updater_id = models.IntegerField()
+    updater_id  = models.IntegerField()
     class Meta:
         db_table = 'kx_user_org'
 
 class KxUserlogin(models.Model):
-    email = models.CharField(max_length=50L,unique=True)
-    mac = models.CharField(max_length=100L)
+    email = models.CharField(max_length = 50L,unique = True)
+    mac   = models.CharField(max_length = 100L)
     class Meta:
         db_table = 'kx_userlogin'
 
 class UserMsg(models.Model):
-    user = models.CharField(max_length=50L, blank=True)
-    title = models.CharField(max_length=50L, blank=True)
-    content = models.CharField(max_length=2000L, blank=True)
-    from_email = models.CharField(max_length=50L)
+    user       = models.CharField(max_length = 50L, blank = True)
+    title      = models.CharField(max_length = 50L, blank = True)
+    content    = models.CharField(max_length = 2000L, blank = True)
+    from_email = models.CharField(max_length = 50L)
     class Meta:
         db_table = 'user_msg'
-
