@@ -1,11 +1,22 @@
-{% extends "msg_base.html" %}
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
 
-{% block msg_index %}
-<!-- <div class="main ">
+{% block header %} 
+
+{% include "header.html" %}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="main ">
 	<div class="comment_in w1000">
-		<div style="height:50px;"></div>
+		<div style="height:50px;">
+			
+		</div>
 		<div class="send_content">
-		<form  action="/msg_board/add_msg" method="post" onsubmit="return checkMsg();">
+		<form  action="/msg_board/add_msg/" method="post" onsubmit="return checkMsg();">
+			{% csrf_token %}
 			<textarea id="msg_content" name="msg"></textarea>
 			<div class="comment_small_bg" id="top_comment"></div>
 			<div class="clear"></div>
@@ -15,38 +26,306 @@
 				<input type="button" name value="" class="btn_cancel btn_cancel_top"/>
 			</div>
 		</form>
-	</div>
-	<div class="list_comment" style="margin-left:175px;">
+		
+		</div>
+		<div class="list_comment" style="margin-left:175px;">
 		<ul class="msg_board">
-			if msgList %}
-			 if _SEDDION%}
-			 if eqaul %}
-<!-- 			<present name="msgList">
-			<present name="_SESSION['RID']">
-			<eq name="_SESSION['RID']" value="1"> -->
-<!-- 				<volist name="msgList" id="msg">
-				<li id="msg_id_{$msg.id}">
-					<div class="board_left">
-						<div class="board_img">
-							<gt name="msg.user_id" value="0">
-							<assign name="uid" value="$msg.user_id" />
-							<neq name="userList.$uid" value="">
-								<img src="{&IMG}/{$userList.$uid|getPicUri}/snap_50X50_{$userList.$uid|getPicName}" />
-							<else />
-							<img src="{&STATIC}/Img/snap_50X50_default_head.jpg" />
-							</neq>
-							
-							<else />
-								<img src="{&STATIC}/Img/snap_50X50_default_head.jpg" />
-							</gt>
+		<present name="msgList">
+		<present name="_SESSION['RID']">
+		<eq name="_SESSION['RID']" value="1">
+			<volist name="msgList" id="msg">
+			<li id="msg_id_{$msg.id}">
+				<div class="board_left">
+					<div class="board_img">
+						<gt name="msg.user_id" value="0">
+						<assign name="uid" value="$msg.user_id" />
+						<neq name="userList.$uid" value="">
+							<img src="{&IMG}/{$userList.$uid|getPicUri}/snap_50X50_{$userList.$uid|getPicName}" />
+						<else />
+						<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
+						</neq>
+						
+						<else />
+							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
+						</gt>
+					</div>
+				</div>
+				<div class="board_area">
+					<div class="board_user"><span class="board_uname" id="user_{$msg.id}"><gt name="msg.user_id" value="0">{$msg.user_nick} <else /> {$msg.ip|getBeforeIp}</gt></span><span class="board_time">{$msg.create_time}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({$msg.id});"></a></span> <span> | <a href="javascript:delMsg({$msg.id});">删除</a></span></span></div>
+					
+					<div class="board_right">
+					
+					<div class="board_content">
+						<div class="board_body">
+						{$msg.msg}
 						</div>
 					</div>
- --> -->
-<ul>
-{% for key,value in req.items %}
-   <li>{{ key }} : {{ value }}</li>
-</ul>
-{% endfor %}
-{{ u }}
-{{ p }}
+
+					<assign name="rid" value="$msg.id" />
+					<present name="replyList.$rid">
+					<div class="reply_area">
+						<volist name="replyList.$rid" id="reply">
+						<div class="board_body dashed_border">
+						答：{$reply.msg}
+						</div>
+						</volist>
+					</div>
+					</present>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</li>
+		</volist>
+		
+		<else />
+		<volist name="msgList" id="msg">
+			<li>
+				<div class="board_left">
+					<div class="board_img">
+						<gt name="msg.user_id" value="0">
+						<assign name="uid" value="$msg.user_id" />
+						<neq name="userList.$uid" value="">
+							<img src="{&IMG}/{$userList.$uid|getPicUri}/snap_50X50_{$userList.$uid|getPicName}" />
+						<else />
+						<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
+						</neq>
+						
+						<else />
+							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
+						</gt>
+						
+					</div>
+				</div>
+	
+				<div class="board_area">
+					<div class="board_user"><span class="board_uname" id="user_{$msg.id}"><gt name="msg.user_id" value="0">{$msg.user_nick} <else /> {$msg.ip|getBeforeIp}</gt></span><span class="board_time">{$msg.create_time}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({$msg.id});"></a></span></span></div>
+					<div class="board_right">
+					
+						<div class="board_content">
+							<div class="board_body">
+							{$msg.msg}
+							</div>
+						</div>
+	
+						<assign name="rid" value="$msg.id" />
+						<present name="replyList.$rid">
+						<div class="reply_area">
+							<volist name="replyList.$rid" id="reply">
+							<div class="board_body dashed_border">
+							答：{$reply.msg}
+							</div>
+							</volist>
+						</div>
+						</present>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</li>
+		</volist>
+		</eq>
+		<else />
+			<volist name="msgList" id="msg">
+			<li>
+			
+				<div class="board_left">
+					<div class="board_img">
+						<gt name="msg.user_id" value="0">
+						<assign name="uid" value="$msg.user_id" />
+						<neq name="userList.$uid" value="">
+							<img src="{&IMG}/{$userList.$uid|getPicUri}/snap_50X50_{$userList.$uid|getPicName}" />
+						<else />
+						<img src="{{ STATIC_URL }}/images/snap_50X50_default_head.jpg" />
+						</neq>
+						
+						<else />
+							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
+						</gt>
+						
+					</div>
+				</div>
+			
+				<div class="board_area">
+					<div class="board_user">
+						<span class="board_uname" id="user_{$msg.id}"><gt name="msg.user_id" value="0">{$msg.user_nick} <else /> {$msg.ip|getBeforeIp}</gt> </span><span class="board_time">{$msg.create_time}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({$msg.id});"></a></span></span>
+					</div>
+					<div class="board_right">
+					
+						<div class="board_content">
+							<div class="board_body">
+							{$msg.msg}
+							</div>
+						</div>
+	
+						<assign name="rid" value="$msg.id" />
+						<present name="replyList.$rid">
+						<div class="reply_area">
+							<volist name="replyList.$rid" id="reply">
+							<div class="board_body dashed_border">
+							答：{$reply.msg}
+							</div>
+							</volist>
+						</div>
+						</present>
+					</div>
+				
+				</div>
+				<div class="clear"></div>
+			</li>
+		</volist>
+		</present>
+		</present>
+		</ul>
+		</div>	
+
+	<div id="msg_form" class="send_reply">
+	<form  action="/msg_board/add_msg/" method="post" onsubmit="return checkMsg3();">
+		{% csrf_token %}
+		<textarea id="msg_content3" name="msg"></textarea>
+		<div class="comment_small_bg" id="scroll_comment"></div>
+		<div class="clear"></div>
+		<div class="send_btn send_btn_scroll">
+			<input type="hidden" name="send_from" value="1" />
+			<input type="submit" name value="" class="btn_send"/>
+			<input type="button" name value="" class="btn_cancel btn_cancel_scroll"/>
+		</div>
+	</form>
+	</div>			
+	</div>
+	<div class="clear"></div>
+</div>
+	
+	<div class="reply_form" style="display:none;">
+	<div class="send_board">
+	<span class="send_u" id="reply_u"> 回复“阡陌游客”：</span>
+	</div>
+	<div class="send_content2 send_bg" >
+	<form  action="/msg_board/add_msg/" method="post" onsubmit="return checkMsg2();">
+		{% csrf_token %}
+		<textarea name="msg" id="msg_content2"></textarea>
+		<div class="reply_btn">
+		<input type="hidden" name="send_from" value="1" />
+		<input id="reply_msg" type="hidden" name="reply" value="" />
+		<input type="submit" value="" class="send_button"/>
+		<input type="button" name="" onclick="javascript:replyClose();" class="reply_close"/>
+		</div>
+	</form>
+	</div>
+	</div>
+<script>
+	$(function(){
+		$(".menu_board").css({"color":"#000000"});
+	});
+	$("#top_comment").click(function(){
+		$(this).hide();
+		$("#msg_content").css({"height":"91px","border-bottom":"1px solid #c8c8c8"});
+		$(".send_btn_top").fadeIn("fast");
+		$("#msg_content")[0].focus();
+	});
+	
+	$("#msg_content").focus(function(){
+		$("#top_comment").hide();
+		$(this).prev("textarea").css({"height":"91px","border-bottom":"1px solid #c8c8c8"});
+		$(".send_btn_top").fadeIn("fast");
+	});
+	
+	$(".btn_cancel_top").click(function(){
+		$("#msg_content").val("");
+		$("#top_comment").show();
+		$("#msg_content").css({"height":"33px","border-bottom":"1px solid #b5dbe8"});
+		$(".send_btn_top").fadeOut("fast");
+		
+	});
+	
+	$("#scroll_comment").click(function(){
+		$(this).hide();
+		$("#msg_content3").css({"height":"91px","border-bottom":"1px solid #c8c8c8"});
+		$(".send_btn_scroll").fadeIn("fast");
+		$("#msg_content3")[0].focus();
+	});
+	
+	$("#msg_content3").focus(function(){
+		$("#scroll_comment").hide();
+		$(this).prev("textarea").css({"height":"91px","border-bottom":"1px solid #c8c8c8"});
+		$(".send_btn_scroll").fadeIn("fast");
+	});
+	
+	$(".btn_cancel_scroll").click(function(){
+		$("#msg_content3").val("");
+		$("#scroll_comment").show();
+		$("#msg_content3").css({"height":"33px","border-bottom":"1px solid #b5dbe8"});
+		$(".send_btn_scroll").fadeOut("fast");
+		
+	});
+
+	function checkMsg(){
+		var msg=$("#msg_content").val();
+		msg=$.trim(msg);
+		if(msg=="")
+			return false;
+		return true;
+	}
+	function checkMsg2(){
+		var msg=$("#msg_content2").val();
+		msg=$.trim(msg);
+		if(msg=="")
+			return false;
+		return true;
+	}
+
+	function checkMsg3(){
+		var msg=$.trim($("#msg_content3").val());
+		if(msg=="")
+			return false;
+		return true;
+	}
+	function replyMsg(mid){
+		if(mid>0){
+			$("#msg_form").hide();
+			$("#reply_msg").val(mid);
+			var reply_u=$("#user_"+mid).html();
+			$("#reply_u").html("回复“"+reply_u+"”：");
+			var _reply=$("#user_"+mid).parent(".board_user").parent(".board_area").parent("li");
+			var _left=_reply.offset().left; //左绝对距离 
+			var _top=_reply.offset().top+_reply.outerHeight(); //上绝对距离,此处要加上div的高度 
+			$(".reply_form").css({'position':'absolute','left':_left+'px','top':_top+'px'});
+			$(".reply_form").show(); 
+		}
+	
+	}
+	function replyClose(){
+		$(".reply_form").hide(); 
+	}
+
+	function delMsg(mid){
+		if(mid>0){
+			if(confirm("确定要删除此留言吗？")){
+				jQuery.post("{&WWW}/MsgBoard/del_msg",{"id":mid},function(data){
+					if(data.status==1){
+						$("#msg_id_"+mid).remove();
+					}else{
+						alert("删除留言失败！");
+					}
+				},"json");
+			}
+
+		}
+	}
+	window.onscroll=function(){
+		if(document.getElementById('msg_form')!=null){
+		if(document.body.scrollTop>180 ||document.documentElement.scrollTop>180) {
+		document.getElementById('msg_form').style.display="block";
+		}else{
+		document.getElementById('msg_form').style.display="none";
+		}
+		}
+		} 
+</script>
+
+
+{% endblock %}
+
+{% block footer %} 
+
+{% include "footer.html" %}
+
 {% endblock %}
