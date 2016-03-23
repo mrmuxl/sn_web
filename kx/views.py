@@ -5,7 +5,7 @@ from django.views.decorators.csrf import requires_csrf_token
 from django.shortcuts import render_to_response,render
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
-from kx.models import KxUser
+from kx.models import KxUser,KxMsgBoard
 from django.contrib.auth import authenticate
 from django.contrib import auth,messages
 from django.utils.translation import ugettext_lazy as _
@@ -29,12 +29,6 @@ class myforms(forms.Form):
 
 
 # def msg_board_1(request):
-#     time_tag  = ' 23:59:59'
-#     today = datetime.date.today()
-#     last_month =str(today-datetime.timedelta(days=30))
-#     left_create_time = last_month + time_tag
-#     #right_create_time = str(today) + time_tag
-#     right_create_time = '2013-03-1 23:59:59'
 #     from django.db import connection, transaction
 #     cursor = connection.cursor()
 #     query="""SELECT * FROM kx_msg_board 
@@ -69,43 +63,46 @@ class myforms(forms.Form):
 #         # cursor.close()
 
 def msg_board(request):
-    req=request.session
-    #print type(req)
-    #print dir(req)
-    #print req.keys()
-    #print req.items()
-    p=request.path
-    u=request.user
-    print dir(u)
-    #print u.email
-
-
-    return render(request,'msg_index.html',{'req':req,'p':p,'u':u}) 
+    data={"title":u"留言板"}
+    time_tag  = ' 23:59:59'
+    today = datetime.date.today()
+    last_month =str(today-datetime.timedelta(days=30))
+    #left_create_time = last_month + time_tag
+    left_create_time = '2013-02-1 23:59:59'
+    #right_create_time = str(today) + time_tag
+    right_create_time = '2013-03-1 23:59:59'
+    msg_list = KxMsgBoard.objects.filter(reply_id__exact=0,is_del__exact=0,create_time__gte=left_create_time,create_time__lte=right_create_time).order_by("-create_time").values()
+    data.update(msg_list=msg_list)
+    #print "msg_list",msg_list
+    reply_ids = []
+    user_ids = []
+    for i in msg_list:
+        if i['id'] >0:
+            reply_ids.append(i['id'])
+        if i['user_id'] >0:
+            user_ids.append(i['user_id'])
+    if reply_ids:
+        reply_list = KxMsgBoard.objects.filter(is_del__exact=0,reply_id__gt=0,reply_id__in=reply_ids).order_by("create_time").values('id','reply_id','msg')
+        reply_dict={}
+        for r in reply_list:
+            reply_dict[r["id"]] = r
+        data.update(reply_list=reply_dict)
+        #print "reply_list",reply_dict
+    if user_ids:
+        user_list = KxUser.objects.filter(id__in=user_ids).values('id','avatar')
+        data.update(user_list=user_list)
+        #print "user_list",user_list
+    #print data
+    return render(request,"msg_index.html",data) 
 
 def add_msg(request):
     return render(request,'msg_index.html',{}) 
+
 def register(request):
     '''注册视图'''
-#    now = timezone.now()
-#    template_var={}
-#    form = RegisterForm()    
-#    if request.method=="POST":
-#        form=RegisterForm(request.POST.copy())
-#        if form.is_valid():
-#            username=form.cleaned_data["username"]
-#            email=form.cleaned_data["email"]
-#            password=form.cleaned_data["password"]
-#            user=KxUser.objects.create_user(username=username,email=email,password=password,create_time=now,update_time=now)
-#            user.save()
-#            _login(request,username,password)#注册完毕 直接登陆
-#            return HttpResponseRedirect(reverse("index"))    
-#    template_var["form"]=form        
-    #print request
     return render_to_response("register.html",{},context_instance=RequestContext(request))
         
 
-#@requires_csrf_token
-#@csrf_exempt
 def check(request):
     if request.method =="POST":
         email = request.POST.get("email")
@@ -171,19 +168,7 @@ def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
 
-#def info(request):
-#    pass
 
-def _login(request,email,password):
-    '''登陆核心方法'''
-    ret=False
-    user=authenticate(username=email,password=password)
-    if user is not None:
-        if user.is_active:
-            a=auth_login(request,user)
-            ret=True
-        else:
-            messages.add_message(request, messages.INFO, _(u'用户没有激活'))
-    else:
-        messages.add_message(request, messages.INFO, _(u'用户不存在'))
-    return ret
+def info(request):
+    pass
+
