@@ -20,9 +20,9 @@ class KxUserAdmin(UserAdmin):
     list_display = ('email','nick','last_login')
     list_filter = ('is_staff','is_superuser','status')
     fieldsets = (
-        (u'基本信息', {'fields': ('email', 'password')}),
+        (u'用户基本信息', {'fields': ('email', 'password')}),
         (u'用户详细信息', {'fields': ('nick','status','active_time')}),
-        (u'时间', {'fields': ('last_login','create_time',)}),
+        (u'用户登陆时间', {'fields': ('last_login','create_time',)}),
     )
     add_fieldsets = (
         (u'添加用户', {

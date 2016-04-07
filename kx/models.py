@@ -260,20 +260,22 @@ class KxMailingAddfriend(models.Model):
         db_table = 'kx_mailing_addfriend'
 
 class KxMsgBoard(models.Model):
-    id          = models.IntegerField(primary_key = True)
-    ip          = models.CharField(max_length = 15L)
+    id          = models.AutoField(primary_key = True)
+    ip          = models.CharField(max_length = 15L,verbose_name=u'留言用户ip')
     msg         = models.CharField(max_length = 500L)
-    create_time = models.DateTimeField()
-    reply_id    = models.IntegerField()
-    is_del      = models.IntegerField()
-    user_id     = models.IntegerField()
-    user_nick   = models.CharField(max_length = 50L)
+    create_time = models.DateTimeField(db_index=True,verbose_name=u'留言时间')
+    reply_id    = models.IntegerField(db_index=True,default=0,verbose_name=u'要回复的留言ID，0表示新的留言')
+    is_del      = models.BooleanField(default=False,verbose_name=u'是否删除，0=未删除，1=删除')
+    user_id     = models.IntegerField(default=0)
+    user_nick   = models.CharField(max_length = 50L,default='--')
     class Meta:
         db_table = 'kx_msg_board'
+    def __unicode__(self):
+        return self.msg
 
 class KxOrg(models.Model):
     id          = models.IntegerField(primary_key = True)
-    name        = models.CharField(max_length     = 20L)
+    name        = models.CharField(max_length = 20L)
     parent_id   = models.IntegerField()
     ent_id      = models.IntegerField()
     create_time = models.DateTimeField()
@@ -295,12 +297,12 @@ class KxOrgSelf(models.Model):
 
 class KxPub(models.Model):
     id           = models.IntegerField(primary_key = True)
-    ver          = models.CharField(max_length     = 30L, unique = True)
-    pub_desc     = models.CharField(max_length     = 600L)
-    install_file = models.CharField(max_length     = 100L, blank = True)
-    patch_file   = models.CharField(max_length     = 100L, blank = True)
+    ver          = models.CharField(max_length = 30L, unique = True)
+    pub_desc     = models.CharField(max_length = 600L)
+    install_file = models.CharField(max_length = 100L, blank = True)
+    patch_file   = models.CharField(max_length = 100L, blank = True)
     create_time  = models.DateTimeField()
-    pub_time     = models.DateTimeField(null       = True, blank = True)
+    pub_time     = models.DateTimeField(null = True, blank = True)
     is_tongji    = models.IntegerField()
     class Meta:
         db_table = 'kx_pub'
@@ -347,8 +349,8 @@ class KxPubTongji(models.Model):
 
 class KxSoftAd(models.Model):
     id          = models.IntegerField(primary_key = True)
-    title       = models.CharField(max_length     = 50L)
-    ad_url      = models.CharField(max_length     = 200L)
+    title       = models.CharField(max_length = 50L)
+    ad_url      = models.CharField(max_length = 200L)
     exp_day     = models.DateField()
     creater_id  = models.IntegerField()
     create_time = models.DateTimeField()
@@ -368,12 +370,12 @@ class KxSoftBug(models.Model):
         db_table = 'kx_soft_bug'
 
 class KxSoftRecord(models.Model):
-    id               = models.IntegerField(primary_key = True)
-    client_identifie = models.CharField(max_length = 32L)
-    version          = models.CharField(max_length = 10L)
+    id               = models.AutoField(primary_key = True)
+    client_identifie = models.CharField(db_index=True,max_length = 32L)
+    version          = models.CharField(db_index=True,max_length = 10L)
     login_time       = models.DateTimeField()
-    is_new           = models.IntegerField()
-    is_uninstall     = models.IntegerField()
+    is_new           = models.BooleanField(default=False)
+    is_uninstall     = models.BooleanField(default=False)
     class Meta:
         db_table = 'kx_soft_record'
 
@@ -393,16 +395,16 @@ class KxSystemInfo(models.Model):
         db_table = 'kx_system_info'
 
 class KxTongjiRecord(models.Model):
-    id            = models.IntegerField(primary_key = True)
-    tongji_day    = models.DateField(unique         = True)
-    new_num       = models.IntegerField()
-    un_num        = models.IntegerField()
-    seven_new_num = models.IntegerField()
-    seven_un_num  = models.IntegerField()
-    last_mon_num  = models.IntegerField()
-    cur_mon_num   = models.IntegerField()
-    no_login_num  = models.IntegerField()
-    all_num       = models.IntegerField()
+    id            = models.AutoField(primary_key = True)
+    tongji_day    = models.DateField(unique = True)
+    new_num       = models.IntegerField(default=0)
+    un_num        = models.IntegerField(default=0)
+    seven_new_num = models.IntegerField(default=0)
+    seven_un_num  = models.IntegerField(default=0)
+    last_mon_num  = models.IntegerField(default=0)
+    cur_mon_num   = models.IntegerField(default=0)
+    no_login_num  = models.IntegerField(default=0)
+    all_num       = models.IntegerField(default=0)
     class Meta:
         db_table = 'kx_tongji_record'
 
@@ -410,7 +412,7 @@ class KxUser(AbstractBaseUser,PermissionsMixin):
     id                  = models.AutoField(primary_key = True)
     email               = models.EmailField(verbose_name=u'邮件地址', max_length=50, unique=True)
     nick                = models.CharField(u'用户昵称',max_length  = 20L)
-    status              = models.BooleanField(u'0=未激活，1=正常，2=封禁',default  =True)
+    status              = models.BooleanField(u'用户状态，0=未激活，1=正常，2=封禁',default  =True)
     create_time         = models.DateTimeField(verbose_name=u'注册时间')
     update_time         = models.DateTimeField()
     avatar              = models.CharField(max_length = 200L, null = True,blank = True)
@@ -421,11 +423,11 @@ class KxUser(AbstractBaseUser,PermissionsMixin):
     qianmo_dot          = models.IntegerField(u'现有阡陌点',default = 0,null = False)
     con_qianmo_dot      = models.IntegerField(u'累计消费阡陌点',default = 0)
     invate_init         = models.BooleanField(u'登陆状态：0 = 未登录,1 = 邀请用户登录并初始化成功，2 = 非邀请用',default = False)
-    login_counts        = models.IntegerField(default = False)
-    create_group_counts = models.IntegerField(default = False)
-    online_time         = models.IntegerField(default = False)
-    invites             = models.IntegerField(default = False)
-    user_share          = models.IntegerField(default = False)
+    login_counts        = models.IntegerField(default = 0)
+    create_group_counts = models.IntegerField(default = 0)
+    online_time         = models.IntegerField(default = 0)
+    invites             = models.IntegerField(default = 0)
+    user_share          = models.IntegerField(default = 0)
     share_begin_time    = models.DateField(null = True, blank = True)
     active_time         = models.DateTimeField(u'激活时间',null = True, blank = True)
     is_active           = models.BooleanField(u'用户状态',default=True)
@@ -441,14 +443,13 @@ class KxUser(AbstractBaseUser,PermissionsMixin):
     REQUIRED_FIELDS = ['nick']
  
     def get_full_name(self):
-        # The user is identified by their email address
         return self.email
  
     def get_short_name(self):
-        # The user is identified by their email address
         return self.email
+
     def __unicode__(self):
-        return self.email
+        return self.nick
     #@property
     #def is_active(self):
     #    return self.status

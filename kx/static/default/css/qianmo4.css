@@ -86,7 +86,7 @@ img{
 .menu{
 	width:282px;
 	height:116px;
-	margin:0 0 0 440px;
+	margin:0 0 0 430px;
 	_margin:0 0 0 280px;
 	float:left;
 	font-family:Microsoft Yahei;
@@ -99,7 +99,7 @@ img{
 	float:left;
 	height:33px;
 	font-size:16px;
-	margin:45px 23px 0 23px;
+	margin:45px 22px 0 22px;
 	_margin:45px 15px 0 15px;
 }
 .menu a:hover{

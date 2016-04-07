@@ -1,9 +1,6 @@
 #_*_coding:utf-8_*_
 
 from django import forms
-#from django.contrib import admin
-#from django.contrib.auth.models import Group
-#from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils import timezone
 
@@ -21,7 +18,6 @@ class UserCreationForm(forms.ModelForm):
         fields = ('email', 'nick')
 
     def clean_password2(self):
-        # Check that the two password entries match
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
@@ -30,7 +26,6 @@ class UserCreationForm(forms.ModelForm):
 
     def save(self, commit=True):
         now = timezone.now()
-        # Save the provided password in hashed format
         user = super(UserCreationForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password1"])
         user.create_time = now
@@ -51,9 +46,6 @@ class UserChangeForm(forms.ModelForm):
         model = KxUser
 
     def clean_password(self):
-        # Regardless of what the user provides, return the initial value.
-        # This is done here, rather than on the field, because the
-        # field does not have access to the initial value
         return self.initial["password"]
 
 #class AdminPasswordChangeForm(forms.ModelForm):
