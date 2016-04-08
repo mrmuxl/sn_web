@@ -487,3 +487,5 @@ class UserMsg(models.Model):
     from_email = models.CharField(max_length = 50L)
     class Meta:
         db_table = 'user_msg'
+
+
