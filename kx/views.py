@@ -6,7 +6,7 @@ from django.views.decorators.csrf import requires_csrf_token
 from django.shortcuts import render_to_response,render
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
-from kx.models import KxUser,KxMsgBoard
+from kx.models import (KxUser,KxMsgBoard,KxSoftRecord,KxTongjiRecord)
 from django.contrib.auth import authenticate
 from django.contrib import auth,messages
 from django.utils.translation import ugettext_lazy as _
@@ -267,6 +267,7 @@ def avatar(request):
                     image.resize(size_60,Image.ANTIALIAS).save(save_60,format="jpeg",quality=95)
                     try:
                         avatar_obj = KxUser.objects.filter(email=request.user.email).update(avatar=avatar_info)
+                        #raise Exception(u"失败!")
                     except Exception as e:
                         logger.debug(u"插入数据库失败！%s",e)
                     return HttpResponseRedirect(reverse('info'))
@@ -287,7 +288,28 @@ def tongji(request):
     if not request.user.is_superuser:
         return HttpResponseRedirect(reverse('index'))
     else:
+        try:
+            login_num = KxUser.objects.extra(where=['DATE(last_login)=CURDATE()']).count()
+            logger.info('login_num:%d',login_num)
+        except Exception as e:
+            login_num = 0
+            logger.debug(u'用户呢?%s',e)
+        try:
+            all_user_num = KxSoftRecord.objects.filter(is_uninstall__exact=0).extra(select={'num':'count(DISTINCT client_identifie)'}).values('num')
+            #all_user_num = KxSoftRecord.objects.extra(select={'num':'count(distinct client_identifie)'}).filter(is_uninstall__exact=0)
+            logger.info('all_user_num:%s',all_user_num)
+        except Exception as e:
+            all_user_num =0
+            logger.debug(u'有问题?%s',e)
+        try:
+            max_login = KxTongjiRecord.objects.order_by('-all_num').values('tongji_day','all_num')[:1]
+            logger.info('max_login:%s',max_login)
+        except Exception as e:
+            max_login =0
+            logger.debug(u'问题在那里?%s',e)
+
         return render(request,"tongji.html",{})
+
 def login_tongji(request):
     if not request.user.is_superuser:
         return HttpResponseRedirect(reverse('index'))
