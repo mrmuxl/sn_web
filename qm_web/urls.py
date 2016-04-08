@@ -38,7 +38,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
      url(r'^admin/', include(admin.site.urls)),
-    url(r'^api-token-auth/','rest_framework.authtoken.views.obtain_auth_token'), 
+    url(r'^api-token-auth/','api.auth.views.obtain_auth_token'), 
 )
 
 if settings.DEBUG:
