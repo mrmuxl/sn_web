@@ -295,7 +295,7 @@ def tongji(request):
             login_num = 0
             logger.debug(u'用户呢?%s',e)
         try:
-            all_user_num = KxSoftRecord.objects.filter(is_uninstall__exact=0).extra(select={'num':'count(DISTINCT client_identifie)'}).values('num')
+            all_user_num = KxSoftRecord.objects.filter(is_uninstall__exact=0).extra(select={'num':'count(DISTINCT client_identifie)'}).values('num')[0]['num']
             #all_user_num = KxSoftRecord.objects.extra(select={'num':'count(distinct client_identifie)'}).filter(is_uninstall__exact=0)
             logger.info('all_user_num:%s',all_user_num)
         except Exception as e:
@@ -307,8 +307,19 @@ def tongji(request):
         except Exception as e:
             max_login =0
             logger.debug(u'问题在那里?%s',e)
+        today = datetime.date.today()
+        if request.method == 'GET':
+            tp = request.GET.get('type',1)
+            day = request.GET.get('day',today)
+            logger.info('type:%s day:%s',tp,day)
+        temp_var={
+                'title':u'统计',
+                'login_num':login_num,
+                'all_user_num':all_user_num,
+                'day':day,
+                }
 
-        return render(request,"tongji.html",{})
+        return render(request,"tongji.html",temp_var)
 
 def login_tongji(request):
     if not request.user.is_superuser:
