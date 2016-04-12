@@ -316,6 +316,7 @@ def tongji(request):
                 'title':u'统计',
                 'login_num':login_num,
                 'all_user_num':all_user_num,
+                'type':tp,
                 'day':day,
                 }
 
