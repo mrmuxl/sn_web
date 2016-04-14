@@ -301,7 +301,7 @@
 	function delMsg(mid){
 		if(mid>0){
 			if(confirm("确定要删除此留言吗？")){
-				jQuery.post("/MsgBoard/del_msg",{"id":mid},function(data){
+				jQuery.post("/msg_board/del_msg/",{"id":mid},function(data){
 					if(data.status==1){
 						$("#msg_id_"+mid).remove();
 					}else{
