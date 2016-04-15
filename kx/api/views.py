@@ -1,10 +1,11 @@
 #_*_coding:utf-8_*_
-import logging,json,sys,datetime
-from django.core.validators import email_re
+import logging,json,sys,datetime,time
+from kx.utils import is_valid_email
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from kx.models import KxSoftRecord,KxLanTongji
+from kx.models import (KxUser,KxSoftRecord,KxLanTongji,KxPubRecord)
+from kx.models import (KxSoftUtime)
 from django.utils.html import strip_tags
 from hashlib import md5
 
@@ -216,23 +217,42 @@ def pub_record(request):
     info = "Data save success"
     try:
         if request.method == 'POST':
-            email = strip_tags(request.POST.get("email").strip())
             email = request.POST.get('email',None)
             pub_type = request.POST.get('type',None)
             num = request.POST.get('num',None)
             if email is not None and pub_type is not None and num is not None:
-                type_int = int(pub_type)
+                email = strip_tags(email.strip().lower())
+                obj = int(pub_type)
                 num_int = int(num)
-                if type_int > 0 and num_int >0:
-                    if type_int > 5:
+                if obj > 0 and num_int >0:
+                    if obj > 5:
                         message['message']=u"type error!"
                         message['create_time']=str(now)
                         return HttpResponse(json.dumps(message),content_type="application/json")
-                    email = strip_tags(email.strip().lower())
-
-
-
-
+                    count = KxUser.objects.filter(email=email).count()
+                    if count == 0:
+                        message['message']=u"User is not exists!"
+                        message['create_time']=str(now)
+                        return HttpResponse(json.dumps(message),content_type="application/json")
+                    try:
+                        pub_record = KxPubRecord.objects.create(id=None,email=email,tongji_time=now,obj=obj,obj_val=num_int)
+                        message['message']=info
+                        message['create_time']=str(now)
+                        return HttpResponse(json.dumps(message),content_type="application/json")
+                    except Exception as e:
+                        logger.debug("pub_record:%s",e,exc_info=True)
+                        info = "%s" %(e)
+                        message['message']=info
+                        message['create_time']=str(now)
+                        return HttpResponse(json.dumps(message),content_type="application/json")
+                else:
+                    message['message']=u"I am zero!"
+                    message['create_time']=str(now)
+                    return HttpResponse(json.dumps(message),content_type="application/json")
+            else:
+                message['message']=u"Some boys is a girl?"
+                message['create_time']=str(now)
+                return HttpResponse(json.dumps(message),content_type="application/json")
         else:
             message['message']=u"No GET! Please POST!"
             message['create_time']=str(now)
@@ -243,3 +263,154 @@ def pub_record(request):
         message['message']=info
         message['create_time']=str(now)
         return HttpResponse(json.dumps(message),content_type="application/json")
+ 
+
+@csrf_exempt
+def utime(request):
+    '''
+    登陆时长
+    '''
+    now = datetime.datetime.now()
+    message = {}
+    info = "Data save success"
+    try:
+        if request.method == 'POST':
+            cid = request.POST.get('clientIdentifie',None)
+            day = request.POST.get('day',None)
+            utime = request.POST.get('utime',None)
+            if cid is not None and day is not None and utime is not None:
+                day = strip_tags(day.strip())
+                cid = strip_tags(cid.strip().upper())
+                ut = strip_tags(utime.strip())
+                logger.info("day:%s,ut:%s",day,ut)
+                if ut >0 and day:
+                    try:
+                        su = KxSoftUtime.objects.get(client_identifie=cid,tongji_day=day)
+                        ut_id = su.id
+                        try:
+                            su_obj = KxSoftUtime.objects.filter(id__exact=ut_id).update(utime=ut)
+                            message['message']=info
+                            message['create_time']=str(now)
+                            return HttpResponse(json.dumps(message),content_type="application/json")
+                        except Exception as e:
+                            logger.debug("su_obj%s",e)
+                            info = "%s" %(e)
+                            message['message']=info
+                            message['create_time']=str(now)
+                            return HttpResponse(json.dumps(message),content_type="application/json")
+                    except Exception as e:
+                        try:
+                            ut_obj = KxSoftUtime.objects.create(id=None,client_identifie=cid,tongji_day=day,utime=ut,create_time=now)
+                            message['message']=info
+                            message['create_time']=str(now)
+                            return HttpResponse(json.dumps(message),content_type="application/json")
+                        except Exception as e:
+                            logger.debug("ut_obj%s",e)
+                            info = "%s" %(e)
+                            message['message']=info
+                            message['create_time']=str(now)
+                            return HttpResponse(json.dumps(message),content_type="application/json")
+                        logger.debug("su:%s",e)
+                        info = "su:%s" %(e)
+                        message['message']=info
+                        message['create_time']=str(now)
+                        return HttpResponse(json.dumps(message),content_type="application/json")
+                else:
+                    message['message']=u"Type error!"
+                    message['create_time']=str(now)
+                    return HttpResponse(json.dumps(message),content_type="application/json")
+            else:
+                message['message']=u"Type error!"
+                message['create_time']=str(now)
+                return HttpResponse(json.dumps(message),content_type="application/json")
+        else:
+            message['message']=u"No GET! Please POST!"
+            message['create_time']=str(now)
+            return HttpResponse(json.dumps(message),content_type="application/json")
+    except Exception as e:
+        logger.debug("utime:%s",e,exc_info=True)
+        info = "utime%s" %(e)
+        message['message']=info
+        message['create_time']=str(now)
+        return HttpResponse(json.dumps(message),content_type="application/json")
+
+@csrf_exempt
+def cadd(request):
+    '''
+    登陆时长
+    '''
+    now = datetime.datetime.now()
+    message = {}
+    word = [u'simplenect',u'运营',u'管理',u'系统']
+    info = "Data save success"
+    try:
+        if request.method == 'POST':
+            email = request.POST.get('email',None)
+            nick = request.POST.get('nick',None)
+            password = request.POST.get('password',None)
+            if email is not None and nick is not None and password is not None:
+                email = strip_tags(email.strip().lower())
+                nick = strip_tags(nick.strip())
+                password = strip_tags(password.strip())
+                if not email:
+                    message['message']=u'请填写邮箱!'
+                    message['create_time']=str(now)
+                    return HttpResponse(json.dumps(message),content_type="application/json")
+                if not is_valid_email(email):
+                    message['message']=u'email邮箱格式不正确!'
+                    message['create_time']=str(now)
+                    return HttpResponse(json.dumps(message),content_type="application/json")
+                if not nick:
+                    message['message']=u'nick请填写昵称!'
+                    message['create_time']=str(now)
+                    return HttpResponse(json.dumps(message),content_type="application/json")
+                if len(nick)<4 and len(nick)>12:
+                    message['message']=u'昵称应为4-12个字符!'
+                    message['create_time']=str(now)
+                    return HttpResponse(json.dumps(message),content_type="application/json")
+                if nick in word:
+                    message['message']=u'昵称包含非法字符!'
+                    message['create_time']=str(now)
+                    return HttpResponse(json.dumps(message),content_type="application/json")
+                if not password:
+                    message['message']=u'请填写密码!'
+                    message['create_time']=str(now)
+                    return HttpResponse(json.dumps(message),content_type="application/json")
+                count = KxUser.objects.filter(email=email).count()
+                if count > 0:
+                    message['message']=u'邮箱已经被使用,请更改一个可用的邮箱!'
+                    message['create_time']=str(now)
+                    return HttpResponse(json.dumps(message),content_type="application/json")
+                try:
+                    uid=md5(email).hexdigest()
+                    create_user=KxUser.objects.create_user(auto_id=None,id=uid,email=email,nick=nick,password=password,status=0)
+                    create_user.save()
+                except Exception as e:
+                    logger.debug("%s",e)
+                    time_str = time.time()
+                    chk = md5(email+time_str+"qianmo20120601").hexdigest()
+                    ver_data = ''
+                    url = ''
+                    msg = """尊敬的SimpleNect用户，" . 
+                    $email . "：<br />&nbsp;&nbsp;您好！ 
+                    <br />&nbsp;&nbsp;请点击以下链接激活您的账号：
+                    <a href='" . $url . "'>" . $url . "</a>"""
+                    sendmail
+                    try:
+                        user_obj = KxUser.objects.filter(email=email).update(status=1)
+                    except Exception as e:
+                        logger.debug("%s",e)
+                    
+
+                    
+                    
+
+
+
+    except Exception as e:
+        logger.debug("cadd:%s",e,exc_info=True)
+        info = "cadd:%s" %(e)
+        message['message']=info
+        message['create_time']=str(now)
+        return HttpResponse(json.dumps(message),content_type="application/json")
+
