@@ -22,11 +22,7 @@
 		<tr>
 			<td class="register_left">电子邮箱：</td>
 			<td class="reg_input">
-			
 				<input id="email" name="email" type="text" value="{{ email }}" class="input-len" />
-			
-			<!-- 	<input id="email" name="email" type="text" value="" class="input-len" /> -->
-			
 			</td>
 			<td class="reg_msg_email"></td>
 		</tr>
@@ -35,7 +31,7 @@
 			<td class="reg_input"><input id="pwd" name="password" type="password" value="" class="input-len" /></td>
 			<td class="reg_msg_pwd"></td>
 		</tr>
-		<present name="email">
+		{% if email %}
 		<tr>
 			<td class="register_left">&nbsp;</td>
 			<td class="reg_input">
@@ -48,12 +44,12 @@
 			</span></td>
 			<td class="reg_msg_pwd"></td>
 		</tr>
-		</present>
+		{% endif %}
 		<tr>
 			<td></td>
 			<td>
 				<input name="" type="submit" value="" class="login_btn"/>
-				&nbsp;&nbsp;<a href="/accounts/findPwd" style=" color: #007EFF;">忘记密码？</a>
+				&nbsp;&nbsp;<a href="/accounts/findPwd/" style=" color: #007EFF;">忘记密码？</a>
 			</td>
 			<td></td>
 		</tr>
