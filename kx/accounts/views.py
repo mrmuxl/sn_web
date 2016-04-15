@@ -20,40 +20,54 @@ from django.http import Http404
 logger = logging.getLogger(__name__)
 
 def save(request):
-    if request.method == "POST":
-        email = strip_tags(request.POST.get("email").lower().strip())
-        nick = strip_tags(request.POST.get("nick").strip())
-        password = request.POST.get("password").strip()
-        repassword = request.POST.get("repassword").strip()
-        raw_email ="""请填写邮箱！<A HREF="javascript:history.back()">返 回</A>"""
-        is_email ="""邮箱格式不正确！<A HREF="javascript:history.back()">返 回</A>"""
-        raw_nick ="""请填昵称！<A HREF="javascript:history.back()">返 回</A>"""
-        raw_nick_length ="""昵称应为4-12个字符！<A HREF="javascript:history.back()">返 回</A>"""
-        raw_password ="""请填写密码！<A HREF="javascript:history.back()">返 回</A>"""
-        raw_repassword ="""两次密码填写不一致！<A HREF="javascript:history.back()">返 回</A>"""
-        raw_has_email= """邮箱已存在！<A HREF="javascript:history.back()">返 回</A>"""
-        if not email:
-            return HttpResponse(raw_email)
-        if not is_valid_email(email):
-            return HttpResponse(is_email)
-        if not nick:
-            return HttpResponse(raw_nick)
-        if len(nick)<4 and len(nick)>12:
-            return HttpResponse(raw_nick_length)
-        if not password:
-            return HttpResponse(raw_password)
-        if password != repassword:
-            return HttpResponse(raw_nick_length)
-        count = KxUser.objects.filter(email=email).count()
-        if count >0:
-            return HttpResponse(raw_has_email)
-        md5_email = md5(email).hexdigest()
-        create_user=KxUser.objects.create_user(id=md5_email,email=email,nick=nick,password=password,status=0)
-        create_user.save()
-        user = authenticate(username=email,password=password)
-        if user is not None and user.is_active:
-            auth.login(request,user)
+    now = datetime.datetime.now()
+    info = "Data save success"
+    try:
+        if request.method == "POST":
+            email = strip_tags(request.POST.get("email").strip().lower())
+            nick = strip_tags(request.POST.get("nick").strip())
+            password = request.POST.get("password").strip()
+            repassword = request.POST.get("repassword").strip()
+            if email is not None and nick is not None and password is not None and repassword is not None:
+                if not email:
+                    message ="""请填写邮箱！<A HREF="javascript:history.back()">返 回</A>"""
+                    return HttpResponse(message)
+                if not is_valid_email(email):
+                    message ="""邮箱格式不正确！<A HREF="javascript:history.back()">返 回</A>"""
+                    return HttpResponse(message)
+                if not nick:
+                    message ="""请填昵称！<A HREF="javascript:history.back()">返 回</A>"""
+                    return HttpResponse(message)
+                if len(nick)<4 and len(nick)>12:
+                    message ="""昵称应为4-12个字符！<A HREF="javascript:history.back()">返 回</A>"""
+                    return HttpResponse(message)
+                if not password:
+                    message ="""请填写密码！<A HREF="javascript:history.back()">返 回</A>"""
+                    return HttpResponse(message)
+                if password != repassword:
+                    message ="""两次密码填写不一致！<A HREF="javascript:history.back()">返 回</A>"""
+                    return HttpResponse(message)
+                count = KxUser.objects.filter(email=email).count()
+                if count >0:
+                    message = """邮箱已存在！<A HREF="javascript:history.back()">返 回</A>"""
+                    return HttpResponse(message)
+                uid = md5(email).hexdigest()
+                try:
+                    #raise "aaa"
+                    create_user=KxUser.objects.create_user(auto_id=None,id=uid,email=email,nick=nick,password=password,status=0)
+                    create_user.save()
+                    user = authenticate(username=email,password=password)
+                except Exception as e:
+                    logger.debug("%s",e)
+                    return HttpResponseRedirect(reverse("login"))    
+                if user is not None and user.is_active:
+                    auth.login(request,user)
+                    return HttpResponseRedirect(reverse("index"))    
+        else:
             return HttpResponseRedirect(reverse("index"))    
+    except Exception as e:
+        logger.debug("%s",e)
+        return HttpResponseRedirect(reverse("index"))    
 
 def login(request):
     '''登陆视图'''
