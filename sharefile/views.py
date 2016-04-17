@@ -41,6 +41,7 @@ def peerPort(request):
     logger.debug('mac: ' + mac)
     con = get_redis_connection('default')
     result = con.lindex(mac, 10)
+    logger.debug("result:" + result)
     if result:
         sendMyInfoToServer(request, mac)
         return HttpResponse(result)
