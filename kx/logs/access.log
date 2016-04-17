@@ -10047,3 +10047,27 @@ DEBUG [17/Apr/2013 20:24:01] [django.db.backends:util:execute:51] [None] (0.001)
 DEBUG [17/Apr/2013 20:24:01] [django.db.backends:util:execute:51] [None] (0.002) SELECT `authtoken_token`.`key`, `authtoken_token`.`user_id`, `authtoken_token`.`created` FROM `authtoken_token` WHERE `authtoken_token`.`key` = 'd02829e33b52cd28fc95da9153f35c9c644fc60e' ; args=('d02829e33b52cd28fc95da9153f35c9c644fc60e',)
 DEBUG [17/Apr/2013 20:24:01] [django.db.backends:util:execute:51] [None] (0.014) SELECT `kx_user`.`password`, `kx_user`.`last_login`, `kx_user`.`is_superuser`, `kx_user`.`id`, `kx_user`.`email`, `kx_user`.`nick`, `kx_user`.`status`, `kx_user`.`create_time`, `kx_user`.`update_time`, `kx_user`.`avatar`, `kx_user`.`last_ip`, `kx_user`.`mobile`, `kx_user`.`department`, `kx_user`.`login_status`, `kx_user`.`qianmo_dot`, `kx_user`.`con_qianmo_dot`, `kx_user`.`invate_init`, `kx_user`.`login_counts`, `kx_user`.`create_group_counts`, `kx_user`.`online_time`, `kx_user`.`invites`, `kx_user`.`user_share`, `kx_user`.`share_begin_time`, `kx_user`.`active_time`, `kx_user`.`last_lan_ip`, `kx_user`.`is_active`, `kx_user`.`is_staff` FROM `kx_user` WHERE `kx_user`.`id` = '30' ; args=(u'30',)
 DEBUG [17/Apr/2013 20:24:01] [django.db.backends:util:execute:51] [None] (0.004) select o.email, o.lan_ip, o.wlan_ip, o.mac id from kx_userlogin o where o.email in (select friend from kx_user_friend where user='falqs@foxmail.com')  or o.email='falqs@foxmail.com'; args=['falqs@foxmail.com', 'falqs@foxmail.com']
+DEBUG [17/Apr/2013 20:57:58] [django.db.backends:util:execute:51] [None] (0.003) SELECT `kx_user`.`password`, `kx_user`.`last_login`, `kx_user`.`is_superuser`, `kx_user`.`id`, `kx_user`.`email`, `kx_user`.`nick`, `kx_user`.`status`, `kx_user`.`create_time`, `kx_user`.`update_time`, `kx_user`.`avatar`, `kx_user`.`last_ip`, `kx_user`.`mobile`, `kx_user`.`department`, `kx_user`.`login_status`, `kx_user`.`qianmo_dot`, `kx_user`.`con_qianmo_dot`, `kx_user`.`invate_init`, `kx_user`.`login_counts`, `kx_user`.`create_group_counts`, `kx_user`.`online_time`, `kx_user`.`invites`, `kx_user`.`user_share`, `kx_user`.`share_begin_time`, `kx_user`.`active_time`, `kx_user`.`last_lan_ip`, `kx_user`.`is_active`, `kx_user`.`is_staff` FROM `kx_user` WHERE `kx_user`.`email` = 'yang0@126.com' ; args=(u'yang0@126.com',)
+DEBUG [17/Apr/2013 20:57:58] [django.db.backends:util:execute:51] [None] (0.001) SELECT `authtoken_token`.`key`, `authtoken_token`.`user_id`, `authtoken_token`.`created` FROM `authtoken_token` WHERE `authtoken_token`.`user_id` = '30' ; args=(u'30',)
+ERROR [17/Apr/2013 20:57:58] [django.request:base:handle_uncaught_exception:212] [(<type 'exceptions.SyntaxError'>, SyntaxError('invalid syntax', ('/Users/yangling/Documents/t/projectHome/sn_web/sharefile/views.py', 38, 8, '    if !mac:\n')), <traceback object at 0x10fa56cb0>)] Internal Server Error: /shareFile/
+Traceback (most recent call last):
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/core/handlers/base.py", line 103, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/core/urlresolvers.py", line 321, in resolve
+    sub_match = pattern.resolve(new_path)
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/core/urlresolvers.py", line 321, in resolve
+    sub_match = pattern.resolve(new_path)
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/core/urlresolvers.py", line 223, in resolve
+    return ResolverMatch(self.callback, args, kwargs, self.name)
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/core/urlresolvers.py", line 230, in callback
+    self._callback = get_callable(self._callback_str)
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/utils/functional.py", line 29, in wrapper
+    result = func(*args)
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/core/urlresolvers.py", line 97, in get_callable
+    mod = import_module(mod_name)
+  File "/Users/yangling/.virtualenvs/simplenect/lib/python2.7/site-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/Users/yangling/Documents/t/projectHome/sn_web/sharefile/views.py", line 38
+    if !mac:
+       ^
+SyntaxError: invalid syntax
