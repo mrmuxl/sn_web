@@ -106,8 +106,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-#    'rest_framework',
-#    'rest_framework.authtoken',
+    'rest_framework',
+    'rest_framework.authtoken',
     #'django.contrib.comments',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
