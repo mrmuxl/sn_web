@@ -2,6 +2,7 @@
 import os
 import logging
 ROOT_DIR = os.path.dirname(__file__)
+ALLOWED_HOSTS = ['en.qianmo.cc','localhost']
 THEME = '/default/'
 
 STATIC_ROOT = os.path.join(ROOT_DIR,'static')

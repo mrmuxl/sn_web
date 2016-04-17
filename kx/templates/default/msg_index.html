@@ -32,12 +32,10 @@
 			<li id="msg_id_{{ msg.id }}">
 				<div class="board_left">
 					<div class="board_img">
-						{% if msg.user_id > 0 %}
+						{% if msg.user_id != '0' %}
 							{% for user in user_list %}
 								{% if user.id == msg.user_id %}
 									<img src="{{ MEDIA_URL }}{{user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
-								{% else %}
-									<!-- <img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" /> -->
 								{% endif %}
 							{% endfor %}
 						{% else %}
@@ -48,7 +46,7 @@
 				<div class="board_area">
 					<div class="board_user">
 						<span class="board_uname" id="user_{{ msg.id }}">
-						{% if msg.user_id > 0 %}
+						{% if msg.user_id != '0' %}
 							{{ msg.user_nick }}
 						{% else %}
 							  {{ msg.ip|slice:"8"|add:"*"}}
@@ -78,12 +76,10 @@
 			<li>
 				<div class="board_left">
 					<div class="board_img">
-						{% if msg.user_id > 0 %}
+						{% if msg.user_id != '0' %}
 							{% for user in user_list %}
 								{% if user.id == msg.user_id %}
 									<img src="{{ MEDIA_URL }}{{user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
-								{% else %}
-										<!-- <img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" /> -->
 								{% endif %}
 							{% endfor %}
 						{% else %}
@@ -96,7 +92,7 @@
 				<div class="board_area">
 					<div class="board_user">
 					<span class="board_uname" id="user_{{ msg.id }}">
-						{% if msg_user_id > 0 %}
+						{% if msg.user_id != '0' %}
 							{{ msg.user_nick }}
 						{% else %}
 						  {{ msg.ip|slice:"8"|add:"*" }}
@@ -129,25 +125,22 @@
 			<li>
 				<div class="board_left">
 					<div class="board_img">
-						{% if msg.user_id > 0 %}
+						{% if msg.user_id != '0' %}
 							{% for user in user_list %}
 									{% if user.id == msg.user_id %}
 										<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
-									{% else %}
-										<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
 									{% endif %}
 							{% endfor %}
 						{% else %}
-							<!-- <img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" /> -->
+							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg?ver=1" />
 						{% endif %}
-			
 					</div>
 				</div>
 			
 				<div class="board_area">
 					<div class="board_user">
 						<span class="board_uname" id="user_{{ msg.id }}">
-						{% if msg.user_id > 0 %}
+						{% if msg.user_id != '0' %}
 							{{ msg.user_nick }}
 						{% else %}
 							{{ msg.ip|slice:"8"|add:"*"}}

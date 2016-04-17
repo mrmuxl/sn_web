@@ -1,7 +1,7 @@
 # Django settings for qm_web project.
 
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -111,6 +111,7 @@ INSTALLED_APPS = (
     #'django.contrib.comments',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
+    'gunicorn',
     'kx',
 #    'api',
     # Uncomment the next line to enable admin documentation:
