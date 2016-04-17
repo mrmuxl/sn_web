@@ -114,6 +114,7 @@ INSTALLED_APPS = (
     'kx',
     'sharefile',
     'online_user',
+    'auth',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
