@@ -78,6 +78,10 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'sharefile': {
+            'handlers': ['console','file','mail_admins' ],
+            'level': 'DEBUG',
+        },
         'kx': {
             'handlers': ['console','file','mail_admins' ],
             'level': 'DEBUG',
