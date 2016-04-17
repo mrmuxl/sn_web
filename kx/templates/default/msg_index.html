@@ -134,11 +134,11 @@
 									{% if user.id == msg.user_id %}
 										<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
 									{% else %}
-										<!-- <img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" /> -->
+										<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
 									{% endif %}
 							{% endfor %}
 						{% else %}
-							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
+							<!-- <img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" /> -->
 						{% endif %}
 			
 					</div>
@@ -301,7 +301,7 @@
 	function delMsg(mid){
 		if(mid>0){
 			if(confirm("确定要删除此留言吗？")){
-				jQuery.post("/MsgBoard/del_msg",{"id":mid},function(data){
+				jQuery.post("/msg_board/del_msg/",{"id":mid},function(data){
 					if(data.status==1){
 						$("#msg_id_"+mid).remove();
 					}else{

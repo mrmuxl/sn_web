@@ -1,0 +1,2 @@
+alter.sql 为django添加的字段
+create.sql 是测试环境新添加的表

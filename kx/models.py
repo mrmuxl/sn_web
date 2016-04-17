@@ -61,7 +61,7 @@ class KxAlipayOrder(models.Model):
     pay_money      = models.DecimalField(max_digits = 10, decimal_places = 2)
     qianmo_dot     = models.IntegerField()
     add_qianmo_dot = models.IntegerField()
-    user_id        = models.IntegerField()
+    user_id        = models.CharField(max_length=32L)
     trade_no       = models.CharField(max_length = 16L, blank = True)
     pay_status     = models.IntegerField()
     create_time    = models.DateTimeField()
@@ -84,7 +84,7 @@ class KxCscRecord(models.Model):
 
 class KxEmailInvate(models.Model):
     id             = models.IntegerField(primary_key = True)
-    user_id        = models.IntegerField()
+    user_id        = models.CharField(max_length=32L)
     user_name      = models.CharField(max_length = 20L)
     invate_email   = models.CharField(max_length = 50L)
     invate_name    = models.CharField(max_length = 20L)
@@ -116,7 +116,7 @@ class KxEnt(models.Model):
     ent_status                 = models.IntegerField()
     ent_setup_indexmaxfilesize = models.IntegerField(db_column ='ent_setup_indexMaxFileSize') # Field name made lowercase.
     ent_user_num               = models.IntegerField()
-    ent_master_id              = models.IntegerField()
+    ent_master_id              = models.CharField(max_length=32L)
     create_time                = models.DateTimeField()
     update_time                = models.DateTimeField()
     version                    = models.IntegerField()
@@ -125,11 +125,11 @@ class KxEnt(models.Model):
 
 class KxEntUser(models.Model):
     id          = models.IntegerField(primary_key = True)
-    user_id     = models.IntegerField()
+    user_id     = models.CharField(max_length=32L)
     ent_id      = models.IntegerField()
     status      = models.IntegerField()
     update_time = models.DateTimeField()
-    updater_id  = models.IntegerField()
+    updater_id  = models.CharField(max_length=32L)
     class Meta:
         db_table = 'kx_ent_user'
 
@@ -138,7 +138,7 @@ class KxForumForum(models.Model):
     name        = models.CharField(max_length = 20L)
     posts_num   = models.IntegerField()
     order_num   = models.IntegerField()
-    updater_id  = models.IntegerField()
+    updater_id  = models.CharField(max_length=32L)
     update_time = models.DateTimeField()
     class Meta:
         db_table = 'kx_forum_forum'
@@ -147,7 +147,7 @@ class KxForumMpost(models.Model):
     id          = models.IntegerField(primary_key = True)
     forum_id    = models.IntegerField()
     title       = models.CharField(max_length = 100L)
-    user_id     = models.IntegerField()
+    user_id     = models.CharField(max_length=32L)
     reply_num   = models.IntegerField()
     view_num    = models.IntegerField()
     top_num     = models.IntegerField()
@@ -168,7 +168,7 @@ class KxForumPosts(models.Model):
     tid         = models.IntegerField()
     title       = models.CharField(max_length = 100L)
     content     = models.TextField()
-    user_id     = models.IntegerField()
+    user_id     = models.CharField(max_length=32L)
     reply_id    = models.IntegerField()
     is_main     = models.IntegerField()
     user_ip     = models.CharField(max_length = 15L)
@@ -201,8 +201,8 @@ class KxGroupmembers(models.Model):
 
 class KxInvateRecord(models.Model):
     id          = models.IntegerField(primary_key = True)
-    user_id     = models.IntegerField()
-    invate_id   = models.IntegerField()
+    user_id     = models.CharField(max_length=32L)
+    invate_id   = models.CharField(max_length=32L)
     qianmo_dot  = models.IntegerField()
     create_time = models.DateTimeField()
     class Meta:
@@ -266,7 +266,7 @@ class KxMsgBoard(models.Model):
     create_time = models.DateTimeField(db_index=True,verbose_name=u'留言时间')
     reply_id    = models.IntegerField(db_index=True,default=0,verbose_name=u'要回复的留言ID，0表示新的留言')
     is_del      = models.BooleanField(default=False,verbose_name=u'是否删除，0=未删除，1=删除')
-    user_id     = models.IntegerField(default=0)
+    user_id     = models.CharField(max_length=32L)
     user_nick   = models.CharField(max_length = 50L,default='--')
     class Meta:
         db_table = 'kx_msg_board'
@@ -280,18 +280,18 @@ class KxOrg(models.Model):
     ent_id      = models.IntegerField()
     create_time = models.DateTimeField()
     update_time = models.DateTimeField()
-    updater_id  = models.IntegerField()
+    updater_id  = models.CharField(max_length=32L)
     class Meta:
         db_table = 'kx_org'
 
 class KxOrgSelf(models.Model):
     id             = models.IntegerField(primary_key = True)
-    user_id        = models.IntegerField()
-    target_user_id = models.IntegerField()
+    user_id        = models.CharField(max_length=32L)
+    target_user_id = models.CharField(max_length=32L)
     ent_id         = models.IntegerField()
     create_time    = models.DateTimeField()
     update_time    = models.DateTimeField()
-    updater_id     = models.IntegerField()
+    updater_id     = models.CharField(max_length=32L)
     class Meta:
         db_table = 'kx_org_self'
 
@@ -352,7 +352,7 @@ class KxSoftAd(models.Model):
     title       = models.CharField(max_length = 50L)
     ad_url      = models.CharField(max_length = 200L)
     exp_day     = models.DateField()
-    creater_id  = models.IntegerField()
+    creater_id  = models.CharField(max_length=32L)
     create_time = models.DateTimeField()
     class Meta:
         db_table = 'kx_soft_ad'
@@ -409,10 +409,10 @@ class KxTongjiRecord(models.Model):
         db_table = 'kx_tongji_record'
 
 class KxUser(AbstractBaseUser,PermissionsMixin):
-    id                  = models.AutoField(primary_key = True)
+    id                  = models.CharField(max_length=32L, primary_key=True)
     email               = models.EmailField(verbose_name=u'邮件地址', max_length=50, unique=True)
     nick                = models.CharField(u'用户昵称',max_length  = 20L)
-    status              = models.BooleanField(u'用户状态，0=未激活，1=正常，2=封禁',default  =True)
+    status              = models.IntegerField(u'用户状态，0=未激活，1=正常，2=封禁',default  =True)
     create_time         = models.DateTimeField(verbose_name=u'注册时间')
     update_time         = models.DateTimeField()
     avatar              = models.CharField(max_length = 200L, null = True,blank = True)
@@ -422,7 +422,7 @@ class KxUser(AbstractBaseUser,PermissionsMixin):
     login_status        = models.IntegerField(default = False,null = False)
     qianmo_dot          = models.IntegerField(u'现有阡陌点',default = 0,null = False)
     con_qianmo_dot      = models.IntegerField(u'累计消费阡陌点',default = 0)
-    invate_init         = models.BooleanField(u'登陆状态：0 = 未登录,1 = 邀请用户登录并初始化成功，2 = 非邀请用',default = False)
+    invate_init         = models.IntegerField(u'登陆状态：0 = 未登录,1 = 邀请用户登录并初始化成功，2 = 非邀请用',default = False)
     login_counts        = models.IntegerField(default = 0)
     create_group_counts = models.IntegerField(default = 0)
     online_time         = models.IntegerField(default = 0)
@@ -430,6 +430,7 @@ class KxUser(AbstractBaseUser,PermissionsMixin):
     user_share          = models.IntegerField(default = 0)
     share_begin_time    = models.DateField(null = True, blank = True)
     active_time         = models.DateTimeField(u'激活时间',null = True, blank = True)
+    last_lan_ip = models.CharField(max_length=50L, blank=True)
     is_active           = models.BooleanField(u'用户状态',default=True)
     is_staff            = models.BooleanField(u'后台登陆',default=False)
 
@@ -466,17 +467,19 @@ class KxUserFriend(models.Model):
 
 class KxUserOrg(models.Model):
     id          = models.IntegerField(primary_key = True)
-    user_id     = models.IntegerField()
+    user_id     = models.CharField(max_length=32L)
     org_id      = models.IntegerField()
     ent_id      = models.IntegerField()
     update_time = models.DateTimeField()
-    updater_id  = models.IntegerField()
+    updater_id  = models.CharField(max_length=32L)
     class Meta:
         db_table = 'kx_user_org'
 
 class KxUserlogin(models.Model):
-    email = models.CharField(max_length = 50L,unique = True)
-    mac   = models.CharField(max_length = 100L)
+    email   = models.CharField(max_length = 50L,unique = True)
+    mac     = models.CharField(max_length = 100L)
+    lan_ip  = models.CharField(max_length=50L, blank=True)
+    wlan_ip = models.CharField(max_length=50L, blank=True)
     class Meta:
         db_table = 'kx_userlogin'
 
