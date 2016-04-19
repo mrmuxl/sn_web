@@ -29,7 +29,6 @@ def index(request):
     data.update(msg_count=msg_count)
     msg_list = KxMsgBoard.objects.filter(reply_id__exact=0,is_del__exact=0,create_time__gte=left_create_time,create_time__lte=right_create_time).order_by("-create_time").values()[:5]
     data.update(msg_list=msg_list)
-    #print "msg_list",msg_list
     reply_ids = []
     user_ids = []
     for i in msg_list:
@@ -46,12 +45,20 @@ def index(request):
         for r in reply_list:
             reply_dict[r["id"]] = r
         data.update(reply_list=reply_dict)
-        #print "reply_list",reply_dict
     if user_ids:
         user_list = KxUser.objects.filter(id__in=user_ids).values('id','avatar')
-        data.update(user_list=user_list)
-        #print "user_list",user_list
-    #print data
+        u_dict={}
+        ul = []
+        for u in user_list:
+            if u['avatar']:
+                ul.append([u"id",u['id']])
+                for l in u['avatar'].split(','):
+                    ul.append(l.split('='))
+            user_dict=dict(ul)    
+            if user_dict:
+                u_dict[u['id']]=user_dict
+            ul=[]
+        data.update(user_list=u_dict)
     return render(request,"index.html",data) 
 
 def msg_board(request):
@@ -65,7 +72,6 @@ def msg_board(request):
     #right_create_time = '2013-03-1 23:59:59'
     msg_list = KxMsgBoard.objects.filter(reply_id__exact=0,is_del__exact=0,create_time__gte=left_create_time,create_time__lte=right_create_time).order_by("-create_time").values()[:20]
     data.update(msg_list=msg_list)
-    #print "msg_list",msg_list
     reply_ids = []
     user_ids = []
     for i in msg_list:
@@ -82,11 +88,9 @@ def msg_board(request):
         for r in reply_list:
             reply_dict[r["id"]] = r
         data.update(reply_list=reply_dict)
-        #print "reply_list",reply_dict
     if user_ids:
         user_list = KxUser.objects.filter(id__in=user_ids).values('id','avatar')
-        #user_list=[{'id': 8361L, 'avatar':u'folder=User/2013/03/16,uid=810398361,ext=jpg,swidth=0,sheight=0,name=000.jpg,size=3745' }, {'id': 8371L, 'avatar':u'folder=User/2013/03/17,uid=810398371,ext=jpg,swidth=0,sheight=0,name=000.jpg,size=3745'},{'id': 9554L, 'avatar': u'folder=User/2013/02/19,uid=810399720,ext=jpg,swidth=0,sheight=0,name=000.jpg,size=3745'}]
-        u_list=[]
+        u_dict={}
         ul = []
         for u in user_list:
             if u['avatar']:
@@ -95,9 +99,9 @@ def msg_board(request):
                     ul.append(l.split('='))
             user_dict=dict(ul)    
             if user_dict:
-                u_list.append(user_dict)
+                u_dict[u['id']]=user_dict
             ul=[]
-        data.update(user_list=u_list)
+        data.update(user_list=u_dict)
     return render(request,"msg_index.html",data) 
 
 def add_msg(request):
