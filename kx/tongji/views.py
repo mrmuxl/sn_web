@@ -135,9 +135,10 @@ def login_tongji(request):
                     for d in day_list:
                         if d not in login_dict.keys():
                             login_dict[d]=0
-                    keys = login_dict.keys()
-                    keys.sort()
-                    login_l = [ login_dict[key] for key in keys]
+                    #keys = login_dict.keys()
+                    #keys.sort()
+                    #login_l = [ login_dict[key] for key in keys]
+                    login_l = [ login_dict[key] for key in sorted(login_dict.keys())]
                     logger.info("login_l:%s",login_l)
                 except Exception as e:
                     logger.debug("%s",e)
@@ -171,7 +172,7 @@ def uninstall_chart(request):
                     sr_list = KxSoftRecord.objects.filter(is_uninstall__exact=1).extra(where=['DATE(login_time)=%s'],params=[day]).extra(select={'client_identifie':'client_identifie'}).values('client_identifie').annotate(login_time = Max('login_time')).order_by('-login_time')
                     logger.info("sr_list%s",sr_list)
                 except Exception as e:
-                    sr_list =0
+                    sr_list = []
                     logger.debug("sr_list:%s",e)
                 sr_num = {}
                 num_list = ["%02d" % i for i in range(23)]
@@ -185,6 +186,7 @@ def uninstall_chart(request):
                         f_list = KxSoftRecord.objects.filter(is_new__exact=1,client_identifie__in=client_list).extra(select={'client_identifie':'client_identifie'}).values('client_identifie').annotate(login_time = Min('login_time')).order_by()
                         logger.info("f_list%s",f_list)
                     except Exception as e:
+                        f_list = []
                         logger.debug("%s",e)
                 else:
                     f_list = 0
@@ -231,6 +233,7 @@ def bug_chart(request):
                     p =[old_day,day]
                     bc_list = bug_chart_sql(q=q,p=p)
                 except Exception as e:
+                    bc_list = []
                     logger.debug("%s",e)
                 ######################################################
                 try:
@@ -242,6 +245,7 @@ def bug_chart(request):
                     p =[old_day,day]
                     t_list = bug_chart_sql(q=q,p=p)
                 except Exception as e:
+                    t_list = []
                     logger.debug("%s",e)
                 ######################################################
                 '''客户端卸载'''
@@ -252,6 +256,7 @@ def bug_chart(request):
                           BETWEEN %s and %s GROUP BY client_identifie,date(login_time))t group by t.login_date"""
                     unc_list = bug_chart_sql(q=q,p=p)
                 except Exception as e:
+                    unc_list = []
                     logger.debug("%s",e)
                 ######################################################
                 try:
@@ -263,6 +268,7 @@ def bug_chart(request):
                     p =[old_day,day]
                     new_list = bug_chart_sql(q=q,p=p)
                 except Exception as e:
+                    new_list = []
                     logger.debug("%s",e)
                 ######################################################
                 try:
@@ -272,6 +278,7 @@ def bug_chart(request):
                     p =[old_day,day]
                     reg_list = bug_chart_sql(q=q,p=p)
                 except Exception as e:
+                    reg_list = []
                     logger.debug("%s",e)
 
                 temp_var={
@@ -320,11 +327,13 @@ def reg_chart(request):
                     pub_list = KxPub.objects.filter(is_tongji__exact=1).values('id','ver','pub_time')
                     logger.info("%s",pub_list)
                 except Exception as e:
+                    pub_list = []
                     logger.debug("%s",e)
                 try:
                     pt_list = KxPubTongji.objects.values('id','pub_id','reg_num','act_num','un_num')
                     logger.info("%s",pt_list)
                 except Exception as e:
+                    pt_list = []
                     logger.debug("%s",e)
                 reg_users = []
                 inactive = []
@@ -345,4 +354,56 @@ def reg_chart(request):
     except Exception as e:
         logger.debug("%s",e)
         raise Http404
+
+
+def bug_ratio_chart(request):
+    try:
+        if request.method == 'GET':
+            today = datetime.date.today()
+            day = request.GET.get('day',today)
+            if day is not None and isinstance(day,unicode):
+                try:
+                    day =parse(day.strip().strip('\t').strip('\n').strip('\r').strip('\0').strip('\x0B')).date()
+                except Exception as e:
+                    day = today
+                    logger.debug("%s",e)
+            if not request.user.is_superuser:
+                return HttpResponseRedirect(reverse('index'))
+            else:
+                old_day = day-datetime.timedelta(days=29)
+                day_list =[day-datetime.timedelta(days=d) for d in range(29,-1,-1)]
+                try:
+                    bug_list = KxTongjiRecord.objects.filter(tongji_day__range=(old_day,day)).values('id','seven_new_num','seven_un_num','tongji_day')
+                    print bug_list
+                except Exception as e:
+                    bug_list = []
+                    logger.debug("%s",e)
+                bug_ratio = []
+                print len(bug_list)
+                if len(bug_list) < 30:
+                    for i in range(30):
+                        try:
+                            bug_ratio.append(round(float(bug_list[i]['seven_un_num'])*100/float(bug_list[i]['seven_new_num']),2))
+                        except Exception as e:
+                            bug_ratio.append(0)
+                            pass
+                else:
+                    bug_ratio = [round(float(i['seven_un_num'])*100/i['seven_new_num'],2) for i in bug_list]
+                temp_var = {
+                            'day':day,
+                            'day_list':day_list,
+                            'bug_ratio':bug_ratio,
+                        }
+                return render(request,"bug_ratio_chart.html",temp_var)
+    except Exception as e:
+        logger.debug("%s",e)
+        raise Http404
+def lan_stack_chart(request):
+    pass
+def lan_line_chart(request):
+    pass
+def silence_ratio_chart(request):
+    pass
+def remain_ratio_chart(request):
+    pass
 

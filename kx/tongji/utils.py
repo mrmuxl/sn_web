@@ -38,4 +38,3 @@ def bug_chart_sql(q=None,p=[]):
     except Exception as e:
         logger.debug("%s",e)
         return A_list
-
