@@ -388,8 +388,8 @@ def cadd(request):
                 except Exception as e:
                     logger.debug("%s",e)
                     time_str = time.time()
-                    chk = md5(email+time_str+"qianmo20120601").hexdigest()
-                    ver_data = ''
+                    chk = md5(email + "," + time_str + ",qianmo20120601").hexdigest()
+                    ver_data =emial + "," + time_str + "," + chk
                     url = ''
                     msg = """尊敬的SimpleNect用户，" . 
                     $email . "：<br />&nbsp;&nbsp;您好！ 

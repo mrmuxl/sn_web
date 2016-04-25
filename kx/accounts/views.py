@@ -120,7 +120,7 @@ def avatar(request):
                 path_save = path_folder + "/" + file_uid + ".jpg"
                 save_50 = path_folder + "/" + 'snap_50X50_' + file_uid + '.jpg'
                 save_60 = path_folder + "/" + 'snap_60X60_' + file_uid + '.jpg'
-                avatar_info = 'folder='+ folder + ',uid=' + file_uid + ',ext=jpg' + ',swidth=0,sheight=0' + ',name=' +file_name +',size=' + file_size
+                avatar_info = 'folder='+ folder + ',uid=' + file_uid + ',ext=jpg' + ',swidth=50,sheight=50' + ',name=' +file_name +',size=' + file_size
                 try:
                     if not os.path.isdir(path_folder):
                         os.makedirs(path_folder)
@@ -173,8 +173,6 @@ def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
 
-def post(request):
-    pass
 def chpasswd(request):
     pass
 
