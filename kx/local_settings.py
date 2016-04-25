@@ -5,6 +5,7 @@ ROOT_DIR = os.path.dirname(__file__)
 ALLOWED_HOSTS = ['en.qianmo.cc','localhost']
 THEME = '/default/'
 
+APPEND_SLASH = True
 STATIC_ROOT = os.path.join(ROOT_DIR,'static')
 #STATIC_URL = 'http://static.qianmo.cc' 
 STATIC_URL = '/static' + THEME
