@@ -11,7 +11,7 @@
 <div class="login_top_title">欢迎登录阡陌</div>
 <div class="center_register">
 <div class="login_area">
-<form action="/accounts/login/" method="post" enctype="multipart/form-data" onsubmit="return checkForm();">
+<form action="{% url 'login' %}" method="post" enctype="multipart/form-data" onsubmit="return checkForm();">
 	{% csrf_token %}
 	<table class="register">
 		<tr>
@@ -49,7 +49,7 @@
 			<td></td>
 			<td>
 				<input name="" type="submit" value="" class="login_btn"/>
-				&nbsp;&nbsp;<a href="/accounts/findPwd/" style=" color: #007EFF;">忘记密码？</a>
+				&nbsp;&nbsp;<a href="{% url 'findPwd' %}" style=" color: #007EFF;">忘记密码？</a>
 			</td>
 			<td></td>
 		</tr>

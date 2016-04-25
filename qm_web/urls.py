@@ -10,8 +10,6 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^$','kx.views.index',name='index'),
-    url(r'^msg_board$','kx.views.msg_board',name='msg_show'),
-    url(r'^msg_board/add_msg$','kx.views.add_msg',name='add_msg'),
 
     # url(r'^qm_web/', include('qm_web.foo.urls')),
 
@@ -23,9 +21,10 @@ urlpatterns = patterns('',
     #url(r'^api-token-auth/','api.auth.views.obtain_auth_token'), 
 )
 urlpatterns += patterns('',
+    url(r'^MsgBoard/',include("kx.msg_board.urls")),
     url(r'^SoftRecord/',include("kx.api.urls",)),
-    url(r'^accounts/',include("kx.accounts.urls")),
-    url(r'^blog/',include("kx.blog.urls")),
+    url(r'^User/',include("kx.accounts.urls")),
+    url(r'^Blog/',include("kx.blog.urls")),
 )
 
 if settings.DEBUG:
