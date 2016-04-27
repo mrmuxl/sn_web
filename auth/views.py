@@ -19,7 +19,7 @@ class ObtainAuthToken(APIView):
         serializer = self.serializer_class(data=request.DATA)
         if serializer.is_valid():
             token, created = Token.objects.get_or_create(user=serializer.object['user'])
-            return Response({'token': token.key})
+            return Response({'token': token.key, 'ip':request.META['REMOTE_ADDR']})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
