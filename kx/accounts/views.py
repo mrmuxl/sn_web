@@ -1,6 +1,7 @@
 #_*_coding:utf-8_*_
-import uuid,os,datetime,json,logging
+import uuid,os,datetime,json,logging,time
 from hashlib import md5
+from base64 import urlsafe_b64encode
 from PIL import Image
 from django.contrib.auth import authenticate
 from django.contrib import auth
@@ -16,12 +17,12 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from kx.models import KxUser,KxEmailInvate
 from django.http import Http404
+from django.core.mail import send_mail
 
 logger = logging.getLogger(__name__)
 
 def save(request):
     now = datetime.datetime.now()
-    info = "Data save success"
     try:
         if request.method == "POST":
             email = strip_tags(request.POST.get("email").strip().lower())
@@ -53,36 +54,43 @@ def save(request):
                     return HttpResponse(message)
                 uid = md5(email).hexdigest()
                 try:
-                    #raise "aaa"
-                    create_user=KxUser.objects.create_user(auto_id=None,id=uid,email=email,nick=nick,password=password,status=0)
+                    create_user=KxUser.objects.create_user(id=uid,email=email,nick=nick,password=password,status=0)
+                    #手贱的bug,auto_id不需要传None参数
                     create_user.save()
                     user = authenticate(username=email,password=password)
                 except Exception as e:
                     logger.debug("%s",e)
-                    return HttpResponseRedirect(reverse("login"))    
-                if user is not None and user.is_active:
+                    message = """出现未知错误！返回再试一试?<A HREF="javascript:history.back()">返 回</A>"""
+                    return HttpResponse(message)
+                    #return HttpResponseRedirect(reverse("register"))    
+                if user is not None and user.status == 0:
                     auth.login(request,user)
-                    return HttpResponseRedirect(reverse("index"))    
+                    return HttpResponseRedirect(reverse('account_verify'))    
         else:
             return HttpResponseRedirect(reverse("index"))    
     except Exception as e:
         logger.debug("%s",e)
-        return HttpResponseRedirect(reverse("index"))    
+        raise Http404
+        #return HttpResponseRedirect(reverse("index"))    
 
 def login(request):
     '''登陆视图'''
-    if request.method == "POST":
-        email = strip_tags(request.POST.get("email").lower().strip())
-        password = request.POST.get("password").strip()
-        user = authenticate(username=email,password=password)
-        if user is not None and user.is_active:
-            auth.login(request,user)
-            return HttpResponseRedirect(reverse("index"))    
-        else:
-            data={"email":email}
-            messages.add_message(request,messages.INFO,_(u'用户名或密码错误'))
-            return render(request,"login.html",data)
-    return render(request,"login.html",{})
+    try:
+        if request.method == "POST":
+            email = strip_tags(request.POST.get("email",'').lower().strip())
+            password = request.POST.get("password").strip()
+            user = authenticate(username=email,password=password)
+            if user and user.is_active:
+                auth.login(request,user)
+                return HttpResponseRedirect(reverse("index"))    
+            else:
+                data={"email":email}
+                messages.add_message(request,messages.INFO,_(u'用户名或密码错误'))
+                return render(request,"login.html",data)
+        return render(request,"login.html",{})
+    except Exception as e:
+        logger.debug("%s",e)
+        raise Http404
 
 
 
@@ -202,4 +210,85 @@ def logout(request):
 
 def chpasswd(request):
     pass
+
+def findPwd(request):
+    pass
+
+def protocol(request):
+    t_var ={
+                'title':u'用户协议',
+            }
+    return render(request,"protocol.html",t_var)
+
+@login_required
+def to_active(request):
+    try:
+        if request.method =="GET":
+            try:
+                user_obj = KxUser.objects.get(id=request.user.id)
+            except Exception as e:
+                user_obj =None
+                logger.debug("%s",e)
+            try:
+                if user_obj.id:
+                    if user_obj.status == 1:
+                        messages.add_message(request,messages.INFO,_(u'此用户已激活!'))
+                    else:
+                        time_str = str(time.time())
+                        email = str(user_obj.email)
+                        chk = md5(email + "," + time_str + ",qianmo20120601").hexdigest()
+                        ver_data = email + "," + time_str + "," + chk
+                        url =settings.DOMAIN + reverse('activate',args=[urlsafe_b64encode(ver_data),])
+                        msg = "尊敬的SimpleNect用户，" + email + "：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;请点击以下链接激活您的账号：<a href='" + url + "'>" + url + "</a>"
+                        subject = '请激活帐号完成注册!'
+                        send_mail(subject,msg,email)
+                
+                else:
+                    messages.add_message(request,messages.INFO,_(u'改帐号不存在!'))
+                    return render(request,"to_active.html",{})
+            except Exception as e:
+                logger.debug("%s",e)
+    except Exception as e:
+        logger.debug("%s",e)
+        raise Http404
+        #return HttpResponseRedirect(reverse("index"))    
+    
+
+def account_verify(request):
+    try:
+        if request.method =="GET":
+            email = request.GET.get('email','')
+            if email and isinstance(email,unicode):
+                try:
+                    email = email.strip().strip('\t').strip('\n').strip('\r').strip('\0').strip('\x0B')
+                except Exception as e:
+                    email = ''
+                    logger.debug("%s",e)
+                email_suffix = email.split('@')[1]
+                email_login ='http://mail.' + email_suffix
+            else:
+                try:
+                    email = request.user.email
+                    email_suffix = email.split('@')[1]
+                    email_login ='http://mail.' + email_suffix
+                except Exception as e:
+                    email = ''
+                    logger.debug("%s",e)
+                    message = """注册邮箱不存在！<A HREF="javascript:history.go(-2)">返 回</A>"""
+                    return HttpResponse(message)
+
+                
+            t_var={
+                    'email':email,
+                    'email_login':email_login,
+                }
+            return render(request,"account_verify.html",t_var)
+        else:
+            return HttpResponseRedirect(reverse("register"))
+    except Exception as e:
+        logger.debug("%s",e)
+        raise Http404
+
+def activate(request,ver_data):
+    return HttpResponse(ver_data)
 
