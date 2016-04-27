@@ -25,9 +25,14 @@ def index(request):
     #left_create_time = '2013-02-1 23:59:59'
     right_create_time = str(today) + time_tag
     #right_create_time = '2013-03-1 23:59:59'
-    msg_count = KxMsgBoard.objects.filter(is_del__exact=0).count()
+    try:
+        msg_count = KxMsgBoard.objects.filter(is_del__exact=0).count()
+        msg_list = KxMsgBoard.objects.filter(reply_id__exact=0,is_del__exact=0,create_time__gte=left_create_time,create_time__lte=right_create_time).order_by("-create_time").values()[:5]
+    except Exception as e:
+        msg_count = 0
+        msg_list = ''
+        logger.debug("%s",e)
     data.update(msg_count=msg_count)
-    msg_list = KxMsgBoard.objects.filter(reply_id__exact=0,is_del__exact=0,create_time__gte=left_create_time,create_time__lte=right_create_time).order_by("-create_time").values()[:5]
     data.update(msg_list=msg_list)
     reply_ids = []
     user_ids = []
