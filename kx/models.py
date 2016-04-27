@@ -266,7 +266,7 @@ class KxMsgBoard(models.Model):
     create_time = models.DateTimeField(db_index=True,verbose_name=u'留言时间')
     reply_id    = models.IntegerField(db_index=True,default=0,verbose_name=u'要回复的留言ID，0表示新的留言')
     is_del      = models.BooleanField(default=False,verbose_name=u'是否删除，0=未删除，1=删除')
-    user_id     = models.CharField(max_length=32L)
+    user_id     = models.CharField(max_length=32L,default=0)
     user_nick   = models.CharField(max_length = 50L,default='--')
     class Meta:
         db_table = 'kx_msg_board'

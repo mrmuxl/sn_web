@@ -15,8 +15,6 @@ ALTER TABLE kx_user DROP COLUMN  is_staff;
 添加可登陆admin的用户:
  UPDATE kx_user SET is_staff=1 WHERE email='mrmuxl@sina.com';
 
-给kx_use表增加自增id
-ALTER TABLE kx_user ADD auto_id int(11) NOT NULL AUTO_INCREMENT FIRST id;
 
 关于kx_user表不能删除主键的问题:
 第一步删除django_admin_log表引用的外键
