@@ -5,6 +5,7 @@ ROOT_DIR = os.path.dirname(__file__)
 ALLOWED_HOSTS = ['en.qianmo.cc','localhost']
 THEME = '/default/'
 
+DOMAIN = 'http://www.simplenect.cn'
 APPEND_SLASH = True
 STATIC_ROOT = os.path.join(ROOT_DIR,'static')
 #STATIC_URL = 'http://static.qianmo.cc' 
@@ -18,7 +19,7 @@ STATICFILES_DIRS = (
 )
 AUTH_USER_MODEL = 'kx.KxUser'
 PASSWORD_HASHERS = (
-'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
+    'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
 )
 
 TEMPLATE_DIRS = (
