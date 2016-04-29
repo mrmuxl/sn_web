@@ -8,3 +8,5 @@ def is_valid_email(email):
     if email_re.match(email):
         return True
     return False
+def reg_add_friends(email):
+    pass
