@@ -27,7 +27,7 @@ class ObtainAuthToken(APIView):
 
 obtain_auth_token = ObtainAuthToken.as_view()
 
-class Register(APIView):
+class Register(ObtainAuthToken):
 
     def post(self, request):
        email = strip_tags(request.POST.get("email").strip().lower())
