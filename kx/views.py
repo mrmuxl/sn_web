@@ -51,17 +51,17 @@ def index(request):
             reply_dict[r["id"]] = r
         data.update(reply_list=reply_dict)
     if user_ids:
-        user_list = KxUser.objects.filter(id__in=user_ids).values('id','avatar')
+        user_list = KxUser.objects.filter(uuid__in=user_ids).values('uuid','avatar')
         u_dict={}
         ul = []
         for u in user_list:
             if u['avatar']:
-                ul.append([u"id",u['id']])
+                ul.append([u"uuid",u['uuid']])
                 for l in u['avatar'].split(','):
                     ul.append(l.split('='))
-            user_dict=dict(ul)    
+            user_dict=dict(ul)
             if user_dict:
-                u_dict[u['id']]=user_dict
+                u_dict[u['uuid']]=user_dict
             ul=[]
         data.update(user_list=u_dict)
     return render(request,"index.html",data) 

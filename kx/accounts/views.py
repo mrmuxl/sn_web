@@ -64,7 +64,7 @@ def save(request):
                 with transaction.commit_on_success():
                     try:
                         uid = md5(email).hexdigest()
-                        create_user=KxUser.objects.create_user(id=uid,email=email,nick=nick,password=password,status=0)
+                        create_user=KxUser.objects.create_user(uuid=uid,email=email,nick=nick,password=password,status=0)
                         #手贱的bug,auto_id不需要传None参数
                         create_user.save()
                         user = authenticate(username=email,password=password)
@@ -186,36 +186,31 @@ def avatar(request):
             return HttpResponse("""请上传一张图片！<A HREF="javascript:history.back()">返 回</A>""")
     return HttpResponseRedirect(reverse("info"))
 
-def register(request):
+def register(request,invate_code=''):
     '''注册视图'''
-    try:
-        if request.method == 'GET':
-            invate_code = request.GET.get('invate_code','')
-            if invate_code and isinstance(invate_code,unicode):
-                try:
-                    invate_code = invate_code.strip().strip('\t').strip('\n').strip('\r').strip('\0').strip('\x0B')
-                except Exception as e:
-                    invate_code = '' 
-                    logger.debug("%s",e)
+    if invate_code:
+        if isinstance(invate_code,unicode):
             try:
-                invate_obj = KxEmailInvate.objects.get(invate_code=invate_code)
-                if invate_obj.id:
-                    email = invate_obj.invate_email
-                logger.info("%s",invate_obj)
+                invate_code = invate_code.strip().strip('\t').strip('\n').strip('\r').strip('\0').strip('\x0B')
             except Exception as e:
-                email = ''
-                invate_obj = []
+                invate_code = '' 
                 logger.debug("%s",e)
-            temp_var = {
-                        'invate_code':invate_code,
-                        'email':email,
-                    }
-            return render_to_response("register.html",temp_var,context_instance=RequestContext(request))
-        else:
-            return HttpResponseRedirect(reverse("register"))
-    except Exception as e:
-        logger.debug("%s",e)
-        raise Http404
+        try:
+            invate_obj = KxEmailInvate.objects.get(invate_code=invate_code)
+            if invate_obj.id:
+                email = invate_obj.invate_email
+            logger.info("%s",invate_obj)
+        except Exception as e:
+            email = ''
+            invate_obj = []
+            logger.debug("%s",e)
+        t_var = {
+                    'invate_code':invate_code,
+                    'email':email,
+                }
+        return render(request,"register.html",t_var)
+    else:
+        return render(request,"register.html",{})
         
 def check(request):
     if request.method =="POST":
@@ -253,7 +248,7 @@ def chpasswd(request):
             repwd = 0
         if status:
             try:
-                user_obj = KxUser.objects.get(id=request.user.id)
+                user_obj = KxUser.objects.get(uuid=request.user.uuid)
                 if md5(oldPwd).hexdigest() == user_obj.password:
                     try:
                         user_pwd = KxUser.objects.filter(id=user_obj.id).update(password=md5(pwd).hexdigest())
@@ -385,3 +380,4 @@ def activate(request,ver_data):
 
 def verify_success(request):
     return render(request,"verify_success.html",{})
+

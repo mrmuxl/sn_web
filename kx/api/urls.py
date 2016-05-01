@@ -22,5 +22,6 @@ urlpatterns = patterns('',
     url(r'^lan_stack_chart/$','kx.tongji.views.lan_stack_chart',name='lan_stack_chart'),
     url(r'^reg_tongji/$','kx.tongji.views.reg_tongji',name='reg_tongji'),
     url(r'^reg_chart/$','kx.tongji.views.reg_chart',name='reg_chart'),
+    url(r'^invate/$','kx.api.views.invate',name='invate'),
 )
 
