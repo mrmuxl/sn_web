@@ -270,7 +270,10 @@ def chpasswd(request):
         else:
             oldMsg = ''
         t_var ={
+             'pwd':pwd,
+             'repwd':repwd,
              'code':code,
+             'oldMsg':oldMsg,
             }
         return render(request,"changePwd.html",t_var)
     else:
