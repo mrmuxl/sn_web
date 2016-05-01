@@ -47,7 +47,7 @@ def msg_board(request):
         ul = []
         for u in user_list:
             if u['avatar']:
-                ul.append([u"id",u['uuid']])
+                ul.append([u"uuid",u['uuid']])
                 for l in u['avatar'].split(','):
                     ul.append(l.split('='))
             user_dict=dict(ul)    
@@ -79,10 +79,10 @@ def add_msg(request):
             else:
                 reply_id = 0
             if request.user.is_authenticated() and not request.user.is_anonymous():
-                user_id = request.user.id
+                uuid = request.user.uuid
                 user_nick = request.user.nick
                 try:
-                    reply_create = KxMsgBoard.objects.create(ip=ip,msg=msg,create_time=create_time,reply_id=reply_id,user_id=user_id,user_nick=user_nick)
+                    reply_create = KxMsgBoard.objects.create(ip=ip,msg=msg,create_time=create_time,reply_id=reply_id,user_id=uuid,user_nick=user_nick)
                 except:
                     raise Http404
                 return HttpResponseRedirect(reverse("msg_index"))    
