@@ -235,7 +235,46 @@ def logout(request):
     return HttpResponseRedirect(reverse('index'))
 
 def chpasswd(request):
-    pass
+    if request.method =="POST":
+        oldPwd = request.POST.get("oldPwd","")
+        pwd = request.POST.get("password","")
+        repwd = request.POST.get("repassword","")
+        status =1
+        code = 0
+        oldMsg = 0
+        if not oldPwd:
+            status = 0
+            oldMsg = 1
+        if not pwd:
+            status = 0
+            pwd = 0
+        elif repwd != pwd:
+            status = 0
+            repwd = 0
+        if status:
+            try:
+                user_obj = KxUser.objects.get(id=request.user.id)
+                if md5(oldPwd).hexdigest() == user_obj.password:
+                    try:
+                        user_pwd = KxUser.objects.filter(id=user_obj.id).update(password=md5(pwd).hexdigest())
+                        code =1
+                    except Exception as e:
+                        logger.debug("%s",e)
+                else:
+                    oldMsg =2
+            except user_obj.DoesNotExist:
+                logger.debug("%s",e)
+                raise Http404
+        if oldMsg > 0:
+            oldMsg = oldMsg
+        else:
+            oldMsg = ''
+        t_var ={
+             'code':code,
+            }
+        return render(request,"changePwd.html",t_var)
+    else:
+        return render(request,"changePwd.html",{})
 
 def findPwd(request):
     pass
