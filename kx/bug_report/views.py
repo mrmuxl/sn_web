@@ -111,9 +111,9 @@ def bug_log(request):
         log = request.POST.get('log','')
         if client and log:
             log_path = path_folder + file_name + '.log'
-            log = mac + "   START*****************\n" + log + "\n" + mac  "   END*****************\n"
+            c = mac + "   START*****************\n" + log + "\n" + mac + "   END*****************\n"
             with open(log_path,mode = 'a+',) as f:
-                f.write(log)
+                f.write(c)
             message['message']=u"bug_log ok!"
             message['create_time']=str(now)
             return HttpResponse(json.dumps(message),content_type="application/json")
