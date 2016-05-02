@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
+from hashlib import md5
 import datetime,logging,json,os
 
 logger = logging.getLogger(__name__)
