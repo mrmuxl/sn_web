@@ -1,13 +1,15 @@
 #_*_coding:utf-8_*_
-import logging,json,sys,datetime,time
+import logging,json,sys,datetime,time,uuid
 from kx.utils import is_valid_email
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from kx.models import (KxUser,KxSoftRecord,KxLanTongji,KxPubRecord)
-from kx.models import (KxSoftUtime)
+from kx.models import (KxSoftUtime,KxEmailInvate)
 from django.utils.html import strip_tags
 from hashlib import md5
+from django.core.mail import send_mail,EmailMultiAlternatives
+from django.contrib.auth import authenticate
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +17,7 @@ logger = logging.getLogger(__name__)
 def record(request):
     now = datetime.datetime.now()
     message = {}
-    info = "Data save success"
+    info = "record success"
     is_uninstall = 0
     try:
         if request.method == 'POST':
@@ -24,8 +26,8 @@ def record(request):
             md5str = request.POST.get('md5str',None)
             logger.info("ver:%s,cid:%s,md5str:%s",ver,cid,md5str,exc_info=True)
             if ver is not None and cid is not None and md5str is not None:
-                ver = ver.rstrip('\n')
-                cid = cid.rstrip('\n')
+                ver = ver.strip()
+                cid = cid.strip()
                 verify=md5(ver+cid+'123456').hexdigest()
                 if verify == md5str:
                     try:
@@ -35,6 +37,7 @@ def record(request):
                             is_new = 1
                         else:
                             is_new = 0
+                        ver = ver[:10]
                         record_obj = KxSoftRecord.objects.create(version = ver,client_identifie=cid,login_time=now,is_uninstall=is_uninstall,is_new=is_new)
                         message['message']=info
                         message['create_time']=str(now)
@@ -46,7 +49,7 @@ def record(request):
                         message['create_time']=str(now)
                         return HttpResponse(json.dumps(message),content_type="application/json")
                 else:
-                    message['message']=u"校验码不匹配"
+                    message['message']=u"md5校验码不匹配"
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
             else:
@@ -71,7 +74,7 @@ def record(request):
 def uninstall(request):
     now = datetime.datetime.now()
     message = {}
-    info = "Data save success"
+    info = "uninstall success"
     try:
         if request.method == 'POST':
             ver = request.POST.get('ver',None)
@@ -79,13 +82,14 @@ def uninstall(request):
             md5str = request.POST.get('md5str',None)
             logger.info("ver:%s,cid:%s,md5str:%s",ver,cid,md5str,exc_info=True)
             if ver is not None and cid is not None and md5str is not None:
-                ver = ver.rstrip('\n')
-                cid = cid.rstrip('\n')
+                ver = ver.strip()
+                cid = cid.strip()
                 verify=md5(ver+cid+'123456').hexdigest()
                 if verify == md5str:
                     try:
                         is_new = 0
                         is_uninstall = 1
+                        ver = ver[:10]
                         record_obj = KxSoftRecord.objects.create(version = ver,client_identifie=cid,login_time=now,is_uninstall=is_uninstall,is_new=is_new)
                         message['message']=info
                         message['create_time']=str(now)
@@ -125,7 +129,7 @@ def lan_record(request):
     now = datetime.datetime.now()
     lan = {} 
     message = {}
-    info = "Data save success"
+    info = "lan_record success"
     try:
         if request.method == 'POST':
             pc = request.POST.get('pc',None)
@@ -272,7 +276,7 @@ def utime(request):
     '''
     now = datetime.datetime.now()
     message = {}
-    info = "Data save success"
+    info = "utime success"
     try:
         if request.method == 'POST':
             cid = request.POST.get('clientIdentifie',None)
@@ -300,7 +304,7 @@ def utime(request):
                             return HttpResponse(json.dumps(message),content_type="application/json")
                     except Exception as e:
                         try:
-                            ut_obj = KxSoftUtime.objects.create(id=None,client_identifie=cid,tongji_day=day,utime=ut,create_time=now)
+                            ut_obj = KxSoftUtime.objects.create(client_identifie=cid,tongji_day=day,utime=ut,create_time=now)
                             message['message']=info
                             message['create_time']=str(now)
                             return HttpResponse(json.dumps(message),content_type="application/json")
@@ -337,7 +341,7 @@ def utime(request):
 @csrf_exempt
 def cadd(request):
     '''
-    登陆时长
+    客户端注册接口
     '''
     now = datetime.datetime.now()
     message = {}
@@ -352,7 +356,7 @@ def cadd(request):
                 nick = strip_tags(nick.strip())
                 password = strip_tags(password.strip())
                 if not email:
-                    message['message']=u'请填写邮箱!'
+                    message['message']=u'请填写邮箱email!'
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 if not is_valid_email(email):
@@ -360,52 +364,49 @@ def cadd(request):
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 if not nick:
-                    message['message']=u'nick请填写昵称!'
+                    message['message']=u'nick is null请填写昵称!'
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 if len(nick)<4 and len(nick)>12:
-                    message['message']=u'昵称应为4-12个字符!'
+                    message['message']=u'nickname昵称应为4-12个字符!'
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 if nick in word:
-                    message['message']=u'昵称包含非法字符!'
+                    message['message']=u'你被gfw墙了,昵称包含非法字符!'
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 if not password:
-                    message['message']=u'请填写密码!'
+                    message['message']=u'password请填写密码!'
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 count = KxUser.objects.filter(email=email).count()
                 if count > 0:
-                    message['message']=u'邮箱已经被使用,请更改一个可用的邮箱!'
+                    message['message']=u'another邮箱已经被使用,请更改一个可用的邮箱!'
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 try:
                     uid=md5(email).hexdigest()
-                    create_user=KxUser.objects.create_user(id=uid,email=email,nick=nick,password=password,status=0)
+                    create_user=KxUser.objects.create_user(uuid=uid,email=email,nick=nick,password=password,status=0)
                     create_user.save()
+                    user = authenticate(username=email,password=password)
                 except Exception as e:
                     logger.debug("%s",e)
-                    time_str = time.time()
+                    message['message']=u'register 注册失败!请再重试一次!'
+                    message['create_time']=str(now)
+                    return HttpResponse(json.dumps(message),content_type="application/json")
+                if user is not None and user.status == 0:
+                    time_str = str(time.time())
                     chk = md5(email + "," + time_str + ",qianmo20120601").hexdigest()
                     ver_data =emial + "," + time_str + "," + chk
-                    url = ''
-                    msg = """尊敬的SimpleNect用户，" . 
-                    $email . "：<br />&nbsp;&nbsp;您好！ 
-                    <br />&nbsp;&nbsp;请点击以下链接激活您的账号：
-                    <a href='" . $url . "'>" . $url . "</a>"""
-                    sendmail
-                    try:
-                        user_obj = KxUser.objects.filter(email=email).update(status=1)
-                    except Exception as e:
-                        logger.debug("%s",e)
-                    
-
-                    
-                    
-
-
-
+                    url =settings.DOMAIN + reverse('activate',args=[urlsafe_b64encode(ver_data),])
+                    msg = "尊敬的SimpleNect用户，" + email + "：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;请点击以下链接激活您的账号：<a href='" + url + "'>" +     url + "</a>"
+                    subject = '请激活帐号完成注册!'
+                    from_email = 'SimpleNect <noreply@simaplenect.cn>'
+                    EmailMultiAlternative(subject,msg,from_email,[email])
+                    mail = EmailMultiAlternatives(subject,msg,from_email,[email])
+                    mail.content_subtype = "html"
+                    mail.send(fail_silently=True)
+                    return HttpResponseRedirect('/User/account_verify/?email='+email)
     except Exception as e:
         logger.debug("cadd:%s",e,exc_info=True)
         info = "cadd:%s" %(e)
@@ -413,3 +414,65 @@ def cadd(request):
         message['create_time']=str(now)
         return HttpResponse(json.dumps(message),content_type="application/json")
 
+def invate(request):
+    '''邀请接口'''
+    message = {}
+    info = "invate success"
+    now = datetime.datetime.now()
+    if request.method =="POST":
+        my_email = request.POST.get('my_email','')
+        invate_email = request.POST.get('invate_email','')
+        my_name = request.POST.get('my_name','')
+        invate_name = request.POST.get('nvate_name','')
+        group_id = request.POST.get('group_id','')
+        group_name = request.POST.get('group_name','')
+        if my_email and invate_email and my_name and invate_name and group_id and group_name:
+            my_email = my_email.strip()
+            invate_name = invate_name.strip()
+            if is_valid_email(my_email) and is_valid_email(invate_email):
+                message['message']="check email"
+                message['status']="ok"
+                message['create_time']=str(now)
+                return HttpResponse(json.dumps(message),content_type="application/json")
+            my_name = my_name.strip()
+            invate_name = invate_name.strip()
+            group_id = group_id.strip()
+            if not (group_id == -1 or group_id > 0):
+                message['message']="group id error"
+                message['status']="errors"
+                message['create_time']=str(now)
+                return HttpResponse(json.dumps(message),content_type="application/json")
+            group_id = group_id.strip()
+            try:
+                user = KxUser.objects.get(email=my_emal)
+                if user.uuid and user.uuid > 0:
+                    try:
+                        invate_code = md5(uuid.uuid4()).hexdigest()
+                        invate_obj = KxEmailInvate.objects.create(user_id=user.uuid,user_name=my_name,invate_email=invate_email,group_id=group_id,group_name=group_name,invate_code=invate_code,qianmo_dot=0,create_time=now,status=0)
+                        status = 1
+                        url = settings.DOMAIN + reverse('invate_code',args=[invate_code])
+                        if group_id == -1:
+                            msg = "尊敬的" + invate_name + "：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;" + my_name + " 邀请您成为TA的好友，赶快注册并使用阡陌软件吧！<a href='" + url + "'>" + url + "</a>" 
+                        else:
+                            msg = "尊敬的" + invate_name + "：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;" + my_name + " 邀请您加入“" + group_name + "”群，赶快注册并使用阡陌软件吧！<a href='" + url + "'>" + url + "</a>" 
+                        subject = '请激活帐号完成注册!'
+                        from_email = 'SimpleNect <noreply@simaplenect.cn>'
+                        mail = EmailMultiAlternatives(subject,msg,from_email,[invate_email])
+                        mail.content_subtype = "html"
+                        mail.send(fail_silently=True)
+                        message['message']="invate ok"
+                        message['status']="ok"
+                        message['create_time']=str(now)
+                        return HttpResponse(json.dumps(message),content_type="application/json")
+                    except Exception as e:
+                        logger.debug("%s",e)
+                        message['message']="invate error"
+                        message['status']="errors"
+                        message['create_time']=str(now)
+                        return HttpResponse(json.dumps(message),content_type="application/json")
+
+            except user.DoesNotExist:
+                message['message']="user dos not exist!"
+                message['status']="errors"
+                message['create_time']=str(now)
+                return HttpResponse(json.dumps(message),content_type="application/json")

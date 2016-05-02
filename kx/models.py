@@ -409,7 +409,8 @@ class KxTongjiRecord(models.Model):
         db_table = 'kx_tongji_record'
 
 class KxUser(AbstractBaseUser,PermissionsMixin):
-    id                  = models.CharField(max_length=32L, primary_key=True)
+    id                  = models.AutoField(primary_key = True)
+    uuid                = models.CharField(db_index=True,max_length=32L)
     email               = models.EmailField(verbose_name=u'邮件地址', max_length=50, unique=True)
     nick                = models.CharField(u'用户昵称',max_length  = 20L)
     status              = models.IntegerField(u'用户状态，0=未激活，1=正常，2=封禁',default  =True)

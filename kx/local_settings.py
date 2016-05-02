@@ -2,17 +2,29 @@
 import os
 import logging
 ROOT_DIR = os.path.dirname(__file__)
-ALLOWED_HOSTS = ['en.qianmo.cc','localhost']
+ALLOWED_HOSTS = ['simplenect.cn','www.simplenect.cn','en.qianmo.cc','localhost']
+
 THEME = '/default/'
 
 DOMAIN = 'http://www.simplenect.cn'
+
+LOGIN_URL = '/User/login/'
+LOGIN_REDIRECT_URL = LOGIN_URL
+
 APPEND_SLASH = True
+
 STATIC_ROOT = os.path.join(ROOT_DIR,'static')
 #STATIC_URL = 'http://static.qianmo.cc' 
 STATIC_URL = '/static' + THEME
 MEDIA_ROOT = os.path.join(ROOT_DIR,'media/upload')
 #MEDIA_URL = 'http://img.simplenect.cn/'
 MEDIA_URL = '/'
+
+EMAIL_HOST = 'mail.simplenect.cn'
+EMAIL_PORT = 25
+EMAIL_HOST_USER ='noreply@simplenect.cn'
+EMAIL_HOST_PASSWORD = 'o86w9OQUTPW1'
+EMAIL_BACKEND ='kx.backends.esmtp.EmailBackend'
 
 STATICFILES_DIRS = (
 	os.path.join(ROOT_DIR,'static' + THEME),
