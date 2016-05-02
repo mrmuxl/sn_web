@@ -34,7 +34,7 @@
 					<div class="board_img">
 						{% if msg.user_id in user_list.keys %}
 							{% for user in user_list.values %}
-								{% if msg.user_id == user.id %}
+								{% if msg.user_id == user.uuid %}
 									<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
 								{% endif %}
 							{% endfor %}		
@@ -78,7 +78,7 @@
 					<div class="board_img">
 						{% if msg.user_id in user_list.keys %}
 							{% for user in user_list.values %}
-								{% if msg.user_id == user.id %}
+								{% if msg.user_id == user.uuid %}
 									<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
 								{% endif %}
 							{% endfor %}		
@@ -126,7 +126,7 @@
 					<div class="board_img">
 						{% if msg.user_id in user_list.keys %}
 							{% for user in user_list.values %}
-								{% if msg.user_id == user.id %}
+								{% if msg.user_id == user.uuid %}
 									<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
 								{% endif %}
 							{% endfor %}		
