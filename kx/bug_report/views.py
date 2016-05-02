@@ -84,7 +84,7 @@ def soft_bug(request):
             verify=md5(ver+client+'123456').hexdigest()
             if verify == md5str:
                 try:
-                    soft_bug_obj = KxSoftBug.objects.create()
+                    soft_bug_obj = KxSoftBug.objects.create(client_identifie=client,version=ver,upload_time=now,os=os,auto_start=auto_start,lan_num=lan_num,u_email=email)
                     message['message']=u"soft_bug interface ok!"
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
