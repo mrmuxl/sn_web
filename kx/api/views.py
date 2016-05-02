@@ -9,6 +9,7 @@ from kx.models import (KxSoftUtime,KxEmailInvate)
 from django.utils.html import strip_tags
 from hashlib import md5
 from django.core.mail import send_mail,EmailMultiAlternatives
+from django.contrib.auth import authenticate
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +17,7 @@ logger = logging.getLogger(__name__)
 def record(request):
     now = datetime.datetime.now()
     message = {}
-    info = "Data save success"
+    info = "record success"
     is_uninstall = 0
     try:
         if request.method == 'POST':
@@ -25,8 +26,8 @@ def record(request):
             md5str = request.POST.get('md5str',None)
             logger.info("ver:%s,cid:%s,md5str:%s",ver,cid,md5str,exc_info=True)
             if ver is not None and cid is not None and md5str is not None:
-                ver = ver.rstrip('\n')
-                cid = cid.rstrip('\n')
+                ver = ver.strip()
+                cid = cid.strip()
                 verify=md5(ver+cid+'123456').hexdigest()
                 if verify == md5str:
                     try:
@@ -47,7 +48,7 @@ def record(request):
                         message['create_time']=str(now)
                         return HttpResponse(json.dumps(message),content_type="application/json")
                 else:
-                    message['message']=u"校验码不匹配"
+                    message['message']=u"md5校验码不匹配"
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
             else:
@@ -126,7 +127,7 @@ def lan_record(request):
     now = datetime.datetime.now()
     lan = {} 
     message = {}
-    info = "Data save success"
+    info = "lan_record success"
     try:
         if request.method == 'POST':
             pc = request.POST.get('pc',None)
