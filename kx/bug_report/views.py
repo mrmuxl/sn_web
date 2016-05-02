@@ -109,7 +109,7 @@ def bug_log(request):
     if request.method == 'POST':
         mac = request.POST.get('clientIdentifie','')
         log = request.POST.get('log','')
-        if client and log:
+        if mac and log:
             log_path = path_folder + file_name + '.log'
             c = mac + "   START*****************\n" + log + "\n" + mac + "   END*****************\n"
             with open(log_path,mode = 'a+',) as f:

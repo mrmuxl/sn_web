@@ -81,7 +81,7 @@ def uninstall(request):
             md5str = request.POST.get('md5str',None)
             logger.info("ver:%s,cid:%s,md5str:%s",ver,cid,md5str,exc_info=True)
             if ver is not None and cid is not None and md5str is not None:
-                ver = ver.strip()
+                ver = ver.strip()[:10]
                 cid = cid.strip()
                 verify=md5(ver+cid+'123456').hexdigest()
                 if verify == md5str:
