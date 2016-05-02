@@ -24,9 +24,6 @@
 	<div class="register_line">&nbsp;</div>
 	<form action="{% url 'chpasswd' %}" method="post" enctype="multipart/form-data" onsubmit="return checkForm();">
 		{% csrf_token %}
-		code:{{ code }}<br/>
-		oldMsg:{{ oldMsg }}<br/>
-		pwd:{{ pwd }}<br/>
 		<table class="register">
 			{% if code %}
 			<tr>
