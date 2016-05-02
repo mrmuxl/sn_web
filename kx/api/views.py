@@ -404,7 +404,6 @@ def cadd(request):
                     mail.content_subtype = "html"
                     mail.send(fail_silently=True)
                     return HttpResponseRedirect('/User/account_verify/?email='+email)
-                    #user_obj = KxUser.objects.filter(email=email).update(status=1)
     except Exception as e:
         logger.debug("cadd:%s",e,exc_info=True)
         info = "cadd:%s" %(e)

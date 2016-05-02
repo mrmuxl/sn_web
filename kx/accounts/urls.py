@@ -19,6 +19,8 @@ urlpatterns = patterns('',
     url(r'^account_verify/?$','kx.accounts.views.account_verify',name='account_verify'),
     url(r'^activate/verify/(.+)$','kx.accounts.views.activate',name='activate'),
     url(r'^verify_success/$','kx.accounts.views.verify_success',name='verify_success'),
+    url(r'^cadd/?$','kx.api.views.cadd',name='cadd'),
+    url(r'^invate/$','kx.api.views.invate',name='invate'),
     
     #url(r'^reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm'),
     #url(r'^reset/done/$', 'django.contrib.auth.views.password_reset_complete'),
