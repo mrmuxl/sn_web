@@ -276,7 +276,7 @@ def utime(request):
     '''
     now = datetime.datetime.now()
     message = {}
-    info = "Data save success"
+    info = "utime success"
     try:
         if request.method == 'POST':
             cid = request.POST.get('clientIdentifie',None)
