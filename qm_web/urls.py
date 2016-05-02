@@ -25,6 +25,7 @@ urlpatterns += patterns('',
     url(r'^SoftRecord/',include("kx.api.urls",)),
     url(r'^User/',include("kx.accounts.urls")),
     url(r'^Blog/',include("kx.blog.urls")),
+    url(r'^BugReport/',include("kx.bug_report.urls")),
 )
 
 if settings.DEBUG:
