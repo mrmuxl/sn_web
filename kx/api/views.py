@@ -26,7 +26,7 @@ def record(request):
             md5str = request.POST.get('md5str',None)
             logger.info("ver:%s,cid:%s,md5str:%s",ver,cid,md5str,exc_info=True)
             if ver is not None and cid is not None and md5str is not None:
-                ver = ver.strip()[:10]
+                ver = ver.strip()
                 cid = cid.strip()
                 verify=md5(ver+cid+'123456').hexdigest()
                 if verify == md5str:
@@ -37,6 +37,7 @@ def record(request):
                             is_new = 1
                         else:
                             is_new = 0
+                        ver = ver[:10]
                         record_obj = KxSoftRecord.objects.create(version = ver,client_identifie=cid,login_time=now,is_uninstall=is_uninstall,is_new=is_new)
                         message['message']=info
                         message['create_time']=str(now)
@@ -81,13 +82,14 @@ def uninstall(request):
             md5str = request.POST.get('md5str',None)
             logger.info("ver:%s,cid:%s,md5str:%s",ver,cid,md5str,exc_info=True)
             if ver is not None and cid is not None and md5str is not None:
-                ver = ver.strip()[:10]
+                ver = ver.strip()
                 cid = cid.strip()
                 verify=md5(ver+cid+'123456').hexdigest()
                 if verify == md5str:
                     try:
                         is_new = 0
                         is_uninstall = 1
+                        ver = ver[:10]
                         record_obj = KxSoftRecord.objects.create(version = ver,client_identifie=cid,login_time=now,is_uninstall=is_uninstall,is_new=is_new)
                         message['message']=info
                         message['create_time']=str(now)
