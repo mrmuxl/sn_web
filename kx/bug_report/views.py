@@ -19,9 +19,10 @@ def upload_bug(request):
     date =datetime.date.strftime(datetime.date.today(),"%Y/%m/%d")
     now = datetime.datetime.now()
     if request.method == 'POST':
-        upload_file = request.FILES.get("mac",None)
-        if upload_file:
-            mac = upload_file.name.encode('utf-8')
+        mac = request.POST.get('mac','')
+        upload_file = request.FILES.get("file",None)
+        if upload_file and mac:
+            #mac = upload_file.name.encode('utf-8')
             mac = mac.strip()
             mac_file =mac.replace(':','_') + ".dmp"
             folder = "/BugReport/"+str(date) + "/"
