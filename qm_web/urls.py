@@ -29,6 +29,7 @@ urlpatterns += patterns('',
     url(r'^User/',include("kx.accounts.urls")),
     url(r'^Blog/',include("kx.blog.urls")),
     url(r'^BugReport/',include("kx.bug_report.urls")),
+    url(r'^Pub/',include("kx.publish.urls")),
 )
 
 if settings.DEBUG:

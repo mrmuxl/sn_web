@@ -7,6 +7,8 @@ from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
+from kx.models import KxSoftBug
+from hashlib import md5
 import datetime,logging,json,os
 
 logger = logging.getLogger(__name__)
@@ -17,9 +19,10 @@ def upload_bug(request):
     date =datetime.date.strftime(datetime.date.today(),"%Y/%m/%d")
     now = datetime.datetime.now()
     if request.method == 'POST':
-        upload_file = request.FILES.get("mac",None)
-        if upload_file:
-            mac = upload_file.name.encode('utf-8')
+        mac = request.POST.get('mac','')
+        upload_file = request.FILES.get("file",None)
+        if upload_file and mac:
+            #mac = upload_file.name.encode('utf-8')
             mac = mac.strip()
             mac_file =mac.replace(':','_') + ".dmp"
             folder = "/BugReport/"+str(date) + "/"
@@ -41,25 +44,26 @@ def upload_bug(request):
                     with open(path_folder + new_file,'wb') as fd:
                         for chunk in upload_file.chunks():
                             fd.write(chunk)
-                    message['message']=u"文件上传成功!"
+                    message['message']=u"dump upload success文件上传成功!"
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 except Exception as e:
-                    logger.debug(u"文件上传失败！%s",e)
+                    logger.debug(u"dump upload fail 1文件上传失败！%s",e)
                     message['message']=u"文件上传失败!"
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
             except Exception as e:
                 logger.debug(u"文件上传失败！%s",e)
-                message['message']=u"文件上传失败!"
+                message['message']=u"dump upload fail 2 文件上传失败!"
                 message['create_time']=str(now)
                 return HttpResponse(json.dumps(message),content_type="application/json")
         else:
-            message['message']=u"文件上传失败!"
+            message['message']=u"dupm upload fail 3文件上传失败!"
             message['create_time']=str(now)
             return HttpResponse(json.dumps(message),content_type="application/json")
     
     
+@csrf_exempt
 def soft_bug(request):
     message = {} 
     now = datetime.datetime.now()
@@ -82,15 +86,42 @@ def soft_bug(request):
             verify=md5(ver+client+'123456').hexdigest()
             if verify == md5str:
                 try:
-                    soft_bug_obj = KxSoftBug.objects.create()
-                    message['message']=u"ok!"
+                    ver = ver[:10]
+                    soft_bug_obj = KxSoftBug.objects.create(client_identifie=client,version=ver,upload_time=now,os=os,auto_start=auto_start,lan_num=lan_num,u_email=email)
+                    message['message']=u"soft_bug interface ok!"
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
                 except Exception as e:
-                    message['message']=u"error!"
+                    logger.debug("%s",e)
+                    message['message']=u"soft_bug interface error!"
                     message['create_time']=str(now)
                     return HttpResponse(json.dumps(message),content_type="application/json")
-                    logger.debug("%s",e)
                 
+@csrf_exempt
 def bug_log(request):
-    pass
+    message = {} 
+    now = datetime.datetime.now()
+    date =datetime.date.strftime(datetime.date.today(),"%Y-%m-%d")
+    path_root = settings.MEDIA_ROOT
+    folder = "/BugLog/"  
+    path_folder = path_root + folder
+    file_name = "soft_bug_" + str(date)
+    if not os.path.isdir(path_folder):
+        os.makedirs(path_folder)
+    if request.method == 'POST':
+        mac = request.POST.get('clientIdentifie','')
+        log = request.POST.get('log','')
+        if mac and log:
+            log_path = path_folder + file_name + '.log'
+            c = mac + "   START*****************\n" + log + "\n" + mac + "   END*****************\n"
+            with open(log_path,mode = 'a+',) as f:
+                f.write(c)
+            message['message']=u"bug_log ok!"
+            message['create_time']=str(now)
+            return HttpResponse(json.dumps(message),content_type="application/json")
+        else:
+            message['message']=u"bug_log fail!"
+            message['create_time']=str(now)
+            return HttpResponse(json.dumps(message),content_type="application/json")
+
+
