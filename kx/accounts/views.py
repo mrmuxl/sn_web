@@ -151,7 +151,7 @@ def avatar(request):
                 file_size = str(image.size)
                 file_uid = str(uid) 
                 path_root = settings.MEDIA_ROOT
-                path_folder = path_root + "/" + folder
+                path_folder = path_root + folder
                 path_upload = path_folder + "/" + file_uid + "." +ext
                 path_save = path_folder + "/" + file_uid + ".jpg"
                 save_50 = path_folder + "/" + 'snap_50X50_' + file_uid + '.jpg'
