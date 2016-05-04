@@ -1,4 +1,5 @@
 #_*_coding:utf-8_*_
+
 import uuid,os,datetime,json,logging,time
 from hashlib import md5
 from base64 import urlsafe_b64encode,urlsafe_b64decode
@@ -14,6 +15,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render_to_response,render
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.conf import settings
 from kx.models import KxUser,KxEmailInvate
 from django.http import Http404
@@ -75,7 +77,7 @@ def save(request):
                             chk = md5(email + "," + time_str + ",qianmo20120601").hexdigest()
                             ver_data = email + "," + time_str + "," + chk
                             url =settings.DOMAIN + reverse('activate',args=[urlsafe_b64encode(ver_data),])
-                            msg = "尊敬的SimpleNect用户，" + email + "：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;请点击以下链接激活您的账号：<a href='" + url + "'>" + url + "</    a>"
+                            msg = "尊敬的SimpleNect用户，" + email + "：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;请点击以下链接激活您的账号：<a href='" + url + "'>" + url + "</a>"
                             subject = '请激活帐号完成注册!'
                             from_email = 'SimpleNect <noreply@simaplenect.cn>'
                             mail = EmailMultiAlternatives(subject,msg,from_email,[email])
@@ -275,7 +277,108 @@ def chpasswd(request):
         return render(request,"changePwd.html",{})
 
 def findPwd(request):
-    pass
+    step = 1
+    if request.method =="POST":
+        email = request.POST.get('email','')
+        if email:
+            code =0
+            email = email.strip()
+            try:
+                user_obj = KxUser.objects.get(email=email)
+                if user_obj.id:
+                    time_str = str(time.time())
+                    chk = md5(email + "," + time_str + ",kx2011").hexdigest()
+                    data = email + "," + time_str + "," + chk
+                    url =settings.DOMAIN + reverse('resetPwd',args=[urlsafe_b64encode(data),])
+                    msg =u"尊敬的用户，" + email + u"<br />&nbsp;&nbsp;您好！<br/>&nbsp;&nbsp;请点击以下链接重置密码：<a href='"+ url + "'>" + url + "</a>"
+                    from_email = 'SimpleNect <noreply@simaplenect.cn>'
+                    subject = "SimpleNect用户密码重置提示函"
+                    try:
+                        mail = EmailMultiAlternatives(subject,msg,from_email,[email])
+                        mail.content_subtype = "html"
+                        mail.send()
+                        code =1
+                        step =2
+                    except Exception as e:
+                        logger.debug("%s",e)
+                        code = 2
+                else:
+                    code = 0
+                t_var = {
+                         'step':step,
+                         'code':code,
+                        }
+                return render(request,"findPwd.html",t_var)
+            except Exception as e:
+                logger.debug("%s",e)
+        else:
+            t_var ={ 'step':step,}
+            return render(request,"findPwd.html",t_var)
+    else:
+        t_var ={ 'step':step,}
+        return render(request,"findPwd.html",t_var)
+
+def resetPwd(request,verify):
+    try:
+        if verify:
+            now = time.time()
+            verify = urlsafe_b64decode(str(verify)).split(',')
+            email = verify[0]
+            time_str = verify[1]
+            md5_str = verify[2]
+            chk = md5(email + "," + time_str + ",kx2011").hexdigest()
+            if md5_str == chk:
+                if float(time_str)+24*3600 > now:
+                    chkcode = md5(email+"2011kx").hexdigest()
+                    t_var = {
+                             'email':email,
+                             'chkcode':chkcode,
+                            }
+                    return render(request,"resetPwd.html",t_var)
+                else:
+                    t_var ={'email':email,}
+                    messages.add_message(request,messages.INFO,_(u'链接已经失效'))
+                    return render(request,"resetPwd.html",t_var)
+            else:
+                t_var ={'email':email,}
+                messages.add_message(request,messages.INFO,_(u'链接错误'))
+                return render(request,"resetPwd.html",t_var)
+        else:
+            t_var ={'email':email,}
+            messages.add_message(request,messages.INFO,_(u'链接非法'))
+            return render(request,"resetPwd.html",t_var)
+    except Exception as e:
+        logger.debug("%s",e)
+        return HttpResponseRedirect(reverse("index"))    
+
+@require_POST
+def rePwd(request):
+    code = 0
+    email = request.POST.get('email','')
+    password = request.POST.get('password','')
+    repassword = request.POST.get('repassword','')
+    chkcode = request.POST.get('chkcode','')
+    if  email and password and repassword and chkcode:
+        email = email.strip()
+        password = password.strip()
+        repassword = repassword.strip()
+        chkcode = chkcode.strip()
+        chk = md5(email+"2011kx").hexdigest()
+        if chk == chkcode and password == repassword:
+            try:
+                user_pwd = KxUser.objects.filter(email=email).update(password=md5(password).hexdigest())
+                code =1 
+            except Exception as e:
+                logger.debug("%s",e)
+                code = 2
+        t_var = {
+                  'email':email,
+                  'code':code,
+                  'chkcode':chkcode,
+                }
+        return render(request,"rePwd.html",t_var)
+
+    
 
 def protocol(request):
     t_var ={
@@ -353,27 +456,31 @@ def account_verify(request):
 
 def activate(request,ver_data):
     try:
-        now = time.time()
-        active_time = datetime.datetime.now()
-        ver_data = urlsafe_b64decode(str(ver_data)).split(',')
-        email = ver_data[0]
-        time_str = ver_data[1]
-        md5_str = ver_data[2]
-        chk = md5(email + "," + time_str + ",qianmo20120601").hexdigest()
-        if md5_str == chk:
-            if float(time_str)+24*3600 > now:
-                try:
-                    user_obj = KxUser.objects.filter(email=email).update(status=1,active_time=active_time)
-                    return HttpResponseRedirect(reverse("verify_success"))
-                except Exception as e:
-                    logger.debug("%s",e)
-                    message = """激活失败！<A HREF="javascript:history.back()">返 回</A>"""
+        if ver_data:
+            now = time.time()
+            active_time = datetime.datetime.now()
+            ver_data = urlsafe_b64decode(str(ver_data)).split(',')
+            email = ver_data[0]
+            time_str = ver_data[1]
+            md5_str = ver_data[2]
+            chk = md5(email + "," + time_str + ",qianmo20120601").hexdigest()
+            if md5_str == chk:
+                if float(time_str)+24*3600 > now:
+                    try:
+                        user_obj = KxUser.objects.filter(email=email).update(status=1,active_time=active_time)
+                        return HttpResponseRedirect(reverse("verify_success"))
+                    except Exception as e:
+                        logger.debug("%s",e)
+                        message = """激活失败！<A HREF="javascript:history.back()">返 回</A>"""
+                        return HttpResponse(message)
+                else:
+                    message = """链接已失效！<A HREF="javascript:history.back()">返 回</A>"""
                     return HttpResponse(message)
             else:
-                message = """链接已失效！<A HREF="javascript:history.back()">返 回</A>"""
+                message = """链接错误！<A HREF="javascript:history.back()">返 回</A>"""
                 return HttpResponse(message)
         else:
-            message = """链接错误！<A HREF="javascript:history.back()">返 回</A>"""
+            message = """链接非法！<A HREF="javascript:history.back()">返 回</A>"""
             return HttpResponse(message)
     except Exception as e:
         logger.debug("%s",e)

@@ -5,4 +5,5 @@
 .hg
 .hgignore
 kx/media/upload/User/
+kx/media/upload/BugReport/
 kx/logs/access.log
