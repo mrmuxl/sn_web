@@ -82,7 +82,7 @@ def tongji(request):
                     uninstall_num =0
                     logger.deug("%s",e)
                 try:
-                    new_user = KxUser.objects.extra(where=['DATE(last_login)=CURDATE()']).count()
+                    new_user = KxUser.objects.extra(where=['DATE(create_time)=CURDATE()']).count()
                 except Exception as e:
                     new_user = 0
                     logger.deug("%s",e)
@@ -299,11 +299,23 @@ def bug_chart(request):
 
 
 def bug_msg(request):
-    pass
+    try:
+        if request.method == 'GET':
+            today = datetime.date.today()
+            day = request.GET.get('day',today)
+            if day is not None and isinstance(day,unicode):
+                try:
+                    day =parse(day.strip().strip('\t').strip('\n').strip('\r').strip('\0').strip('\x0B')).date()
+                except Exception as e:
+                    day = today
+                    logger.debug("%s",e)
+            if not request.user.is_superuser:
+                return HttpResponseRedirect(reverse('index'))
+            else:
+                try:
 
 def bug_log(request):
     pass
-
 
 def reg_tongji(request):
     try:
