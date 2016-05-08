@@ -48,7 +48,7 @@
 				alert("请选择查询日期！");
 				return;
 			}
-			var url="/SoftRecord/tongji/?day="+sDay;
+			var url="{% url 'tongji' %}?day="+sDay;
 			window.location.href=url;
 		});
 {% endif %}

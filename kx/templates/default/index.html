@@ -131,7 +131,7 @@ var swfLeft=$(".main_in").offset().left;
 				{% csrf_token %}
 				<textarea id="msg_content" name="msg"></textarea>
 				<div class="send_area_btn">
-					<input type="hidden" name="send_from" value="1" />
+					<input type="hidden" id="form1" name="send_from" value="1" />
 					<input type="submit" name value="" class="btn_send2"/>
 				</div>
 			</form>	
@@ -302,7 +302,7 @@ var swfLeft=$(".main_in").offset().left;
 			<div class="comment_small_bg" id="scroll_comment"></div>
 			<div class="clear"></div>
 			<div class="send_btn send_btn_scroll">
-				<input type="hidden" name="send_from" value="1" />
+				<input type="hidden" id="form3" name="send_from" value="1" />
 				<input type="submit" name value="" class="btn_send"/>
 				<input type="button" name value="" class="btn_cancel btn_cancel_scroll"/>
 			</div>
@@ -321,7 +321,7 @@ var swfLeft=$(".main_in").offset().left;
 		{% csrf_token %}
 		<textarea name="msg" id="msg_content2"></textarea>
 		<div class="reply_btn">
-		<input type="hidden" name="send_from" value="1" />
+		<input type="hidden" id="form2" name="send_from" value="1" />
 		<input id="reply_msg" type="hidden" name="reply" value="" />
 		<input type="submit" value="" class="send_button"/>
 		<input type="button" name="" onclick="javascript:replyClose();" class="reply_close"/>
@@ -396,6 +396,8 @@ var swfLeft=$(".main_in").offset().left;
 	function checkMsg(){
 		var msg=$("#msg_content").val();
 		msg=$.trim(msg);
+		$.ajax({	type:"post",	url: "{% url 'check_msg' %}",async:false,dataType:"json",
+			success:function(data){document.getElementById('form1').value =data.id;}});
 		if(msg=="")
 			return false;
 		return true;
@@ -403,6 +405,8 @@ var swfLeft=$(".main_in").offset().left;
 	function checkMsg2(){
 		var msg=$("#msg_content2").val();
 		msg=$.trim(msg);
+		$.ajax({	type:"post",	url: "{% url 'check_msg' %}",async:false,dataType:"json",
+			success:function(data){document.getElementById('form2').value =data.id;}});
 		if(msg=="")
 			return false;
 		return true;
@@ -410,6 +414,8 @@ var swfLeft=$(".main_in").offset().left;
 	function checkMsg3(){
 		var msg=$.trim($("#msg_content3").val());
 		if(msg=="")
+		$.ajax({	type:"post",	url: "{% url 'check_msg' %}",async:false,dataType:"json",
+			success:function(data){document.getElementById('form3').value =data.id;}});
 			return false;
 		return true;
 	}
