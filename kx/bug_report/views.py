@@ -113,7 +113,7 @@ def bug_log(request):
         log = request.POST.get('log','')
         if mac and log:
             log_path = path_folder + file_name + '.log'
-            c = mac + "   START*****************\n" + log + "\n" + mac + "   END*****************\n"
+            c = str(mac) + "   START*****************\n" + str(log) + "\n" + str(mac) + "   END*****************\n"
             with open(log_path,mode = 'a+',) as f:
                 f.write(c)
             message['message']=u"bug_log ok!"
