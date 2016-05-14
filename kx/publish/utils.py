@@ -32,7 +32,7 @@ def do_upload(path_folder,path_upload,upload_file):
 
 def update_download_link(install_file):
     print install_file
-    download_html = u'<span> <a href="' + settings.DOMAIN + u'/Install/' + install_file + u'" target="_blank" title="下载">'
+    download_html = u'<span> <a href="' + settings.DOWNLOAD + u'/Install/' + install_file + u'" target="_blank" title="下载">'
     download_html += u'<img src="{{ STATIC_URL }}images/download_btn2.png" class="mypng" /></a></span>'
     download_html=download_html.encode('utf8')
     fname = os.path.join(settings.ROOT_DIR,'templates' + settings.THEME)

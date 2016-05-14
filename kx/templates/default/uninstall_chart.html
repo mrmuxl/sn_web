@@ -1,9 +1,6 @@
 {% extends "base.html" %}
-
 {% block title %}{{title}}{% endblock %}
-
 {% block header %}{% include "header.html" %}{% endblock %}
-
 {% block content %}
 <script type="text/javascript">document.domain = '{{ domain }}';</script>
 <script language="javascript" type="text/javascript" defer="defer" src="{{ STATIC_URL }}js/datepicker/WdatePicker.js"></script>
@@ -12,7 +9,6 @@
 查询日期 <input type="text" name="day" class="Wdate search_day" title="统计日期" value="{{ day|date:"Y-m-d" }}"     onFocus="WdatePicker({minDate:'2011-11-08',startDate:'{$day}',dateFmt:'yyyy-MM-dd'})" readonly style="width:90px;font-size:12px;color:#555555" />
 &nbsp;&nbsp;<input type="button" name="" value="确定" class="day_search" />
 </h3>
-<!-- <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.4.2.min.js"></script> -->
 <script type="text/javascript">
 $(function () {
     var chart;

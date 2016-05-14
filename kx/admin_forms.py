@@ -27,7 +27,7 @@ class UserCreationForm(forms.ModelForm):
     def save(self, commit=True):
         now = timezone.now()
         user = super(UserCreationForm, self).save(commit=False)
-        user.set_password(self.cleaned_data["password1"])
+        user.set_password(self.cleaned_data["password2"])
         user.create_time = now
         user.update_time = now
         if commit:
