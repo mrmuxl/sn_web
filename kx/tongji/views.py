@@ -6,7 +6,7 @@ from django.views.decorators.csrf import requires_csrf_token
 from django.shortcuts import render_to_response,render
 from django.http import HttpResponse, HttpResponseRedirect
 from kx.models import (KxUser,KxMsgBoard,KxSoftRecord,KxTongjiRecord,KxLoginRecord)
-from kx.models import (KxSoftBug,KxPub,KxPubTongji,KxLanDay)
+from kx.models import (KxSoftBug,KxPub,KxPubTongji,KxLanDay,KxActTongji)
 from django.contrib import auth,messages
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
@@ -347,6 +347,7 @@ def bug_log(request):
         else:
             return HttpResponse("""日志类型不正确！<A HREF="javascript:history.back()">返 回</A>""")
         return HttpResponse(log)
+    return HttpResponse("""没有日志类型！<A HREF="javascript:history.back()">返 回</A>""")
 
     
 
@@ -437,13 +438,71 @@ def lan_stack_chart(request):
                 logger.debug("%s",e)
         old_day = day-datetime.timedelta(days=29)
         day_list =[day-datetime.timedelta(days=d) for d in range(29,-1,-1)]
-        #if 'type' in request.GET['type']:
-        #    tp = request.GET['type']
-
+        lan_list = KxLanDay.objects.filter(tongji_day__range=(old_day,day)).values()
+        tp = request.GET.get('type',u'1')
+        num1 = []
+        num2 = []
+        num3 = []
+        num4 = []
+        num5 = []
+        num6 = []
+        num7 = []
+        lan_dict = {}
+        if tp == '1':
+            type_name =u"装机数"
+            for i in range(30):
+                try:
+                    num1.append(lan_list[i]['qm1'])
+                    num2.append(lan_list[i]['qm2'])
+                    num3.append(lan_list[i]['qm3'])
+                    num4.append(lan_list[i]['qm4'])
+                    num5.append(lan_list[i]['qm5'])
+                    num6.append(lan_list[i]['qm6'])
+                    num7.append(lan_list[i]['qm7'])
+                except Exception as e:
+                    num1.append(0)
+                    num2.append(0)
+                    num3.append(0)
+                    num4.append(0)
+                    num5.append(0)
+                    num6.append(0)
+                    num7.append(0)
+                    pass
+        else:
+            tp = '2'
+            type_name =u"PC数"
+            for i in range(30):
+                try:
+                    num1.append(lan_list[i]['pc1'])
+                    num2.append(lan_list[i]['pc2'])
+                    num3.append(lan_list[i]['pc3'])
+                    num4.append(lan_list[i]['pc4'])
+                    num5.append(lan_list[i]['pc5'])
+                    num6.append(lan_list[i]['pc6'])
+                    num7.append(lan_list[i]['pc7'])
+                except Exception as e:
+                    num1.append(0)
+                    num2.append(0)
+                    num3.append(0)
+                    num4.append(0)
+                    num5.append(0)
+                    num6.append(0)
+                    num7.append(0)
+                    pass
+        lan_dict['num1'] = num1
+        lan_dict['num2'] = num2
+        lan_dict['num3'] = num3
+        lan_dict['num4'] = num4
+        lan_dict['num5'] = num5
+        lan_dict['num6'] = num6
+        lan_dict['num7'] = num7
         t_var = {
                 'domain':'simplenect.cn',
                 'day':str(day),
+                'type':tp,
+                'type_name':type_name,
                 'day_list':day_list,
+                'lan_dict':lan_dict,
         }
         return render(request,"lan_stack_chart.html",t_var)
 
@@ -557,3 +616,43 @@ def remain_ratio_chart(request):
                 'remain_ratio':remain_ratio,
                 }
         return render(request,"remain_ratio_chart.html",t_var)
+
+@require_GET
+def online_act_chart(request):
+    today = datetime.date.today()
+    day = request.GET.get('day',today)
+    if day is not None and isinstance(day,unicode):
+        try:
+            day =parse(day.strip().strip('\t').strip('\n').strip('\r').strip('\0').strip('\x0B')).date()
+        except Exception as e:
+            day = today
+            logger.debug("%s",e)
+    if not request.user.is_superuser:
+        return HttpResponseRedirect(reverse('index'))
+    else:
+        old_day = day-datetime.timedelta(days=29)
+        day_list =[day-datetime.timedelta(days=d) for d in range(29,-1,-1)]
+        online_list = KxActTongji.objects.filter(tongji_day__range=(old_day,day)).values('id','tongji_day','on_num','act_num','un_num')
+        on_num = []
+        act_num = []
+        un_num = []
+        for i in range(30):
+            try:
+                on_num.append(online_list[i]['on_num'])
+                act_num.append(online_list[i]['act_num'])
+                un_num.append(online_list[i]['un_num'])
+            except Exception as e:
+                on_num.append(0)
+                act_num.append(0)
+                un_num.append(0)
+                pass
+        t_var = {
+                'domain':'simplenect.cn',
+                'day':str(day),
+                'day_list':day_list,
+                'on_num':on_num,
+                'act_num':act_num,
+                'un_num':un_num,
+                }
+        return render(request,"online_act_chart.html",t_var)
+        
