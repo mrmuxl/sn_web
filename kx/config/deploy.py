@@ -13,9 +13,9 @@ except ImportError:
 
 STATIC_ROOT = os.path.join(ROOT_DIR,'static')
 STATIC_URL = 'http://static.simplenect.cn/' 
-MEDIA_ROOT = '/home/admin/php/www/kx/Public/Upload/'
+MEDIA_ROOT = '/home/webapp_root/upload/'
 MEDIA_URL = 'http://img.simplenect.cn/'
-PUBLISH_UPLOAD = '/home/admin/php/www/kx/Public/LiveUp/'
+PUBLISH_UPLOAD = '/home/webapp_root/publish/'
 SERVER_LOG = '/home/admin/udtserver/'
 
 EMAIL_HOST = 'mail.simplenect.cn'
