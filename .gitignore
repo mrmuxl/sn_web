@@ -10,3 +10,4 @@ kx/media/upload/BugReport/
 kx/media/upload/BugLog/
 kx/media/upload/Install/
 kx/logs/access.log
+bin/gunicorn.pid
