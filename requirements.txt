@@ -1,0 +1,12 @@
+Cython
+Django
+Markdown
+MySQL-python
+PIL
+django-redis
+djangorestframework
+greenlet
+gunicorn
+python-dateutil
+redis
+distribute
