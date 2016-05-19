@@ -82,7 +82,7 @@ def save(request):
                             from_email = 'SimpleNect <noreply@simaplenect.cn>'
                             mail = EmailMultiAlternatives(subject,msg,from_email,[email])
                             mail.content_subtype = "html"
-                            mail.send(fail_silently=True)
+                            mail.send(fail_silently=False)
                             return HttpResponseRedirect('/User/account_verify/?email='+email)
                         else:
                             message = """创建用户出现错误！<A HREF="javascript:history.back()">返 回</A>"""
@@ -291,7 +291,7 @@ def findPwd(request):
                     data = email + "," + time_str + "," + chk
                     url =settings.DOMAIN + reverse('resetPwd',args=[urlsafe_b64encode(data),])
                     msg =u"尊敬的用户，" + email + u"<br />&nbsp;&nbsp;您好！<br/>&nbsp;&nbsp;请点击以下链接重置密码：<a href='"+ url + "'>" + url + "</a>"
-                    from_email = 'SimpleNect <noreply@simaplenect.cn>'
+                    from_email = 'SimpleNect <postmaster@simaplenect.cn>'
                     subject = "SimpleNect用户密码重置提示函"
                     try:
                         mail = EmailMultiAlternatives(subject,msg,from_email,[email])
@@ -403,10 +403,10 @@ def to_active(request):
                         url =settings.DOMAIN + reverse('activate',args=[urlsafe_b64encode(ver_data),])
                         msg = "尊敬的SimpleNect用户，" + email + "：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;请点击以下链接激活您的账号：<a href='" + url + "'>" + url + "</a>"
                         subject = '请激活帐号完成注册!'
-                        from_email = 'SimpleNect <noreply@simaplenect.cn>'
+                        from_email = 'SimpleNect <postmaster@simaplenect.cn>'
                         mail = EmailMultiAlternatives(subject,msg,from_email,[email])
                         mail.content_subtype = "html"
-                        mail.send(fail_silently=True)
+                        mail.send(fail_silently=False)
                         #send_mail(subject,msg,from_email,[email])
                         return HttpResponseRedirect('/User/account_verify/?email='+email)
                 except Exception as e:
