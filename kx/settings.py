@@ -73,6 +73,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
+            'filters': ['require_debug_false'],
             'filename':os.path.join(ROOT_DIR+'/logs/','access.log'),
             'formatter': 'standard'
             },
