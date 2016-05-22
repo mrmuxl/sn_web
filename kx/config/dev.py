@@ -17,6 +17,7 @@ MEDIA_ROOT = os.path.join(ROOT_DIR,'media/upload/')
 MEDIA_URL = '/'
 PUBLISH_UPLOAD = os.path.join(ROOT_DIR,'media/upload/')
 SERVER_LOG =''
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_PORT = 25
@@ -118,6 +119,7 @@ INSTALLED_APPS = (
     #'django.contrib.comments',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
+    'pipeline',
     'gunicorn',
     'kx',
     'sharefile',
