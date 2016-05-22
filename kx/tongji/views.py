@@ -637,16 +637,19 @@ def online_act_chart(request):
         on_num = []
         act_num = []
         un_num = []
-        for i in range(30):
-            try:
-                on_num.append(online_list[i]['on_num'])
-                act_num.append(online_list[i]['act_num'])
-                un_num.append(online_list[i]['un_num'])
-            except Exception as e:
-                on_num.append(0)
-                act_num.append(0)
-                un_num.append(0)
-                pass
+        if online_list:
+            for i in range(30):
+                try:
+                    on_num.append(online_list[i]['on_num'])
+                    act_num.append(online_list[i]['act_num'])
+                    un_num.append(online_list[i]['un_num'])
+                except Exception as e:
+                    on_num.append(0)
+                    act_num.append(0)
+                    un_num.append(0)
+                    pass
+        else:
+            on_num = act_num = un_num = [0 for i in range(30)] 
         t_var = {
                 'domain':'simplenect.cn',
                 'day':str(day),
