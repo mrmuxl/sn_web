@@ -1,12 +1,7 @@
-
 {% extends "admin_index.html" %}
-
 {% block title %}{{title}}{% endblock %}
-
 {% block header %}{% include "header.html" %}{% endblock %}
-
 {% block admin_left %}{% include "admin_left.html" %}{% endblock %}
-
 {% block content %}
 
 <div class="manager_right">
@@ -21,8 +16,8 @@
 2011-11-08 起总的使用用户：{{ all_user_num }}；</h3>
 <h3>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/SoftRecord/bug_chart/" target="_blank">BUG统计&gt;&gt;</a>
-&nbsp;&nbsp;<a href="/SoftRecord/bug_msg/" target="_blank">客户端BUG信息记录&gt;&gt;</a>
-服务端BUG日志：<a href="/SoftRecord/bug_log/?day={{ day|date:"Y-m-d" }}&type=s" target="_blank">SERVER_{{ day|date:"Y-m-d" }}</a>
+&nbsp;&nbsp;<a href="{% url 'bug_msg' %}/?day={{ day|date:"Y-m-d" }}" target="_blank">客户端BUG信息记录&gt;&gt;</a>
+服务端BUG日志：<a href="{% url 'bug_log'%}/?day={{ day|date:"Y-m-d" }}&type=s" target="_blank">SERVER_{{ day|date:"Y-m-d" }}</a>
 &nbsp;&nbsp;&nbsp;&nbsp;客户端BUG日志：<a href="/SoftRecord/bug_log/?day={{ day|date:"Y-m-d" }}&type=c" target="_blank">CLIENT_{{ day|date:"Y-m-d" }}</a>
 </h3>
 <h3>
@@ -35,7 +30,7 @@
   &nbsp;&nbsp;<a href="/SoftRecord/reg_tongji/" target="_blank">发布24小时注册统计&gt;&gt;</a>
 </h3>
 <h3>单日最高登录用户信息：<span style="color:red;">【日期】{{ max_login_day|date:"Y-m-d" }} 【人数】{{ max_login_num }}</span>&nbsp;&nbsp;
-查询日期 <input type="text" name="day" class="Wdate search_day" title="统计日期" value="{{ day|date:"Y-m-d" }}"     onFocus="WdatePicker({minDate:'2011-11-08',startDate:'{$day}',dateFmt:'yyyy-MM-dd'})" readonly style="width:90px;font-size:12px;color:#555555" /> 
+查询日期 <input type="text" name="day" class="Wdate search_day" title="统计日期" value="{{ day|date:"Y-m-d" }}"     onFocus="WdatePicker({minDate:'2011-11-08',startDate:'{{day}}',dateFmt:'yyyy-MM-dd'})" readonly style="width:90px;font-size:12px;color:#555555" /> 
 &nbsp;&nbsp;<input type="button" name="" value="确定" class="day_search" />
 </h3>
 {% endif %}
@@ -57,5 +52,4 @@
 </div>
 
 {% endblock %}
-
 {% block footer %}{% include "footer.html" %}{% endblock %}
