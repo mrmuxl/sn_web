@@ -6,7 +6,7 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 COMPRESS_HTML = True
 COMPRESS_ENABLED =True
-COMPRESS_OUTPUT_DIR='cache'
+#COMPRESS_OUTPUT_DIR='cache'
 
 try:
     from kx.settings import *
