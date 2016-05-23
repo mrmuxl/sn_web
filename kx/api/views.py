@@ -9,6 +9,7 @@ from kx.models import (KxSoftUtime,KxEmailInvate)
 from django.utils.html import strip_tags
 from hashlib import md5
 from django.core.mail import send_mail,EmailMultiAlternatives
+from kx.utils import send_mail_thread
 from django.contrib.auth import authenticate
 
 logger = logging.getLogger(__name__)
@@ -399,13 +400,14 @@ def cadd(request):
                     chk = md5(email + "," + time_str + ",qianmo20120601").hexdigest()
                     ver_data =email + "," + time_str + "," + chk
                     url =settings.DOMAIN + reverse('activate',args=[urlsafe_b64encode(ver_data),])
-                    msg = "尊敬的SimpleNect用户，" + email + "：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;请点击以下链接激活您的账号：<a href='" + url + "'>" +     url + "</a>"
+                    msg = "尊敬的SimpleNect用户，" + email + "：<br />&nbsp;&nbsp;您好！ <br/>&nbsp;&nbsp;请点击以下链接激活您的账号：<br/><a href='" + url + "'>" +     url + "</a>"
                     subject = '请激活帐号完成注册!'
                     from_email = 'SimpleNect <noreply@simaplenect.cn>'
-                    EmailMultiAlternative(subject,msg,from_email,[email])
-                    mail = EmailMultiAlternatives(subject,msg,from_email,[email])
-                    mail.content_subtype = "html"
-                    mail.send(fail_silently=True)
+                    #EmailMultiAlternative(subject,msg,from_email,[email])
+                    #mail = EmailMultiAlternatives(subject,msg,from_email,[email])
+                    #mail.content_subtype = "html"
+                    #mail.send(fail_silently=True)
+                    send_mail_thread(subject,msg,from_email,[email],html=msg)
                     return HttpResponseRedirect('/User/account_verify/?email='+email)
     except Exception as e:
         logger.debug("cadd:%s",e,exc_info=True)
@@ -457,9 +459,10 @@ def invate(request):
                             msg = "尊敬的" + invate_name + "：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;" + my_name + " 邀请您加入“" + group_name + "”群，赶快注册并使用阡陌软件吧！<a href='" + url + "'>" + url + "</a>" 
                         subject = '请激活帐号完成注册!'
                         from_email = 'SimpleNect <noreply@simaplenect.cn>'
-                        mail = EmailMultiAlternatives(subject,msg,from_email,[invate_email])
-                        mail.content_subtype = "html"
-                        mail.send(fail_silently=True)
+                        #mail = EmailMultiAlternatives(subject,msg,from_email,[invate_email])
+                        #mail.content_subtype = "html"
+                        #mail.send(fail_silently=True)
+                        send_mail_thread(subject,msg,from_email,[email],html=msg)
                         message['message']="invate ok"
                         message['status']="ok"
                         message['create_time']=str(now)

@@ -3,7 +3,6 @@
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils import timezone
-
 from kx.models import KxUser
 
 

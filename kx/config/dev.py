@@ -2,16 +2,18 @@
 import os
 import logging
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 COMPRESS_HTML = False
+COMPRESS_ENABLED =True
+COMPRESS_OUTPUT_DIR='cache'
 
 try:
     from kx.settings import *
 except ImportError:
     pass
 
-STATIC_ROOT = os.path.join(ROOT_DIR,'cssjs')
+STATIC_ROOT = os.path.join(ROOT_DIR,'static')
 STATIC_URL = '/static' + THEME
 MEDIA_ROOT = os.path.join(ROOT_DIR,'media/upload/')
 MEDIA_URL = '/'
@@ -71,6 +73,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 # List of callables that know how to import templates from various sources.
@@ -118,12 +121,13 @@ INSTALLED_APPS = (
     #'django.contrib.comments',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
-    'pipeline',
     'gunicorn',
     'kx',
+    'kx.blog',
     'sharefile',
     'online_user',
     'auth',
+    'compressor',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
@@ -143,30 +147,5 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "redis_cache.client.DefaultClient",
         }
-    }
-}
-####
-# django-pipeline
-####
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
-PIPELINE_CSS = {
-    'qianmo': {
-        'source_filenames': (
-          'css/qianmo4.css',
-          'css/page.css',
-          'js/video/video-js.css',
-        ),
-        'output_filename': 'css/qianmo.css',
-    },
-}
-
-PIPELINE_JS = {
-    'qianmo': {
-        'source_filenames': (
-          'js/jquery-1.7.2.min.js',
-          'js/django_ajax.js',
-          'js/video/video.js',
-        ),
-        'output_filename': 'js/qianmo.js',
     }
 }

@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{{title}}{% endblock %}
-
 {% block header %}{% include "header.html" %}{% endblock %}
-
 {% block content %}
 <div class="blog">
 	{% for post in post_show %}
@@ -59,7 +57,7 @@ function sendComment(id){
 		if(msg==""){
 			alert("请填写评论内容！");
 		}
-		jQuery.post("/blog/add_comment/",{"id":id,"msg":msg},function(data){
+		$.post("/blog/add_comment/",{"id":id,"msg":msg},function(data){
 				if(data.status==0){
 					alert("评论失败，请重试");
 				}else{
@@ -79,5 +77,4 @@ $(".btn_cancel").click(function(){
 
 </script>
 {% endblock %}
-
 {% block footer %}{% include "footer.html" %}{% endblock %}

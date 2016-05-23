@@ -5,6 +5,8 @@ import logging
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 COMPRESS_HTML = False
+COMPRESS_ENABLED =True
+COMPRESS_OUTPUT_DIR='cache'
 
 try:
     from kx.settings import *
@@ -23,6 +25,7 @@ EMAIL_PORT = 25
 EMAIL_HOST_USER ='postmaster@simplenect.com'
 EMAIL_HOST_PASSWORD = '2tuexhqw24h2'
 EMAIL_BACKEND ='kx.backends.esmtp.EmailBackend'
+
 
 STATICFILES_DIRS = (
 	os.path.join(ROOT_DIR,'static' + THEME),
@@ -70,6 +73,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 # List of callables that know how to import templates from various sources.
@@ -89,6 +93,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.transaction.TransactionMiddleware',
         # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'compresshtml.middleware.CompressHtmlMiddleware',
 )
 
 DATABASES = {
@@ -118,9 +123,11 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'gunicorn',
     'kx',
+    'kx.blog',
     'sharefile',
     'online_user',
     'auth',
+    'compressor',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
