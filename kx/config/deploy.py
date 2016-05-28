@@ -149,10 +149,13 @@ REST_FRAMEWORK = {
 CACHES = {
     "default": {
         "BACKEND": "redis_cache.cache.RedisCache",
-        "LOCATION": "127.0.0.1:6383:0",
+        "LOCATION": "127.0.0.1:6383:15",
         "OPTIONS": {
             "CLIENT_CLASS": "redis_cache.client.DefaultClient",
         }
     }
 }
 
+REDIS_IP = "127.0.0.1"
+REDIS_PORT = "6383"
+REDIS_DB_ONLINE_USER = "0"
