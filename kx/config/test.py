@@ -24,6 +24,7 @@ COMPRESS_ENABLED = True
 COMPRESS_ROOT=STATIC_ROOT + THEME
 COMPRESS_URL= STATIC_URL
 COMPRESS_OUTPUT_DIR='cache'
+COMPRESS_JS_FILTERS = ['compressor.filters.jsmin.SlimItFilter']
 
 #email
 EMAIL_HOST = 'smtp.mailgun.org'
