@@ -2,7 +2,7 @@
 import logging,json,sys,datetime,time,uuid
 from kx.utils import is_valid_email
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from kx.models import (KxUser,KxSoftRecord,KxLanTongji,KxPubRecord)
 from kx.models import (KxSoftUtime,KxEmailInvate)
@@ -11,6 +11,9 @@ from hashlib import md5
 from django.core.mail import send_mail,EmailMultiAlternatives
 from kx.utils import send_mail_thread
 from django.contrib.auth import authenticate
+from django.conf import settings
+from django.core.urlresolvers import reverse
+from base64 import urlsafe_b64encode,urlsafe_b64decode
 
 logger = logging.getLogger(__name__)
 
@@ -400,8 +403,8 @@ def cadd(request):
                     chk = md5(email + "," + time_str + ",qianmo20120601").hexdigest()
                     ver_data =email + "," + time_str + "," + chk
                     url =settings.DOMAIN + reverse('activate',args=[urlsafe_b64encode(ver_data),])
-                    msg = "尊敬的SimpleNect用户，" + email + "：<br />&nbsp;&nbsp;您好！ <br/>&nbsp;&nbsp;请点击以下链接激活您的账号：<br/><a href='" + url + "'>" +     url + "</a>"
-                    subject = '请激活帐号完成注册!'
+                    msg = u"尊敬的SimpleNect用户，" + email + u"：<br />&nbsp;&nbsp;您好！ <br/>&nbsp;&nbsp;请点击以下链接激活您的账号：<br/><a href='" + url + u"'>" +  url + u"</a>"
+                    subject = u'请激活帐号完成注册!'
                     from_email = 'SimpleNect <noreply@simaplenect.cn>'
                     #EmailMultiAlternative(subject,msg,from_email,[email])
                     #mail = EmailMultiAlternatives(subject,msg,from_email,[email])
@@ -454,9 +457,9 @@ def invate(request):
                         status = 1
                         url = settings.DOMAIN + reverse('invate_code',args=[invate_code])
                         if group_id == -1:
-                            msg = "尊敬的" + invate_name + "：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;" + my_name + " 邀请您成为TA的好友，赶快注册并使用阡陌软件吧！<a href='" + url + "'>" + url + "</a>" 
+                            msg = u"尊敬的" + invate_name + u"：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;" + my_name + u" 邀请您成为TA的好友，赶快注册并使用阡陌软件吧！<a href='" + url + u"'>" + url + u"</a>" 
                         else:
-                            msg = "尊敬的" + invate_name + "：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;" + my_name + " 邀请您加入“" + group_name + "”群，赶快注册并使用阡陌软件吧！<a href='" + url + "'>" + url + "</a>" 
+                            msg = u"尊敬的" + invate_name + u"：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp;" + my_name + u" 邀请您加入“" + group_name + u"”群，赶快注册并使用阡陌软件吧！<a href='" + url + u"'>" + url + u"</a>" 
                         subject = '请激活帐号完成注册!'
                         from_email = 'SimpleNect <noreply@simaplenect.cn>'
                         #mail = EmailMultiAlternatives(subject,msg,from_email,[invate_email])

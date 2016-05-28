@@ -4,9 +4,8 @@ import logging
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+#django-compresshtml
 COMPRESS_HTML = False
-COMPRESS_ENABLED =True
-#COMPRESS_OUTPUT_DIR='cache'
 
 try:
     from kx.settings import *
@@ -20,12 +19,19 @@ MEDIA_URL = '/'
 PUBLISH_UPLOAD = os.path.join(ROOT_DIR,'media/upload/')
 SERVER_LOG =''
 
+#django_compressor
+COMPRESS_ENABLED = True
+COMPRESS_ROOT=STATIC_ROOT + THEME
+COMPRESS_URL= STATIC_URL
+COMPRESS_OUTPUT_DIR='cache'
+COMPRESS_JS_FILTERS = ['compressor.filters.jsmin.SlimItFilter']
+
+#email
 EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_PORT = 25
 EMAIL_HOST_USER ='postmaster@simplenect.com'
 EMAIL_HOST_PASSWORD = '2tuexhqw24h2'
 EMAIL_BACKEND ='kx.backends.esmtp.EmailBackend'
-
 
 STATICFILES_DIRS = (
 	os.path.join(ROOT_DIR,'static' + THEME),
