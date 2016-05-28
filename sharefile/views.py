@@ -39,7 +39,7 @@ def peerPort(request):
        return HttpResponse('')
 
     logger.debug('mac: ' + mac)
-    con = get_redis_connection('default')
+    con = get_redis_connection('onlineUser')
     sPtr = con.lindex(mac, 11)
     if sPtr in [None, '']:
        return HttpResponse('')

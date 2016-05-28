@@ -141,11 +141,18 @@ REST_FRAMEWORK = {
 }
 
 CACHES = {
-    "default": {
-        "BACKEND": "redis_cache.cache.RedisCache",
-        "LOCATION": "192.168.18.200:6383:0",
-        "OPTIONS": {
-            "CLIENT_CLASS": "redis_cache.client.DefaultClient",
-        }
-    }
-}
+   "default": {
+       "BACKEND": "redis_cache.cache.RedisCache",
+       "LOCATION": "192.168.18.200:6383:15",
+       "OPTIONS": {
+           "CLIENT_CLASS": "redis_cache.client.DefaultClient",
+       }
+   }
+   "onlineUser": {                                                
+      "BACKEND": "redis_cache.cache.RedisCache",
+       "LOCATION": "192.168.18.200:6383:0",
+       "OPTIONS": {
+           "CLIENT_CLASS": "redis_cache.client.DefaultClient",
+       }
+   }
+ }
