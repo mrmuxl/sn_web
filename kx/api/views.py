@@ -2,7 +2,7 @@
 import logging,json,sys,datetime,time,uuid
 from kx.utils import is_valid_email
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from kx.models import (KxUser,KxSoftRecord,KxLanTongji,KxPubRecord)
 from kx.models import (KxSoftUtime,KxEmailInvate)
