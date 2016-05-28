@@ -8,11 +8,11 @@ from rest_framework.permissions import IsAuthenticated
 import logging
 from redis_cache import get_redis_connection
 from django.http import HttpResponse
-from django.confi import settings;
+from django.conf import settings;
 import redis
 
-POOL = redis.ConnectionPool(host=settings.REDIS_IP port = REDIS_PORT ,
-        db=REDIS_DB_ONLINE_USER)
+POOL = redis.ConnectionPool(host=settings.REDIS_IP, port = settings.REDIS_PORT,
+        db=settings.REDIS_DB_ONLINE_USER)
 
 
 logger = logging.getLogger(__name__)
