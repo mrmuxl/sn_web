@@ -4,15 +4,13 @@ import logging
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+#django-compresshtml
 COMPRESS_HTML = True
-COMPRESS_ENABLED =True
-#COMPRESS_OUTPUT_DIR='cache'
 
 try:
     from kx.settings import *
 except ImportError:
     pass
-
 
 STATIC_ROOT = os.path.join(ROOT_DIR,'static')
 STATIC_URL = 'http://static.simplenect.cn/' 
@@ -21,6 +19,13 @@ MEDIA_URL = 'http://img.simplenect.cn/'
 PUBLISH_UPLOAD = '/home/webapp_root/publish/'
 SERVER_LOG = '/home/admin/udtserver/'
 
+#django_compressor
+COMPRESS_ENABLED = True
+COMPRESS_ROOT=STATIC_ROOT + THEME
+COMPRESS_URL= STATIC_URL
+COMPRESS_OUTPUT_DIR='cache'
+
+#email
 EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_PORT = 25
 EMAIL_HOST_USER ='postmaster@simplenect.com'

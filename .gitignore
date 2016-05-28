@@ -12,4 +12,5 @@ kx/media/upload/Install/
 kx/logs/access.log
 bin/gunicorn.pid
 kx/templates/default/index_download.html
-kx/static/CACHE/
+kx/static/default/cache/
+
