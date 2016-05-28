@@ -104,6 +104,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         }
+        'gunicorn': {
+            'handlers': ['console','file' ],
+            'level': 'DEBUG',
+            'propagate': False,
+        }
     }
 }
 
