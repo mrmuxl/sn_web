@@ -107,6 +107,7 @@ def login(request):
         if request.method == "POST":
             email = strip_tags(request.POST.get("email",'').lower().strip())
             password = request.POST.get("password").strip()
+            refer = request.POST.get("refer","")
             user = authenticate(username=email,password=password)
             if user and user.is_active:
                 auth.login(request,user)
@@ -120,7 +121,7 @@ def login(request):
                     messages.add_message(request,messages.INFO,_(u'用户名或密码错误'))
                     return render(request,"login.html",data)
                 else:
-                    refer = request.META.get('HTTP_REFERER')
+                    #refer = request.META.get('HTTP_REFERER','')
                     return HttpResponseRedirect(refer)
         elif request.method == "GET":
             return render(request,"login.html",{})
