@@ -114,15 +114,15 @@ def login(request):
                 if not next_url:
                     return HttpResponseRedirect(reverse("index"))    
                 else:
-                    return HttpResponseRedirect(next_url)    
+                    return HttpResponseRedirect(next_url)  
             else:
-                if not next_url:
-                    data={"email":email}
-                    messages.add_message(request,messages.INFO,_(u'用户名或密码错误'))
-                    return render(request,"login.html",data)
+                data={"email":email}
+                messages.add_message(request,messages.INFO,_(u'用户名或密码错误'))
+                if not refer:
+                    return render(request,"login.html", data)
                 else:
-                    #refer = request.META.get('HTTP_REFERER','')
-                    return HttpResponseRedirect(reverse(refer))
+                    return render(request, "client_login.html", data)
+
         elif request.method == "GET":
             return render(request,"login.html",{})
     except Exception as e:

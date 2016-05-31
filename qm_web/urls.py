@@ -10,6 +10,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'shareFile/', include('sharefile.urls')),
+    url(r'client/', include('client.urls')),
     url(r'onlineUser/', include('online_user.urls')),
     url(r'^$','kx.views.index',name='index'),
 
