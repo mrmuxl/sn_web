@@ -110,7 +110,7 @@ def login(request):
             user = authenticate(username=email,password=password)
             if user and user.is_active:
                 auth.login(request,user)
-                if next:
+                if not next:
                     return HttpResponseRedirect(reverse("index"))    
                 else:
                     return HttpResponseRedirect(next_url)    
