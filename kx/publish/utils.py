@@ -9,7 +9,7 @@ def handle_uploaded_file(ver=None,ins=None,patch=None):
     path_root = settings.PUBLISH_UPLOAD
     if ins is not None:
         path_folder=path_root + "/Install/"
-        path_upload = path_folder + "Qianmo_" + ver + ".zip"
+        path_upload = path_folder + "Qianmo_" + ver.upper() + ".zip"
         do_upload(path_folder,path_upload,ins)
     if patch is not None:
         path_folder=path_root + "/Install/" + ver + "/"

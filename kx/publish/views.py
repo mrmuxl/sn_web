@@ -48,7 +48,7 @@ def publish_add(request):
             form = PublishAdd(request.POST,request.FILES,auto_id=False) 
             if form.is_valid():
                 pub_id =form.cleaned_data['id']
-                ver = form.cleaned_data['ver'].upper()
+                ver = form.cleaned_data['ver']
                 desc = form.cleaned_data['desc']
                 try:
                     ins = request.FILES['ins']
