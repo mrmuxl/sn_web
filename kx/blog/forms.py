@@ -9,9 +9,12 @@ class Posts(forms.ModelForm):
         fields = ('title', 'content')
 
 class Mpost(forms.ModelForm):
+    def save():
+        pass
+    class Meta:
         mpost = KxForumMpost
         #fields = ('title', 'content','create_time','update_time')
-
+        
 class Forums(forms.ModelForm):
     class Meta:
         forums = KxForumForum
