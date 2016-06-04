@@ -38,47 +38,5 @@
 	</div>
 
 </div>
-<script>
-
-// $(function(){
-// 	$(".menu_guide").css({"color":"#000000"});
-// });
-// function showSend(id){
-// 	if(id!=null&&id>0){
-// 		$(".blog_send_"+id).show();
-// 	}
-// }
-// function showComment(id){
-// 	if(id!=null&&id>0){
-// 		$(".comment_"+id).load("/blog/c_list?id="+id);
-// 	}
-// }
-
-// function sendComment(id){
-// 	if(id!=null&&id>0){
-// 		var msg=$(".blog_send_"+id+" textarea").val();
-// 		msg=$.trim(msg);
-// 		if(msg==""){
-// 			alert("请填写评论内容！");
-// 		}
-// 		$.post("/blog/add_comment/",{"id":id,"msg":msg},function(data){
-// 				if(data.status==0){
-// 					alert("评论失败，请重试");
-// 				}else{
-// 					$(".comment_"+id+" ul").prepend(data.data);
-// 					$(".blog_send_"+id+" textarea").val("");
-// 					$(".blog_send_"+id).hide();
-					
-// 				}
-// 			},"json");
-// 	}else{
-// 		alert("参数有误！");
-// 	}
-// }
-// $(".btn_cancel").click(function(){
-// 	$(this).parent().parent().hide();
-// });
-
-</script>
 {% endblock %}
 {% block footer %}{% include "footer.html" %}{% endblock %}

@@ -116,7 +116,7 @@ def del_msg(request):
         if msg_id:
             msg_id = int(msg_id)
             try:
-                msg_obj = KxMsgBoard.objects.filter(id=msg_id).delete()
+                msg_obj = KxMsgBoard.objects.filter(id=msg_id).update(is_del=1)
                 message['status']=1
                 message['info']="ok"
                 message['data']=1
