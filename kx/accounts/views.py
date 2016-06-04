@@ -516,13 +516,11 @@ def invite_msg(reqeust,ckey=''):
             if i['send_reason_type'] == 0:
                 subject = u'SimpleNect好友邀请信息！'
                 msg = invite_register(from_nick,invite_content,reg_url)
-                to_email = 'mrmuxl@126.com'
                 try:
                     send_mail_thread(subject,msg,from_email,[to_email],html=msg)
                     sendok_ids.append(i['id'])
                 except Exception as e:
                     logger.debug("%s",e)
-                break
             elif i['send_reason_type'] == 1:
                 subject = u'SimpleNect好友邀请提示信息！'
                 invite_content =u'希望加你为好友，请及时登录SimpleNect客户端，确认邀请信息。'
@@ -532,7 +530,6 @@ def invite_msg(reqeust,ckey=''):
                     sendok_ids.append(i['id'])
                 except Exception as e:
                     logger.debug("%s",e)
-                break
             elif i['send_reason_type'] == 2:
                 subject = u'SimpleNect好友邀请提示信息！'
                 to_email = i['user'] 
@@ -543,7 +540,6 @@ def invite_msg(reqeust,ckey=''):
                     sendok_ids.append(i['id'])
                 except Exception as e:
                     logger.debug("%s",e)
-                break
             else:
                 pass
         if sendok_ids:
