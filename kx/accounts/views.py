@@ -494,7 +494,6 @@ def invite_msg(reqeust,ckey=''):
     key = '518279d14e20e'
     site_url = settings.DOMAIN
     reg_url = settings.DOMAIN + u'/User/register'
-    to_email = 'mrmuxl@126.com'
     sendok_ids = []
     if ckey and key == ckey:
         mail_list = KxMailingAddfriend.objects.filter(is_sendemail__exact=0).values()
@@ -514,6 +513,7 @@ def invite_msg(reqeust,ckey=''):
             if i['send_reason_type'] == 0:
                 subject = u'SimpleNect好友邀请信息！'
                 msg = invite_register(from_nick,invite_content,reg_url)
+                to_email = 'mrmuxl@126.com'
                 try:
                     send_mail_thread(subject,msg,from_email,[to_email],html=msg)
                     sendok_ids.append(i['id'])
