@@ -29,7 +29,7 @@ urlpatterns += patterns('',
     url(r'^activate/verify/(.+)$','kx.accounts.views.activate',name='activate'),
     url(r'^invate/$','kx.api.views.invate',name='invate'),
     url(r'^to_active/?$','kx.accounts.views.to_active',name='to_active'),
-    url(r'^invate_msg/(\w+)/?$','kx.accounts.views.invate_msg',name='invate_msg'),
+    url(r'^invite_msg/(\w+)/?$','kx.accounts.views.invite_msg',name='invite_msg'),
 )
 
 urlpatterns += patterns('',

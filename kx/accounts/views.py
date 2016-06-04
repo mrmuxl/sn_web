@@ -497,12 +497,12 @@ def invite_msg(reqeust,ckey=''):
     sendok_ids = []
     if ckey and key == ckey:
         mail_list = KxMailingAddfriend.objects.filter(is_sendemail__exact=0).values()
-        email = 'mrmuxl@126.com'
         for i in mail_list:
             invite_content = i['invite_content'].strip()
             from_email = i['user'].strip()
             to_email = i['friend'].strip()
             if not to_email:
+                KxMailingAddfriend.objects.filter(id=i['id']).update(is_del=1,is_sendemail=1)
                 continue
             try:
                 user_obj = KxUser.objects.get(email=from_email)
@@ -529,6 +529,7 @@ def invite_msg(reqeust,ckey=''):
                     logger.debug("%s",e)
             elif i['send_reason_type'] == 2:
                 subject = u'SimpleNect好友邀请提示信息！'
+                to_email = i['user'] 
                 invite_content =u'通过了您的好友邀请，请登录SimpleNect客户端，现在你们可以进行通讯了。'
                 msg = invite_register(from_nick,invite_content,reg_url)
                 try:
