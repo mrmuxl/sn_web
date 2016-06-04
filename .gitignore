@@ -13,4 +13,5 @@ kx/logs/access.log
 bin/gunicorn.pid
 kx/templates/default/index_download.html
 kx/static/default/cache/
+*.DS_Store
 
