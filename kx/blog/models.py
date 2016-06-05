@@ -58,17 +58,17 @@ class KxForumPosts(models.Model):
 
 #BLOG_CHOICES = (
 #    (0,_(u'已发布')),
-#    (1,u'置顶'),
-#    (2,u'隐藏'),
-#    (3,u'删除'),
+#    (1,_(u'置顶')),
+#    (2,_(u'隐藏')),
+#    (3,_(u'删除')),
 #    )
 #class BlogPosts(models.Model):
 #    id = models.AutoField(primary_key = True)
-#    author  = models.CharField(verbose_name=_(u'用户昵称'),max_length  = 20L)
+#    author = models.ForeignKey(KxUser, editable=False)
 #    title = models.CharField(max_length = 100L)
 #    content= models.TextField()
-#    status  = models.IntegerField(verbose_name=_(u'文章状态'),default = 0,choices=BLOG_CHOICES,help_text=_(u'0=已发布，1=隐藏，2=删除'))
+#    status  = models.IntegerField(verbose_name=_(u'文章状态'),default = 0,choices=BLOG_CHOICES,help_text=_(u'0=已发布，1=置顶，2=隐藏，3=删除'))
 #    create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'发布日期')
 #    update_time = models.DateTimeField(auto_now_add=True, verbose_name=u'更新日期')
 #    class Meta:
-#        verbose_name_plural = verbose_name = _(u'文章')
+#        verbose_name_plural = verbose_name = _(u'BlogPosts')

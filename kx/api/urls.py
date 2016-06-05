@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     url(r'^pub_record/?$','kx.api.views.pub_record'),
     url(r'^utime/?$','kx.api.views.utime'),
     url(r'^Uninstall/?$','kx.api.views.uninstall'),
+    url(r'^send_diskfree_email/?$','kx.api.views.send_diskfree_email'),
     url(r'^login_tongji/$','kx.tongji.views.login_tongji',name='login_tongji'),
     url(r'^reg_tongji/?$','kx.tongji.views.reg_tongji',name='reg_tongji'),
 )
