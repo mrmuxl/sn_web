@@ -490,38 +490,46 @@ def invate(request):
 @csrf_exempt
 @require_POST
 def send_diskfree_email(request):
+    message = {}
+    now = datetime.datetime.now()
     mail_type = request.POST.get('type','1')
     uuid = request.POST.get('uuid','')
     disk_info = request.POST.get('disk_info','')
-    if uuid and disk_info:
-        try:
-            user_obj = KxUser.objects.get(uuid=uuid)
-            email = user_obj.email
-        except Exception as e:
-            logger("uuid not found:%s",e)
-            message['message']="email address not found! "
-            message['status']="errors"
-            message['create_time']=str(now)
-            return HttpResponse(json.dumps(message),content_type="application/json")
-        url = settings.DOMAIN
-        from_email = 'SimpleNect <noreply@simaplenect.cn>'
-        subject = u'Simplenect仓库空间提醒'
-        msg = u"尊敬的" + email + u"：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp; 您的SimpleNect的仓库空间小于" + disk_info + u"请增加您的仓库空间。<a href='" + url + u"'>" + url + u"</a>"
-        try:
-            send_mail_thread(subject,msg,from_email,[email],html=msg)
-            logger.info("send a email:%s",email)
-            message['message']="email send sucessful!"
-            message['status']="ok!"
-            message['create_time']=str(now)
-            return HttpResponse(json.dumps(message),content_type="application/json")
-        except Exception as e:
-            logger.debug("send_diskfree_email:%s",e)
-            message['message']="send_email error"
+    if mail_type == '1':
+        if uuid and disk_info:
+            try:
+                user_obj = KxUser.objects.get(uuid=uuid)
+                email = user_obj.email
+            except Exception as e:
+                logger.debug("uuid not found:%s",e)
+                message['message']="email address not found! "
+                message['status']="error"
+                message['create_time']=str(now)
+                return HttpResponse(json.dumps(message),content_type="application/json")
+            url = settings.DOMAIN
+            from_email = 'SimpleNect <noreply@simaplenect.cn>'
+            subject = u'Simplenect仓库空间提醒'
+            msg = u"尊敬的" + email + u"：<br />&nbsp;&nbsp;您好！ <br />&nbsp;&nbsp; 您的SimpleNect的仓库空间小于" + disk_info + u"请增加您的仓库空间。<a href='" + url + u"'>" + url + u"</a>"
+            try:
+                send_mail_thread(subject,msg,from_email,[email],html=msg)
+                logger.info("send a email:%s",email)
+                message['message']="email send sucessful!"
+                message['status']="ok!"
+                message['create_time']=str(now)
+                return HttpResponse(json.dumps(message),content_type="application/json")
+            except Exception as e:
+                logger.debug("send_diskfree_email:%s",e)
+                message['message']="send_email error"
+                message['status']="error"
+                message['create_time']=str(now)
+                return HttpResponse(json.dumps(message),content_type="application/json")
+        else:
+            message['message']="uuid or disk_info not found!"
             message['status']="errors"
             message['create_time']=str(now)
             return HttpResponse(json.dumps(message),content_type="application/json")
     else:
-        message['message']="uuid or disk_info not found!"
-        message['status']="errors"
+        message['message']="type error!"
+        message['status']="error"
         message['create_time']=str(now)
         return HttpResponse(json.dumps(message),content_type="application/json")
