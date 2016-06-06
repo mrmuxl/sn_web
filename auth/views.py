@@ -5,7 +5,7 @@ from rest_framework import renderers
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from auth.serializers import AuthTokenSerializer
-from kx.models import KxUser
+from apps.kx.models import KxUser
 from hashlib import md5
 from django.utils.html import strip_tags
 

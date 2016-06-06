@@ -1,0 +1,18 @@
+{
+"status": <eq name="status" value="1">true<else />false</eq>,
+"desc": "{$desc}",
+"data": [ 
+<present name="saList">
+<volist name="saList" id="sa">
+{
+"id": {$sa.id},
+"title": {$sa.title|json_encode},
+"adUrl": "{$sa.ad_url}"
+}
+<lt name="i" value="$num">
+,
+</lt> 
+</volist>
+</present>
+]
+}
