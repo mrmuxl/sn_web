@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block header %}{% include "header.html" %}{% endblock %}
+{% block content %}
+<div class="center_area" >
+<div class="login_top_title">忘记密码？</div>
+<div class="center_register">
+	<div class="register_area">
+		{% if message %}
+		<table class="register">
+		<tr>
+			<td class="register_left reg_name" >忘记密码？</td>
+			<td class="reg_input">&nbsp;</td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="register_left" ></td>
+			<td class="reg_input">链接错误或已经失效，请点击<a href="{% url 'findPwd' %}">这里</a>重新生成</td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		</table>
+		{% else %}
+		<form method="post" action="{% url 'rePwd' %}" onsubmit="return chkPwd();">
+			{% csrf_token %}
+		<table class="register">
+		<tr>
+			<td class="register_left reg_name" >忘记密码？</td>
+			<td class="reg_input">&nbsp;</td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="register_left" >注册邮箱地址：</td>
+			<td class="reg_input">{{ email }}<input type="hidden" value="{{ email }}" name="email" /></td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="register_left" >新密码：</td>
+			<td class="reg_input"><input id="pwd" type="password" name="password" value="" class="input-len" /></td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="register_left" >确认密码：</td>
+			<td class="reg_input"><input id="repwd" type="password" name="repassword" value="" class="input-len" /></td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="register_left" ></td>
+			<td class="">
+			<input type="hidden" name="chkcode" value="{{ chkcode }}" />
+			<input class="resetpwd_btn" type="submit" value="" name=""></td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		</table>
+		</form>
+		{% endif %}
+	</div>
+</div>
+
+</div>
+<script>
+ function chkPwd(){
+	var pwd=$("#pwd").val();
+	var repwd=$("#repwd").val();
+	if(null==pwd||""==$.trim(pwd)){
+		alert("请填写密码！");
+		return false;
+	}
+	if(null==repwd||""==$.trim(repwd)){
+		alert("请填写确认密码！");
+		return false;
+	}
+	if(pwd!=repwd){
+		alert("新密码与确认密码不一致！");
+		return false;
+	}
+	return true;
+}
+</script>
+{% endblock %}
+
+{% block footer %}{% include "footer.html" %}{% endblock %}

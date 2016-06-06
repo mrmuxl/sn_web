@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block header %}{% include "header.html" %}{% endblock %}
+{% block content %}
+<div class="blog">
+	<div class="blog_view">
+		<br/><br/>
+		<div class="blog_title">
+			如何解决网络故障和获得帮助。
+		</div>
+		<div class="blog_time">
+			<br/>
+			{% now "Y-n-d H:i:s" %}
+		</div>
+		<div class="blog_text">
+			<br/>
+			一、首先检查你系统的防火墙设置，看有没有开放：3333、9013、9014、9015、9016和9035端口，如果没有请开放这个几个端口。<br/><br/>
+			二、联系网络管理员，检查路由器有没有开放：3333、9013、9014、9015、9016和9035端口，如果没有，请打开这几个端口。<br/><br/>
+			如果还没有解决您的问题，请加我们的QQ群：205528924
+		</div>
+<!-- 		<div class="blog_ctop">
+			<span><a href="javascript:showSend({{ post.id }});">评论</a> <a href="javascript:showComment({{ post.id }});">({{ post.reply_num }})</a></span>
+		</div> -->
+<!-- 		<div class="blog_comment">
+			<div  class="blog_send blog_send_{{ post.id }}">
+				<textarea name="msg"></textarea>
+				<div class="clear"></div>
+				<div class="blog_cbtn">
+					<input class="btn_csend" type="button" onclick="sendComment({{ post.id }});" value="" name="">
+					<input class="btn_cancel" type="button" value="" name="">
+				</div>
+			</div>
+			<div class="comment_{{ post.id }}">
+			{# 评论加载区 #}
+			</div>
+
+		</div> -->
+	</div>
+
+</div>
+{% endblock %}
+{% block footer %}{% include "footer.html" %}{% endblock %}

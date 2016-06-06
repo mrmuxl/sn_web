@@ -5,13 +5,13 @@
 .hg
 .hgignore
 nohup.out
-kx/media/upload/User/
-kx/media/upload/BugReport/
-kx/media/upload/BugLog/
-kx/media/upload/Install/
-kx/logs/access.log
+media/upload/User/
+media/upload/BugReport/
+media/upload/BugLog/
+media/upload/Install/
+logs/access.log
 bin/gunicorn.pid
-kx/templates/default/index_download.html
-kx/static/default/cache/
+templates/default/index_download.html
+static/default/cache/
 *.DS_Store
 
