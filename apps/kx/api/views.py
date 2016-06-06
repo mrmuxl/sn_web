@@ -4,8 +4,8 @@ from apps.kx.utils import is_valid_email,send_mail_thread
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
-from kx.models import (KxUser,KxSoftRecord,KxLanTongji,KxPubRecord)
-from kx.models import (KxSoftUtime,KxEmailInvate)
+from apps.kx.models import (KxUser,KxSoftRecord,KxLanTongji,KxPubRecord)
+from apps.kx.models import (KxSoftUtime,KxEmailInvate)
 from django.utils.html import strip_tags
 from hashlib import md5
 from django.core.mail import send_mail,EmailMultiAlternatives
