@@ -31,7 +31,7 @@ EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_PORT = 25
 EMAIL_HOST_USER ='postmaster@simplenect.com'
 EMAIL_HOST_PASSWORD = '2tuexhqw24h2'
-EMAIL_BACKEND ='apps.kx.backends.esmtp.EmailBackend'
+EMAIL_BACKEND ='apps.backends.esmtp.EmailBackend'
 
 STATICFILES_DIRS = (
 	os.path.join(ROOT_DIR,'static' + THEME),
