@@ -9,9 +9,9 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'shareFile/', include('sharefile.urls')),
-    #url(r'client/', include('client.urls')),
-    url(r'onlineUser/', include('online_user.urls')),
+    url(r'shareFile/', include('apps.sharefile.urls')),
+    url(r'client/', include('apps.client.urls')),
+    url(r'onlineUser/', include('apps.online_user.urls')),
     url(r'^$','apps.kx.views.index',name='index'),
 
     # url(r'^qm_web/', include('qm_web.foo.urls')),
@@ -21,8 +21,8 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^api-token-auth/','auth.views.obtain_auth_token'), 
-    url(r'^api-register/','auth.views.api_register'), 
+    url(r'^api-token-auth/','apps.auth.views.obtain_auth_token'), 
+    url(r'^api-register/','apps.auth.views.api_register'), 
 )
 urlpatterns += patterns('',
     url(r'^MsgBoard/',include("apps.msg_board.urls")),
