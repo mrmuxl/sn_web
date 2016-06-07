@@ -10,9 +10,9 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'shareFile/', include('sharefile.urls')),
-    url(r'client/', include('client.urls')),
+    #url(r'client/', include('client.urls')),
     url(r'onlineUser/', include('online_user.urls')),
-    url(r'^$','kx.views.index',name='index'),
+    url(r'^$','apps.kx.views.index',name='index'),
 
     # url(r'^qm_web/', include('qm_web.foo.urls')),
 
@@ -25,12 +25,13 @@ urlpatterns = patterns('',
     url(r'^api-register/','auth.views.api_register'), 
 )
 urlpatterns += patterns('',
-    url(r'^MsgBoard/',include("kx.msg_board.urls")),
-    url(r'^SoftRecord/',include("kx.api.urls",)),
-    url(r'^User/',include("kx.accounts.urls")),
-    url(r'^Blog/',include("kx.blog.urls")),
-    url(r'^BugReport/',include("kx.bug_report.urls")),
-    url(r'^Pub/',include("kx.publish.urls")),
+    url(r'^MsgBoard/',include("apps.msg_board.urls")),
+    url(r'^SoftRecord/',include("apps.kx.api.urls",)),
+    url(r'^User/',include("apps.accounts.urls")),
+    url(r'^Blog/',include("apps.blog.urls")),
+    url(r'^BugReport/',include("apps.bug_report.urls")),
+    url(r'^Pub/',include("apps.publish.urls")),
+    url(r'^SoftAd/',include("apps.ad.urls")),
 )
 
 if settings.DEBUG:

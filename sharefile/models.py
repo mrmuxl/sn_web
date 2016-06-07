@@ -1,5 +1,5 @@
 from django.db import models
-from kx.models import KxUser
+from apps.kx.models import KxUser
 from rest_framework import serializers
 
 # Create your models here.
