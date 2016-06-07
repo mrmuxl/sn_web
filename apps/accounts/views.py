@@ -125,6 +125,7 @@ def login(request):
                 if not refer:
                     return render(request,"login.html", data)
                 else:
+                    request.session.set_expiry(0)
                     return render(request, "client_login.html", data)
 
         elif request.method == "GET":
