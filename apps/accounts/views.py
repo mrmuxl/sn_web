@@ -189,8 +189,6 @@ def avatar(request):
                     image.resize(size_50,Image.ANTIALIAS).save(save_50,format="jpeg",quality=95)
                     image.resize(size_60,Image.ANTIALIAS).save(save_60,format="jpeg",quality=95)
                     if os.path.exists(save_60) and os.path.exists(path_save):
-                        print save_60
-                        print path_save
                         shutil.copy2(save_60,path_save)
                     try:
                         avatar_obj = KxUser.objects.filter(email=request.user.email).update(avatar=avatar_info)
