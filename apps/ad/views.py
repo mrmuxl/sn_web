@@ -29,16 +29,14 @@ def ad_api(request):
     message = {}
     ad_dict = {}
     now = datetime.datetime.now()
-    ad_list = KxSoftAd.objects.extra(where=['DATE(exp_day)>=CURDATE()']).order_by('-id').values('id','title','ad_url')
+    ad_list =list(KxSoftAd.objects.extra(where=['DATE(exp_day)>=CURDATE()']).order_by('-id').values('id','title','ad_url'))
     if ad_list:
-        for i in range(len(ad_list)):
-            ad_dict[i]=ad_list[i]
-        message['message']=ad_dict
-        message['status']="ok"
-        message['create_time']=str(now)
-        return HttpResponse(json.dumps(ad_dict),content_type="application/json")
+        message['data']=ad_list
+        message['status']="1"
+        message['desc']= 'ok'
+        return HttpResponse(json.dumps(message),content_type="application/json")
     else:
-        message['message']="no data"
-        message['status']="error"
-        message['create_time']=str(now)
+        message['data']=""
+        message['status']="0"
+        message['desc']= 'error'
         return HttpResponse(json.dumps(message),content_type="application/json")

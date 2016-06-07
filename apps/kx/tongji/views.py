@@ -47,7 +47,7 @@ def tongji(request):
             max_login = KxTongjiRecord.objects.order_by('-all_num').values('tongji_day','all_num')[:1]
             logger.info('max_login:%s',max_login)
         except Exception as e:
-            max_login =0
+            max_login = []
             logger.debug(u'问题在那里?%s',e)
         if tp is not None and isinstance(tp,str):
             try:
@@ -88,6 +88,12 @@ def tongji(request):
             new_user = 0
             logger.deug("%s",e)
 
+        if max_login:
+            max_login_day = max_login[0]['tongji_day']
+            max_login_num = max_login[0]['all_num']
+        else:
+            max_login_day = 0
+            max_login_num = 0
         day_count = new_count + old_count
         temp_var={
                 'title':u'统计',
@@ -100,8 +106,8 @@ def tongji(request):
                 'day_count':day_count,
                 'uninstall_num':uninstall_num,
                 'new_user':new_user,
-                'max_login_day':max_login[0]['tongji_day'],
-                'max_login_num':max_login[0]['all_num'],
+                'max_login_day':max_login_day,
+                'max_login_num':max_login_num,
                 }
         return render(request,"tongji.html",temp_var)
 
