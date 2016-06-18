@@ -8,7 +8,19 @@
 {% compress css %}
 <link rel="stylesheet" href="{{STATIC_URL}}css/qianmo4.css" type="text/css" />
 <link rel="stylesheet" href="{{STATIC_URL}}css/page.css" type="text/css" />
-<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.css" type="text/css" />
+{% if DEBUG %}
+	<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.css" type="text/css" />
+	<link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome.css" type="text/css" />
+	<!--[if IE 7]>
+	<link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome-ie7.css" type="text/css" />
+	<![endif]-->
+{% else %}
+	<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.min.css" type="text/css" />
+	<link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome.min.css" type="text/css" />
+	<!--[if IE 7]>
+	<link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome-ie7.min.css" type="text/css" />
+	<![endif]-->
+{% endif %}
 <link rel="stylesheet" href="{{STATIC_URL}}css/sm.css" type="text/css" />
 <link rel="stylesheet" href="{{STATIC_URL}}js/video/video-js.css" type="text/css" />
 {% endcompress %}
