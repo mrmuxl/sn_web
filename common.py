@@ -17,6 +17,7 @@ MANAGERS = ADMINS
 ALLOWED_HOSTS = ['simplenect.cn','www.simplenect.cn','www.qianmo.cc','qianmo.cc','localhost']
 
 THEME = '/default/'
+#THEME = '/classic/'
 
 DOMAIN = 'http://www.simplenect.cn'
 DOWNLOAD='http://download.qianmo.cc'
