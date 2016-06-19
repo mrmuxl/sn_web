@@ -126,13 +126,13 @@ img{
 .main{
 	width:100%;
 }
-.index_banner{
-	background:url(../images/index_bg.jpg) no-repeat scroll center top;
-}
-.other_bg{
+/*.index_banner{
+	background:url(../images/index/index_bg.jpg) no-repeat scroll center top;
+}*/
+/*.other_bg{
 	background: url(../images/qianmo_bg.jpg) repeat scroll 0 0 transparent;
 }
-
+*/
 .main_in{
 	width:1000px;
 	height:532px;
