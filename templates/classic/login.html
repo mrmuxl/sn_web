@@ -18,7 +18,9 @@
 		<tr>
 			<td class="register_left">电子邮箱：</td>
 			<td class="reg_input">
-				<input id="email" name="email" type="text" value="{{ email }}" class="input-len" />
+				<div class="inputWrap" style="z-index:100;">
+				<input id="email" name="email" type="text" value="{{ email }}" class="input-len"  mailAutoTip="off" autocomplete="off" disableautocomplete />
+				    <div class="mailAutoTip" id="MailAutoTip"></div>
 			</td>
 			<td class="reg_msg_email"></td>
 		</tr>
