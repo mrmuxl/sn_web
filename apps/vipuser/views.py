@@ -30,17 +30,17 @@ def vipuser_api(request):
                 message['vip_friends']='not needed'
                 return HttpResponse(json.dumps(message),content_type="application/json")
             elif vip_friends:
-                message['status']="2"
+                message['status']=2
                 message['vip_friends']=list(vip_friends)
                 return HttpResponse(json.dumps(message),content_type="application/json")
             else:
-                message['status']="0"
+                message['status']=0
                 message['vip_friends']='no friends'
                 return HttpResponse(json.dumps(message),content_type="application/json")
         except Exception as e:
             logger.debug("email not found:%s",e)
             if vip_friends:
-                message['status']="2"
+                message['status']=2
                 message['vip_friends']=list(vip_friends)
                 return HttpResponse(json.dumps(message),content_type="application/json")
             else:
