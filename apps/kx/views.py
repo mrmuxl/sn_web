@@ -65,6 +65,6 @@ def index(request):
                 u_dict[u['uuid']]=user_dict
             ul=[]
         data.update(user_list=u_dict)
-    data.update(ins_file={'ins_file':ins_file.install_file})
+    data.update(ins_file=ins_file.install_file)
     return render(request,"index.html",data) 
 
