@@ -130,7 +130,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'gunicorn',
     'apps.kx',
-    'apps.blog',
+    #'apps.blog',
     'apps.sharefile',
     'apps.online_user',
     'apps.auth',
