@@ -13,5 +13,6 @@ logs/access.log
 bin/gunicorn.pid
 templates/default/index_download.html
 static/default/cache/
+templates/classic/index_download.html
 *.DS_Store
 

@@ -354,9 +354,9 @@ class KxTongjiRecord(models.Model):
         db_table = 'kx_tongji_record'
 
 STATUS_CHOICES = (
-    ('0', u'未激活'),
-    ('1', u'正常'),
-    ('2', u'封禁'),
+    (0, u'未激活'),
+    (1, u'正常'),
+    (2, u'封禁'),
 )
 class KxUser(AbstractBaseUser,PermissionsMixin):
     id                  = models.AutoField(primary_key = True)

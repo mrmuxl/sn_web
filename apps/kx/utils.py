@@ -2,7 +2,9 @@
 from django.core.validators import email_re
 from django.core.mail import send_mail as core_send_mail
 from django.core.mail import EmailMultiAlternatives
-import threading
+import threading,logging
+
+logger = logging.getLogger(__name__)
 
 def get_client_ip(request):
     pass
@@ -29,7 +31,10 @@ class EmailThread(threading.Thread):
         #msg.content_subtype = "html"
         if self.html:
             msg.attach_alternative(self.html, "text/html")
-        msg.send(self.fail_silently)
+        try:
+            msg.send(self.fail_silently)
+        except Exception as e:
+            logger.debug("Send email error:%s,e")
 
 def send_mail_thread(subject, body, from_email, recipient_list, fail_silently=False, html=None, *args, **kwargs):
     EmailThread(subject, body, from_email, recipient_list, fail_silently, html).start()

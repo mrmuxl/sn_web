@@ -291,7 +291,18 @@ def chpasswd(request):
             }
         return render(request,"changePwd.html",t_var)
     else:
-        return render(request,"changePwd.html",{})
+        try:
+            obj_avatar = KxUser.objects.filter(email=request.user.email).values('avatar')
+            l = []
+            if obj_avatar:
+                for i in obj_avatar[0]['avatar'].split(','):
+                    l.append(i.split('='))
+                avatar = dict(l)
+                logger.info('%s',avatar)
+        except Exception as e:
+            avatar = {}
+            logger.debug(u'加载用户头像失败！',e,exc_info=True)
+        return render(request,"changePwd.html",avatar)
 
 def findPwd(request):
     step = 1

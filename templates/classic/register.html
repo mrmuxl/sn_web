@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block header %}{% include "header.html" %}{% endblock %}
+{% block content %}
+<div class="main">
+<div class="center_area" >
+<div class="login_top_title">欢迎注册阡陌</div>
+<div class="center_register">
+
+<div class="register_area">
+<form action="{% url 'save' %}" method="post" enctype="multipart/form-data" onsubmit="return checkForm();">
+	{% csrf_token %}
+	<table class="register">
+		<tr>
+			<td class="register_left reg_name" >注册阡陌账号</td>
+			<td class="reg_input">&nbsp;</td>
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="register_left">电子邮箱：</td>
+			<td class="reg_input">
+				<div class="inputWrap" style="z-index:100;">
+				<input id="email" name="email" type="text" value="{{email}}" class="input-len" mailAutoTip="off" autocomplete="off" disableautocomplete />
+				<div class="mailAutoTip" id="MailAutoTip"></div></div>
+			</td>
+				
+			<td class="reg_msg_email">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="register_left">昵称：</td>
+			<td class="reg_input"><input id="nick" name="nick" type="text" value="" class="input-len" /></td>
+			<td class="reg_msg_nick" style="font-size:12px;">4-12个字符</td>
+		</tr>
+		<tr>
+			<td class="register_left">创建密码：</td>
+			<td class="reg_input"><input id="pwd" name="password" type="password" value="" class="input-len" /></td>
+			<td class="reg_msg_pwd" style="font-size:12px;">6-20个字符（区分大小写）</td>
+		</tr>
+		<tr>
+			<td class="register_left">确认密码：</td>
+			<td class="reg_input"><input id="repwd" name="repassword" type="password" value="" class="input-len" /></td>
+			<td class="reg_msg_repwd">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="register_left"></td>
+			<td class="reg_input user_pro"><input id="pro" name="pro" type="checkbox" value="1" class="" /><a  href="{% url 'protocol' %}" target="_blank" >我已阅读并接受《用户协议》</a></td>
+			<td class="">&nbsp;</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+			{% if invate_code %}
+			<input type="hidden" name="invate_code" value="{{ invate_code }}" />
+			{% endif %}
+			<input name="" type="submit" value="" class="register_btn" style="width=99px"/>
+			<a href="{% url 'findPwd' %}" style=" color: #007EFF;">忘记密码？</a>
+			</td>
+			<td></td>
+		</tr>
+	</table>
+</form>
+</div>
+</div>
+</div>
+</div>
+<script>
+   $(".input-len").blur(function(){
+	   var cur=$(this);
+		var name=$.trim(cur.attr("name"));
+		var val=$.trim(cur.val());
+
+		if(name=="email"){
+			if(val==""){
+				alert("请填写电子邮箱");
+				//$(".reg_msg_email").html("<span style='color:red;'>请填写电子邮箱</span>");
+			}else{
+			jQuery.post("{% url 'check' %}",{"email":val},function(data){
+					if(data.status==0){
+						alert("此邮箱地址已被注册!");
+						//$(".reg_msg_email").html("<span style='color:red;'>此邮箱地址已被注册</span>");
+					}else{
+						//$(".reg_msg_email").html("请填写您真实的邮箱地址，万一忘记密码，可以通过此邮箱找回");
+					}
+				},"json");
+			}
+		}else if(name=="nick"){
+			if(val==""){
+				alert("请填写昵称");
+				//$(".reg_msg_nick").html("<span style='color:red;'>请填写昵称</span>");
+			}else{
+				var len=strlen(val);
+				if(len>12||len<4){
+					alert("昵称为4-12个字符");
+				}
+				//$(".reg_msg_nick").html("请填写您在阡陌的昵称");
+			}
+		}else if(name=="password"){
+			//alert(val.length);
+			if(val==""||val.length<6||val.length>20){
+				alert("请填写6-20个字符（区分大小写）");
+				//$(".reg_msg_pwd").html("<span style='color:red;'>请填写6-20个字符（区分大小写）</span>");
+			}else{
+				//$(".reg_msg_pwd").html("6-20个字符（区分大小写）");
+			}
+		}else if(name=="repassword"){
+			var pwd=$("#pwd").val().trim();
+			if(val==""||pwd!=val){
+
+				alert("二次输入密码不一致");
+				//$(".reg_msg_repwd").html("<span style='color:red;'>二次输入密码不一致</span>");
+			}else{
+				//$(".reg_msg_repwd").html("");
+			}
+		}
+		
+	});
+   function strlen(str){ 
+	   var len = 0; for (var i=0; i<str.length; i++) { var c = str.charCodeAt(i); //单字节加1
+       if ((c >= 0x0001 && c <= 0x007e) || (0xff60<=c && c<=0xff9f)) { len++; } else { len+=2; } } return len;
+   }
+	function checkForm(){
+
+		var val=$.trim($("#email").val());
+	
+		if(val==""){
+			alert("请填写电子邮箱");
+			//$(".reg_msg_email").html("<span style='color:red;'>请填写电子邮箱</span>");
+			return false;
+		}else{
+			jQuery.post("{% url 'check' %}",{"email":val},function(data){
+			   if(data.status==0){
+					alert("此邮箱地址已被注册");
+					//$(".reg_msg_email").html("<span style='color:red;'>此邮箱地址已被注册</span>");
+					return false;
+				}
+			},"json");
+		}
+		val=$.trim($("#nick").val());
+		if(val==""){
+			alert("请填写昵称");
+			//$(".reg_msg_nick").html("<span style='color:red;'>请填写昵称</span>");
+			return false;
+		}
+		var len=strlen(val);
+		if(len>12||len<4){
+			alert("昵称为4-12个字符");
+			return false;
+		}
+		val=$.trim($("#pwd").val());
+		var repwd=$.trim($("#repwd").val());
+		if(val==""||val.length<6||val.length>20){
+			alert("请填写6-20个字符（区分大小写）");
+			//$(".reg_msg_pwd").html("<span style='color:red;'>请填写6-20个字符（区分大小写）</span>");
+			return false;
+		}
+			
+	   if(repwd!=val){
+		   alert("二次输入密码不一致");
+		   	//$(".reg_msg_repwd").html("<span style='color:red;'>二次输入密码不一致</span>");
+		   return false;
+	   }
+	   val=$("#pro").is(":checked");
+   	   if(!val){
+		 alert("您只有在接受用户协议后才能注册阡陌账号 ");
+		 return false;
+	   }
+	   return true;
+	}
+</script>
+{% endblock %}
+
+{% block footer %}{% include "footer.html" %}{% endblock %}
