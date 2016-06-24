@@ -20,12 +20,14 @@ def vipuser_api(request):
     if email:
         friends=KxUserFriend.objects.filter(user=email).values('friend')
         vip_friends=VIPUser.objects.filter(is_vip__exact=1,email__in=friends).values('email')
-        logger.info("friends:%s;vip_friends:%s",friends,vip_friends)
+        print friends
+        print vip_friends
+        logger.debug("friends:%s;vip_friends:%s" %(friends,vip_friends))
         try:
             vipuser_obj = VIPUser.objects.get(email=email)
             if vipuser_obj.is_vip:
                 message['status']=1
-                message['vip_friends']=[]
+                message['vip_friends']='not needed'
                 return HttpResponse(json.dumps(message),content_type="application/json")
             elif vip_friends:
                 message['status']="2"
@@ -33,17 +35,17 @@ def vipuser_api(request):
                 return HttpResponse(json.dumps(message),content_type="application/json")
             else:
                 message['status']="0"
-                message['vip_friends']=[]
+                message['vip_friends']='no friends'
                 return HttpResponse(json.dumps(message),content_type="application/json")
         except Exception as e:
             logger.debug("email not found:%s",e)
-            if vip_friends
+            if vip_friends:
                 message['status']="2"
                 message['vip_friends']=list(vip_friends)
                 return HttpResponse(json.dumps(message),content_type="application/json")
             else:
-                message['status']="0"
-                message['vip_friends']=[]
+                message['status']=0
+                message['vip_friends']='no in tables'
                 return HttpResponse(json.dumps(message),content_type="application/json")
     else:
         message['message']='please post to me a email'
