@@ -245,7 +245,7 @@ width : 100%;
 .comment{
   padding-top:68px;
   width:100%;
-  background-color:#E5E9ED;
+  background-color:#FDFDFD;
 }
 .footer{
   margin-top:0px;
@@ -320,20 +320,20 @@ width : 100%;
 
 .send_area_top{
   height:54px;
-  background:url(../images/comment_tip.png) no-repeat;
+  background:url("../images/comment_tip.jpg") no-repeat;
 }
 .reply_small a{
   display:block;
   width:46px;
   height:23px;
-  background:url(../images/reply_btn_small.png) no-repeat scroll 0 0 transparent;
+  background:url("../images/reply_btn_small.png") no-repeat scroll 0 0 transparent;
   overflow:hidden;
 }
 .reply_small a:hover{
   background-position:0 -23px;
 }
 .btn_send2{
-  background: url("../images/comment_btn2.png") no-repeat scroll 0 0 transparent;
+  background: url("../images/comment_btn2.jpg") no-repeat scroll 0 0 transparent;
   width:65px;
   height:33px;
   border:none;

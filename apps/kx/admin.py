@@ -11,6 +11,7 @@ from apps.kx.forms import (UserChangeForm,UserCreationForm)
 from apps.vipuser.models import VIPUser
 
 class VIPUserInline(admin.StackedInline):
+    fk_name = 'email'
     model = VIPUser
     #fieldsets=(
     #    (None, {
