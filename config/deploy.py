@@ -36,6 +36,7 @@ EMAIL_BACKEND ='apps.backends.esmtp.EmailBackend'
 STATICFILES_DIRS = (
 	os.path.join(ROOT_DIR,'static' + THEME),
 )
+
 AUTH_USER_MODEL = 'kx.KxUser'
 PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
