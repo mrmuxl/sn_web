@@ -49,7 +49,7 @@
 		<div class="span5">
 		</div>
 		<div class="span7">
-			<a id="example"></a>
+			<a id="tips"></a>
 		</div>
 	</div>
 
@@ -110,20 +110,15 @@
 {% block js %}
 <script type="text/javascript">
 
-
-
-    //$("#tips").popover('show');
-
     $(document).ready(function() {
-    $("#example").popover({
+    $("#tips").popover({
             placement: 'bottom',
             html: 'true',
             title : '<span class="text-info"><i class="icon-lightbulb"></i> <strong>提示</strong></span>'+
                     '<button type="button" id="close" class="close" onclick="$(&quot;#example&quot;).popover(&quot;hide&quot;);">&times;</button>',
-            content : '<div style="width:200px;">双击盘符开始共享</div>'
-    });
+            content : '<p style="width:201px;">双击盘符开始共享</p>'});
 
-    $("#example").popover('show');
+    $("#tips").popover('show');
 
     $(".js-star").on("click", function(e){
     	$(".js-star").toggleClass("orange");

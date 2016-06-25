@@ -130,7 +130,7 @@ INSTALLED_APPS = (
     #'django.contrib.comments',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
-    'gunicorn',
+    #'gunicorn',
     'apps.kx',
     #'apps.blog',
     'apps.sharefile',
