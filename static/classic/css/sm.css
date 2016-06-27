@@ -698,7 +698,7 @@ width : 100%;
 }
 #intro .video-wrapper .video-preview .btn-play
 {
-  background: url(/static/classic/images/video-play.png) no-repeat -109px 0px;
+  background: url(../images/video-play.png) no-repeat -109px 0px;
   height: 110px;
   left: 50%;
   margin: -45px 0 0 -45px;
@@ -708,7 +708,7 @@ width : 100%;
 }
 #intro .video-wrapper .video-preview:hover .btn-play
 {
-  background: url(/static/classic/images/video-play.png) no-repeat 0px 0px;
+  background: url(../images/video-play.png) no-repeat 0px 0px;
 }
 
 /** video end */
