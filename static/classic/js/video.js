@@ -9002,7 +9002,7 @@ function(a) {
                 mcw.transitionEnd(i,
                 function() {
                     j = i.find("img").remove(),
-                    i.html('<video id="video" class="video-js vjs-default-skin" width="' + b + '" height="' + d + '" controls poster="/static/classic/images/video-preview-431bdceb1b043aa2f98a22b989b88cc4.png" preload="auto">\t\t\t\t\t<source type="video/mp4" src="http://localhost:8000/static/classic/flash/intro.mp4">\t\t\t\t\t<source type="video/webm" src="http://localhost:8000/static/classic/flash/intro.webm">\t\t\t\t</video>\t\t\t\t<a id="close" href="javascript:;" title="关闭视频">关闭</a>'),
+                    i.html('<video id="video" class="video-js vjs-default-skin" width="' + b + '" height="' + d + '" controls poster="/static/classic/images/video-preview-431bdceb1b043aa2f98a22b989b88cc4.png" preload="auto">\t\t\t\t\t<source type="video/mp4" src="http://www.simplenect.cn/static/classic/flash/intro.mp4">\t\t\t\t\t<source type="video/webm" src="http://www.simplenect.cn/static/classic/flash/intro.webm">\t\t\t\t</video>\t\t\t\t<a id="close" href="javascript:;" title="关闭视频">关闭</a>'),
                     a("#close").click(function() {
                         l()
                     }),
