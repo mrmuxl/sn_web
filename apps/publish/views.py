@@ -77,7 +77,7 @@ def publish_add(request):
                     message ="""patch上传失败！<A HREF="javascript:history.back()">返 回</A>"""
                     return HttpResponse(message)
                 try:
-                    ins_file = "Qianmo_" + ver.upper() + ".zip"
+                    ins_file = "SimpleNect_" + ver.upper() + ".zip"
                     patch_file = ver + "/Patch.zip"
                     if pub_id:
                         pub_edit = KxPub.objects.filter(id=pub_id).update(pub_desc=desc,install_file=ins_file,patch_file=patch_file,create_time=now,is_tongji=1)

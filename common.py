@@ -20,7 +20,7 @@ ALLOWED_HOSTS = ['simplenect.cn','www.simplenect.cn','www.qianmo.cc','qianmo.cc'
 THEME = '/classic/'
 
 DOMAIN = 'http://www.simplenect.cn'
-DOWNLOAD='http://download.qianmo.cc'
+DOWNLOAD='http://download.simplenect.cn'
 
 LOGIN_URL = '/User/login/'
 LOGOUT_URL='/User/logout/'
