@@ -7924,7 +7924,7 @@ function(a) {
             b = a(b);
             if (c !== !1) {
                 var d = a("<img />", {
-                    src: "/static/classic/images/blank-3dbe121a376a181f0fe840fb1daeeb51.gif"
+                    src: "http://static.simplenect.cn/classic/images/blank-3dbe121a376a181f0fe840fb1daeeb51.gif"
                 }).css({
                     display: b.css("display"),
                     width: b.outerWidth(),
@@ -7936,7 +7936,7 @@ function(a) {
                     "float": b.css("float"),
                     position: b.css("position"),
                     verticalAlign: "middle",
-                    background: "url(/static/classic/images/tiny-loading-e8bd9af828c29751e76f3d73d4f9e005.gif) no-repeat 50% 50%"
+                    background: "url(http://static.simplenect.cn/classic/images/tiny-loading-e8bd9af828c29751e76f3d73d4f9e005.gif) no-repeat 50% 50%"
                 }).addClass("tiny-loading").insertAfter(b),
                 e = b.css("top"),
                 f = b.css("left"),
@@ -8473,7 +8473,7 @@ function(a) {
 function(a) {
     a(function() {
         //mcw.
-        //preloadImages(["/static/classic/images/blank-3dbe121a376a181f0fe840fb1daeeb51.gif", "/static/classic/images/loading-665030080668b5e043705395c74dc61a.gif", "/static/classic/images/icon-enter-key-85ea1f3d6deb90d9a48d4cdc5e34298a.png", "/static/classic/images/back-to-top-aa485503b416e67b699c82ee4f7638d0.png", "/static/classic/images/tiny-loading-e8bd9af828c29751e76f3d73d4f9e005.gif", "/static/classic/images/todo-actions-icon-03198277d00fa322f26853a9fcac697a.png", "/static/classic/images/todo-actions-icon-today-a8bd827d9d61e3a2d8d06303e631d79c.png", "/static/classic/images/popover-arrow-eb2c165f449ad2547233a5fdffc20730.png", "/static/classic/images/popover-arrow-gray-57a0cf7ea84aa3cff6ef5954f2d5145c.png"]),
+        //preloadImages(["http://static.simplenect.cn/classic/images/blank-3dbe121a376a181f0fe840fb1daeeb51.gif", "http://static.simplenect.cn/classic/images/loading-665030080668b5e043705395c74dc61a.gif", "http://static.simplenect.cn/classic/images/icon-enter-key-85ea1f3d6deb90d9a48d4cdc5e34298a.png", "http://static.simplenect.cn/classic/images/back-to-top-aa485503b416e67b699c82ee4f7638d0.png", "http://static.simplenect.cn/classic/images/tiny-loading-e8bd9af828c29751e76f3d73d4f9e005.gif", "http://static.simplenect.cn/classic/images/todo-actions-icon-03198277d00fa322f26853a9fcac697a.png", "http://static.simplenect.cn/classic/images/todo-actions-icon-today-a8bd827d9d61e3a2d8d06303e631d79c.png", "http://static.simplenect.cn/classic/images/popover-arrow-eb2c165f449ad2547233a5fdffc20730.png", "http://static.simplenect.cn/classic/images/popover-arrow-gray-57a0cf7ea84aa3cff6ef5954f2d5145c.png"]),
         a.browser.msie && a.browser.version.indexOf(10) === 0 && a("body").addClass("ie10"),
         a(document).on("click", "#link-feedback", mcw.feedbackClick).on("click", "#dialog-feedback .twr-show-feedback",
         function(b) {
@@ -8816,7 +8816,7 @@ function(a) {
             show: function(b) {
                 if (!mcw.d18n.support()) return;
                 var c = null;
-                a.browser.safari ? c = new Notification(b.title, b.content) : a.browser.chrome && (c = webkitNotifications.createNotification("/static/classic/images/icon-tower-479344ffcf99c7852fa40955302e15ac.png", b.title, b.content)),
+                a.browser.safari ? c = new Notification(b.title, b.content) : a.browser.chrome && (c = webkitNotifications.createNotification("http://static.simplenect.cn/classic/images/icon-tower-479344ffcf99c7852fa40955302e15ac.png", b.title, b.content)),
                 c.onclick = function() {
                     mcw.stack({
                         url: b.url,
@@ -8830,7 +8830,7 @@ function(a) {
                     window.focus(),
                     this.cancel()
                 },
-                mcw.playAudio("notification", "/static/classic/images/notification-cc3cfeed3b317b42296450911fae479a.mp3"),
+                mcw.playAudio("notification", "http://static.simplenect.cn/classic/images/notification-cc3cfeed3b317b42296450911fae479a.mp3"),
                 c.show(),
                 setTimeout(function() {
                     c && c.cancel()
@@ -9002,14 +9002,14 @@ function(a) {
                 mcw.transitionEnd(i,
                 function() {
                     j = i.find("img").remove(),
-                    i.html('<video id="video" class="video-js vjs-default-skin" width="' + b + '" height="' + d + '" controls poster="/static/classic/images/video-preview-431bdceb1b043aa2f98a22b989b88cc4.png" preload="auto">\t\t\t\t\t<source type="video/mp4" src="http://localhost:8000/static/classic/flash/intro.mp4">\t\t\t\t\t<source type="video/webm" src="http://localhost:8000/static/classic/flash/intro.webm">\t\t\t\t</video>\t\t\t\t<a id="close" href="javascript:;" title="关闭视频">关闭</a>'),
+                    i.html('<video id="video" class="video-js vjs-default-skin" width="' + b + '" height="' + d + '" controls poster="http://static.simplenect.cn/classic/images/video-preview-431bdceb1b043aa2f98a22b989b88cc4.png" preload="auto">\t\t\t\t\t<source type="video/mp4" src="http://static.simplenect.cn/classic/flash/intro.mp4">\t\t\t\t\t<source type="video/webm" src="http://static.simplenect.cn/classic/flash/intro.webm">\t\t\t\t</video>\t\t\t\t<a id="close" href="javascript:;" title="关闭视频">关闭</a>'),
                     a("#close").click(function() {
                         l()
                     }),
                     setTimeout(function() {
                         k = _V_("video", {
                             flash: {
-                                swf: "/static/classic/images/video-js-6e518d1400bea4ce1a96767e3d705b88.swf"
+                                swf: "http://static.simplenect.cn/classic/images/video-js-6e518d1400bea4ce1a96767e3d705b88.swf"
                             }
                         },
                         function() {

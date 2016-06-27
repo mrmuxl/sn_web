@@ -156,14 +156,14 @@ body.vjs-full-window
 }
 .vjs-default-skin.vjs-paused .vjs-play-control div
 {
-	background: url(/static/classic/images/video-js-a4e882b3c27b7d6a6db65779704f0d6e.png);
+	background: url(../images/video-js-a4e882b3c27b7d6a6db65779704f0d6e.png);
 	height: 17px;
 	margin: 0.5em auto 0;
 	width: 15px;
 }
 .vjs-default-skin.vjs-playing .vjs-play-control div
 {
-	background: url(/static/classic/images/video-js-a4e882b3c27b7d6a6db65779704f0d6e.png) -25px 0;
+	background: url(../images/video-js-a4e882b3c27b7d6a6db65779704f0d6e.png) -25px 0;
 	height: 17px;
 	margin: 0.5em auto 0;
 	width: 15px;
@@ -175,7 +175,7 @@ body.vjs-full-window
 }
 .vjs-default-skin .vjs-rewind-control div
 {
-	background: url(/static/classic/images/video-js-a4e882b3c27b7d6a6db65779704f0d6e.png);
+	background: url(../images/video-js-a4e882b3c27b7d6a6db65779704f0d6e.png);
 	height: 16px;
 	margin: 0.5em auto 0;
 	width: 19px;
@@ -188,22 +188,22 @@ body.vjs-full-window
 }
 .vjs-default-skin .vjs-mute-control div
 {
-	background: url(/static/classic/images/video-js-a4e882b3c27b7d6a6db65779704f0d6e.png) -75px -25px;
+	background: url(../images/video-js-a4e882b3c27b7d6a6db65779704f0d6e.png) -75px -25px;
 	height: 16px;
 	margin: 0.5em auto 0;
 	width: 22px;
 }
 .vjs-default-skin .vjs-mute-control.vjs-vol-0 div
 {
-	background: url(/static/classic/images/video-js-a4e882b3c27b7d6a6db65779704f0d6e.png) 0 -25px;
+	background: url(../images/video-js-a4e882b3c27b7d6a6db65779704f0d6e.png) 0 -25px;
 }
 .vjs-default-skin .vjs-mute-control.vjs-vol-1 div
 {
-	background: url(/static/classic/images/video-js-a4e882b3c27b7d6a6db65779704f0d6e.png) -25px -25px;
+	background: url(../images/video-js-a4e882b3c27b7d6a6db65779704f0d6e.png) -25px -25px;
 }
 .vjs-default-skin .vjs-mute-control.vjs-vol-2 div
 {
-	background: url(/static/classic/images/video-js-a4e882b3c27b7d6a6db65779704f0d6e.png) -50px -25px;
+	background: url(../images/video-js-a4e882b3c27b7d6a6db65779704f0d6e.png) -50px -25px;
 }
 .vjs-default-skin .vjs-volume-control
 {
@@ -338,7 +338,7 @@ body.vjs-full-window
 }
 .vjs-default-skin div.vjs-seek-handle
 {
-	background: url(/static/classic/images/video-js-a4e882b3c27b7d6a6db65779704f0d6e.png) 0 -50px;
+	background: url(../images/video-js-a4e882b3c27b7d6a6db65779704f0d6e.png) 0 -50px;
 	border-radius: 0.8em;
 	box-shadow: 0 2px 4px 0 #000;
 	height: 16px;
@@ -414,18 +414,18 @@ body.vjs-full-window
 }
 .vjs-default-skin .vjs-fullscreen-control div
 {
-	background: url(/static/classic/images/video-js-a4e882b3c27b7d6a6db65779704f0d6e.png) -50px 0;
+	background: url(../images/video-js-a4e882b3c27b7d6a6db65779704f0d6e.png) -50px 0;
 	height: 16px;
 	margin: 0.5em auto 0;
 	width: 16px;
 }
 .vjs-default-skin.vjs-fullscreen .vjs-fullscreen-control div
 {
-	background: url(/static/classic/images/video-js-a4e882b3c27b7d6a6db65779704f0d6e.png) -75px 0;
+	background: url(../images/video-js-a4e882b3c27b7d6a6db65779704f0d6e.png) -75px 0;
 }
 .vjs-default-skin .vjs-big-play-button
 {
-	background: url(/static/classic/images/btn-play-video-352a9601e3f90cbfe878e155c410a9c4.png) no-repeat 0 0;
+	background: url(../images/btn-play-video-352a9601e3f90cbfe878e155c410a9c4.png) no-repeat 0 0;
 	cursor: pointer;
 	height: 89px;
 	left: 50%;
