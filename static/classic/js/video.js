@@ -4133,8 +4133,8 @@ function(a, b) {
         fileInputSelector: "input:file",
         linkDisableSelector: "a[data-disable-with]",
         CSRFProtection: function(b) {
-            var c = a('meta[name="csrf-token"]').attr("content");
-            c && b.setRequestHeader("X-CSRF-Token", c)
+            var c = a("input[name='csrfmiddlewaretoken']").attr("value");
+            c && b.setRequestHeader("X-CSRFToken", c)
         },
         fire: function(b, c, d) {
             var e = a.Event(c);
