@@ -1,0 +1,19 @@
+{
+  "fonts": [
+    "fontcustom_cf93ed59e9f027e03ca99ae95ef04824.ttf",
+    "fontcustom_cf93ed59e9f027e03ca99ae95ef04824.woff",
+    "fontcustom_cf93ed59e9f027e03ca99ae95ef04824.eot",
+    "fontcustom_cf93ed59e9f027e03ca99ae95ef04824.svg"
+  ],
+  "templates": [
+    "_fontcustom.scss",
+    "fontcustom-preview.html",
+    "fontcustom-bootstrap.css",
+    "fontcustom.css"
+  ],
+  "file_name": "fontcustom_cf93ed59e9f027e03ca99ae95ef04824",
+  "glyphs": [
+    "simplenect",
+    "simplenect2"
+  ]
+}

@@ -8,6 +8,7 @@
 {% compress css %}
 <link rel="stylesheet" href="{{STATIC_URL}}css/qianmo4.css" type="text/css" />
 <link rel="stylesheet" href="{{STATIC_URL}}css/page.css" type="text/css" />
+
 {% if DEBUG %}
 	<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.css" type="text/css" />
 	<link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome.css" type="text/css" />
@@ -21,8 +22,9 @@
 	<link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome-ie7.min.css" type="text/css" />
 	<![endif]-->
 {% endif %}
+<link rel="stylesheet" href="{{STATIC_URL}}fontcustom/fontcustom.css" />
 <link rel="stylesheet" href="{{STATIC_URL}}css/sm.css" type="text/css" />
-<link rel="stylesheet" href="{{STATIC_URL}}js/video/video-js.css" type="text/css" />
+
 {% endcompress %}
 {% compress js %}
 <script src="{{STATIC_URL}}js/video/video.js"></script>

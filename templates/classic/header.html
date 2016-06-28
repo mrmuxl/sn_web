@@ -4,14 +4,22 @@
 .nav a:focus {color: #000000}
 .nav a:visited{color: #000000}
 .nav a:hover{color: #000000}
+
 </style>
 <div class="container-narrow" style="height:100px">
-	<div class="masthead">
-			<ul class="nav nav-pills pull-left">
-				<li>
-				<a title="首页" href="{% url 'index' %}" class="disabled">
-					<span><img src="{{ STATIC_URL }}images/index/logo.png" /></span></a> </li>
-			</ul>
+
+
+
+				<ul class="nav nav-pills pull-left">
+					<li><a title="首页" href="{% url 'index' %}" >
+						<i class="icon-simplenect icon-4x"></i>
+						</a></li>
+					<li class="disable" style="padding-top:35px;"><a title="首页" href="{% url 'index' %}" >
+							<span style="font-size:20px;">SimpleNect</span>
+						</a></li>
+				</ul>
+
+
 			<div>
 				<ul class="nav nav-pills pull-left" style="color: #000000;margin-top: 35px;margin-left: 90px;">
 					<li class="disable"><a href="{% url 'index' %}">首页</a></li>
@@ -43,4 +51,4 @@
 	<span class="s"></span>
 	<span class="b"></span> 返回顶部
 </div>
-<div class="clearfix"></div>
+
