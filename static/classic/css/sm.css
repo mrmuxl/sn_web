@@ -622,57 +622,52 @@ width : 100%;
   opacity: 0;
 }
 
-.video
-{
-  background: #000000;
-  box-shadow: 0 0 10px #000;
-  cursor: pointer;
-  moz-box-shadow: 0 0 10px #000;
-  moz-transition: width 250ms, height 250ms, top 250ms, left 250ms;
+.video {
   position: fixed;
-  transition: width 250ms, height 250ms, top 250ms, left 250ms;
-  webkit-box-shadow: 0 0 10px #000;
-  webkit-transition: width 250ms, height 250ms, top 250ms, left 250ms;
   z-index: 12;
+  background: #000000;
+  cursor: pointer;
+  -webkit-box-shadow: 0 0 10px #000;
+  -moz-box-shadow: 0 0 10px #000;
+  box-shadow: 0 0 10px #000;
+  transition: width 250ms, height 250ms, top 250ms, left 250ms;
+  -moz-transition: width 250ms, height 250ms, top 250ms, left 250ms;
+  -webkit-transition: width 250ms, height 250ms, top 250ms, left 250ms
 }
-.video img
-{
+.video img {
   display: block;
-  height: 100%;
   width: 100%;
+  height: 100%
 }
-
-#close
-{
-  background: #fff;
-  border: 1px solid #333;
-  border-bottom: 0;
-  border-radius: 4px 4px 0 0;
-  box-shadow: 0px -3px 5px rgba(0,0,0,0.5);
-  color: #666;
+#close {
   display: block;
+  position: absolute;
+  top: -21px;
+  right: -1px;
+  z-index: 1;
+  width: 50px;
   height: 20px;
   line-height: 20px;
-  moz-border-radius: 4px 4px 0 0;
-  moz-box-shadow: 0px -3px 5px rgba(0,0,0,0.5);
-  moz-transition: all 0.1s ease-in-out;
-  opacity: .6;
-  position: absolute;
-  right: -1px;
   text-align: center;
-  top: -21px;
-  transition: all 0.1s ease-in-out;
-  webkit-border-radius: 4px 4px 0 0;
-  webkit-box-shadow: 0px -3px 5px rgba(0,0,0,0.5);
-  webkit-transition: all 0.1s ease-in-out;
-  width: 50px;
-  z-index: 1;
+  border: 1px solid #333;
+  border-bottom: 0;
+  background: #fff;
+  color: #666;
+  opacity: .6;
+  -moz-border-radius: 4px 4px 0 0;
+  -webkit-border-radius: 4px 4px 0 0;
+  border-radius: 4px 4px 0 0;
+  -webkit-box-shadow: 0px -3px 5px rgba(0,0,0,0.5);
+  -moz-box-shadow: 0px -3px 5px rgba(0,0,0,0.5);
+  box-shadow: 0px -3px 5px rgba(0,0,0,0.5);
+  -webkit-transition: all 0.1s ease-in-out;
+  -moz-transition: all 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out
 }
-#close:hover
-{
+#close: hover {
   color: #333;
-  opacity: 1;
   text-decoration: none;
+  opacity: 1
 }
 
 
