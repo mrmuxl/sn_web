@@ -20,7 +20,7 @@ def vipuser_api(request):
     if email:
         friends=KxUserFriend.objects.filter(user=email).values('friend')
         vip_friends=VIPUser.objects.filter(is_vip__exact=1,expire__gt=now,email__in=friends).values('email')
-        logger.debug("friends:%s;vip_friends:%s" %(friends,vip_friends))
+        logger.info("friends:%s;vip_friends:%s" %(friends,vip_friends))
         try:
             vipuser_obj = VIPUser.objects.get(email=email)
             if vipuser_obj.is_vip:
