@@ -142,6 +142,7 @@ INSTALLED_APPS = (
     'apps.msg_board',
     'debug_toolbar',
     'apps.vipuser',
+    'apps.publish',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )

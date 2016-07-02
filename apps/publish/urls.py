@@ -7,5 +7,6 @@ urlpatterns = patterns('',
     url(r'edit/?$','apps.publish.views.publish_add',name ='publish_edit'),
     url(r'do_pub/?$','apps.publish.views.do_pub',name ='do_pub'),
     url(r'del_pub/?$','apps.publish.views.del_pub',name ='del_pub'),
+    url(r'publist_select/?$','apps.publish.views.publish_select',name ='publish_select'),
 )
 

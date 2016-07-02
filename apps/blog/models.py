@@ -88,8 +88,8 @@ class Blog(models.Model):
     content= models.TextField(verbose_name=_(u'正文'))
     status  = models.IntegerField(verbose_name=_(u'文章状态'),default = 0,choices=BLOG_CHOICES,help_text=_(u'0=已发布，1=隐藏'))
     is_above =  models.BooleanField(verbose_name=_(u'置顶'),default = 0,choices=TOP_CHOICES,help_text=_(u'0=未置顶，1=已置顶'))
-    created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
-    modified = models.DateTimeField(default=datetime.now, verbose_name='修改时间')
+    created = models.DateTimeField(default=datetime.now(), verbose_name='创建时间')
+    modified = models.DateTimeField(default=datetime.now(), verbose_name='修改时间')
     hits = models.IntegerField(default=0, editable=False, verbose_name='点击次数')
     class Meta:
         db_table = 'blog'
