@@ -25,7 +25,6 @@ class KxPub(models.Model):
         return unicode(self.ver)
         
 class PublishUser(models.Model):
-    #email = models.OneToOneField(KxUser,to_field='email',db_column='email',related_name='publish_user',verbose_name = _(u'邮箱'))
     email = models.EmailField(verbose_name=_(u'邮件地址'), max_length=50, unique=True)
     ver = models.ForeignKey(KxPub,db_column='ver')
     is_publish = models.BooleanField(verbose_name=_(u'是否灰度发布用户'))

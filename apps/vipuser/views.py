@@ -6,7 +6,6 @@ from apps.kx.models import KxUserFriend
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import (require_POST,require_GET)
 from django.http import HttpResponseRedirect,HttpResponse
-from django.shortcuts import render
 
 logger = logging.getLogger(__name__)
 
