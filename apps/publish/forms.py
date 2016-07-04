@@ -1,6 +1,6 @@
 #_*_coding:utf-8_*_
 from django import forms
-from apps.kx.models import KxPub
+from models import KxPub,PublishUser
 
 class PublishAdd(forms.Form):
     ver = forms.CharField(max_length=20,error_messages={'required':u'请填写版本号'})
@@ -22,3 +22,7 @@ class PublishAdd(forms.Form):
         if not desc:
             raise forms.ValidationError(u'请填写功能描述！')
         return desc
+
+class PublishUserForm(forms.ModelForm):
+    class Meta:
+        p_userform = PublishUser

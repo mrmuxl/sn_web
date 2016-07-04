@@ -6,7 +6,8 @@ from django.views.decorators.csrf import requires_csrf_token
 from django.shortcuts import render_to_response,render
 from django.http import HttpResponse, HttpResponseRedirect
 from apps.kx.models import (KxUser,KxMsgBoard,KxSoftRecord,KxTongjiRecord,KxLoginRecord)
-from apps.kx.models import (KxSoftBug,KxPub,KxPubTongji,KxLanDay,KxActTongji)
+from apps.kx.models import (KxSoftBug,KxPubTongji,KxLanDay,KxActTongji)
+from apps.publish.models import KxPub
 from django.contrib import auth,messages
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse

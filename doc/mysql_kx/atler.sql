@@ -37,3 +37,7 @@ ALTER TABLE kx_user ADD INDEX `id_index`(`id`);
 ALTER TABLE django_admin_log ADD CONSTRAINT `user_id_refs_id_fda4e7d9` FOREIGN KEY (`user_id`) REFERENCES `kx_user` (`id`)
 
 
+给kx_pub 表添加字段
+ALTER TABLE kx_pub ADD install_md5 varchar(32) NULL DEFAULT NULL COMMENT "安装文件的MD5" AFTER install_file;
+ALTER TABLE kx_pub ADD patch_md5 varchar(32) NULL DEFAULT NULL COMMENT "patch文件的MD5" AFTER patch_file;
+ALTER TABLE kx_pub ADD is_publish tinyint(1) NOT NULL DEFAULT 0 COMMENT "是否灰度发布用户" AFTER is_tongji;

@@ -3,13 +3,15 @@
 import datetime,logging,json,os
 from django.conf import settings
 from django.http import Http404
-from apps.kx.models import KxPub
+from models import KxPub,PublishUser
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import (require_POST,require_GET)
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect,HttpResponse
 from django.shortcuts import render
 from forms import PublishAdd
 from utils import handle_uploaded_file,update_download_link
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +54,7 @@ def publish_add(request):
                 desc = form.cleaned_data['desc']
                 try:
                     ins = request.FILES['ins']
-                    handle_uploaded_file(ver=ver,ins=ins)
+                    install_md5 = handle_uploaded_file(ver=ver,ins=ins)
                 except KeyError as e:
                     logger.debug("ins参数不存在%s",e)
                 except OSError as e:
@@ -65,7 +67,7 @@ def publish_add(request):
                     return HttpResponse(message)
                 try:
                     patch = request.FILES['patch']
-                    handle_uploaded_file(ver=ver,patch=patch)
+                    patch_md5 = handle_uploaded_file(ver=ver,patch=patch)
                 except KeyError as e:
                     logger.debug("%s",e)
                 except OSError as e:
@@ -79,10 +81,14 @@ def publish_add(request):
                 try:
                     ins_file = "SimpleNect_" + ver.upper() + ".zip"
                     patch_file = ver + "/Patch.zip"
+                    if not install_md5:
+                        install_md5 = '0'
+                    if not patch_md5:
+                        patch_md5 = '0'
                     if pub_id:
-                        pub_edit = KxPub.objects.filter(id=pub_id).update(pub_desc=desc,install_file=ins_file,patch_file=patch_file,create_time=now,is_tongji=1)
+                        pub_edit = KxPub.objects.filter(id=pub_id).update(pub_desc=desc,install_file=ins_file,install_md5=install_md5,patch_file=patch_file,patch_md5=patch_md5,create_time=now,is_tongji=1,is_publish=0)
                     else:
-                        pub_add = KxPub.objects.create(ver=ver,pub_desc=desc,install_file=ins_file,patch_file=patch_file,create_time=now,is_tongji=1)
+                        pub_add = KxPub.objects.create(ver=ver,pub_desc=desc,install_file=ins_file,install_md5=install_md5,patch_file=patch_file,patch_md5=patch_md5,create_time=now,is_tongji=1,is_publish=0)
                 except Exception as e:
                     logger.debug("%s",e)
                 return HttpResponseRedirect(reverse('publish_index'))
@@ -216,3 +222,50 @@ def del_pub(request):
         message['info']="deny!"
         message['data']=0
         return HttpResponse(json.dumps(message),content_type="application/json")
+
+@csrf_exempt
+@require_POST
+def published(request):
+    message = {}
+    now = datetime.datetime.now()
+    email = request.POST.get('email','')
+    logger.info("email:%s",email)
+    if email:
+        try:
+            publish_user = PublishUser.objects.get(email=email)
+            if publish_user.is_publish:
+                publish_info = KxPub.objects.get(pk=publish_user.ver_id)
+                ver_list = publish_info.ver.split('.')
+                ver_dict={"Major":ver_list[0],"Minor": ver_list[1],"Build":ver_list[2],"Revision":ver_list[3],"MajorRevision":0,"MinorRevision": 0}
+                standAloneVersion = []
+                files = []
+                file_ins = {"fileRelativePath":publish_info.install_file,"url":settings.DOWNLOAD+'/'+publish_info.install_file,"MD5":publish_info.install_md5}
+                file_patch = {"fileRelativePath":"Patch.zip","url":settings.DOWNLOAD+'/'+publish_info.patch_file,"MD5":publish_info.patch_md5}
+                files.append(file_ins)
+                files.append(file_patch)
+                stand_dict = {}
+                stand_dict.update(ver=ver_dict)
+                stand_dict.update(files=files)
+                stand_dict.update(pubTime=str(publish_info.pub_time))
+                stand_dict.update(URL=settings.DOWNLOAD)
+                stand_dict.update(installFile="Patch.zip")
+                stand_dict.update(installArgs=["/VERYSILENT",])
+                standAloneVersion.append(stand_dict)
+                message.update(standAloneVersion=standAloneVersion)
+                message.update(netWorkVersion=[])
+                message['is_publish']=True
+                from pprint import pprint
+                pprint(message)
+                return HttpResponse(json.dumps(message),content_type="application/json")
+            else:
+                message['is_publish1']=False
+                return HttpResponse(json.dumps(message),content_type="application/json")
+        except Exception as e:
+            logger.debug("email not found:%s",e)
+            message['is_publish2']=False
+            return HttpResponse(json.dumps(message),content_type="application/json")
+    else:
+        message['status']="error"
+        message['message']='please POST to me a email'
+        return HttpResponse(json.dumps(message),content_type="application/json")
+
