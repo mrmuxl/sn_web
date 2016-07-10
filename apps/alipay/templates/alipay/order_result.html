@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block header %}{% include "header.html" %}{% endblock %}
+{% block content %}
+
+<div class="container">
+	<div class="row">
+		<div class="span12">
+			<table class="table">
+				<thead>
+					<tr>	
+						<th>	编号	</th>
+						<th>	产品	</th>
+						<th>	交付时间</th>
+						<th>	状态	</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>	<td>	1</td>
+						<td>	TB - Monthly	</td>
+						<td>	01/04/2012</td>
+						<td>	Default</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span12 text-right">
+		<form  action="{% url 'order_result' %}" method="post">
+	    		{% csrf_token %}
+	    		<input  name="order_type" value="2" type="hidden">
+		    <button class="btn-primary" style="width:180px;margin-top:10px" type="submit">去结算</button>
+		</form>
+		</div> 
+	</div>
+</div>
+{% endblock %}
+{% block footer %}{% include "footer.html" %}{% endblock %}
