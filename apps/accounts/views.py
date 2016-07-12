@@ -4,7 +4,7 @@ import uuid,os,datetime,json,logging,time,shutil
 from hashlib import md5
 from base64 import urlsafe_b64encode,urlsafe_b64decode
 from PIL import Image
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate,REDIRECT_FIELD_NAME
 from django.contrib import auth
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -23,6 +23,7 @@ from django.http import Http404
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 from utils import invite_register,invite_tip
+from django.utils.http import is_safe_url
 
 logger = logging.getLogger(__name__)
 
@@ -104,35 +105,37 @@ def save(request):
     except Exception as e:
         logger.debug("%s",e)
 
-def login(request):
+def login(request,next_page=None,redirect_field_name=REDIRECT_FIELD_NAME):
     '''登陆视图'''
-    try:
-        next_url = request.GET.get("next","")
-        if request.method == "POST":
-            email = strip_tags(request.POST.get("email",'').lower().strip())
-            password = request.POST.get("password").strip()
-            refer = request.POST.get("refer","")
-            user = authenticate(username=email,password=password)
-            if user and user.is_active:
-                auth.login(request,user)
-                if not next_url:
-                    return HttpResponseRedirect(reverse("index"))    
-                else:
-                    return HttpResponseRedirect(next_url)  
+    if request.method == "GET":
+        if redirect_field_name in request.REQUEST:
+            next_page = request.REQUEST[redirect_field_name]
+            if not is_safe_url(url=next_page, host=request.get_host()):
+                next_page = "/"
+        else:
+            next_page = request.META.get("HTTP_REFERER","")
+            # Security check -- don't allow redirection to a different host.
+            if not is_safe_url(url=next_page, host=request.get_host()):
+                next_page = "/"
+        if next_page:
+            request.session['next_page'] = next_page
+        return render(request,"login.html",{})
+    elif request.method == "POST":
+        email = strip_tags(request.POST.get("email",'').lower().strip())
+        password = request.POST.get("password").strip()
+        refer = request.POST.get("refer","")
+        user = authenticate(username=email,password=password)
+        if user and user.is_active:
+            auth.login(request,user)
+            return HttpResponseRedirect(request.session['next_page'])    
+        else:
+            data={"email":email}
+            messages.add_message(request,messages.INFO,_(u'用户名或密码错误'))
+            if not refer:
+                return render(request,"login.html", data)
             else:
-                data={"email":email}
-                messages.add_message(request,messages.INFO,_(u'用户名或密码错误'))
-                if not refer:
-                    return render(request,"login.html", data)
-                else:
-                    request.session.set_expiry(0)
-                    return render(request, "client_login.html", data)
-
-        elif request.method == "GET":
-            return render(request,"login.html",{})
-    except Exception as e:
-        logger.debug("%s",e)
-        #raise Http404
+                request.session.set_expiry(0)
+                return render(request, "client_login.html", data)
 
 
 
