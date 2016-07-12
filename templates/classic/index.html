@@ -141,17 +141,20 @@
 			<img alt="574x138" src="{{STATIC_URL}}images/index/pay.jpg" />
 	    <div class="row">
 	    	<div class="span4 text-center">
-	    	<form  action="{% url 'order_result' %}" method="post">
-	    		{% csrf_token %}
-	    		<input  name="order_type" value="1" type="hidden">
-		    <button class="btn-primary" style="width:180px;margin-top:10px" type="submit">购买</button> 
-		</form></div>
+		    <a href="{% url 'order_info' %}" >
+		    	<button class="btn-primary" style="width:180px;margin-top:10px" type="button">购 买</button>
+		    </a>
+		</div>
 		<div class="span4 text-center">
-		<form  action="{% url 'order_result' %}" method="post">
+			<a href="{% url 'order_info' %}" >
+		    	<button class="btn-primary" style="width:180px;margin-top:10px" type="button">购 买</button>
+		    </a>
+<!-- 		<form  action="{% url 'order_info' %}" method="post">
 	    		{% csrf_token %}
 	    		<input  name="order_type" value="2" type="hidden">
 		    <button class="btn-primary" style="width:180px;margin-top:10px" type="submit">购买</button>
-		</form></div> 
+		</form> -->
+		</div> 
 	    </div>
 	</div>
 </br>

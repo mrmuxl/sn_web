@@ -26,7 +26,8 @@ class KxPub(models.Model):
         
 class PublishUser(models.Model):
     email = models.EmailField(verbose_name=_(u'邮件地址'), max_length=50, unique=True)
-    ver = models.ForeignKey(KxPub,db_column='ver')
+    ver = models.ForeignKey(KxPub,db_column='ver',related_name="pub_ver")
+    repo_ver = models.ForeignKey(KxPub,db_column='repo_ver',related_name="pub_repo")
     is_publish = models.BooleanField(verbose_name=_(u'是否灰度发布用户'))
     class Meta:
         db_table = 'publish_user'
