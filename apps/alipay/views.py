@@ -33,11 +33,11 @@ def order_result(request):
     order_id = time.strftime("%Y%m%d") + str(uuid.UUID.get_time_low(uuid.uuid1()))
     print order_id
     t = request.POST.get('type','12')
-    if t == 12:
+    if t == '12':
         name = u'SimpleNectVIP'
         desc = u'12个月'
         price = 1000 
-    elif t == 6:
+    elif t == '6':
         name = u'SimpleNectVIP'
         desc = u'6个月'
         price = 600
