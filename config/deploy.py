@@ -139,6 +139,10 @@ INSTALLED_APPS = (
     'apps.client',
     'apps.ad',
     'apps.msg_board',
+    'apps.bug_report',
+    'apps.vipuser',
+    'apps.publish',
+    'apps.alipay',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
