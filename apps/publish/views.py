@@ -265,6 +265,7 @@ def published(request):
             email = 'simplenect@simplenect.com'
             publish_user = PublishUser.objects.get(email=email)
             if publish_user.is_publish:
+                publish_info = KxPub.objects.get(pk=publish_user.ver_id)
                 ver_list = publish_info.ver.split('.')
                 #ver_dict={"Major":ver_list[0],"Minor": ver_list[1],"Build":ver_list[2],"Revision":ver_list[3],"MajorRevision":0,"MinorRevision": 0}
                 ver_dict={"Major":int(ver_list[0].strip('v')),"Minor": int(ver_list[1]),"Build":int(ver_list[2]),"Revision":int(ver_list[3]),"MajorRevision":0,"MinorRevision": 0}
