@@ -53,6 +53,11 @@ def update_download_link(install_file):
 
 def publish_message(publish_info):
     message = {}
+    if publish_info.patch_md5:
+        patch_md5 = publish_info.patch_md5.upper()
+        publish_info.patch_md5 = publish_info.patch_md5.upper()
+    if publish_info.install_md5:
+        publish_info.install_md5 = publish_info.install_md5.upper()
     ver_list = publish_info.ver.split('.')
     ver_dict={"Major":int(ver_list[0].strip('VvSs')),"Minor": int(ver_list[1]),"Build":int(ver_list[2]),"Revision":int(ver_list[3]),"MajorRevision":0,"MinorRevision": 0}
     standAloneVersion = []
