@@ -8,7 +8,7 @@ class KxSoftAd(models.Model):
     ad_url      = models.URLField(max_length = 200L,verbose_name=u'推广链接')
     exp_day     = models.DateField(verbose_name=u'过期时间')
     creater_id  = models.CharField(max_length=32L)
-    create_time = models.DateTimeField()
+    create_time = models.DateTimeField(verbose_name =u'创建时间')
     class Meta:
         db_table = 'kx_soft_ad'
         verbose_name_plural = verbose_name = u'推广'
