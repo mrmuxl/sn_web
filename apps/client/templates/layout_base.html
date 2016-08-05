@@ -2,7 +2,7 @@
 <head>
 	<title>main</title>
 	<meta charset="utf-8">
-	<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css" media=screen>
+	<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.css" media=screen>
 	<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}font-awesome/css/font-awesome.min.css">
   <style type='text/css'>
     body {
@@ -23,9 +23,6 @@
     float:right;
 }
 
-.fixed-fixed {
-    margin: 0 340px 0 0;
-}
 
 .media-heading {
   margin: 0;
@@ -46,6 +43,14 @@
   margin: 0 auto;
 }
 
+.media-hover:hover .friend-file{
+  display:block;
+}
+
+.friend-file{
+  display:none;
+}
+
   </style>
 {% block style %}{% endblock %}
 
@@ -58,9 +63,9 @@
     <div class="container-fluid">
       <div class="nav-collapse collapse">
         <ul class="nav pagination-centered">
-          <li id="menu_friend"><a href="/client/friend/feed/"><i class="icon-user icon-3x"></i><br>好友</a></li>
+          <li id="menu_friend"><a href="/client/friend/feed/" ><i class="icon-user icon-3x"></i><br>好友</a></li>
           <li id="menu_file"><a href="/client/file/index/"><i class="icon-share icon-3x"></i><br>文件共享</a></li>
-          <li id="menu_transfer"><a href="/client/trans/processing/"><i class="icon-exchange icon-3x"></i><br>传输记录</a></li>
+          <li id="menu_transfer"><a href="/client/trans/processing/" ><i class="icon-exchange icon-3x"></i><br>传输记录</a></li>
           <li id="menu_print"><a href="/client/print/index/"><i class="icon-print icon-3x"></i><br>打印共享</a></li>
           <li id="menu_help"><a href="/client/help/nav/"><i class="icon-book icon-3x"></i><br>帮助教程</a></li>
         </ul>
@@ -82,8 +87,8 @@
 {% block content %}{% endblock %}
 
 <script src="http://code.jquery.com/jquery.js"></script>
-<script src="{{STATIC_URL}}js/jquery.cookie.js"></script>
-<script src="{{STATIC_URL}}js/bootstrap.min.js"></script>
+<script src="{{STATIC_URL}}js/lib/jquery.cookie.js"></script>
+<script src="{{STATIC_URL}}js/lib/bootstrap.min.js"></script>
 <script type="text/javascript">
 //高亮选中的菜单
 var pathArray = window.location.pathname.split('/');

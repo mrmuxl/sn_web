@@ -1,6 +1,5 @@
 {% load compress %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="description" content="局域网共享 跨网段共享  windows共享 文件共享 打印共享 阡陌软件" />
@@ -8,20 +7,20 @@
 {% compress css %}
 <link rel="stylesheet" href="{{STATIC_URL}}css/qianmo4.css" type="text/css" />
 <link rel="stylesheet" href="{{STATIC_URL}}css/page.css" type="text/css" />
-
+<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.min.css" type="text/css" />
 {% if DEBUG %}
-	<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.css" type="text/css" />
 	<link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome.css" type="text/css" />
 	<!--[if IE 7]>
 	<link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome-ie7.css" type="text/css" />
 	<![endif]-->
 {% else %}
-	<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.min.css" type="text/css" />
+	
 	<link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome.min.css" type="text/css" />
 	<!--[if IE 7]>
 	<link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome-ie7.min.css" type="text/css" />
 	<![endif]-->
 {% endif %}
+
 <link rel="stylesheet" href="{{STATIC_URL}}fontcustom/fontcustom.css" />
 <link rel="stylesheet" href="{{STATIC_URL}}css/sm.css" type="text/css" />
 
