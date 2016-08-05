@@ -1,15 +1,17 @@
 #_*_coding:utf-8_*_
 
 import datetime,logging,json,os
-from django.conf import settings
 from django.http import Http404
-from apps.kx.models import KxPub
+from models import KxPub,PublishUser
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import (require_POST,require_GET)
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect,HttpResponse
 from django.shortcuts import render
 from forms import PublishAdd
 from utils import handle_uploaded_file,update_download_link
+from django.conf import settings
+from utils import publish_message
 
 logger = logging.getLogger(__name__)
 
@@ -18,16 +20,6 @@ def publish_index(request):
     if not request.user.is_superuser:
         return HttpResponseRedirect(reverse('login'))
     else:
-        #try:
-        #    p = int(request.GET.get('p','1'))
-        #except ValueError:
-        #    p = 1
-        #try:
-        #    pub_count = KxPub.objects.all().count()
-        #    logger.info("%s",pub_count)
-        #except Exception as e:
-        #    pub_count = 0
-        #    logger.debug("%s",e)
         try:
             pub_list = KxPub.objects.order_by('-id').values()
             logger.info("%s",pub_list)
@@ -48,11 +40,11 @@ def publish_add(request):
             form = PublishAdd(request.POST,request.FILES,auto_id=False) 
             if form.is_valid():
                 pub_id =form.cleaned_data['id']
-                ver = form.cleaned_data['ver']
+                ver = form.cleaned_data['ver'].lower()
                 desc = form.cleaned_data['desc']
                 try:
-                    ins = request.FILES['ins']
-                    handle_uploaded_file(ver=ver,ins=ins)
+                    ins = request.FILES.get('ins',None)
+                    install_md5 = handle_uploaded_file(ver=ver,ins=ins)
                 except KeyError as e:
                     logger.debug("ins参数不存在%s",e)
                 except OSError as e:
@@ -64,8 +56,8 @@ def publish_add(request):
                     message ="""安装包上传失败！<A HREF="javascript:history.back()">返 回</A>"""
                     return HttpResponse(message)
                 try:
-                    patch = request.FILES['patch']
-                    handle_uploaded_file(ver=ver,patch=patch)
+                    patch = request.FILES.get('patch',None)
+                    patch_md5 = handle_uploaded_file(ver=ver,patch=patch)
                 except KeyError as e:
                     logger.debug("%s",e)
                 except OSError as e:
@@ -77,12 +69,16 @@ def publish_add(request):
                     message ="""patch上传失败！<A HREF="javascript:history.back()">返 回</A>"""
                     return HttpResponse(message)
                 try:
-                    ins_file = "Qianmo_" + ver.upper() + ".zip"
+                    ins_file = "SimpleNect_" + ver.upper() + ".zip"
                     patch_file = ver + "/Patch.zip"
+                    if not install_md5:
+                        install_md5 = '0'
+                    if not patch_md5:
+                        patch_md5 = '0'
                     if pub_id:
-                        pub_edit = KxPub.objects.filter(id=pub_id).update(pub_desc=desc,install_file=ins_file,patch_file=patch_file,create_time=now,is_tongji=1)
+                        pub_edit = KxPub.objects.filter(id=pub_id).update(pub_desc=desc,install_file=ins_file,install_md5=install_md5,patch_file=patch_file,patch_md5=patch_md5,create_time=now,is_tongji=1,is_publish=0)
                     else:
-                        pub_add = KxPub.objects.create(ver=ver,pub_desc=desc,install_file=ins_file,patch_file=patch_file,create_time=now,is_tongji=1)
+                        pub_add = KxPub.objects.create(ver=ver,pub_desc=desc,install_file=ins_file,install_md5=install_md5,patch_file=patch_file,patch_md5=patch_md5,create_time=now,is_tongji=1,is_publish=0)
                 except Exception as e:
                     logger.debug("%s",e)
                 return HttpResponseRedirect(reverse('publish_index'))
@@ -136,7 +132,7 @@ def do_pub(request):
                 pub_obj = KxPub.objects.get(id=pub_id)
                 if not pub_obj.pub_time:
                     try:
-                        pub_update = KxPub.objects.filter(id=pub_id).update(pub_time=now)
+                        pub_update = KxPub.objects.filter(id=pub_id).update(pub_time=now,is_publish=1)
                         try:
                             install_file = pub_obj.install_file
                             update_download_link(install_file)
@@ -215,4 +211,48 @@ def del_pub(request):
         message['status']=0
         message['info']="deny!"
         message['data']=0
+        return HttpResponse(json.dumps(message),content_type="application/json")
+
+@csrf_exempt
+@require_POST
+def published(request):
+    message = {}
+    email = request.POST.get('email','')
+    logger.info("email:%s",email)
+    if email:
+        try:
+            publish_user = PublishUser.objects.filter(is_publish__exact=1).get(email=email)
+            publish_info = KxPub.objects.get(pk=publish_user.ver_id)
+        except Exception as e:
+            logger.debug("define publish:%s",e)
+            email = 'simplenect@simplenect.com'
+            publish_user = PublishUser.objects.get(email=email)
+            publish_info = KxPub.objects.get(pk=publish_user.ver_id)
+        message = publish_message(publish_info)
+        return HttpResponse(json.dumps(message),content_type="application/json")
+    else:
+        message['status']="error"
+        message['message']='please POST to me a email'
+        return HttpResponse(json.dumps(message),content_type="application/json")
+
+@csrf_exempt
+@require_POST
+def repo_published(request):
+    message = {}
+    email = request.POST.get('email','')
+    logger.info("email:%s",email)
+    if email:
+        try:
+            publish_user = PublishUser.objects.filter(is_publish__exact=1).get(email=email)
+            publish_info = KxPub.objects.get(pk=publish_user.repo_ver_id)
+        except Exception as e:
+            logger.debug("define repo_published:%s",e)
+            email = 'simplenect@simplenect.com'
+            publish_user = PublishUser.objects.get(email=email)
+            publish_info = KxPub.objects.get(pk=publish_user.repo_ver_id)
+        message = publish_message(publish_info)
+        return HttpResponse(json.dumps(message),content_type="application/json")
+    else:
+        message['status']="error"
+        message['message']='please POST to me a email'
         return HttpResponse(json.dumps(message),content_type="application/json")

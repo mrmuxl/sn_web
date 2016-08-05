@@ -1,6 +1,5 @@
 #_*_coding:utf-8_*_
 
-#from django import forms
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
@@ -9,6 +8,7 @@ from django.contrib.auth.forms import AdminPasswordChangeForm
 from apps.kx.models import KxUser
 from apps.kx.forms import (UserChangeForm,UserCreationForm)
 from apps.vipuser.models import VIPUser
+from apps.publish.models import PublishUser
 
 class VIPUserInline(admin.StackedInline):
     fk_name = 'email'
@@ -21,9 +21,9 @@ class VIPUserInline(admin.StackedInline):
 
 class KxUserAdmin(UserAdmin):
     # The forms to add and change user instances
-    inlines = [VIPUserInline,]
     form = UserChangeForm
     add_form = UserCreationForm
+    inlines = [VIPUserInline]
 
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin

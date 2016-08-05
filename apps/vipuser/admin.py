@@ -4,11 +4,13 @@ from django.contrib import admin
 from models import VIPUser
 
 class VIPUserAdmin(admin.ModelAdmin):
-    list_display = ('email_email','is_vip','expire')
+    list_display = ('Email','is_vip','expire')
+    search_fields = ['email__email',]
     #fieldsets = (
     #    (u'用户基本信息', {'fields': ('email', 'is_vip','expire')}),
     #)
-    def email_email(self, instance):
+    def Email(self, instance):
         return instance.email.email
+    Email.short_description = u'邮箱'
 
 admin.site.register(VIPUser,VIPUserAdmin)

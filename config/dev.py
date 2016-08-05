@@ -31,7 +31,7 @@ EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_PORT = 25
 EMAIL_HOST_USER ='postmaster@simplenect.com'
 EMAIL_HOST_PASSWORD = '2tuexhqw24h2'
-EMAIL_BACKEND ='apps.backends.esmtp.EmailBackend'
+#EMAIL_BACKEND ='apps.backends.esmtp.EmailBackend'
 
 STATICFILES_DIRS = (
 	os.path.join(ROOT_DIR,'static' + THEME),
@@ -110,8 +110,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'kx',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
-        'PASSWORD': 'abc123',                  # Not used with sqlite3.
-        'HOST': '192.168.18.200',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PASSWORD': 'mrmuxl',                  # Not used with sqlite3.
+        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -130,9 +130,9 @@ INSTALLED_APPS = (
     #'django.contrib.comments',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
-    #'gunicorn',
+    'gunicorn',
     'apps.kx',
-    #'apps.blog',
+    'apps.blog',
     'apps.sharefile',
     'apps.online_user',
     'apps.auth',
@@ -140,8 +140,11 @@ INSTALLED_APPS = (
     'apps.client',
     'apps.ad',
     'apps.msg_board',
-    'debug_toolbar',
+    'apps.bug_report',
     'apps.vipuser',
+    'apps.publish',
+    'apps.alipay',
+    'debug_toolbar',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )

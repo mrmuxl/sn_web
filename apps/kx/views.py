@@ -5,7 +5,8 @@ from django.http import Http404
 from django.views.decorators.csrf import requires_csrf_token
 from django.shortcuts import render_to_response,render
 from django.http import HttpResponse, HttpResponseRedirect
-from apps.kx.models import (KxUser,KxMsgBoard,KxSoftRecord,KxTongjiRecord,KxPub)
+from apps.kx.models import (KxUser,KxMsgBoard,KxSoftRecord,KxTongjiRecord)
+from apps.publish.models import KxPub
 from django.contrib import auth,messages
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
@@ -26,9 +27,9 @@ def index(request):
     right_create_time = str(today) + time_tag
     #right_create_time = '2013-03-1 23:59:59'
     try:
-        ins_file = KxPub.objects.filter(pub_time__isnull=False).order_by('-id')[0:1].get()
         msg_count = KxMsgBoard.objects.filter(is_del__exact=0).count()
         msg_list = KxMsgBoard.objects.filter(reply_id__exact=0,is_del__exact=0,create_time__gte=left_create_time,create_time__lte=right_create_time).order_by("-create_time").values()[:5]
+        logger.info("msg_count:%s",msg_count)
     except Exception as e:
         msg_count = 0
         msg_list = ''
@@ -65,6 +66,11 @@ def index(request):
                 u_dict[u['uuid']]=user_dict
             ul=[]
         data.update(user_list=u_dict)
-    data.update(ins_file=ins_file.install_file)
+    try:
+        ins_file = KxPub.objects.filter(pub_time__isnull=False).order_by('-id')[0:1].get()
+        data.update(ins_file=ins_file.install_file)
+    except Exception as e:
+        data.update(ins_file='')
+        logger.debug("ins_file:%s",e)
     return render(request,"index.html",data) 
 

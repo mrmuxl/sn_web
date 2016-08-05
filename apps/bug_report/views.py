@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
-from apps.kx.models import KxSoftBug
+from models import KxSoftBug
 from hashlib import md5
 import datetime,logging,json,os
 from django.utils.encoding import smart_unicode,smart_str
@@ -99,7 +99,7 @@ def soft_bug(request):
 @csrf_exempt
 @require_POST
 def bug_log(request):
-    logger.info("%s",request.POST)
+    #print "%r" %(raw_str)
     message = {} 
     now = datetime.datetime.now()
     date =datetime.date.strftime(datetime.date.today(),"%Y-%m-%d")
@@ -110,7 +110,9 @@ def bug_log(request):
     if not os.path.isdir(path_folder):
         os.makedirs(path_folder)
     mac = request.POST.get('clientIdentifie','').encode('utf8')
-    log = request.POST.get('log','').encode('utf8')
+    #log = request.POST.get('log','')
+    raw_log=request.raw_post_data.split('=')[2]
+    log = raw_log.decode('gbk').encode('utf8')
     if mac and log:
         log_path = path_folder + file_name + '.log'
         c = mac + "   START*****************\n" + log + "\n" + mac + "   END*****************\n\n"
