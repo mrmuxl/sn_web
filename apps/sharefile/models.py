@@ -12,7 +12,8 @@ class ShareFile(models.Model):
     type = models.IntegerField(db_column='share_file_type')
     mac = models.CharField(max_length=100, db_column='owner_mac')
     ownerEmail = models.CharField(max_length=50, db_column='owner_email')
-    ownerNick = models.CharField(max_length=20, db_column='nick')    
+    ownerNick = models.CharField(max_length=20, db_column='nick')   
+    createTime = models.DateTimeField(db_column='create_time') 
 
     class Meta:
         db_table = 'kx_share'
@@ -21,4 +22,4 @@ class ShareFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShareFile
         fields = ('id', 'fileName', 'size', 'cmtNum', 'mac', 'type',
-                'ownerEmail', 'ownerNick')
+                'ownerEmail', 'ownerNick', 'createTime')

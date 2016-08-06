@@ -1,34 +1,24 @@
 {% extends "layout_base.html" %}
 
 {% block content %}
+{% load filter %}
+<style type="text/css">
+.blackwhite {
+         -webkit-filter: grayscale(100%) brightness(10%) contrast(100%);
+         color: #999
+}
+a h1 h2 h3 h4 h5 h6{
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+</style>
 
 
 <div class="container-fluid">
 	<div class="row-fluid">
-		<div class="well sidebar-nav right">
-            <ul class="nav nav-tabs">
-				<li class="active">
-					<a href="#">好友</a>
-				</li>
-				<li>
-					<a href="#">群</a>
-				</li>
-			</ul>
+		
 
-
-			<div class="media">
-				 <a href="#" class="pull-left"><i class="icon-user icon-2x"></i></a>
-				<div class="media-body">
-					<h5 class="media-heading">
-						张三
-					</h5>
-					<div class="muted font12">
-					zhangsan@126.com
-					</div>
-				</div>
-			</div>
-          </div><!--/.well -->
-
+          <div class="span8">
           <div class="content fixed-fixed">
 				<div class = "well" style="padding:5px 10px">
 					<div class="right">
@@ -44,30 +34,90 @@
 
 				</div>
 
+{% for file in fileList  %}
 
-				<div class="row-fluid">
+				<div class="row-fluid ">
 					<div class="right muted font12">
-						2013-05-20 11:04:47
+						{{file.createTime | naturaltime}}
 						<br>
-						test
 					</div>
 
 					<div class="media">
 						 <a href="#" class="pull-left"><i class="icon-file icon-2x"></i></a>
 						<div class="media-body">
 							<h5 class="media-heading">
-								共享文件名
+								{{ file.fileName | afterLast:"/"}}
 							</h5>
 							<div class="muted font12">
-							李四
+							{{ file.ownerNick }} 群杨凌帮助
 							</div>
 						</div>
 					</div>
 				</div>
+{% endfor %}
+
+				
 			</div>
+		  </div>
+
+
+		  <div class="span4">
+			<div class="well sidebar-nav" style="padding-right:5px;">
+	            <ul class="nav nav-tabs">
+					<li class="active">
+						<a href="#">好友</a>
+					</li>
+					<li>
+						<a href="#">群</a>
+					</li>
+				</ul>
+
+				<div class="media  media-hover">
+					 <a href="/client/chat/index/?email={{friend.email}}" class="pull-left">
+					 	<i class="icon-user icon-2x"></i>
+					 </a>
+					<div class="media-body">
+						<h5 class="media-heading {% if friend.login_status = 0 %}muted{% endif %}">
+							<a href="/client/chat/index/?email={{friend.email}}">{{user.nick}}</a>
+							<a href="/client/chat/sharefile/?email={{friend.email}}" class="pull-right friend-file" ><i class="icon-cog icon-large"></i></a>
+						</h5>
+						<div class="{% if friend.login_status = 0 %}muted{% endif %} font12">
+							{{user.email}}
+						</div>
+
+
+					</div>
+				</div>
+
+	{% for friend in friendList  %}
+				<div class="media  media-hover">
+					 <a href="/client/chat/index/?email={{friend.email}}" class="pull-left">
+					 	<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
+					 </a>
+					<div class="media-body">
+						<h5 class="media-heading {% if friend.login_status = 0 %}muted{% endif %}">
+							<a href="/client/chat/index/?email={{friend.email}}">{{friend.nick}}</a>
+							<a href="/client/chat/sharefile/?email={{friend.email}}" class="pull-right friend-file" ><i class="icon-folder-open-alt icon-large"></i></a>
+						</h5>
+						<div class="{% if friend.login_status = 0 %}muted{% endif %} font12">
+							{{friend.email}}
+						</div>
+
+
+					</div>
+				</div>
+	{% endfor %}
+	          </div><!--/.well -->
+          </div>
+
+
+
+
           </div>
 	</div>
 </div>
+
+<a href="qrc:///html/test.html">config.xml</a>
 
 {% endblock %}
 
