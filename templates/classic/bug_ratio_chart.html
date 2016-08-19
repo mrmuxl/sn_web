@@ -6,7 +6,7 @@
 
 {% block content %}
 <script type="text/javascript">document.domain = '{{ domain }}';</script>
-<script language="javascript" type="text/javascript" defer="defer" src="{{ STATIC_URL }}js/datepicker/WdatePicker.js"></script>
+<script language="javascript" type="text/javascript" defer="defer" src="{{ STATIC_URL }}js/lib/datepicker/WdatePicker.js"></script>
 <h1 class="center">阡陌7天卸载率统计</h1>
 <h3 style="text-align:right;margin-right:150px;">
 查询日期 <input type="text" name="day" class="Wdate search_day" title="统计日期" value="{{ day|date:"Y-m-d" }}" onFocus="WdatePicker({minDate:'2012-11-01',startDate:'{$day}',dateFmt:'yyyy-MM-dd'})" readonly style="width:90px;font-size:12px;color:#555555" />
@@ -73,8 +73,8 @@ $(function () {
 });
 		</script>
 
-<script src="{{ STATIC_URL }}js/highcharts/highcharts.js"></script>
-<script src="{{ STATIC_URL }}js/highcharts/modules/exporting.js"></script>
+<script src="{{ STATIC_URL }}js/lib/highcharts/highcharts.js"></script>
+<script src="{{ STATIC_URL }}js/lib/highcharts/modules/exporting.js"></script>
 
 <div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
 
