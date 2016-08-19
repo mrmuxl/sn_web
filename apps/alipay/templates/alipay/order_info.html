@@ -54,7 +54,7 @@
 			<form action="{% url 'order_result' %}" method="post">
 				{% csrf_token %}
 				<fieldset>
-					 <legend>开通VIP：</legend>
+					 <legend>开通VIP：<span style="color:#FDFDFD;font-size:12px">（VIP用户和VIP用户好友可使用全部功能）</span></legend>
 					  <label ></label>
 					  <label class="radio" style="font-size:20px;margin-top:10px;">
 					  	<input type="radio" name="type" value="12" checked="true"/><span>&nbsp;1000元</span><span style="color:red">&nbsp;&nbsp;12个月</span>（全年更多实惠）
