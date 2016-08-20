@@ -15,5 +15,5 @@ class VIPUser(models.Model):
         db_table = 'vipuser'
         verbose_name_plural = verbose_name = _(u'VIP用户')
     def __unicode__(self):
-        return self.email
+        return unicode(self.email)
 
