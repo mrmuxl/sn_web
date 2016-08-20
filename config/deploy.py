@@ -5,7 +5,7 @@ import logging
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 #django-compresshtml
-COMPRESS_HTML = False
+COMPRESS_HTML = True
 
 try:
     from common import *
@@ -20,7 +20,7 @@ PUBLISH_UPLOAD = '/home/webapp_root/publish/'
 SERVER_LOG = '/home/admin/udtserver/'
 
 #django_compressor
-COMPRESS_ENABLED = False
+COMPRESS_ENABLED = True
 COMPRESS_ROOT=STATIC_ROOT + THEME
 COMPRESS_URL= STATIC_URL
 COMPRESS_OUTPUT_DIR='cache'
