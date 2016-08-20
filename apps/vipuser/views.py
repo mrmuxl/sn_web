@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 def vipuser_api(request):
     message = {}
     now = datetime.datetime.now()
-    Dday = datetime.datetime(2013,8,19) #1944-06-06
+    Dday = datetime.datetime(2013,8,20) #1944-06-06
     email = request.POST.get('email','')
     logger.info("email:%s",email)
     if email:
