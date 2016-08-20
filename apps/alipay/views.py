@@ -143,29 +143,29 @@ def notify_url_handler(request):
                                         vipuser.update(is_vip=1,expire=expire)
                                         logger.info("==>>VIPUser update email:%s,expire:%s",buy_user,expire)
                                     except Exception as e:
-                                        logger.debug("==>>VIPUser update fail expire:%s,%s",expire,e)
+                                        logger.debug("==>>VIPUser update fail expire:%s",e)
                                 else:
                                     try:
                                         expire = now + datetime.timedelta(days=365)
                                         vipuser.update(is_vip=1,expire = expire)
                                         logger.info("==>>VIPUser update email:%s,now:%s,expire:%s",buy_user,now,expire)
                                     except Exception as e:
-                                        logger.debug("==>>VIPUser update fail:expire:%s",expire,e)
+                                        logger.debug("==>>VIPUser update fail:expire:%s",e)
                             elif buy_product_id == 2:
-                                if expire >= now:
+                                if myexpire >= now:
                                     try:
                                         expire = myexpire + datetime.timedelta(days=182)
                                         vipuser.update(is_vip=1,expire=expire)
                                         logger.info("==>>VIPUser update email:%s,expire:%s",buy_user,expire)
                                     except Exception as e:
-                                        logger.debug("==>>VIPUser update fail expire:%s,%s",expire,e)
+                                        logger.debug("==>>VIPUser update fail expire:%s",e)
                                 else:
                                     try:
                                         expire = now + datetime.timedelta(days=365)
                                         vipuser.update(is_vip=1,expire = expire)
                                         logger.info("==>>VIPUser update email:%s,now:%s,expire:%s",buy_user,now,expire)
                                     except Exception as e:
-                                        logger.debug("==>>VIPUser update fail:expire:%s",expire,e)
+                                        logger.debug("==>>VIPUser update fail:expire:%s",e)
                         else:
                             if buy_product_id == 1:
                                 expire = now + datetime.timedelta(days=365)
