@@ -227,7 +227,6 @@ def order_result(request):
         logger.info("order_id:%s",order_id)
         email = request.user.email
         logger.info("email:%s",email)
-        email = request.user.email
         number =1
         total_fee = number * price
         logger.info("buy_user:%s,order_id:%s,number:%s,total_fee:%s",email,order_id,number,total_fee)
