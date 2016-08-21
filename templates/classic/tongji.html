@@ -10,7 +10,7 @@
 <h1 class="center">阡陌装机、登录统计信息</h1>
 {% if type = 1 %}
 <h3>
-今日注册用户登录数：<a href="/SoftRecord/login_tongji/" target="_blank">{{ login_num }}&nbsp;查看</a>；
+今日注册用户登录数：<a href="/SoftRecord/login_tongji/" target="_blank">{{ login_num }}&nbsp;查看</a>；付费订单数：<a href="/admin/alipay/orderinfo/" target="_blank">{{order_num}}详细</a>
 【{{ day|date:"Y-m-d" }}】总登录用户数：{{ day_count}}，新装机用户数：{{ new_count }}，
 注册用户数：{{ new_user }};<a href="/SoftRecord/uninstall_chart/?day={{ day|date:"Y-m-d" }}" title="查看当日卸载情况" target="_blank" style="color:blue;">卸载用户数：{{ uninstall_num }}；</a>
 2011-11-08 起总的使用用户：{{ all_user_num }}；</h3>
