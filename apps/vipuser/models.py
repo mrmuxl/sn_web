@@ -10,7 +10,7 @@ from datetime import datetime
 class VIPUser(models.Model):
     email = models.OneToOneField(KxUser,to_field='email',db_column='email',related_name='vipuser_email',verbose_name = _(u'邮箱'))
     is_vip = models.BooleanField(verbose_name=_(u'是否vip用户'))
-    expire = models.DateTimeField(default = datetime.now(),verbose_name = _(u'过期时间'))
+    expire = models.DateTimeField(default = datetime(1970,1,1),verbose_name = _(u'过期时间'))
     class Meta:
         db_table = 'vipuser'
         verbose_name_plural = verbose_name = _(u'VIP用户')

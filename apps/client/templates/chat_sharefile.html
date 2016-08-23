@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>main</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.css" media=screen>
+	<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bubble.css">
+	<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/qianmo4.css">
+	<link rel="stylesheet" href="{{STATIC_URL}}fontcustom/fontcustom.css" />
+</head>
+<body >
+
+
+<div style="min-height:100%; height: auto !important; padding-bottom:50px; margin-top:20px; padding-top:70px;">
+
+<div class="navbar-fixed-top" style="margin:0 10px; background:#fff; padding:10px 0 20px 0;">
+	<div class="media" >
+		 <a href="#" class="pull-left">
+		 	<i class="icon-simplenect icon-4x"></i>
+		 </a>
+		<div class="media-body">
+			<h5 class="media-heading {% if friend.login_status = 0 %}muted{% endif %}">
+				{{friend.nick}}
+			</h5>
+			<div class="{% if friend.login_status = 0 %}muted{% endif %} font12">
+				{{friend.email}}
+			</div>
+		</div>
+	</div>
+</div>
+
+
+	<div style="margin:0 10px; padding-top:86px; background:#fff;">
+	    <ul class="nav nav-tabs navbar-fixed-top" style="margin:85px 10px ; background:#fff; ">
+			<li>
+				<a href="/client/chat/index/?email={{friend.email}}">聊天</a>
+			</li>
+			<li class="active">
+				<a href="#">共享文件</a>
+			</li>
+		</ul>
+
+		<div class="navbar-fixed-top" style="margin-top:123px; background:#fff; padding-top:15px;" >
+			<div style="background:#fff;" >
+
+				<div style="position:fixed; width:80px; right:0; background:#fff; " class="pull-right">
+					<a href=""><i class="icon-refresh icon-2x" style="margin-right:10px;"></i></a>
+					<a href=""><i class="icon-search icon-2x" ></i></a>
+					
+				</div>
+
+				<div style="position:fixed; width:160px; left:10px; background:#fff;">
+					<button class="btn pull-left" ><i class="icon-arrow-up icon-large"></i> 上级目录</button>
+					<a href=""><i class="icon-home icon-2x pull-left" style="margin-left:10px;"></i></a>
+				</div>
+			
+			</div>
+			<div style="padding:0 100px 0 170px;">
+				<input type="text"   style="border:1px solid #ccc; height:30px; background:#fff;"  class="boxsizingBorder" placeholder="当前目录"/>
+			</div>	
+		</div>
+
+		
+
+
+		<div class="clearfix" ></div>
+
+		<div>
+			<table class="table table-hover">
+				<thead>
+					<tr >
+						<th >文件名</th> 
+						<th >修改时间</th>
+						<th >大小</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><a href="">中文文件名.doc</a></td>
+						<td>09-01-01 11:22</td>
+						<td>1M</td>
+					</tr>
+					<tr>
+						<td><a href="">testtesttesttesttesttesttesttesttesttesttesttesttesttest.doc</a></td>
+						<td>09-01-01 11:22</td>
+						<td>1M</td>
+					</tr>
+					<tr>
+						<td><a href="">test.doc</a></td>
+						<td>09-01-01 11:22</td>
+						<td>1M</td>
+					</tr>
+				</tbody>
+			</table>
+
+
+			
+		</div>
+	</div>
+
+</div>
+
+<div style="position: fixed; bottom:0; left:0; display:block;  background:#fff; padding:10px; width:100%; clear:both" class="boxsizingBorder">
+			<i class="icon-edit" ></i>默认下载路径：<a href="">C:\QMDOWNLOAD</a>
+			
+</div>
+
+
+<script src="{{STATIC_URL}}js/lib/jquery.min.js"></script>
+<script src="{{STATIC_URL}}js/lib/bootstrap.min.js"></script>
+
+</body>
+</html>
+

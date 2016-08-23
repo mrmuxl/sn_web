@@ -87,8 +87,9 @@ def save(request):
                             #mail.send(fail_silently=True)
                             try:
                                 send_mail_thread(subject,msg,from_email,[email],html=msg)
+                                logger.info("active account:%s",email)
                             except Exception as e:
-                                logger.debug("%s",e)
+                                logger.debug("active account:%s",e)
                             return HttpResponseRedirect('/User/account_verify/?email='+email)
                         else:
                             message = """创建用户出现错误！<A HREF="javascript:history.back()">返 回</A>"""
@@ -325,14 +326,12 @@ def findPwd(request):
                     from_email = 'SimpleNect <noreply@simaplenect.cn>'
                     subject = "SimpleNect用户密码重置提示函"
                     try:
-                        #mail = EmailMultiAlternatives(subject,msg,from_email,[email])
-                        #mail.content_subtype = "html"
-                        #mail.send()
                         send_mail_thread(subject,msg,from_email,[email],html=msg)
+                        logger.info("rest password:%s",email)
                         code =1
                         step =2
                     except Exception as e:
-                        logger.debug("%s",e)
+                        logger.debug("rest password:%s",e)
                         code = 2
                 else:
                     code = 0

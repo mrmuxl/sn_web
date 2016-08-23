@@ -33,4 +33,4 @@ class PublishUser(models.Model):
         db_table = 'publish_user'
         verbose_name_plural = verbose_name = _(u'灰度发布用户')
     def __unicode__(self):
-        return unicode(self.ver)
+        return unicode(self.email)

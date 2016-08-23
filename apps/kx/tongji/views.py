@@ -7,6 +7,7 @@ from django.shortcuts import render_to_response,render
 from django.http import HttpResponse, HttpResponseRedirect
 from apps.kx.models import (KxUser,KxMsgBoard,KxSoftRecord,KxTongjiRecord,KxLoginRecord)
 from apps.kx.models import (KxPubTongji,KxLanDay,KxActTongji)
+from apps.alipay.models import OrderInfo
 from apps.publish.models import KxPub
 from apps.bug_report.models import KxSoftBug
 from django.contrib import auth,messages
@@ -97,6 +98,7 @@ def tongji(request):
             max_login_day = 0
             max_login_num = 0
         day_count = new_count + old_count
+        order_num = OrderInfo.objects.count()
         temp_var={
                 'title':u'统计',
                 'domain':'simplenect.cn',
@@ -110,6 +112,7 @@ def tongji(request):
                 'new_user':new_user,
                 'max_login_day':max_login_day,
                 'max_login_num':max_login_num,
+                'order_num':order_num,
                 }
         return render(request,"tongji.html",temp_var)
 
@@ -314,7 +317,6 @@ def bug_msg(request):
                 ctime = os.path.getctime(file_path)
                 size = os.path.getsize(file_path)
                 file_info[file_name]={'ctime':ctime,'size':size}
-        print bug_list
         temp_var = {
                     'domain':u'simplenect.cn',
                     'bug_list':bug_list,

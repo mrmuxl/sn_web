@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>main</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.css" media=screen>
+	<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bubble.css">
+	<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/qianmo4.css">
+</head>
+<body >
+
+
+<div style="min-height:100%; height: auto !important; padding-bottom:200px; margin-top:20px; padding-top:70px;">
+
+<div class="navbar-fixed-top" style="margin:0 10px; background:#fff; padding:10px 0 20px 0;">
+	<div class="media" >
+		 <a href="#" class="pull-left">
+		 	<i class="icon-user icon-4x"></i>
+		 </a>
+		<div class="media-body">
+			<h5 class="media-heading {% if friend.login_status = 0 %}muted{% endif %}">
+				{{friend.nick}}
+			</h5>
+			<div class="{% if friend.login_status = 0 %}muted{% endif %} font12">
+				{{friend.email}}
+			</div>
+		</div>
+	</div>
+</div>
+
+
+	<div style="margin:0 10px; padding-top:56px; background:#fff;">
+	    <ul class="nav nav-tabs navbar-fixed-top" style="margin:85px 10px ; background:#fff; ">
+			<li class="active">
+				<a href="#">聊天</a>
+			</li>
+			<li>
+				<a href="/client/chat/sharefile/?email={{friend.email}}">共享文件</a>
+			</li>
+		</ul>
+
+
+		<div>
+			<div class="text-center muted">28:10</div>
+			<p class="triangle-border left pull-left">
+				你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好
+			</p>
+			<div class="clearfix" ></div>
+			<p class="triangle-border left pull-left">
+				我是一个兵
+			</p>
+			<div class="clearfix" ></div>
+			<p class="triangle-border right pull-right">你好</p>
+			<div class="clearfix" ></div>
+			<p class="triangle-border left pull-left">
+				你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好
+			</p>
+			<div class="clearfix" ></div>
+			<p class="triangle-border left pull-left">
+				我是一个兵
+			</p>
+			<div class="clearfix" ></div>
+
+			<p class="triangle-border left pull-left">
+				你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好
+			</p>
+			<div class="clearfix" ></div>
+			<p class="triangle-border left pull-left">
+				我是一个兵
+			</p>
+			<div class="clearfix" ></div>
+			<p class="triangle-border right pull-right">你好</p>
+			<div class="clearfix" ></div>
+			<p class="triangle-border left pull-left">
+				你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好
+			</p>
+			<div class="clearfix" ></div>
+			<p class="triangle-border left pull-left">
+				我是一个兵
+			</p>
+			<div class="clearfix" ></div>
+
+
+
+<p class="triangle-border left pull-left">
+				你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好
+			</p>
+			<div class="clearfix" ></div>
+			<p class="triangle-border left pull-left">
+				我是一个兵
+			</p>
+			<div class="clearfix" ></div>
+			<p class="triangle-border right pull-right">你好</p>
+			<div class="clearfix" ></div>
+			<p class="triangle-border left pull-left">
+				你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好
+			</p>
+			<div class="clearfix" ></div>
+			<p class="triangle-border left pull-left">
+				我是一个兵a
+			</p>
+			<div class="clearfix" ></div>
+
+
+			
+		</div>
+	</div>
+
+</div>
+<div class="clearfix" ></div>
+<div style="position: fixed; bottom:0; left:0; display:block;  background:#fff; padding-right:30px; padding-bottom:20px; width:100%; clear:both;" class="boxsizingBorder">
+			<textarea rows="3" style="width:100%; height:140px; margin:10px; padding:4px;" ></textarea>
+
+			<button class="btn pull-right btn-primary" type="button" style="margin-right:50px; width:100px;" >发送</button>
+</div>
+
+<script src="{{STATIC_URL}}js/lib/jquery.min.js"></script>
+<script src="{{STATIC_URL}}js/lib/bootstrap.min.js"></script>
+
+</body>
+</html>
+

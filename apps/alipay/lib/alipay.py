@@ -126,7 +126,6 @@ def notify_verify(post):
         gateway = 'https://mapi.alipay.com/gateway.do?'
     else:
         gateway = 'http://notify.alipay.com/trade/notify_query.do?'
-    print "notify_verify:",params
     veryfy_result = urlopen(gateway, urlencode(params)).read()
     if veryfy_result.lower().strip() == 'true':
         return True

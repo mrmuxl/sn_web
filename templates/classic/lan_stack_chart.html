@@ -3,7 +3,7 @@
 {% block header %}{% include "header.html" %}{% endblock %}
 {% block content %}
 <script type="text/javascript">document.domain = '{{ domain }}';</script>
-<script language="javascript" type="text/javascript" defer="defer" src="{{ STATIC_URL }}js/datepicker/WdatePicker.js"></script>
+<script language="javascript" type="text/javascript" defer="defer" src="{{ STATIC_URL }}js/lib/datepicker/WdatePicker.js"></script>
 <h1 class="center">阡陌最近30天局域网数统计</h1>
 <h3 style="text-align:right;margin-right:150px;">
 {% if type == '1' %}
@@ -105,8 +105,8 @@ $(function () {
 });
 </script>
 
-<script src="{{ STATIC_URL }}js/highcharts/highcharts.js"></script>
-<script src="{{ STATIC_URL }}js/highcharts/modules/exporting.js"></script>
+<script src="{{ STATIC_URL }}js/lib/highcharts/highcharts.js"></script>
+<script src="{{ STATIC_URL }}js/lib/highcharts/modules/exporting.js"></script>
 
 <div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
 
