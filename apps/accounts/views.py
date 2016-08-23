@@ -128,7 +128,7 @@ def login(request,next_page=None,redirect_field_name=REDIRECT_FIELD_NAME):
         user = authenticate(username=email,password=password)
         if user and user.is_active:
             auth.login(request,user)
-            return HttpResponseRedirect(request.session['next_page'])    
+            return HttpResponseRedirect(request.session.get('next_page','/'))    
         else:
             data={"email":email}
             messages.add_message(request,messages.INFO,_(u'用户名或密码错误'))
