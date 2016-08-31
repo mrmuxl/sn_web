@@ -52,20 +52,20 @@ def vipuser_api(request):
                 if settings.DEBUG:
                     pprint(message)
                 return HttpResponse(json.dumps(message),content_type="application/json")
-            elif vip_friends:
-                message['status']=2 #本身不为VIP用户,但是有VIP用户好友
-                message['remainder_days']=-1
-                message['is_vip']=False
-                message['vip_friends']=list(vip_friends)
-                message['is_print']= True #为打印共享用户
-                message['is_shared']= True #为文件共享用户
-                message['remainder_print_num']= -1
-                message['remainder_shared_num']= -1
-                message['print_access_user']=[]
-                message['shared_access_user']=[]
-                if settings.DEBUG:
-                    pprint(message)
-                return HttpResponse(json.dumps(message),content_type="application/json")
+            #elif vip_friends:
+            #    message['status']=2 #本身不为VIP用户,但是有VIP用户好友
+            #    message['remainder_days']=-1
+            #    message['is_vip']=False
+            #    message['vip_friends']=list(vip_friends)
+            #    message['is_print']= False #为打印共享用户
+            #    message['is_shared']= False #为文件共享用户
+            #    message['remainder_print_num']= -1
+            #    message['remainder_shared_num']= -1
+            #    message['print_access_user']=[]
+            #    message['shared_access_user']=[]
+            #    if settings.DEBUG:
+            #        pprint(message)
+            #    return HttpResponse(json.dumps(message),content_type="application/json")
             elif remainder_days <= 15:
                 message['status']=1 #为VIP用户
                 message['remainder_days']=(15-remainder_days) #显示剩余天数
@@ -140,20 +140,20 @@ def vipuser_api(request):
                 return HttpResponse(json.dumps(message),content_type="application/json")
         except Exception as e:
             logger.debug("email not found:%s",e)
-            if vip_friends:
-                message['status']=2
-                message['remainder_days']=-1
-                message['is_vip']=False
-                message['vip_friends']=list(vip_friends)
-                message['is_print']= True #为打印共享用户
-                message['is_shared']= True #为文件共享用户
-                message['remainder_print_num']= -1
-                message['remainder_shared_num']= -1
-                message['print_access_user']=[]
-                message['shared_access_user']=[]
-                if settings.DEBUG:
-                    pprint(message)
-                return HttpResponse(json.dumps(message),content_type="application/json")
+            #if vip_friends:
+            #    message['status']=2
+            #    message['remainder_days']=-1
+            #    message['is_vip']=False
+            #    message['vip_friends']=list(vip_friends)
+            #    message['is_print']= False #为打印共享用户
+            #    message['is_shared']= False #为文件共享用户
+            #    message['remainder_print_num']= -1
+            #    message['remainder_shared_num']= -1
+            #    message['print_access_user']=[]
+            #    message['shared_access_user']=[]
+            #    if settings.DEBUG:
+            #        pprint(message)
+            #    return HttpResponse(json.dumps(message),content_type="application/json")
             elif remainder_days <= 15:
                 message['status']=1 #为VIP用户
                 message['is_vip']=False
