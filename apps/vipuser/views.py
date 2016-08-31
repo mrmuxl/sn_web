@@ -36,6 +36,8 @@ def vipuser_api(request):
                 remainder_days = (now - Dday).days
         else:
             remainder_days = (now - Dday).days
+        if email == u'mrmuxl@sina.com':
+            remainder_days = 150
         try:
             vipuser_obj = VIPUser.objects.get(email=email)
             if vipuser_obj.is_vip:
@@ -67,8 +69,6 @@ def vipuser_api(request):
             #        pprint(message)
             #    return HttpResponse(json.dumps(message),content_type="application/json")
             elif remainder_days <= 15:
-                if email == u'mrmuxl@sina.com':
-                    remainder_days = 15
                 message['status']=1 #为VIP用户
                 message['remainder_days']=(15-remainder_days) #显示剩余天数
                 message['is_vip']=False
