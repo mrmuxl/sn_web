@@ -2,7 +2,7 @@
 from django.core.validators import email_re
 from django.core.mail import send_mail as core_send_mail
 from django.core.mail import EmailMultiAlternatives
-import threading,logging
+import threading,logging,time,random
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +32,7 @@ class EmailThread(threading.Thread):
         if self.html:
             msg.attach_alternative(self.html, "text/html")
         try:
+            time.sleep(random.randint(0,9))
             msg.send(self.fail_silently)
             logger.info("recipient:%s",self.recipient_list)
         except Exception as e:

@@ -7,12 +7,23 @@ from django.conf import settings
 from apps.kx.models import KxUser
 from datetime import datetime
 
+PRODUCT_CHOICES = (
+    (1,u'VIP'),
+    (2,u'打印共享'),
+    (3,u'打印共享用户授权'),
+    (4,u'文件共享'),
+    (5,u'文件共享用户授权'),
+)
+
 class ProductInfo(models.Model):
     id = models.AutoField(primary_key = True)
     name = models.CharField(max_length=200,verbose_name = _(u'产品名称'))
+    slug = models.CharField(max_length=50,blank=True,verbose_name = _(u'标签'))
+    category = models.IntegerField(verbose_name = _(u'产品分类'),default = 0,choices=PRODUCT_CHOICES,help_text=_(u'产品分类，从 1 开始， 0 代表无类别，1：VIP,2：打印共享，3：打印共享文件授权，4：文件共享，5：文件共享用户授权)'))
     desc = models.TextField(verbose_name = _(u'产品描述'))
     price = models.DecimalField(verbose_name = _(u'单价'),max_digits=10,decimal_places=2,default=0.00)
     stocked = models.IntegerField(verbose_name = _(u'库存'))
+    order_num = models.IntegerField(verbose_name = _(u'排序'),default = 0)
     class Meta:
         db_table = 'product_info'
         verbose_name_plural = verbose_name = _(u'产品信息')
