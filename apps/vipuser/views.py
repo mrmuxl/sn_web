@@ -345,7 +345,7 @@ def access_user(request):
                         if ins_print.used_print_num <= ins_print.print_num:
                             u_ins = KxUser.objects.get(email=u)
                             PrintAccess.objects.create(email=ins_print,access_user=u_ins,create_at=now,status=1)
-                            ins_print.used_print_num +=1
+                            ins_print.used_print_num =len(users)
                             ins_print.save()
                             message['status']=0
                             message['message']="ok"
@@ -367,10 +367,10 @@ def access_user(request):
                 SharedAccess.objects.filter(email=email).update(status=0)
                 for u in users:
                     try:
-                        if ins_shared.used_print_num <= ins_shared.used_print_num:
+                        if ins_shared.used_shared_num <= ins_shared.shared_num:
                             u_ins = KxUser.objects.get(email=u)
                             SharedAccess.objects.create(email=ins_shared,access_user=u_ins,create_at=now,status=1)
-                            ins_shared.used_print_num+1
+                            ins_shared.used_shared_num = len(users)
                             ins_shared.save()
                             message['status']=0
                             message['message']="ok"
