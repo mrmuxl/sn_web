@@ -12,6 +12,7 @@ from apps.kx.utils import is_valid_email,send_mail_thread
 from django.utils.html import strip_tags
 from mail_text import vipuser_tip
 from pprint import pprint
+from utils import access_user_print,access_user_shared
 
 logger = logging.getLogger(__name__)
 
@@ -36,38 +37,20 @@ def vipuser_api(request):
                 remainder_days = (now - Dday).days
         else:
             remainder_days = (now - Dday).days
-        if email == u'mrmuxl@sina.com':
-            remainder_days = 150
         try:
             vipuser_obj = VIPUser.objects.get(email=email)
             if vipuser_obj.is_vip:
                 message['status']=1 #为VIP用户
                 message['is_vip']=vipuser_obj.is_vip
                 message['remainder_days']=-1 #不显示
-                message['vip_friends']='not needed'
-                message['is_print']= True #为打印共享用户
-                message['is_shared']= True #为文件共享用户
-                message['remainder_print_num']= 999
-                message['remainder_shared_num']= 999
-                message['print_access_user']=[]
-                message['shared_access_user']=[]
+                message['vip_friends']=''
+                p = access_user_print(vipuser_obj.email)
+                s = access_user_shared(vipuser_obj.email)
+                message.update(p)
+                message.update(s)
                 if settings.DEBUG:
                     pprint(message)
                 return HttpResponse(json.dumps(message),content_type="application/json")
-            #elif vip_friends:
-            #    message['status']=2 #本身不为VIP用户,但是有VIP用户好友
-            #    message['remainder_days']=-1
-            #    message['is_vip']=False
-            #    message['vip_friends']=list(vip_friends)
-            #    message['is_print']= False #为打印共享用户
-            #    message['is_shared']= False #为文件共享用户
-            #    message['remainder_print_num']= -1
-            #    message['remainder_shared_num']= -1
-            #    message['print_access_user']=[]
-            #    message['shared_access_user']=[]
-            #    if settings.DEBUG:
-            #        pprint(message)
-            #    return HttpResponse(json.dumps(message),content_type="application/json")
             elif remainder_days <= 15:
                 message['status']=1 #为VIP用户
                 message['remainder_days']=(15-remainder_days) #显示剩余天数
@@ -85,77 +68,17 @@ def vipuser_api(request):
             else: 
                 message['status']=0 #无权限使用
                 message['remainder_days']=0
-                message['is_vip']=False
+                message['is_vip']=True
                 message['vip_friends']='no friends'
-                print_access_list = []
-                shared_access_list =[]
-                try:
-                    print_user = Print.objects.filter(expire__gt=now).select_related().get(email=email)
-                    if print_user:
-                        message['is_print']= print_user.is_print #为打印共享用户
-                        message['remainder_print_num']= (print_user.print_num - print_user.used_print_num)
-                        print_access_obj_set = print_user.print_access.filter(status=1)
-                        if print_access_obj_set:
-                            for i in print_access_obj_set:
-                                print_access_list.append(i.access_user_id)
-                                #print_access_list.append({"email":i.access_user_id})
-                        message['print_access_user']=print_access_list
-                        if settings.DEBUG:
-                            pprint(message)
-                except Exception as e:
-                    logger.debug("print_user:%s",e)
-                    print_access_user_set = Print.objects.filter(print_access__access_user=email).filter(expire__gt=now)
-                    is_print =False
-                    if print_access_user_set:
-                        for i in print_access_user_set:
-                            if i.is_print:
-                                is_print = True
-                    message['is_print']= is_print 
-                    message['remainder_print_num']= -1
-                    message['print_access_user']=print_access_list
-                    if settings.DEBUG:
-                        pprint(message)
-                try:
-                    shared_user = Shared.objects.filter(expire__gt=now).select_related().get(email=email)
-                    if shared_user:
-                        message['is_shared']= shared_user.is_shared #为文件共享用户
-                        message['remainder_shared_num']= (shared_user.shared_num - shared_user.used_shared_num)
-                        shared_access_obj_set = shared_user.shared_access.filter(status=1)
-                        if shared_access_obj_set:
-                            for i in shared_access_obj_set:
-                                shared_access_list.append(i.access_user_id)
-                                #shared_access_list.append({"email":i.access_user_id})
-                        message['shared_access_user']=shared_access_list
-                        if settings.DEBUG:
-                            pprint(message)
-                except Exception as e:
-                    logger.debug("shared_user:%s",e)
-                    shared_access_user_set = Shared.objects.filter(shared_access__access_user=email).filter(expire__gt=now)
-                    is_shared = False
-                    if shared_access_user_set:
-                        for i in shared_access_user_set:
-                            if i.is_shared:
-                                is_shared = True
-                    message['is_shared']= is_shared 
-                    message['remainder_shared_num']= -1
-                    message['shared_access_user']=shared_access_list
+                p = access_user_print(vipuser_obj.email)
+                s = access_user_shared(vipuser_obj.email)
+                message.update(p)
+                message.update(s)
+                if settings.DEBUG:
+                    pprint(message)
                 return HttpResponse(json.dumps(message),content_type="application/json")
         except Exception as e:
             logger.debug("email not found:%s",e)
-            #if vip_friends:
-            #    message['status']=2
-            #    message['remainder_days']=-1
-            #    message['is_vip']=False
-            #    message['vip_friends']=list(vip_friends)
-            #    message['is_print']= False #为打印共享用户
-            #    message['is_shared']= False #为文件共享用户
-            #    message['remainder_print_num']= -1
-            #    message['remainder_shared_num']= -1
-            #    message['print_access_user']=[]
-            #    message['shared_access_user']=[]
-            #    if settings.DEBUG:
-            #        pprint(message)
-            #    return HttpResponse(json.dumps(message),content_type="application/json")
             if remainder_days <= 15:
                 message['status']=1 #为VIP用户
                 message['is_vip']=False
@@ -174,59 +97,13 @@ def vipuser_api(request):
                 message['status']=0 #无权限使用
                 message['remainder_days']=0
                 message['is_vip']=False
-                message['vip_friends']='no friends'
-                print_access_list = []
-                shared_access_list =[]
-                try:
-                    print_user = Print.objects.filter(expire__gt=now).select_related().get(email=email)
-                    if print_user:
-                        message['is_print']= print_user.is_print #为打印共享用户
-                        message['remainder_print_num']= (print_user.print_num - print_user.used_print_num)
-                        print_access_obj_set = print_user.print_access.filter(status=1)
-                        if print_access_obj_set:
-                            for i in print_access_obj_set:
-                                print_access_list.append(i.access_user_id)
-                        message['print_access_user']=print_access_list
-                        if settings.DEBUG:
-                            pprint(message)
-                except Exception as e:
-                    logger.debug("print_user:%s",e)
-                    print_access_user_set = Print.objects.filter(print_access__access_user=email).filter(expire__gt=now)
-                    is_print =False
-                    if print_access_user_set:
-                        for i in print_access_user_set:
-                            if i.is_print:
-                                is_print = True
-                    message['is_print']= is_print 
-                    message['remainder_print_num']= -1
-                    message['print_access_user']=print_access_list
-                    if settings.DEBUG:
-                        pprint(message)
-                try:
-                    shared_user = Shared.objects.filter(expire__gt=now).select_related().get(email=email)
-                    if shared_user:
-                        message['is_shared']= shared_user.is_shared #为文件共享用户
-                        message['remainder_shared_num']= (shared_user.shared_num - shared_user.used_shared_num)
-                        shared_access_obj_set = shared_user.shared_access.filter(status=1)
-                        if shared_access_obj_set:
-                            for i in shared_access_obj_set:
-                                shared_access_list.append(i.access_user_id)
-                        message['shared_access_user']=shared_access_list
-                        if settings.DEBUG:
-                            pprint(message)
-                except Exception as e:
-                    logger.debug("shared_user:%s",e)
-                    shared_access_user_set = Shared.objects.filter(shared_access__access_user=email).filter(expire__gt=now)
-                    is_shared = False
-                    if shared_access_user_set:
-                        for i in shared_access_user_set:
-                            if i.is_shared:
-                                is_shared = True
-                    message['is_shared']= is_shared 
-                    message['remainder_shared_num']= -1
-                    message['shared_access_user']=shared_access_list
-                    if settings.DEBUG:
-                        pprint(message)
+                message['vip_friends']=''
+                p = access_user_print(email)
+                s = access_user_shared(email)
+                message.update(p)
+                message.update(s)
+                if settings.DEBUG:
+                    pprint(message)
                 return HttpResponse(json.dumps(message),content_type="application/json")
     else:
         message['message']='please post to me a email'
@@ -388,7 +265,6 @@ def access_user(request):
                 message['status']=1
                 message['message']=str(e)
                 return HttpResponse(json.dumps(message),content_type="application/json")
-
     else:
         message['status']=2
         message['message']="error parameters"
