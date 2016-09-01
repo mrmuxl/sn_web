@@ -45,7 +45,7 @@ def vipuser_api(request):
                 message['status']=1 #为VIP用户
                 message['is_vip']=vipuser_obj.is_vip
                 message['remainder_days']=-1 #不显示
-                message['vip_friends']=''
+                message['vip_friends']='vip'
                 p = access_user_print(vipuser_obj.email)
                 s = access_user_shared(vipuser_obj.email)
                 message.update(p)
@@ -99,7 +99,7 @@ def vipuser_api(request):
                 message['status']=0 #无权限使用
                 message['remainder_days']=0
                 message['is_vip']=False
-                message['vip_friends']=''
+                message['vip_friends']='other'
                 p = access_user_print(email)
                 s = access_user_shared(email)
                 message.update(p)
