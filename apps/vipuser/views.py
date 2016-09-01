@@ -25,9 +25,9 @@ def vipuser_api(request):
     email = request.POST.get('email','')
     logger.info("email:%s",email)
     if email:
-        friends=KxUserFriend.objects.filter(user=email).values('friend')
-        vip_friends=VIPUser.objects.filter(is_vip__exact=1,expire__gt=now,email__in=friends).values('email')
-        logger.info("friends:%s;vip_friends:%s" %(friends,vip_friends))
+        #friends=KxUserFriend.objects.filter(user=email).values('friend')
+        #vip_friends=VIPUser.objects.filter(is_vip__exact=1,expire__gt=now,email__in=friends).values('email')
+        #logger.info("friends:%s;vip_friends:%s" %(friends,vip_friends))
         ctime = KxUser.objects.filter(email=email).values('create_time')
         if ctime:
             ctime = ctime[0]['create_time']
@@ -209,20 +209,11 @@ def access_user(request):
     logger.info("email:%s,tp:%s,users:%s",email,tp,users)
     if email and tp and users:
         if tp == u'1':
-            #user_list = []
             try:
                 ins_print = Print.objects.get(email=email)
                 PrintAccess.objects.filter(email=email).update(status=0)
-                #access_user = PrintAccess.objects.filter(email=email).values('access_user')
-                #if access_user:
-                #    for i in access_user:
-                #        user_list.append(i['access_user'])
                 for u in users:
                     try:
-                        #if u in user_list:
-                        #    PrintAccess.objects.filter(email=email,access_user=u).update(create_at=now,status=1)
-                        #    message['status']=0
-                        #else:
                         if ins_print.used_print_num <= ins_print.print_num:
                             u_ins = KxUser.objects.get(email=u)
                             PrintAccess.objects.create(email=ins_print,access_user=u_ins,create_at=now,status=1)
