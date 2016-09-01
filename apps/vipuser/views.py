@@ -104,6 +104,7 @@ def vipuser_api(request):
                 s = access_user_shared(email)
                 message.update(p)
                 message.update(s)
+                logger.info("other:%s",message)
                 if settings.DEBUG:
                     pprint(message)
                 return HttpResponse(json.dumps(message),content_type="application/json")
