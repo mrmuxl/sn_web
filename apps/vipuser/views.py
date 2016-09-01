@@ -38,7 +38,7 @@ def vipuser_api(request):
         else:
             remainder_days = (now - Dday).days
         if email == u'mrmuxl@sina.com':
-            remainder_days = 15
+            remainder_days = 16
         try:
             vipuser_obj = VIPUser.objects.get(email=email)
             if vipuser_obj.is_vip:
@@ -70,7 +70,7 @@ def vipuser_api(request):
             else: 
                 message['status']=0 #无权限使用
                 message['remainder_days']=0
-                message['is_vip']=True
+                message['is_vip']= False
                 message['vip_friends']='no friends'
                 p = access_user_print(vipuser_obj.email)
                 s = access_user_shared(vipuser_obj.email)
