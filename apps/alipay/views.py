@@ -166,9 +166,9 @@ def create_order(request):
     else:
         return HttpResponse(u'创建失败，参数错误!')
     if num and num is not None and num.isdigit():
-        money = Decimal(int(num)*5.00)
+        money = Decimal(str(int(num)*5.00))
     else:
-        money = Decimal(0.00)
+        money = Decimal("0.00")
         num = 0
 
     try:
