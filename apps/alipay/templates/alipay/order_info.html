@@ -97,17 +97,13 @@
 					<ul style="margin-top:10px"><li class="product_title" >周&nbsp期：</li>
 						{% for pdt in pdt_list %}						
 							{% if pdt.slug  %}
-								{%if forloop.first %}
-									<input id="product_type" type="hidden" name="type" value="{{pdt.id}}">
-									<li class="product_item"><a id="{{pdt.id}}"  href="javascript:void(0)"><span id="{{pdt.price}}_{{pdt.id}}">{{pdt.slug}}</span></a></li>
-								{%else%}
 							<li class="product_item"><a  id="{{pdt.id}}" href="javascript:void(0)">	<span id="{{pdt.price}}_{{pdt.id}}" >{{pdt.slug}}</span></a></li>
-								{% endif %}
 							{% endif %}
 						{%endfor%}
 					</ul>
 				</div>
 				<div class="clearfix"></div>
+					<input id="product_type" type="hidden" name="type" value="0">
 					<input id="product_submit" type="submit" class="btn-primary pull-left  btn-large" style="margin-top:30px;margin-left:20px;" value="支付宝支付">
 					</fieldset>
 					</form>
@@ -123,8 +119,8 @@ $(function(){
 		$("#{{pdt.id}}").click(function(){
 			$("ul a.selected").removeClass("selected");
 			$("a#{{pdt.id}}").addClass("selected");
-			 $("#price").text({{pdt.price}});
-			 $("#product_type").val({{pdt.id}})
+			$("#price").text({{pdt.price}});
+			$("#product_type").val({{pdt.id}})
 		})
 
 	{%endfor%}

@@ -37,10 +37,12 @@ class OrderInfo(models.Model):
     buy_user = models.EmailField(_(u'购买人'),max_length=50)
     buy_product = models.ForeignKey(ProductInfo,verbose_name = _(u'购买产品'))
     number = models.IntegerField(verbose_name=_(u'购买数量'))
+    auth_user_num = models.IntegerField(verbose_name=_(u'购买用户授权数'),default=0)
     total_fee = models.DecimalField(verbose_name=_(u'支付总额'),max_digits=10,decimal_places=2,default=0.00)
     pay_status = models.BooleanField(verbose_name=_(u'支付状态'),help_text=_(u'0：未付款，1：已付款'))
     pay_at = models.DateTimeField(default = datetime(1970,1,1),verbose_name = _(u'付款时间'))
     trade_no = models.CharField(default ='0000',db_index=True,max_length=64,verbose_name=_(u'支付宝交易号')) 
+    status = models.BooleanField(verbose_name=_(u'订单状态'),help_text=_(u'0：未处理，1：已处理'))
     class Meta:
         db_table = 'order_info'
         verbose_name_plural = verbose_name = _(u'订单信息')

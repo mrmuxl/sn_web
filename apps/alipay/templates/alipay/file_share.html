@@ -71,6 +71,11 @@
 	list-style:none;
 	margin: 5px
 }
+.another{
+	display:none;
+	margin-left:35px;
+
+}
 </style>
 </head>
 <body>
@@ -87,28 +92,33 @@
 				<div class="well" style="background-color:#FDFDFD;margin-bottom:10px;padding:20px;width:600px;"><span style="color:red;font-size:16px">你将开通的VIP帐号：{{user.email}}	</span></div>
 			</div>
 			<div class="row">
-				<div class="hero	-unit pull-left" style="background-color:#FDFDFD;padding:40px;width:560px;">
+				<div class="hero-unit pull-left" style="background-color:#FDFDFD;padding:40px;width:560px;">
 					<form action="{% url 'create_order' %}" method="post">{% csrf_token %}
 						<fieldset>
-					 	<legend>开通VIP：<span style="color:#999;font-size:12px">（VIP及其好友可使用全部付费功能）</span></legend>
-					  
+					 	<legend>开通文件共享VIP：<span style="color:#999;font-size:12px">（你和及其好友可使用文件共享功能）</span></legend>
 				<div class="product">
 					<ul><li style="color:#8e8e8e;margin:5px;list-style:none;float:left;" >价&nbsp格：</li><li style="list-style:none"><span id="price" style="color:#F80;margin-top:100px;font-size:24px" >0.00</span><span style="font-size:14px;margin-left:10px">元</span></li></ul>
 					<ul style="margin-top:10px"><li class="product_title" >周&nbsp期：</li>
 						{% for pdt in pdt_list %}						
 							{% if pdt.slug  %}
-								{%if forloop.first %}
-									<input id="product_type" type="hidden" name="type" value="{{pdt.id}}">
-									<li class="product_item"><a id="{{pdt.id}}"  href="javascript:void(0)"><span id="{{pdt.price}}_{{pdt.id}}">{{pdt.slug}}</span></a></li>
-								{%else%}
 							<li class="product_item"><a  id="{{pdt.id}}" href="javascript:void(0)">	<span id="{{pdt.price}}_{{pdt.id}}" >{{pdt.slug}}</span></a></li>
-								{% endif %}
 							{% endif %}
 						{%endfor%}
 					</ul>
 				</div>
 				<div class="clearfix"></div>
-					<input id="product_submit" type="submit" class="btn-primary pull-left  btn-large" style="margin-top:30px;margin-left:20px;" value="支付宝支付">
+				<br>
+				<div>
+						<ul>赠送5个客户端授权&nbsp&nbsp(<a id="access_user" href="javascript:void(0)">增加</a>)</ul>
+				</div>
+				<div class="another">
+							<p>单价：5.00元/人</p>
+							<input id="min" name="" type="button" value="-" />							
+							<input style="max-width:30px;margin-top:10px" readonly="" id="text_box" name="auth" type="text" value="0" />
+							<input id="add" name="" type="button" value="+" /> 
+				</div>
+					<input id="product_type" type="hidden" name="type" value="0">
+					<input id="product_submit" type="submit" class="btn-primary pull-left  btn-large" style="margin-top:20px;margin-left:20px;" value="支付宝支付">
 					</fieldset>
 					</form>
 						温馨提示：如有疑问，请加入我们的QQ群：205528924
@@ -124,8 +134,9 @@ $(function(){
 			$("ul a.selected").removeClass("selected");
 			$("a#{{pdt.id}}").addClass("selected");
 			 $("#price").text({{pdt.price}});
-			 $("#product_type").val({{pdt.id}})
-		})
+			 $("#product_type").val({{pdt.id}});
+			 $("#text_box").val(0);
+		});
 
 	{%endfor%}
 		$("#product_submit").click(function() {
@@ -136,7 +147,31 @@ $(function(){
 			}
 
 		});
-})
+});
+$(function(){
+	var t = $("#text_box");
+	$("#add").click(function(){
+		t.val(parseInt(t.val())+1);
+		var p = parseInt($("#price").text());
+		$("#price").text((p+5).toFixed(2));
+	})
+	$("#min").click(function(){
+		if (t.val() > 0){
+			t.val(parseInt(t.val())-1);
+			var p = parseInt($("#price").text());
+			$("#price").text((p-5).toFixed(2));
+		}
+		else{
+			alert("这个好像不能为-1哦！");
+			}
+	})
+});
+$(function () {
+	$("#access_user").toggle(function(){
+		$(".another").animate({height: 'toggle',opacity: 'toggle'},"slow");
+	}, function() {});
+});
 </script>
 </body>
 </html>
+
