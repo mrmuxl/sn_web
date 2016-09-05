@@ -9,7 +9,7 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 
 def get_conn(host,user,passwd,db):
-    conn = MySQLdb.connect(host='localhost',user='root',passwd='mrmuxl',db='kx')
+    conn = MySQLdb.connect(host='localhost',user='root',passwd='abc123!!',db='kx')
     return conn
 
 def init_cursor(conn):
