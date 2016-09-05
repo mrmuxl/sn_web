@@ -112,7 +112,7 @@ def update_order(cursor,order_id):
 if __name__ == '__main__':
     now = datetime.now()
     print now
-    conn = get_conn('localhost','root','mrmuxl','kx')
+    conn = get_conn('localhost','root','abc123!!','kx')
     cursor = init_cursor(conn)
     all_order = get_all_order(cursor)
     if all_order:
