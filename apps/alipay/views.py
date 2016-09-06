@@ -191,8 +191,8 @@ def create_order(request):
     try:
         pay_url = create_direct_pay_by_user(order_id,name,desc,total_fee)
         logger.info("pay_url:%s",pay_url)
-        #return HttpResponse('ok')
-        return HttpResponseRedirect(pay_url)
+        return HttpResponse('ok')
+        #return HttpResponseRedirect(pay_url)
     except Exception as e:
         logger.debug("pay_url_debug:%s",e)
         #raise Http404
@@ -201,20 +201,20 @@ def create_order(request):
 @login_required
 @require_GET
 def order_info(request):
-    p = request.GET.get('c',u'1')
-    t = request.GET.get('type',u'12')
-    if t and t.isdigit() and  t == u'12': #buy
+    c = request.GET.get('c',u'1')
+    t = request.GET.get('type','')
+    if t and t.isdigit() and t == u'12': #buy
         return render(request,"buy.html",{})
-    if p and  p.isdigit():
-        if p == u'1':#VIP
-            pdt_list = ProductInfo.objects.filter(category=p).filter(slug__isnull=False).order_by('order_num').values()
-            return render(request,"alipay/order_info.html",{"pdt_list":pdt_list,"p":p})
-        elif p == u'2': #打印机共享
-            pdt_list = ProductInfo.objects.filter(category=p).filter(slug__isnull=False).order_by('order_num').values()
-            return render(request,"alipay/print_share.html",{"pdt_list":pdt_list,"p":p})
-        elif p == u'4': #文件共享
-            pdt_list = ProductInfo.objects.filter(category=p).filter(slug__isnull=False).order_by('order_num').values()
-            return render(request,"alipay/file_share.html",{"pdt_list":pdt_list,"p":p})
+    if c and  c.isdigit():
+        if c == u'1':#VIP
+            pdt_list = ProductInfo.objects.filter(category=c).filter(slug__isnull=False).order_by('order_num').values()
+            return render(request,"alipay/order_info.html",{"pdt_list":pdt_list})
+        elif c == u'2': #打印机共享
+            pdt_list = ProductInfo.objects.filter(category=c).filter(slug__isnull=False).order_by('order_num').values()
+            return render(request,"alipay/print_share.html",{"pdt_list":pdt_list})
+        elif c == u'4': #文件共享
+            pdt_list = ProductInfo.objects.filter(category=c).filter(slug__isnull=False).order_by('order_num').values()
+            return render(request,"alipay/file_share.html",{"pdt_list":pdt_list})
         else:
             return HttpResponse(u'没有此类产品')
     else:
