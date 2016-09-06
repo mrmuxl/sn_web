@@ -9,7 +9,7 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 
 def get_conn(host,user,passwd,db):
-    conn = MySQLdb.connect(host='localhost',user='root',passwd='abc123!!',db='kx')
+    conn = MySQLdb.connect(host='localhost',user='root',passwd='mrmuxl',db='kx')
     return conn
 
 def init_cursor(conn):
@@ -110,7 +110,24 @@ def update_order(cursor,order_id):
         return False
 
 def new_month(month):
-    pass
+    if month >= 6 and month < 12:
+        month+=1
+    if month >= 12:
+        month+=2
+    return month
+
+def get_expire(expire,now,month):
+    if expire > now:
+        m = expire.month + month
+        y = expire.year
+        d = expire.day
+        while m >12:
+            m -=12
+            y += 1
+        t = datetime(y,m,d)
+        print t
+    return t
+
 
 if __name__ == '__main__':
     now = datetime.now()
@@ -123,11 +140,14 @@ if __name__ == '__main__':
             print i
             pdt = get_product(cursor,i['buy_product_id'])
             if  pdt['category'] == 1:
-                month = int(i['total_fee']/50)
+                m = int(i['total_fee']/50)
+                month = new_month(m)
                 one_print = get_print(cursor,i['buy_user'])
                 one_shared = get_shared(cursor,i['buy_user'])
                 try:
                     if one_print:
+                        t = get_expire(one_print['expire'],now,month)
+                        print t
                         expire = one_print['expire']+ timedelta(days=month*30)
                         print "p",expire
                         print_num = 999
@@ -146,12 +166,13 @@ if __name__ == '__main__':
                         expire = now + timedelta(days=month*30)
                         print "sd",expire
                         shared_num = 999
-                        insert_shared(cursor,i['buy_user'],shared_num,expire)
+                        insert_shared(cursor,i['buy_user'],shared_num,now,expire)
                     update_order(cursor,i['order_id'])
                 except Exception as e:
                     print "vip process",e
             elif pdt['category'] == 2:
-                month = int((i['total_fee']-i['auth_user_num']*5)/15)
+                m = int((i['total_fee']-i['auth_user_num']*5)/15)
+                month = new_month(m)
                 one_print = get_print(cursor,i['buy_user'])
                 if one_print:
                     expire = one_print['expire']+ timedelta(days=month*30)
@@ -164,7 +185,8 @@ if __name__ == '__main__':
                     insert_print(cursor,i['buy_user'],print_num,now,expire)
                     update_order(cursor,i['order_id'])
             elif pdt['category'] == 4:
-                month = int((i['total_fee']-i['auth_user_num']*5)/15)
+                m = int((i['total_fee']-i['auth_user_num']*5)/15)
+                month = new_month(m)
                 one_shared = get_shared(cursor,i['buy_user'])
                 if one_shared:
                     expire = one_shared['expire']+ timedelta(days=month*30)
@@ -175,7 +197,7 @@ if __name__ == '__main__':
                 else:
                     expire = now + timedelta(days=month*30)
                     shared_num = 5 + i['auth_user_num']
-                    insert_shared(cursor,i['buy_user'],shared_num,expire)
+                    insert_shared(cursor,i['buy_user'],shared_num,now,expire)
                     logger.info("instert shared")
                     update_order(cursor,i['order_id'])
             else:
