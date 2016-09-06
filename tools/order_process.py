@@ -116,23 +116,48 @@ def new_month(month):
         month+=2
     return month
 
-def get_expire(expire,now,month):
-    if expire > now:
+def get_month_days(year, month):
+    MONTH_DAYS = [0,31,28,31,30,31,30,31,31,30,31,30,31];
+    if(month==2):
+        if(((year%4 == 0) and (year%100 != 0)) or (year%400 == 0)):
+            return 29
+        else:
+            return 28
+    else:
+        return (MONTH_DAYS[month])
+
+def set_expire(now,month,expire=None):
+    if expire is not None and expire > now:
         m = expire.month + month
         y = expire.year
         d = expire.day
-        while m >12:
+        while m > 12:
             m -=12
             y += 1
+        days = get_month_days(y,m)
+        if d > days:
+            m += 1
+            d -= days
         t = datetime(y,m,d)
-        print t
+    else:
+        m = now.month + month
+        y = now.year
+        d = now.day
+        while m > 12:
+            m -= 12
+            y += 1
+        days = get_month_days(y,m)
+        if d > days:
+            m += 1
+            d -= days
+        t = datetime(y,m,d)
     return t
 
 
 if __name__ == '__main__':
     now = datetime.now()
     print now
-    conn = get_conn('localhost','root','abc123!!','kx')
+    conn = get_conn('localhost','root','mrmuxl','kx')
     cursor = init_cursor(conn)
     all_order = get_all_order(cursor)
     if all_order:
@@ -146,24 +171,26 @@ if __name__ == '__main__':
                 one_shared = get_shared(cursor,i['buy_user'])
                 try:
                     if one_print:
-                        t = get_expire(one_print['expire'],now,month)
-                        print t
-                        expire = one_print['expire']+ timedelta(days=month*30)
+                        expire = set_expire(now,month,one_print['expire'])
+                        #expire = one_print['expire']+ timedelta(days=month*30)
                         print "p",expire
                         print_num = 999
                         update_print(cursor,i['buy_user'],print_num,expire)
                     else:
-                        expire = now + timedelta(days=month*30)
+                        #expire = now + timedelta(days=month*30)
+                        expire = set_expire(now,month)
                         print "pr",expire
                         print_num = 999
                         insert_print(cursor,i['buy_user'],print_num,now,expire)
                     if one_shared:
-                        expire = one_shared['expire']+ timedelta(days=month*30)
+                        expire = set_expire(now,month,one_shared['expire'])
+                        #expire = one_shared['expire']+ timedelta(days=month*30)
                         print "s",expire
                         shared_num = 999
                         update_shared(cursor,i['buy_user'],shared_num,expire)
                     else:
-                        expire = now + timedelta(days=month*30)
+                        #expire = now + timedelta(days=month*30)
+                        expire = set_expire(now,month)
                         print "sd",expire
                         shared_num = 999
                         insert_shared(cursor,i['buy_user'],shared_num,now,expire)
@@ -175,12 +202,14 @@ if __name__ == '__main__':
                 month = new_month(m)
                 one_print = get_print(cursor,i['buy_user'])
                 if one_print:
-                    expire = one_print['expire']+ timedelta(days=month*30)
+                    expire = set_expire(now,month,one_print['expire'])
+                    #expire = one_print['expire']+ timedelta(days=month*30)
                     print_num = one_print['print_num'] + i['auth_user_num']
                     update_print(cursor,i['buy_user'],print_num,expire)
                     update_order(cursor,i['order_id'])
                 else:
-                    expire = now + timedelta(days=month*30)
+                    #expire = now + timedelta(days=month*30)
+                    expire = set_expire(now,month)
                     print_num = 5 + i['auth_user_num']
                     insert_print(cursor,i['buy_user'],print_num,now,expire)
                     update_order(cursor,i['order_id'])
@@ -189,16 +218,18 @@ if __name__ == '__main__':
                 month = new_month(m)
                 one_shared = get_shared(cursor,i['buy_user'])
                 if one_shared:
-                    expire = one_shared['expire']+ timedelta(days=month*30)
+                    #expire = one_shared['expire']+ timedelta(days=month*30)
+                    expire = set_expire(now,month,one_shared['expire'])
                     shared_num = one_shared['shared_num'] + i['auth_user_num']
                     update_shared(cursor,i['buy_user'],shared_num,expire)
-                    logger.info("update shared")
+                    print "update shared"
                     update_order(cursor,i['order_id'])
                 else:
-                    expire = now + timedelta(days=month*30)
+                    #expire = now + timedelta(days=month*30)
+                    expire = set_expire(now,month)
                     shared_num = 5 + i['auth_user_num']
                     insert_shared(cursor,i['buy_user'],shared_num,now,expire)
-                    logger.info("instert shared")
+                    print "instert shared"
                     update_order(cursor,i['order_id'])
             else:
                 print "no category"
