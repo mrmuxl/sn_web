@@ -1,0 +1,175 @@
+{% load compress %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="description" content="局域网共享 跨网段共享  windows共享 文件共享 打印共享 阡陌软件" />
+<meta name="keywords" content="局域网共享 跨网段共享  windows共享 文件共享 打印共享 阡陌软件" />
+{% if DEBUG %}
+	<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.css" type="text/css" />
+	<!-- <link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome.css" type="text/css" /> -->
+	<!--[if IE 7]>
+	<link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome-ie7.css" type="text/css" />
+	<![endif]-->
+{% else %}
+	<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.min.css" type="text/css" />
+	<!-- <link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome.min.css" type="text/css" /> -->
+	<!--[if IE 7]>
+	<link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome-ie7.min.css" type="text/css" />
+	<![endif]-->
+{% endif %}
+{% compress js %}
+<script src="{{STATIC_URL}}js/lib/jquery-1.7.2.min.js"></script>
+<script src="{{STATIC_URL}}js/lib/django_ajax.js"></script>
+<script src="{{STATIC_URL}}js/lib/bootstrap.min.js"></script>
+{% endcompress %}
+<style type="text/css">
+.container-narrow {
+  margin: 0 auto;
+  max-width: 960px;
+  }
+  body {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color:#E5E8ED;
+  font-family: "Microsoft YaHei","Frutiger", "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif !important; 
+  font-size: 14px;
+  font-weight:normal;
+}
+.product_item a {
+    display: inline-block;
+    padding: 4px 12px;
+	color: #333333;
+    text-decoration: none;
+}
+
+.product_item  {
+    color: #888888;
+    font-size: 16px;
+    background-color: #F9F9F9;
+    border-left: 1px solid #DDDDDD;
+    box-shadow: 0 1px 1px rgba(255, 255, 255, 0.3) inset;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+	border: 1px solid #DDDDDD;
+    margin: 0 0 0 20px;
+    padding: 0;
+	display: inline-block;
+    float: left;
+}
+.selected  {
+	border: 2px solid #f90;
+	background: url({{STATIC_URL}}images/alipay/9.png) no-repeat 100% 100%;
+	margin: -1px;
+}
+
+.product_title {
+	color: #8e8e8e;
+	float: left;
+	width: 32px;
+	margin-left: 0px;
+	padding: 0;
+	list-style:none;
+	margin: 5px
+}
+.another{
+	display:block;
+	margin-left:35px;
+
+}
+</style>
+</head>
+<body>
+<div class="container-narrow">
+	<div class="row" style="margin-top:100px;">
+		<div class="span2"></div>
+		<div class="span8"><span style="font-size:21px;">SimpleNect支付中心</span><span class="pull-right" style="font-size:18px">你好，{{user.nick}} <a href="{% url 'logout'%}">退出</a></span></div>
+	</div>
+
+	<div class="row" style="margin-top:20px;">
+		<div class="span2"></div>
+		<div class="span8">
+			<div class="row">
+				<div class="well" style="background-color:#FDFDFD;margin-bottom:10px;padding:20px;width:600px;"><span style="color:red;font-size:16px">你将要增加授权人数的帐号：{{user.email}}	</span></div>
+			</div>
+			<div class="row">
+				<div class="hero-unit pull-left" style="background-color:#FDFDFD;padding:40px;width:560px;">
+					<form action="{% url 'create_order' %}" method="post">{% csrf_token %}
+						<fieldset>
+					 	<legend>增加可授权人数：<span style="color:#999;font-size:12px"></span></legend>
+
+				增加打印共享授权人数：
+				<br>
+				<div class="clearfix"></div>
+						<div class="another">
+							<p>单&nbsp价：5.00元/人</p>
+							增&nbsp加：<input class="btn" style="margin-bottom:11px" id="min" name="" type="button" value="-" />							
+							<input style="max-width:35px;height:15px" readonly="" id="text_box" name="print" type="text" value="0" />
+							<input  class="btn" style="margin-bottom:11px" id="add" name="" type="button" value="+" /> 人
+				</div>
+				<br>
+				增加文件共享授权人数：
+				<br>
+				<div class="another">
+							<p>单&nbsp价：5.00元/人</p>
+							增&nbsp加：<input class="btn" style="margin-bottom:11px;" id="min1" name="" type="button" value="-" />							
+							<input style="max-width:35px;height:15px;" readonly="" id="text_box1" name="file" type="text" value="0" />
+							<input class="btn" style="margin-bottom:11px;" id="add1" name="" type="button" value="+" /> 人
+				</div>
+				<div class="product">
+					<ul><li style="color:#8e8e8e;margin:5px;list-style:none;float:left;font-size:22px;" >合&nbsp计：</li><li style="list-style:none;margin-top:20px;"><span id="price" style="color:#F80;margin-top:50px;font-size:24px" >00.00</span><span style="font-size:14px;margin-left:10px">元</span></li></ul>
+				</div>
+			
+					<input id="product_submit" type="submit" class="btn-primary pull-left  btn-large" style="margin-top:20px;margin-left:20px;" value="支付宝支付">
+					</fieldset>
+					</form>
+					<br>
+						温馨提示：如有疑问，请加入我们的QQ群：205528924
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+
+$(function(){
+	$("#text_box").val(0);
+	$("#text_box1").val(0);
+	var t = $("#text_box");
+	$("#add").click(function(){
+		t.val(parseInt(t.val())+1);
+		var p = parseInt($("#price").text());
+		$("#price").text((p+5).toFixed(2));
+	})
+	$("#min").click(function(){
+		if (t.val() > 0){
+			t.val(parseInt(t.val())-1);
+			var p = parseInt($("#price").text());
+			$("#price").text((p-5).toFixed(2));
+		}
+		else{
+			alert("这个好像不能为-1哦！");
+			}
+	})
+});
+$(function(){
+	var t = $("#text_box1");
+	$("#add1").click(function(){
+		t.val(parseInt(t.val())+1);
+		var p = parseInt($("#price").text());
+		$("#price").text((p+5).toFixed(2));
+	})
+	$("#min1").click(function(){
+		if (t.val() > 0){
+			t.val(parseInt(t.val())-1);
+			var p = parseInt($("#price").text());
+			$("#price").text((p-5).toFixed(2));
+		}
+		else{
+			alert("这个好像不能为-1哦！");
+			}
+	})
+});
+</script>
+</body>
+</html>
+
