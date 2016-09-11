@@ -219,6 +219,3 @@ def order_info(request):
             return HttpResponse(u'没有此类产品')
     else:
         return HttpResponse(u'参数错误')
- 
-def user_access_buy(reqeust):
-    pass

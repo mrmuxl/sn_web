@@ -9,6 +9,7 @@ media/upload/User/
 media/upload/BugReport/
 media/upload/BugLog/
 media/upload/Install/
+media/*
 logs/access.log
 logs/alipay.log
 logs/*
