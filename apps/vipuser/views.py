@@ -5,6 +5,7 @@ from django.conf import settings
 from models import VIPUser,Print,Shared,PrintAccess,SharedAccess
 from apps.kx.models import KxUserFriend
 from apps.kx.models import KxUser
+from models import Print,Shared
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import (require_POST,require_GET)
 from django.http import HttpResponseRedirect,HttpResponse
@@ -16,98 +17,84 @@ from utils import access_user_print,access_user_shared
 
 logger = logging.getLogger(__name__)
 
+
+def get_remainder_days(email):
+    now = datetime.datetime.now()
+    Dday = datetime.datetime(2013,8,20) #1944-06-06
+    ctime = KxUser.objects.filter(email=email).values('create_time')
+    if ctime:
+        ctime = ctime[0]['create_time']
+        if ctime >= Dday:
+            remainder_days = (now - ctime).days
+        else:
+            remainder_days = (now - Dday).days
+    else:
+        remainder_days = (now - Dday).days
+    return remainder_days
+
+
 @csrf_exempt
 @require_POST
 def vipuser_api(request):
     message = {}
     now = datetime.datetime.now()
-    Dday = datetime.datetime(2013,8,20) #1944-06-06
     email = request.POST.get('email','')
     logger.info("email:%s",email)
     if email:
-        #friends=KxUserFriend.objects.filter(user=email).values('friend')
-        #vip_friends=VIPUser.objects.filter(is_vip__exact=1,expire__gt=now,email__in=friends).values('email')
-        #logger.info("friends:%s;vip_friends:%s" %(friends,vip_friends))
-        ctime = KxUser.objects.filter(email=email).values('create_time')
-        if ctime:
-            ctime = ctime[0]['create_time']
-            if ctime >= Dday:
-                remainder_days = (now - ctime).days
-            else:
-                remainder_days = (now - Dday).days
+        v = VIPUser.objects.filter(email=email,is_vip__exact=1,expire__gt=now)
+        p = Print.objects.filter(email=email,is_print__exact=1,expire__gt=now)
+        s = Shared.objects.filter(email=email,is_shared__exact=1,expire__gt=now)
+        remainder_days = get_remainder_days(email)
+        if v:
+            message['status']=1 #为VIP用户
+            message['is_vip']=True
+            message['remainder_days']=-1 #不显示
+            message['vip_friends']='vip'
+            p = access_user_print(email)
+            s = access_user_shared(email)
+            message.update(p)
+            message.update(s)
+            if settings.DEBUG:
+                pprint(message)
+            return HttpResponse(json.dumps(message),content_type="application/json")
+        elif p or s:
+            message['status']=0 #为VIP用户
+            message['is_vip']=False
+            message['remainder_days']=-1 #不显示
+            message['vip_friends']='vip'
+            p = access_user_print(email)
+            s = access_user_shared(email)
+            message.update(p)
+            message.update(s)
+            if settings.DEBUG:
+                pprint(message)
+            return HttpResponse(json.dumps(message),content_type="application/json")
+        elif remainder_days <= 15:
+            message['status']=1 #为VIP用户
+            message['remainder_days']=(15-remainder_days) #显示剩余天数
+            message['is_vip']=False
+            message['vip_friends']='not needed'
+            message['is_print']= True #为打印共享用户
+            message['is_shared']= True #为文件共享用户
+            message['remainder_print_num']= -1
+            message['remainder_shared_num']= -1
+            message['print_access_user']=[]
+            message['shared_access_user']=[]
+            if settings.DEBUG:
+                pprint(message)
+            return HttpResponse(json.dumps(message),content_type="application/json")
         else:
-            remainder_days = (now - Dday).days
-        #if email == u'mrmuxl@sina.com':
-        #    remainder_days = 16
-        try:
-            vipuser_obj = VIPUser.objects.get(email=email)
-            if vipuser_obj.is_vip:
-                message['status']=1 #为VIP用户
-                message['is_vip']=vipuser_obj.is_vip
-                message['remainder_days']=-1 #不显示
-                message['vip_friends']='vip'
-                p = access_user_print(vipuser_obj.email)
-                s = access_user_shared(vipuser_obj.email)
-                message.update(p)
-                message.update(s)
-                if settings.DEBUG:
-                    pprint(message)
-                return HttpResponse(json.dumps(message),content_type="application/json")
-            elif remainder_days <= 15:
-                message['status']=1 #为VIP用户
-                message['remainder_days']=(15-remainder_days) #显示剩余天数
-                message['is_vip']=False
-                message['vip_friends']='not needed'
-                message['is_print']= True #为打印共享用户
-                message['is_shared']= True #为文件共享用户
-                message['remainder_print_num']= -1
-                message['remainder_shared_num']= -1
-                message['print_access_user']=[]
-                message['shared_access_user']=[]
-                if settings.DEBUG:
-                    pprint(message)
-                return HttpResponse(json.dumps(message),content_type="application/json")
-            else: 
-                message['status']=0 #无权限使用
-                message['remainder_days']=0
-                message['is_vip']= False
-                message['vip_friends']='no friends'
-                p = access_user_print(vipuser_obj.email)
-                s = access_user_shared(vipuser_obj.email)
-                message.update(p)
-                message.update(s)
-                if settings.DEBUG:
-                    pprint(message)
-                return HttpResponse(json.dumps(message),content_type="application/json")
-        except Exception as e:
-            logger.debug("email not found:%s",e)
-            if remainder_days <= 15:
-                message['status']=1 #为VIP用户
-                message['is_vip']=False
-                message['remainder_days']=(15-remainder_days)
-                message['vip_friends']='false'
-                message['is_print']= True #为打印共享用户
-                message['is_shared']= True #为文件共享用户
-                message['remainder_print_num']= -1
-                message['remainder_shared_num']= -1
-                message['print_access_user']=[]
-                message['shared_access_user']=[]
-                if settings.DEBUG:
-                    pprint(message)
-                return HttpResponse(json.dumps(message),content_type="application/json")
-            else:
-                message['status']=0 #无权限使用
-                message['remainder_days']=0
-                message['is_vip']=False
-                message['vip_friends']='other'
-                p = access_user_print(email)
-                s = access_user_shared(email)
-                message.update(p)
-                message.update(s)
-                logger.info("other:%s",message)
-                if settings.DEBUG:
-                    pprint(message)
-                return HttpResponse(json.dumps(message),content_type="application/json")
+            message['status']=0 #无权限使用
+            message['remainder_days']=0 #无剩余天数
+            message['is_vip']= False
+            message['vip_friends']='no friends'
+            p = access_user_print(email)
+            s = access_user_shared(email)
+            message.update(p)
+            message.update(s)
+            if settings.DEBUG:
+                pprint(message)
+            return HttpResponse(json.dumps(message),content_type="application/json")
     else:
         message['message']='please post to me a email'
         message['status']="error"

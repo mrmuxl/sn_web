@@ -9,7 +9,11 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 
 def get_conn(host,user,passwd,db):
-    conn = MySQLdb.connect(host=host,user=user,passwd=passwd,db=db)
+    try:
+        conn = MySQLdb.connect(host=host,user=user,passwd=passwd,db=db)
+    except Exception as e:
+        print "connection error",e
+        raise
     return conn
 
 def init_cursor(conn):
@@ -52,9 +56,9 @@ def get_shared(cursor,email):
     one_shared = fetchone(sql,cursor,data=email)
     return one_shared
 
-def get_vip(cursor,table,email):
-    sql ="""select * from %%(table)s' where email=%(email)s"""
-    values ={'table':table,'email':email}
+def get_vip(cursor,email):
+    sql ="""select * from vipuser where email=%(email)s"""
+    values ={'email':email}
     one_vip = fetchone(sql,cursor,data=values)
     return one_vip
 
@@ -80,7 +84,7 @@ def insert_shared(cursor,email,shared_num,create_at,expire):
         print "insert shared execute error",e
         return False
 
-def insert_vip(cursor,email,expire):
+def insert_vip(cursor,email,create_at,expire):
     sql="""insert into vipuser values(%(id)s,%(email)s,%(is_vip)s,%(create_at)s,%(expire)s)"""
     data={"id":None,"email":email,"is_vip":True,"create_at":create_at,"expire":expire}
     try:
@@ -92,8 +96,8 @@ def insert_vip(cursor,email,expire):
         return False
 
 def update_print(cursor,email,print_num,expire):
-    sql="""update print set print_num=%(print_num)s, expire = %(expire)s where email=%(email)s"""
-    data = {"email":email,"print_num":print_num,"expire":expire}
+    sql="""update print set is_print=%(is_print)s,print_num=%(print_num)s, expire = %(expire)s where email=%(email)s"""
+    data = {"email":email,"is_print":True,"print_num":print_num,"expire":expire}
     try:
         cursor.execute(sql,data)
         print "update_print successful:",data
@@ -103,8 +107,8 @@ def update_print(cursor,email,print_num,expire):
         return False
 
 def update_shared(cursor,email,print_num,expire):
-    sql="""update shared set shared_num=%(shared_num)s, expire = %(expire)s where email=%(email)s"""
-    data = {"email":email,"shared_num":shared_num,"expire":expire}
+    sql="""update shared set is_shared=%(is_shared)s,shared_num=%(shared_num)s, expire = %(expire)s where email=%(email)s"""
+    data = {"email":email,"is_shared":True,"shared_num":shared_num,"expire":expire}
     try:
         cursor.execute(sql,data)
         print "update_shared:",data
@@ -183,10 +187,11 @@ def set_expire(now,month,expire=None):
 if __name__ == '__main__':
     now = datetime.now()
     print now
-    conn = get_conn('localhost','root','abc123!!','kx')
+    try:
+        conn = get_conn('localhost','root','abc123!!','kx')
+    except Exception as e:
+        conn = get_conn('localhost','root','mrmuxl','kx')
     cursor = init_cursor(conn)
-    #one_vip = get_vip(cursor,'vipuser','mrmuxl@sina.com')
-    #print one_vip
     all_order = get_all_order(cursor)
     if all_order:
         for i in all_order:
@@ -197,6 +202,7 @@ if __name__ == '__main__':
                 month = new_month(m)
                 one_print = get_print(cursor,i['buy_user'])
                 one_shared = get_shared(cursor,i['buy_user'])
+                one_vip = get_vip(cursor,i['buy_user'])
                 try:
                     if one_print:
                         expire = set_expire(now,month,one_print['expire'])
@@ -218,6 +224,14 @@ if __name__ == '__main__':
                         print "sd",expire
                         shared_num = 999
                         insert_shared(cursor,i['buy_user'],shared_num,now,expire)
+                    if one_vip:
+                        expire = set_expire(now,month,one_shared['expire'])
+                        print "vip",expire
+                        update_vip(cursor,i['buy_user'],expire)
+                    else:
+                        expire = set_expire(now,month)
+                        print "vipd",expire
+                        insert_vip(cursor,i['buy_user'],now,expire)
                     update_order(cursor,i['order_id'])
                 except Exception as e:
                     print "vip process",e
