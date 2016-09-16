@@ -52,6 +52,12 @@ def get_shared(cursor,email):
     one_shared = fetchone(sql,cursor,data=email)
     return one_shared
 
+def get_vip(cursor,table,email):
+    sql ="""select * from %%(table)s' where email=%(email)s"""
+    values ={'table':table,'email':email}
+    one_vip = fetchone(sql,cursor,data=values)
+    return one_vip
+
 def insert_print(cursor,email,print_num,create_at,expire):
     sql="""insert into print values(%(id)s,%(email)s,%(is_print)s,%(print_num)s,%(used_print_num)s,%(create_at)s,%(expire)s)"""
     data={"id":None,"email":email,"is_print":True,"print_num":print_num,"used_print_num":0,"create_at":create_at,"expire":expire}
@@ -74,6 +80,16 @@ def insert_shared(cursor,email,shared_num,create_at,expire):
         print "insert shared execute error",e
         return False
 
+def insert_vip(cursor,email,expire):
+    sql="""insert into vipuser values(%(id)s,%(email)s,%(is_vip)s,%(create_at)s,%(expire)s)"""
+    data={"id":None,"email":email,"is_vip":True,"create_at":create_at,"expire":expire}
+    try:
+        cursor.execute(sql,data)
+        print "insert vip successful:",data
+        return True
+    except Exception as e:
+        print "insert vip execute error",e
+        return False
 
 def update_print(cursor,email,print_num,expire):
     sql="""update print set print_num=%(print_num)s, expire = %(expire)s where email=%(email)s"""
@@ -86,7 +102,6 @@ def update_print(cursor,email,print_num,expire):
         print "update print execute error",e
         return False
 
-
 def update_shared(cursor,email,print_num,expire):
     sql="""update shared set shared_num=%(shared_num)s, expire = %(expire)s where email=%(email)s"""
     data = {"email":email,"shared_num":shared_num,"expire":expire}
@@ -96,6 +111,17 @@ def update_shared(cursor,email,print_num,expire):
         return True
     except Exception as e:
         print "update shared execute error",e
+        return False
+
+def update_vip(cursor,email,expire):
+    sql="""update vipuser set is_vip=1, expire = %(expire)s where email=%(email)s"""
+    data = {"email":email,"expire":expire}
+    try:
+        cursor.execute(sql,data)
+        print "update_vip:",data
+        return True
+    except Exception as e:
+        print "update vip execute error",e
         return False
 
 def update_order(cursor,order_id):
@@ -159,6 +185,8 @@ if __name__ == '__main__':
     print now
     conn = get_conn('localhost','root','abc123!!','kx')
     cursor = init_cursor(conn)
+    #one_vip = get_vip(cursor,'vipuser','mrmuxl@sina.com')
+    #print one_vip
     all_order = get_all_order(cursor)
     if all_order:
         for i in all_order:
@@ -212,14 +240,12 @@ if __name__ == '__main__':
                 month = new_month(m)
                 one_shared = get_shared(cursor,i['buy_user'])
                 if one_shared:
-                    #expire = one_shared['expire']+ timedelta(days=month*30)
                     expire = set_expire(now,month,one_shared['expire'])
                     shared_num = one_shared['shared_num'] + i['auth_user_num']
                     update_shared(cursor,i['buy_user'],shared_num,expire)
                     print "update shared"
                     update_order(cursor,i['order_id'])
                 else:
-                    #expire = now + timedelta(days=month*30)
                     expire = set_expire(now,month)
                     shared_num = 5 + i['auth_user_num']
                     insert_shared(cursor,i['buy_user'],shared_num,now,expire)

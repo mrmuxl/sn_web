@@ -25,3 +25,8 @@ def spool_add(request):
         message['status']="error"
         return HttpResponse(json.dumps(message),content_type="application/json")
 
+def spool_select(request):
+    pass
+
+def spool_update(request):
+    pass
