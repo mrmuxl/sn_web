@@ -10,7 +10,6 @@ from django.shortcuts import render
 from forms import SpoolForm
 from models import Spool 
 from django.conf import settings
-from utils import publish_message
 
 logger = logging.getLogger(__name__)
 
