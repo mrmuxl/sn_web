@@ -3,7 +3,7 @@
 import logging,os
 from django.conf import settings
 from hashlib import md5
-from ordereddict import OrderedDict
+#from ordereddict import OrderedDict
 
 logger = logging.getLogger(__name__)
 
