@@ -46,7 +46,7 @@ def spool_select(request):
                 i['print_time'] = print_time
                 i['create_at'] = create_at
                 i['status_time'] = status_time
-            message['origin'] = str(origin_list)
+            message['origin'] = list(origin_list)
         else:
             message['origin'] = []
         if accept_list:
@@ -57,7 +57,7 @@ def spool_select(request):
                 i['print_time'] = print_time
                 i['create_at'] = create_at
                 i['status_time'] = status_time
-            message['accept'] = str(accept_list)
+            message['accept'] = list(accept_list)
         else:
             message['accept'] = []
         message['status']= 0
