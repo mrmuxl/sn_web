@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect,HttpResponse
 from django.shortcuts import render
 from forms import SpoolForm
 from models import Spool 
-from apps.kx.models import KxUserLogin
+from apps.kx.models import KxUserlogin
 from django.conf import settings
 from pprint import pprint
 from datetime import datetime
@@ -79,7 +79,7 @@ def spool_update(request):
             try:
                 sp_list = spool_info.values('origin_email','origin_uuid')
                 if sp_list:
-                    user_online = KxUserLogin.objects.filter(email=sp_list[0]['origin_email']).(mac__contains=sp_list[0]['origin_uuid']).values('email','mac')
+                    user_online = KxUserlogin.objects.filter(email=sp_list[0]['origin_email']).filter(mac__contains=sp_list[0]['origin_uuid']).values('email','mac')
                     if user_online:
                         p = "/home/admin/sn_web_fifo"
                         with open(p,"w") as f:
