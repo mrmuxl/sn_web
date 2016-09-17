@@ -17,7 +17,7 @@
 	<link rel="stylesheet" href="{{STATIC_URL}}font-awesome/css/font-awesome-ie7.min.css" type="text/css" />
 	<![endif]-->
 {% endif %}
-<script src="{{STATIC_URL}}js/bootstrap.min.js"></script>
+<script src="{{STATIC_URL}}js/lib/bootstrap.min.js"></script>
 <style type="text/css">
 .container-narrow {
   margin: 0 auto;
@@ -34,6 +34,7 @@
 </style>
 </head>
 <body>
+	<center>
 <div class="container-narrow">
 	<div class="row" style="margin-top:100px;">
 		<div class="span2"></div>
@@ -46,7 +47,7 @@
 					<div class="span5" style="margin-top:20px">
 						<p>恭喜你付款成功：<br/>
 						订单号：{{order_id}} <br/>
-						你的帐号：<span style="color:red;font-size:16px">{{user.email}} </span>即将激活</p>
+						你的VIP帐号：<span style="color:red;font-size:16px">{{user.email}} </span>将在十分钟之内激活！</p>
 					</div>
 				</div>
 			</div>
@@ -55,5 +56,6 @@
 		<div class="span2"></div>
 	</div>
 </div>
+<center>
 </body>
 </html>

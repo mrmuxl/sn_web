@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block header %}{% include "header.html" %}{% endblock %}
+{% block content %}
+{% load split %}
+
+<div style="background-color:#F5F5F5;">
+<div class="container-narrow">
+	<br/><br/>
+	<div class="row text-center">
+			<img alt="574x138" src="{{STATIC_URL}}images/index/buyf5.png" />
+	    <div class="row" style="padding:10px;">
+	    		<span style="margin-left:50px;margin-right:0px;">
+		    <a href="{% url 'order_info' %}/?c=2" >
+		    	<!-- <button class="btn-primary" style="width:170px;margin-top:5px;margin-left:125px" type="button">购 买</button> -->
+		    	<img src="{{ STATIC_URL }}images/index/goumai.jpg"/>
+		    </a>
+		    </span>
+		    <span style="margin-left:100px;">
+			<a href="{% url 'order_info' %}/?c=4" >
+		    	<!-- <button class="btn-primary" style="width:170px;margin-top:5px;margin-left:85px" type="button">购 买</button> -->
+		    	<img src="{{ STATIC_URL }}images/index/goumai.jpg"  />
+		    </a>
+		    </span>
+		    <span style="margin-left:110px;">
+			<a href="{% url 'order_info' %}/?c=1" >
+		    	<!-- <button class="btn-primary" style="width:170px;margin-top:5px;margin-left:55px" type="button">购 买</button> -->
+		    	<img src="{{ STATIC_URL }}images/index/goumai.jpg" />
+		    </a>
+			</span>
+	    </div>
+	    <div class="text-center" style="font-size:24px;margin-top:30px"><span style="color:red;font-size:30px">优惠活动：</span>每满六个月赠送一个月</div>
+	</div>
+	<br><br><br><br>
+</div>
+</div>
+
+
+{% endblock %}
+{% block footer %}{% include "footer.html" %}{% endblock %}

@@ -10,20 +10,16 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
+    url(r'^$','apps.kx.views.index',name='index'),
+    url(r'^buy/?$','apps.kx.views.buy',name='buy'),
+    url(r'^pop/?$','apps.kx.views.buy',name='pop'),
+    url(r'^admin/', include(admin.site.urls)),
+
+)
+urlpatterns += patterns('',
     url(r'shareFile/', include('apps.sharefile.urls')),
     url(r'client/', include('apps.client.urls')),
     url(r'onlineUser/', include('apps.online_user.urls')),
-    url(r'^$','apps.kx.views.index',name='index'),
-
-    # url(r'^qm_web/', include('qm_web.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    url(r'^admin/', include(admin.site.urls)),
-    #这个连接在发布时要去掉
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api-token-auth/','apps.auth.views.obtain_auth_token'), 
     url(r'^api-register/','apps.auth.views.api_register'), 
@@ -41,6 +37,5 @@ urlpatterns += patterns('',
 )
 
 if settings.DEBUG:
-    #urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(settings.STATIC_URL, document_root = settings.STATIC_ROOT ) 
     urlpatterns += static(settings.MEDIA_URL , document_root = settings.MEDIA_ROOT ) 
