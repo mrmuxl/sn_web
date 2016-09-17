@@ -116,6 +116,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'apps.auth': {
+            'handlers': ['console','file','mail_admins' ],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
         'apps.kx': {
             'handlers': ['console','file','mail_admins' ],
             'level': 'DEBUG',
