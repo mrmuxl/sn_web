@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 def spool_add(request):
     message = {}
     form = SpoolForm(request.POST)
+    print request.POST
     if form.is_valid():
         form.save()
         message['status']=0
