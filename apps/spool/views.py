@@ -50,7 +50,7 @@ def spool_select(request):
                 printer_name = i['printer_name'].encode('gbk')
                 printer_uuid = i['printer_uuid'].encode('gbk')
                 file_name = i['file_name'].encode('gbk')
-                file_uuid = i['file_uuid'].encode('gbk')
+                file_path = i['file_path'].encode('gbk')
                 i['printer_name'] = printer_name
                 i['printer_uuid'] = printer_uuid
                 i['file_name'] = file_name
@@ -69,7 +69,7 @@ def spool_select(request):
                 printer_name = i['printer_name'].encode('gbk')
                 printer_uuid = i['printer_uuid'].encode('gbk')
                 file_name = i['file_name'].encode('gbk')
-                file_uuid = i['file_uuid'].encode('gbk')
+                file_path = i['file_path'].encode('gbk')
                 i['printer_name'] = printer_name
                 i['printer_uuid'] = printer_uuid
                 i['file_name'] = file_name
