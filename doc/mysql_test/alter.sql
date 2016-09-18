@@ -25,4 +25,7 @@ ALTER TABLE kx_user CHANGE id uuid varchar(32) NOT NULL
 ALTER TABLE kx_user ADD INDEX `uuid_index`(`uuid`);
 删除原来id的索引
 ALTER TABLE kx_user DROP INDEX id_index;
+#
+ALTER TABLE print_spool ADD file_client_path varchar(260) NOT NULL  COMMENT "发起方打印文件路径" AFTER file_path;
+
 
