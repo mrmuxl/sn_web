@@ -47,10 +47,11 @@ def spool_select(request):
                 i['print_time'] = print_time
                 i['create_at'] = create_at
                 i['status_time'] = status_time
-                printer_name = i['printer_name'].encode('gbk')
-                printer_uuid = i['printer_uuid'].encode('gbk')
-                file_name = i['file_name'].encode('gbk')
-                file_path = i['file_path'].encode('gbk')
+                print type(i['print_name'])
+                printer_name = i['printer_name'].decode().encode('gbk')
+                printer_uuid = i['printer_uuid'].decode().encode('gbk')
+                file_name = i['file_name'].decode().encode('gbk')
+                file_path = i['file_path'].decode().encode('gbk')
                 i['printer_name'] = printer_name
                 i['printer_uuid'] = printer_uuid
                 i['file_name'] = file_name
@@ -66,10 +67,10 @@ def spool_select(request):
                 i['print_time'] = print_time
                 i['create_at'] = create_at
                 i['status_time'] = status_time
-                printer_name = i['printer_name'].encode('gbk')
-                printer_uuid = i['printer_uuid'].encode('gbk')
-                file_name = i['file_name'].encode('gbk')
-                file_path = i['file_path'].encode('gbk')
+                printer_name = i['printer_name'].decode().encode('gbk')
+                printer_uuid = i['printer_uuid'].decode().encode('gbk')
+                file_name = i['file_name'].decode().encode('gbk')
+                file_path = i['file_path'].decode().encode('gbk')
                 i['printer_name'] = printer_name
                 i['printer_uuid'] = printer_uuid
                 i['file_name'] = file_name
