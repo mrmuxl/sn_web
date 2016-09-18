@@ -107,7 +107,7 @@ def spool_update(request):
                         if user_online:
                             p = "/home/admin/sn_web_fifo"
                             with open(p,"w") as f:
-                                p = "100#" + user_online[0]['mac'] + user_oneline[0]['email'] + "\n"
+                                p = "101#" + user_online[0]['mac'] + user_oneline[0]['email'] + "\n"
                                 f.write(p)
                 except Exception as e:
                     logger.debug("spool_update:%s",e)
