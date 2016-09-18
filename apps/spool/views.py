@@ -47,6 +47,14 @@ def spool_select(request):
                 i['print_time'] = print_time
                 i['create_at'] = create_at
                 i['status_time'] = status_time
+                printer_name = i['printer_name'].encode('gbk')
+                printer_uuid = i['printer_uuid'].encode('gbk')
+                file_name = i['file_name'].encode('gbk')
+                file_uuid = i['file_uuid'].encode('gbk')
+                i['printer_name'] = printer_name
+                i['printer_uuid'] = printer_uuid
+                i['file_name'] = file_name
+                i['file_path'] = file_path
             message['origin'] = list(origin_list)
         else:
             message['origin'] = []
@@ -58,6 +66,14 @@ def spool_select(request):
                 i['print_time'] = print_time
                 i['create_at'] = create_at
                 i['status_time'] = status_time
+                printer_name = i['printer_name'].encode('gbk')
+                printer_uuid = i['printer_uuid'].encode('gbk')
+                file_name = i['file_name'].encode('gbk')
+                file_uuid = i['file_uuid'].encode('gbk')
+                i['printer_name'] = printer_name
+                i['printer_uuid'] = printer_uuid
+                i['file_name'] = file_name
+                i['file_path'] = file_path
             message['accept'] = list(accept_list)
         else:
             message['accept'] = []
@@ -85,6 +101,7 @@ def spool_update(request):
                     sp_list = spool_info.values('origin_email','origin_uuid')
                     if sp_list:
                         user_online = KxUserlogin.objects.filter(email=sp_list[0]['origin_email']).filter(mac__contains=sp_list[0]['origin_uuid']).values('email','mac')
+                        print user_online
                         if user_online:
                             p = "/home/admin/sn_web_fifo"
                             with open(p,"w") as f:
