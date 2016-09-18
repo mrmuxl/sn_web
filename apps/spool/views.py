@@ -37,8 +37,8 @@ def spool_select(request):
     email = request.POST.get('email','')
     mac  = request.POST.get('mac','')
     if email and mac:
-        origin_list = Spool.objects.filter(origin_email=email).filter(origin_uuid=mac).order_by('print_time').values()
-        accept_list = Spool.objects.filter(accept_email=email).filter(accept_uuid=mac).order_by('print_time').values()
+        origin_list = Spool.objects.filter(origin_email=email).filter(origin_uuid=mac).exclude(status__exact=0).order_by('print_time').values()
+        accept_list = Spool.objects.filter(accept_email=email).filter(accept_uuid=mac).exclude(status__exact=0).order_by('print_time').values()
         if origin_list:
             for i in origin_list:
                 print_time = datetime.strftime(i['print_time'],"%Y-%m-%d %H:%M:%S")
@@ -79,6 +79,8 @@ def spool_select(request):
             message['accept'] = []
         message['status']= 0
         return HttpResponse(json.dumps(message,ensure_ascii=False),content_type="application/json")
+        #这行可要可不要
+        #return HttpResponse(json.dumps(message,ensure_ascii=False,encoding='gbk'),content_type="application/json")
     else:
         message['status']= 1
         return HttpResponse(json.dumps(message),content_type="application/json")
