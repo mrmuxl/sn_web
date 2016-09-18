@@ -47,7 +47,7 @@ def spool_select(request):
                 i['print_time'] = print_time
                 i['create_at'] = create_at
                 i['status_time'] = status_time
-                print type(i['print_name'])
+                print type(i['printer_name'])
                 printer_name = i['printer_name'].decode().encode('gbk')
                 printer_uuid = i['printer_uuid'].decode().encode('gbk')
                 file_name = i['file_name'].decode().encode('gbk')
