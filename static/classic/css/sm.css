@@ -704,3 +704,66 @@ width : 100%;
 }
 
 /** video end */
+
+
+
+
+/** print start*/
+
+.print-bg{
+  background: url(../images/print/print_bg.jpg) no-repeat scroll center top;
+  height:450px;
+}
+
+.print-email{
+  background: url(../images/print/print_icon6.png) no-repeat 10px 10px;
+  height:70px;
+}
+
+.print-prop1{
+  background: url(../images/print/print_icon1.png) no-repeat center top;
+  height:230px;
+}
+
+.print-prop-header{
+  color:#848484;
+  font-size:16px;
+}
+
+.print-prop-body{
+  color:#b2b2b2;
+  padding:5px 20px;
+  line-height: 30px
+}
+
+
+.print-prop2{
+  background: url(../images/print/print_icon2.png) no-repeat center top;
+  height:230px;
+}
+
+.print-prop3{
+  background: url(../images/print/print_icon3.png) no-repeat center top;
+  height:230px;
+}
+
+.print-prop4{
+  background: url(../images/print/print_icon4.png) no-repeat center top;
+  height:230px;
+}
+
+.print-prop5{
+  background: url(../images/print/print_icon5.png) no-repeat center top;
+  height:230px;
+}
+
+.print-prop6{
+  background: url(../images/print/print_you.jpg) no-repeat center top;
+  height:230px;
+}
+
+.print-main{
+  background: url(../images/print/print_bg2.jpg) no-repeat center bottom;
+  min-height:600px;
+}
+/** print end*/
