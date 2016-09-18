@@ -47,10 +47,10 @@ def spool_select(request):
                 i['print_time'] = print_time
                 i['create_at'] = create_at
                 i['status_time'] = status_time
-                printer_name = i['printer_name'].decode('utf8').encode('gbk')
-                printer_uuid = i['printer_uuid'].decode('utf8').encode('gbk')
-                file_name = i['file_name'].decode('utf8').encode('gbk')
-                file_path = i['file_path'].decode('utf8').encode('gbk')
+                printer_name = i['printer_name']
+                printer_uuid = i['printer_uuid']
+                file_name = i['file_name']
+                file_path = i['file_path']
                 i['printer_name'] = printer_name
                 i['printer_uuid'] = printer_uuid
                 i['file_name'] = file_name
@@ -66,10 +66,10 @@ def spool_select(request):
                 i['print_time'] = print_time
                 i['create_at'] = create_at
                 i['status_time'] = status_time
-                printer_name = i['printer_name'].decode('utf8').encode('gbk')
-                printer_uuid = i['printer_uuid'].decode('utf8').encode('gbk')
-                file_name = i['file_name'].decode('utf8').encode('gbk')
-                file_path = i['file_path'].decode('utf8').encode('gbk')
+                printer_name = i['printer_name']
+                printer_uuid = i['printer_uuid']
+                file_name = i['file_name']
+                file_path = i['file_path']
                 i['printer_name'] = printer_name
                 i['printer_uuid'] = printer_uuid
                 i['file_name'] = file_name
@@ -78,7 +78,7 @@ def spool_select(request):
         else:
             message['accept'] = []
         message['status']= 0
-        return HttpResponse(json.dumps(message),content_type="application/json")
+        return HttpResponse(json.dumps(message,ensure_ascii=False,encoding='gbk'),content_type="application/json")
     else:
         message['status']= 1
         return HttpResponse(json.dumps(message),content_type="application/json")
