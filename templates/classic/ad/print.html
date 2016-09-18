@@ -6,7 +6,7 @@
 
 <div class="print-bg">
 	<div class="container-narrow">
-		<a class="btn btn-lg" style="margin:360px 0 0 58px; padding:5px 90px; color:#333; font-size:18px;">下载试用</a>
+		<a class="btn btn-lg" style="margin:360px 0 0 58px; padding:5px 90px; color:#333; font-size:18px;" href="{{DOWNLOAD}}/Install/{{ins_file}}" target="_blank" title="下载">下载试用</a>
 	</div>
 </div>
 
@@ -19,8 +19,9 @@
 					<div style="color:#a0a0a0;">有兴趣进一步了解创业计划的，请留下邮箱：</div>
 				</div>
 				<div class="span6">
-					<form class="navbar-form pull-left" style="margin-top:15px;">
-					  <input type="text" style="width:200px;" placeholder="邮箱地址">
+					<form class="navbar-form pull-left" style="margin-top:15px;" action={% url 'printer' %} method="post">
+						{% csrf_token %}
+					  <input type="text" name ="pop" style="width:200px;" placeholder="邮箱地址">
 					  <button type="submit" class="btn" style="width:100px;">我有兴趣</button>
 					</form>
 				</div>

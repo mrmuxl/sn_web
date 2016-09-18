@@ -78,7 +78,3 @@ def index(request):
 def buy(request):
     data={"title":u"首页"}
     return render(request,"buy.html",data) 
-
-def printer(request):
-    data={"title":u"打印创业计划"}
-    return render(request,"print.html",data)
