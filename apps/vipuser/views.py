@@ -218,9 +218,12 @@ def access_user(request):
                             message['status']=1
                             message['message']=str(e)
                     return HttpResponse(json.dumps(message),content_type="application/json")
-                message['status']=0
-                message['message']="ok"
-                return HttpResponse(json.dumps(message),content_type="application/json")
+                else:
+                    ins_print.used_print_num =len(users)
+                    ins_print.save()
+                    message['status']=0
+                    message['message']="ok"
+                    return HttpResponse(json.dumps(message),content_type="application/json")
             except Exception as e:
                 message['status']=1
                 message['message']=str(e)
@@ -247,9 +250,12 @@ def access_user(request):
                             message['status']=1
                             message['message']=str(e)
                     return HttpResponse(json.dumps(message),content_type="application/json")
-                message['status']=0
-                message['message']="ok"
-                return HttpResponse(json.dumps(message),content_type="application/json")
+                else:
+                    ins_shared.used_shared_num = len(users)
+                    ins_shared.save()
+                    message['status']=0
+                    message['message']="ok"
+                    return HttpResponse(json.dumps(message),content_type="application/json")
             except Exception as e:
                 message['status']=1
                 message['message']=str(e)
