@@ -68,7 +68,7 @@ def index(request):
         data.update(user_list=u_dict)
     try:
         ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_V').order_by('-id')[0:1].get()
-        repo_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_S').order_by('-id')[1:2].get()
+        repo_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_S').order_by('-id')[0:1].get()
         data.update(repo_file=repo_file.install_file,ins_file=ins_file.install_file)
     except Exception as e:
         data.update(ins_file='')
