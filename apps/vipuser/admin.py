@@ -5,7 +5,7 @@ from models import VIPUser
 from models import Print,Shared,PrintAccess,SharedAccess
 
 class VIPUserAdmin(admin.ModelAdmin):
-    list_display = ('email','is_vip','expire')
+    list_display = ('email','is_vip','create_at','expire')
     search_fields = ['email__email',]
 
 #class AccessVIPUserAdmin(admin.ModelAdmin):
