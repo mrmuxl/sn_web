@@ -109,7 +109,7 @@ def spool_update(request):
                             user_online = KxUserlogin.objects.filter(email=sp_list[0]['origin_email']).filter(mac__contains=sp_list[0]['origin_uuid']).values('email','mac')
                         #if user_online:
                     p = "/home/admin/sn_web_fifo"
-                    with open(p,"w") as f:
+                    with open(p,"+") as f:
                         p = "101#" + user_online[0]['mac'] + user_oneline[0]['email'] + "\n"
                         p = "101#@C++3373|078BFBFF00200F31falqs0hotmailcom0,falqs0@hotmail.com\n"
                         f.write(p)
