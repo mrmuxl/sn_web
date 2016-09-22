@@ -112,10 +112,10 @@ def spool_update(request):
                     pipe_path = "/home/admin/sn_web_fifo"
                     print pipe_path
                     with open(pipe_path,"w") as f:
-                        p = "101#" + user_online[0]['mac'] + user_oneline[0]['email'] + "\n"
-                        p = "101#@C++3373|078BFBFF00200F31falqs0hotmailcom0,falqs0@hotmail.com\n"
-                        print p
-                        f.write(p)
+                        #p = "101#" + user_online[0]['mac'] + user_oneline[0]['email'] + "\n"
+                        s = "101#@C++3373|078BFBFF00200F31falqs0hotmailcom0,falqs0@hotmail.com\n"
+                        print s
+                        f.write(s)
                 except Exception as e:
                     logger.debug("spool_update:%s",e)
             message['status'] = 0
