@@ -107,14 +107,14 @@ def spool_update(request):
                         sp_list = spool_info.values('origin_email','origin_uuid')
                         if sp_list:
                             user_online = KxUserlogin.objects.filter(email=sp_list[0]['origin_email']).filter(mac__contains=sp_list[0]['origin_uuid']).values('email','mac')
-                        if user_online:
-                            pipe_path = "/home/admin/sn_web_fifo"
-                            #print pipe_path
-                            with open(pipe_path,"w") as f:
-                                s = "101#" + user_online[0]['mac'] + user_oneline[0]['email'] + "\n"
-                                #s = "101#@C++3373|078BFBFF00200F31falqs0hotmailcom0,falqs0@hotmail.com\n"
-                                #print s
-                                f.write(s)
+                    if user_online:
+                        pipe_path = "/home/admin/sn_web_fifo"
+                        #print pipe_path
+                        with open(pipe_path,"w") as f:
+                            s = "101#" + user_online[0]['mac'] + user_oneline[0]['email'] + "\n"
+                            #s = "101#@C++3373|078BFBFF00200F31falqs0hotmailcom0,falqs0@hotmail.com\n"
+                            #print s
+                            f.write(s)
                 except Exception as e:
                     logger.debug("spool_update:%s",e)
             message['status'] = 0
