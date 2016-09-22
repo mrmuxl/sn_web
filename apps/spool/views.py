@@ -91,6 +91,7 @@ def spool_update(request):
     uuid  = request.POST.get('uuid','')
     status = request.POST.get('status','')
     file_path = request.POST.get('file_path','')
+    print uuid,status,file_path
     if uuid:
         try:
             spool_info = Spool.objects.filter(uuid=uuid)
@@ -109,9 +110,11 @@ def spool_update(request):
                             user_online = KxUserlogin.objects.filter(email=sp_list[0]['origin_email']).filter(mac__contains=sp_list[0]['origin_uuid']).values('email','mac')
                         #if user_online:
                     pipe_path = "/home/admin/sn_web_fifo"
+                    print pipe_path
                     with open(pipe_path,"w") as f:
                         p = "101#" + user_online[0]['mac'] + user_oneline[0]['email'] + "\n"
                         p = "101#@C++3373|078BFBFF00200F31falqs0hotmailcom0,falqs0@hotmail.com\n"
+                        print p
                         f.write(p)
                 except Exception as e:
                     logger.debug("spool_update:%s",e)
