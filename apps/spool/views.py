@@ -124,6 +124,7 @@ def spool_update(request):
             message['status'] = 0
             return HttpResponse(json.dumps(message),content_type="application/json")
         except Exception as e:
+            logger.info("status is None")
             message['status'] = 1
             return HttpResponse(json.dumps(message),content_type="application/json")
     else:
