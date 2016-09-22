@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 @require_POST
 def spool_add(request):
     message = {}
+    print request.POST
     form = SpoolForm(request.POST)
     print form
     if form.is_valid():

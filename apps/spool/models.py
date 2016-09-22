@@ -8,9 +8,9 @@ from datetime import date
 from django.conf import settings
 
 
-def get_image_path(instance,filename):
-    date_str =date.strftime(date.today(),"%Y/%m/%d")
-    return '/'.join(["spool_image",date_str,instance.uuid])+'.jpg'
+#def get_image_path(instance,filename):
+#    date_str =date.strftime(date.today(),"%Y/%m/%d")
+#    return '/'.join(["spool_image",date_str,instance.uuid])+'.jpg'
 
 class Spool(models.Model):
     id            = models.AutoField(primary_key = True)
