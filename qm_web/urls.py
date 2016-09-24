@@ -36,7 +36,7 @@ urlpatterns += patterns('',
     url(r'^vipuser/',include("apps.vipuser.urls")),
     url(r'^alipay/',include("apps.alipay.urls")),
     url(r'^spool/',include("apps.spool.urls")),
-    url(r'^forums/',include("apps.forum.urls")),
+    #url(r'^forums/',include("apps.forum.urls")),
 )
 
 if settings.DEBUG:
