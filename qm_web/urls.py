@@ -4,6 +4,8 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf.urls.static import static
+from django.views.generic.base import RedirectView
+from django.conf import settings
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -15,7 +17,7 @@ urlpatterns = patterns('',
     url(r'^printer/?$','apps.ad.views.printer',name='printer'),
     url(r'^pop/?$','apps.kx.views.buy',name='pop'),
     url(r'^admin/', include(admin.site.urls)),
-
+    #url(r'^favicon.ico/?$',RedirectView.as_view(url=settings.STATIC_URL + 'images/favicon.ico'),name='favicon')
 )
 urlpatterns += patterns('',
     url(r'shareFile/', include('apps.sharefile.urls')),
@@ -36,7 +38,7 @@ urlpatterns += patterns('',
     url(r'^vipuser/',include("apps.vipuser.urls")),
     url(r'^alipay/',include("apps.alipay.urls")),
     url(r'^spool/',include("apps.spool.urls")),
-    #url(r'^forums/',include("apps.forum.urls")),
+    url(r'^forums/',include("apps.forum.urls")),
 )
 
 if settings.DEBUG:
