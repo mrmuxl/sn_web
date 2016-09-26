@@ -125,6 +125,7 @@ def vipuser_test(reqeust,ckey,email):
 @csrf_exempt
 @require_POST
 def nonvipuser(request):
+    '''这个接口已经不使用'''
     message = {}
     now = datetime.datetime.now()
     email = request.POST.get('email','')
