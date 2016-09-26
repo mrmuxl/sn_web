@@ -23,7 +23,10 @@ def access_user_print(email):
         print_user = Print.objects.filter(expire__gt=now).select_related().get(email=email)
         if print_user:
             message['is_print']= print_user.is_print #为打印共享用户
-            message['remainder_print_num']= (print_user.print_num - print_user.used_print_num)
+            if print_user.is_print:
+                message['remainder_print_num']= (print_user.print_num - print_user.used_print_num)
+            else: 
+                message['remainder_print_num']= -1 #不能授权
             print_access_obj_set = print_user.print_access.filter(status=1)
             if print_access_obj_set:
                 for i in print_access_obj_set:
@@ -54,12 +57,14 @@ def access_user_shared(email):
         shared_user = Shared.objects.filter(expire__gt=now).select_related().get(email=email)
         if shared_user:
             message['is_shared']= shared_user.is_shared #为文件共享用户
-            message['remainder_shared_num']= (shared_user.shared_num - shared_user.used_shared_num)
+            if shared_user.is_shared:
+                message['remainder_shared_num']= (shared_user.shared_num - shared_user.used_shared_num)
+            else:
+                message['remainder_shared_num']= -1
             shared_access_obj_set = shared_user.shared_access.filter(status=1)
             if shared_access_obj_set:
                 for i in shared_access_obj_set:
                     shared_access_list.append(i.access_user_id)
-                    #shared_access_list.append({"email":i.access_user_id})
             message['shared_access_user']=shared_access_list
             logger.info("access_user_shared_message:%s",message)
     except Exception as e:
@@ -72,7 +77,7 @@ def access_user_shared(email):
                 if i.is_shared:
                     is_shared = True
         message['is_shared']= is_shared 
-        message['remainder_shared_num']= -1
+        message['remainder_shared_num']= -1 #不能授权
         message['shared_access_user']=shared_access_list
         logger.info("shared_access_user_set_message:%s",message)
     return message
