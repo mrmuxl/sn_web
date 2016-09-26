@@ -20,13 +20,10 @@ def access_user_print(email):
     now = datetime.datetime.now()
     print_access_list = []
     try:
-        print_user = Print.objects.filter(expire__gt=now).select_related().get(email=email)
+        print_user = Print.objects.filter(expire__gt=now).filter(is_print=True).select_related().get(email=email)
         if print_user:
             message['is_print']= print_user.is_print #为打印共享用户
-            if print_user.is_print:
-                message['remainder_print_num']= (print_user.print_num - print_user.used_print_num)
-            else: 
-                message['remainder_print_num']= -1 #不能授权
+            message['remainder_print_num']= (print_user.print_num - print_user.used_print_num)
             print_access_obj_set = print_user.print_access.filter(status=1)
             if print_access_obj_set:
                 for i in print_access_obj_set:
@@ -54,7 +51,7 @@ def access_user_shared(email):
     now = datetime.datetime.now()
     shared_access_list =[]
     try:
-        shared_user = Shared.objects.filter(expire__gt=now).select_related().get(email=email)
+        shared_user = Shared.objects.filter(expire__gt=now).filter(is_shared=True).select_related().get(email=email)
         if shared_user:
             message['is_shared']= shared_user.is_shared #为文件共享用户
             if shared_user.is_shared:
