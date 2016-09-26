@@ -17,7 +17,6 @@ urlpatterns = patterns('',
     url(r'^printer/?$','apps.ad.views.printer',name='printer'),
     url(r'^pop/?$','apps.kx.views.buy',name='pop'),
     url(r'^admin/', include(admin.site.urls)),
-    #url(r'^favicon.ico/?$',RedirectView.as_view(url=settings.STATIC_URL + 'images/favicon.ico'),name='favicon')
 )
 urlpatterns += patterns('',
     url(r'shareFile/', include('apps.sharefile.urls')),
@@ -39,11 +38,8 @@ urlpatterns += patterns('',
     url(r'^alipay/',include("apps.alipay.urls")),
     url(r'^spool/',include("apps.spool.urls")),
 )
-if settings.DEBUG:
-    urlpatterns += patterns('',
-        url(r'^forums/',include("apps.forum.urls")),
-)
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root = settings.STATIC_ROOT ) 
     urlpatterns += static(settings.MEDIA_URL , document_root = settings.MEDIA_ROOT ) 
+    urlpatterns += patterns('', url(r'^forums/',include("apps.forum.urls")),)
