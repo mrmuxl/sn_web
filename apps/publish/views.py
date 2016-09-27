@@ -240,7 +240,7 @@ def published(request):
             except Exception as e:
                 logger.debug("publish interface KxUser:%s",e)
                 publish_info=[]
-        if not publish_info:
+        if publish_info:
             message = publish_message(publish_info)
         return HttpResponse(json.dumps(message),content_type="application/json")
     else:
