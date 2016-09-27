@@ -221,7 +221,7 @@ def published(request):
     Dday = datetime.datetime(2013,8,20) #1944-06-06
     email = request.POST.get('email','')
     ver = request.POST.get('ver','')
-    logger.info("email:%s",email)
+    logger.info("email:%s,ver:%s",email,ver)
     if email:
         try:
             publish_user = PublishUser.objects.filter(is_publish__exact=1).get(email=email)
