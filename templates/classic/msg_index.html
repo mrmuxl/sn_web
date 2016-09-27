@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{{title}}{% endblock %}
-
 {% block header %}{% include "header.html" %}{% endblock %}
-
 {% block content %}
 {% load split %}
 <div class="main ">
@@ -171,7 +169,7 @@
 		{% endif %}	
 	{% endif %}	
 
-	<div id="msg_form" class="send_reply">
+<!-- 	<div id="msg_form" class="send_reply">
 	<form  action="{% url 'add_msg' %}" method="post" onsubmit="return checkMsg3();">
 		{% csrf_token %}
 		<textarea id="msg_content3" name="msg"></textarea>
@@ -183,7 +181,7 @@
 			<input type="button" name value="" class="btn_cancel btn_cancel_scroll"/>
 		</div>
 	</form>
-	</div>			
+	</div>	 -->		
 	</div>
 	<div class="clear"></div>
 </div>
