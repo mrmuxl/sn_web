@@ -229,14 +229,19 @@ def published(request):
             logger.info("%s,%s",publish_user,publish_info)
         except Exception as e:
             logger.debug("define publish:%s",e)
-            user_obj = KxUser.objects.get(email=email)
-            if user_obj.create_time >= Dday:
-                email = 'update@simplenect.com'
-            else:
-                email = 'simplenect@simplenect.com'
-            publish_user = PublishUser.objects.get(email=email)
-            publish_info = KxPub.objects.get(pk=publish_user.ver_id)
-        message = publish_message(publish_info)
+            try:
+                user_obj = KxUser.objects.get(email=email)
+                if user_obj.create_time >= Dday:
+                    email = 'update@simplenect.com'
+                else:
+                    email = 'simplenect@simplenect.com'
+                publish_user = PublishUser.objects.get(email=email)
+                publish_info = KxPub.objects.get(pk=publish_user.ver_id)
+            except Exception as e:
+                logger.debug("publish interface KxUser:%s",e)
+                publish_info=[]
+        if not puslish_info:
+            message = publish_message(publish_info)
         return HttpResponse(json.dumps(message),content_type="application/json")
     else:
         message['status']="error"
@@ -246,6 +251,7 @@ def published(request):
 @csrf_exempt
 @require_POST
 def repo_published(request):
+    '''仓库版本的废弃，此接口为仓库版本的灰度发布接口，废弃'''
     message = {}
     email = request.POST.get('email','')
     logger.info("email:%s",email)
