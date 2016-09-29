@@ -71,18 +71,26 @@ def vipuser_api(request):
             if settings.DEBUG:
                 pprint(message)
             return HttpResponse(json.dumps(message),content_type="application/json")
-        elif pa or sa:
-            message['status']=0 #不为VIP用户
-            message['is_vip']=False
-            message['remainder_days']=-1 #不显示
-            message['vip_friends']='vip'
-            p = access_user_print(email)
-            s = access_user_shared(email)
-            message.update(p)
-            message.update(s)
-            if settings.DEBUG:
-                pprint(message)
-            return HttpResponse(json.dumps(message),content_type="application/json")
+        #elif pa or sa:
+        #    message['status']=0 #不为VIP用户
+        #    message['is_vip']=False
+        #    message['remainder_days']=-1 #不显示
+        #    message['vip_friends']='vip'
+        #    if pa:
+        #        message['is_print']= True #为打印共享用户
+        #    else:
+        #        message['is_print']= False #不为打印共享用户
+        #    if sa:
+        #        message['is_shared']= True #为文件共享用户
+        #    else:
+        #        message['is_shared']= False #不为文件共享用户
+        #    message['remainder_print_num']= -1
+        #    message['remainder_shared_num']= -1
+        #    message['print_access_user']=[]
+        #    message['shared_access_user']=[]
+        #    if settings.DEBUG:
+        #        pprint(message)
+        #    return HttpResponse(json.dumps(message),content_type="application/json")
         elif remainder_days <= 15:
             message['status']=1 #为VIP用户
             message['remainder_days']=(15-remainder_days) #显示剩余天数
