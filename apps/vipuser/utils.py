@@ -33,7 +33,7 @@ def access_user_print(email):
             logger.info("access_user_print_message:%s",message)
     except Exception as e:
         logger.debug("print_user:%s",e)
-        print_access_user_set = Print.objects.filter(print_access__access_user=email).filter(expire__gt=now).filter(print_access__status=1)
+        print_access_user_set = Print.objects.filter(print_access__access_user=email).filter(expire__gt=now).filter(print_access__status__exact=1)
         logger.info("print_access:%s",print_access_user_set)
         is_print =False
         if print_access_user_set:
@@ -66,7 +66,7 @@ def access_user_shared(email):
             logger.info("access_user_shared_message:%s",message)
     except Exception as e:
         logger.debug("shared_user:%s",e)
-        shared_access_user_set = Shared.objects.filter(shared_access__access_user=email).filter(expire__gt=now).filter(shared_access__status=1)
+        shared_access_user_set = Shared.objects.filter(shared_access__access_user=email).filter(expire__gt=now).filter(shared_access__status__exact=1)
         logger.info("shared_access_user_set:%s",shared_access_user_set)
         is_shared = False
         if shared_access_user_set:
