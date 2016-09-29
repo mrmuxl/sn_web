@@ -1,7 +1,7 @@
 #_*_coding:utf-8_*_
 
 import datetime,logging,json,os
-from models import KxSoftAd,PrinterPop
+from models import KxSoftAd,PrinterPop,FZu
 from forms import PrinterPopForm
 from apps.publish.models import KxPub
 from django.views.decorators.http import (require_POST,require_GET)
@@ -60,7 +60,7 @@ def printer(request):
         email = request.POST.get('pop','')
         if email:
             try:
-                p = PrinterPop.objects.create(email=email)
+                p = FZu.objects.create(email=email)
                 p.save()
             except Exception as e:
                 logger.debug("printer view:%s",e)
