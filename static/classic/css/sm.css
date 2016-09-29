@@ -719,7 +719,10 @@ width : 100%;
   background: url(../images/fzu/fzu_bg.jpg) no-repeat scroll center top;
   height:450px;
 }
-
+.fzu-qq{
+  background: url(../images/qq.png) no-repeat 0px 20px;
+  height:70px;
+}
 .print-email{
   background: url(../images/print/print_icon6.png) no-repeat 10px 10px;
   height:70px;
