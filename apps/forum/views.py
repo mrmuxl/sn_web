@@ -16,3 +16,6 @@ logger = logging.getLogger(__name__)
 
 def index(request):
     return render(request,"forum/index.html",{})
+
+def add(request):
+    pass
