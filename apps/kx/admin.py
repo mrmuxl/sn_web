@@ -9,6 +9,7 @@ from apps.kx.models import KxUser
 from apps.kx.forms import (UserChangeForm,UserCreationForm)
 from apps.vipuser.models import VIPUser
 from apps.publish.models import PublishUser
+from apps.ad.admin import OperatorInline
 
 class VIPUserInline(admin.StackedInline):
     fk_name = 'email'
@@ -23,7 +24,7 @@ class KxUserAdmin(UserAdmin):
     # The forms to add and change user instances
     form = UserChangeForm
     add_form = UserCreationForm
-    inlines = [VIPUserInline]
+    inlines = [VIPUserInline,OperatorInline]
 
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin

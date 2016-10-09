@@ -7,6 +7,8 @@ from apps.publish.models import KxPub
 from django.views.decorators.http import (require_POST,require_GET)
 from django.http import HttpResponseRedirect,HttpResponse
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
 
 logger = logging.getLogger(__name__)
 
@@ -99,3 +101,11 @@ def fzu(request):
             logger.debug("ins_file:%s",e)
         return render(request,"ad/print_result.html",data)
 
+@login_required
+def operator_add(request):
+    if request.method == 'GET':
+        return render(request,"ad/operator_add.html",data)
+    elif request.method == 'POST':
+        form = OperatorForm(requst.POST)
+        if form.is_valid():
+            form.save()
