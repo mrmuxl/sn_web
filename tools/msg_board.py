@@ -24,12 +24,15 @@ with conn:
 
         sql="""insert into forum_post values(%(id)s,%(user_id)s,%(vote_up)s,%(vote_down)s,%(content)s,%(ip)s,%(status)s,%(created)s,%(modified)s,%(hits)s)"""
         data={"id":None,"user_id":user['id'],"vote_up":0,"vote_down":0,"content":i['msg'],"ip":i['ip'],"status":0,"created":i['create_time'],"modified":i['create_time'],"hits":0}
-        print data
+        #print data
+        print u"一条留言"
         cursor.execute(sql,data)
+        cursor.execute("select * from  forum_post order by id desc ")
+        fid = cursor.fetchone()
         for r in reply:
-            print r
             sql="""insert into forum_comment values(%(id)s,%(fid_id)s,%(user_id)s,%(content)s,%(ip)s,%(status)s,%(created)s)"""
-            data={"id":None,"user_id":user['id'],"fid_id":r['reply_id'],"content":r['msg'],"ip":r['ip'],"status":1,"created":r['create_time']}
+            data={"id":None,"user_id":user['id'],"fid_id":fid,"content":r['msg'],"ip":r['ip'],"status":1,"created":r['create_time']}
             cursor.execute(sql,data)
-            print data
+            #print data
+            print u"一条评论"
     cursor.close()
