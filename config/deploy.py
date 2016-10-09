@@ -54,6 +54,7 @@ TEMPLATE_CONTEXT_PROCESSORS =(
     'django.core.context_processors.static',
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
+    'django.core.context_processors.request',
     'apps.kx.context_processors.kx_settings',
 )
 # Absolute filesystem path to the directory that will hold user-uploaded files.
@@ -102,6 +103,8 @@ MIDDLEWARE_CLASSES = (
         # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'compresshtml.middleware.CompressHtmlMiddleware',
+    'pagination.middleware.PaginationMiddleware',
+
 )
 
 DATABASES = {
@@ -144,6 +147,9 @@ INSTALLED_APPS = (
     'apps.publish',
     'apps.alipay',
     'apps.spool',
+    'apps.forum',
+    'apps.wmd',
+    'pagination',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
