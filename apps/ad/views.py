@@ -8,6 +8,7 @@ from django.views.decorators.http import (require_POST,require_GET)
 from django.http import HttpResponseRedirect,HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from forms import OperatorForm
 
 
 logger = logging.getLogger(__name__)
@@ -104,8 +105,11 @@ def fzu(request):
 @login_required
 def operator_add(request):
     if request.method == 'GET':
-        return render(request,"ad/operator_add.html",data)
+        return render(request,"ad/operator_add_form.html",{})
     elif request.method == 'POST':
-        form = OperatorForm(requst.POST)
+        form = OperatorForm(request.POST)
+        dir(form)
         if form.is_valid():
-            form.save()
+            print form
+            #form.save()
+        return render(request,"ad/operator_add_form.html",{})

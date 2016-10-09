@@ -1,8 +1,7 @@
 #_*_coding:utf-8_*_
 
 from django.contrib import admin
-from models import ForumPost,ForumCategory,ForumTags,ForumComment
-from forms import ForumPostForm
+from models import ForumPost,ForumTags,ForumComment
 
 
 class ForumPostAdmin(admin.ModelAdmin):
@@ -11,8 +10,8 @@ class ForumPostAdmin(admin.ModelAdmin):
         return super(ForumPostAdmin, self).save_model(request, obj,forum,change)
 
 
-class ForumCategoryAdmin(admin.ModelAdmin):
-    pass
+#class ForumCategoryAdmin(admin.ModelAdmin):
+#    pass
 
 class ForumTagsAdmin(admin.ModelAdmin):
     pass
@@ -24,5 +23,5 @@ class ForumCommentAdmin(admin.ModelAdmin):
 
 admin.site.register(ForumTags,ForumTagsAdmin)
 admin.site.register(ForumPost,ForumPostAdmin)
-admin.site.register(ForumCategory,ForumCategoryAdmin)
+#admin.site.register(ForumCategory,ForumCategoryAdmin)
 admin.site.register(ForumComment,ForumCommentAdmin)

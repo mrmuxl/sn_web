@@ -1,9 +1,14 @@
 #_*_coding:utf-8_*_
 
-from django import forms
-from models import ForumPost
+from django.forms import ModelForm
+from models import ForumPost,ForumComment
 
-class ForumPostForm(forms.Form):
+class ForumPostForm(ModelForm):
     class Meta:
-        f = ForumPost
+        model = ForumPost
+        fields = ['content',]
 
+class ForumCommentForm(ModelForm):
+    class Meta:
+        model = ForumComment
+        fields = ['fid','content']
