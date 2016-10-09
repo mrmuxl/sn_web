@@ -14,16 +14,12 @@
 	<div class="container-narrow print-email">
 		<div class="container-fluid" style="margin:5px 5px 5px 70px;">
 			<div class="row-fluid">
-				<div class="span6">
+				<div class="span8">
 					<div style="color:#a0a0a0; font-size:16px;padding-top:10px">加入我们！</div>
-					<div style="color:#a0a0a0;">有兴趣进一步了解创业计划的，请留下邮箱：</div>
+					<div style="color:#a0a0a0;">我们正在为自助打印技术寻找运营伙伴，如有兴趣请留下联系信息：</div>
 				</div>
-				<div class="span6">
-					<form class="navbar-form pull-left" style="margin-top:15px;" action={% url 'printer' %} method="post">
-						{% csrf_token %}
-					  <input type="text" name ="pop" style="width:200px;" placeholder="邮箱地址">
-					  <button type="submit" class="btn btn-primary" style="width:100px;">我有兴趣</button>
-					</form>
+				<div class="span4">
+					 <a  href="/SoftAd/operator/add" class="btn btn-primary" style="width:100px; margin-top:15px">我有兴趣</a>
 				</div>
 			</div>
 		</div>
