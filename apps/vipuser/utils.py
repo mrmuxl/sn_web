@@ -20,7 +20,7 @@ def access_user_print(email):
     now = datetime.datetime.now()
     print_access_list = []
     try:
-        print_user = Print.objects.filter(expire__gt=now).select_related().get(email=email)
+        print_user = Print.objects.filter(expire__gt=now).filter(is_print=True).select_related().get(email=email)
         if print_user:
             message['is_print']= print_user.is_print #为打印共享用户
             message['remainder_print_num']= (print_user.print_num - print_user.used_print_num)
@@ -33,7 +33,7 @@ def access_user_print(email):
             logger.info("access_user_print_message:%s",message)
     except Exception as e:
         logger.debug("print_user:%s",e)
-        print_access_user_set = Print.objects.filter(print_access__access_user=email).filter(expire__gt=now).filter(print_access__status=1)
+        print_access_user_set = Print.objects.filter(print_access__access_user=email).filter(expire__gt=now).filter(print_access__status__exact=1)
         logger.info("print_access:%s",print_access_user_set)
         is_print =False
         if print_access_user_set:
@@ -51,20 +51,22 @@ def access_user_shared(email):
     now = datetime.datetime.now()
     shared_access_list =[]
     try:
-        shared_user = Shared.objects.filter(expire__gt=now).select_related().get(email=email)
+        shared_user = Shared.objects.filter(expire__gt=now).filter(is_shared=True).select_related().get(email=email)
         if shared_user:
             message['is_shared']= shared_user.is_shared #为文件共享用户
-            message['remainder_shared_num']= (shared_user.shared_num - shared_user.used_shared_num)
+            if shared_user.is_shared:
+                message['remainder_shared_num']= (shared_user.shared_num - shared_user.used_shared_num)
+            else:
+                message['remainder_shared_num']= -1
             shared_access_obj_set = shared_user.shared_access.filter(status=1)
             if shared_access_obj_set:
                 for i in shared_access_obj_set:
                     shared_access_list.append(i.access_user_id)
-                    #shared_access_list.append({"email":i.access_user_id})
             message['shared_access_user']=shared_access_list
             logger.info("access_user_shared_message:%s",message)
     except Exception as e:
         logger.debug("shared_user:%s",e)
-        shared_access_user_set = Shared.objects.filter(shared_access__access_user=email).filter(expire__gt=now).filter(shared_access__status=1)
+        shared_access_user_set = Shared.objects.filter(shared_access__access_user=email).filter(expire__gt=now).filter(shared_access__status__exact=1)
         logger.info("shared_access_user_set:%s",shared_access_user_set)
         is_shared = False
         if shared_access_user_set:
@@ -72,7 +74,7 @@ def access_user_shared(email):
                 if i.is_shared:
                     is_shared = True
         message['is_shared']= is_shared 
-        message['remainder_shared_num']= -1
+        message['remainder_shared_num']= -1 #不能授权
         message['shared_access_user']=shared_access_list
         logger.info("shared_access_user_set_message:%s",message)
     return message

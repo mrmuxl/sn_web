@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{#   {% block header %}{% include "header.html" %}{% endblock %}  #}
+{% block content %}
+{% load split %}
+
+
+<div class="fzu-bg">
+	<div class="container-narrow">
+		<a class="btn btn-lg" style="margin:360px 0 0 100px; padding:5px 90px; color:#333; font-size:18px;" href="{{DOWNLOAD}}/Install/{{ins_file}}" target="_blank" title="下载">下载试用</a>
+	</div>
+</div>
+
+<div style="background-color:#f8f8f8;">
+	<div class="container-narrow print-email">
+		<div class="container-fluid" style="margin:5px 5px 5px 70px;">
+			<div class="row-fluid">
+				<div class="span6">
+					<div style="color:#a0a0a0; font-size:16px;padding-top:10px">加入我们！</div>
+					<div style="color:#a0a0a0;">有兴趣加入我们的团队,让云印更好的发展</div>
+					
+				</div>
+				<div class="span6 fzu-qq">
+					
+					<div style="color:#a0a0a0;font-size:16px;padding-top:25px;padding-left:35px">请加入QQ群：314131228</div>
+			<!-- 		<form class="navbar-form pull-left" style="margin-top:15px;" action={% url 'fzu' %} method="post">
+						{% csrf_token %}
+					  <input type="text" name ="pop" style="width:200px;" placeholder="邮箱地址">
+					  <button type="submit" class="btn btn-primary" style="width:100px;">我有兴趣</button>
+					</form> -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-narrow print-main">
+	<div class="text-center" style="margin:35px auto; font-size:20px; color:#7e7e7e">
+		SimpleNect打印平台可以为你提供
+	</div>
+
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span4 text-center print-prop1" style="padding-top:110px;">
+				<div class="print-prop-header">云打印技术</div>
+				<div class="print-prop-body text-left">
+					安装云打印后，在宿舍发出打印指令，便可足不出楼，在同一宿舍楼内取得所属资料。
+				</div>
+			</div>
+			<div class="span4 text-center print-prop2" style="padding-top:110px;">
+				<div class="print-prop-header">移动打印（Coming Soon）</div>
+				<div class="print-prop-body text-left">
+					安装了云打印后，可以直接把手机上的文件发到指定的打印机打印。
+				</div>
+			</div>
+			<div class="span4 text-center print-prop3" style="padding-top:110px;">
+				<div class="print-prop-header">资料共享</div>
+				<div class="print-prop-body text-left">
+					与您的同学和老师进行自由的资料共享，便捷的操作体验。
+				</div>
+			</div>
+		</div>
+
+		<div class="row-fluid" style="margin-top:20px">
+			<div class="span4 text-center print-prop4" style="padding-top:110px;">
+				<div class="print-prop-header">定位打印机</div>
+				<div class="print-prop-body text-left">
+					我们在每栋宿舍楼均安装了打印机，不管你身处何时何地，均能享受便捷的云打印服务。
+				</div>
+			</div>
+			<div class="span4 text-center print-prop5" style="padding-top:110px;">
+				<div class="print-prop-header">多种支付方式</div>
+				<div class="print-prop-body text-left">
+					<p>由您的打印记录一次支付。</p><p>充值帐号享受返还优惠。</p>
+				</div>
+			</div>
+			<div class="span4 text-left print-fzu" style="padding-top:50px;">
+				<p style="margin-left:80px;font-size:18px;line-height:150%"><strong style="color:red">注册有礼：</strong><br>
+				福州大学的用户，<br>
+				注册安装后，可<br>
+				享受首次打印<strong style="color:red;font-size:24px">50张</strong><br>
+				免费优惠活动</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
+{# {% block footer %}{% include "footer.html" %}{% endblock %} #}

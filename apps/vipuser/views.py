@@ -44,6 +44,8 @@ def vipuser_api(request):
         v = VIPUser.objects.filter(email=email,is_vip__exact=1,expire__gt=now)
         p = Print.objects.filter(email=email,is_print__exact=1,expire__gt=now)
         s = Shared.objects.filter(email=email,is_shared__exact=1,expire__gt=now)
+        pa = PrintAccess.objects.filter(access_user=email,status__exact=1)
+        sa = SharedAccess.objects.filter(access_user=email,status__exact=1)
         remainder_days = get_remainder_days(email)
         if v:
             message['status']=1 #为VIP用户
@@ -58,7 +60,7 @@ def vipuser_api(request):
                 pprint(message)
             return HttpResponse(json.dumps(message),content_type="application/json")
         elif p or s:
-            message['status']=0 #为VIP用户
+            message['status']=0 #不为VIP用户
             message['is_vip']=False
             message['remainder_days']=-1 #不显示
             message['vip_friends']='vip'
@@ -66,6 +68,26 @@ def vipuser_api(request):
             s = access_user_shared(email)
             message.update(p)
             message.update(s)
+            if settings.DEBUG:
+                pprint(message)
+            return HttpResponse(json.dumps(message),content_type="application/json")
+        elif pa or sa:
+            message['status']=0 #不为VIP用户
+            message['is_vip']=False
+            message['remainder_days']=-1 #不显示
+            message['vip_friends']='vip'
+            if pa:
+                message['is_print']= True #为打印共享用户
+            else:
+                message['is_print']= False #不为打印共享用户
+            if sa:
+                message['is_shared']= True #为文件共享用户
+            else:
+                message['is_shared']= False #不为文件共享用户
+            message['remainder_print_num']= -1
+            message['remainder_shared_num']= -1
+            message['print_access_user']=[]
+            message['shared_access_user']=[]
             if settings.DEBUG:
                 pprint(message)
             return HttpResponse(json.dumps(message),content_type="application/json")
@@ -125,6 +147,7 @@ def vipuser_test(reqeust,ckey,email):
 @csrf_exempt
 @require_POST
 def nonvipuser(request):
+    '''这个接口已经不使用'''
     message = {}
     now = datetime.datetime.now()
     email = request.POST.get('email','')
@@ -195,28 +218,35 @@ def access_user(request):
     tp = request.POST.get('type','')
     users = request.POST.getlist('users','')
     logger.info("email:%s,tp:%s,users:%s",email,tp,users)
-    if email and tp and users:
+    if email and tp:
         if tp == u'1':
             try:
                 ins_print = Print.objects.get(email=email)
                 PrintAccess.objects.filter(email=email).update(status=0)
-                for u in users:
-                    try:
-                        if ins_print.used_print_num <= ins_print.print_num:
-                            u_ins = KxUser.objects.get(email=u)
-                            PrintAccess.objects.create(email=ins_print,access_user=u_ins,create_at=now,status=1)
-                            ins_print.used_print_num =len(users)
-                            ins_print.save()
-                            message['status']=0
-                            message['message']="ok"
-                        else:
-                            message['status']=3
-                            message['message']="do nothing"
-                    except Exception as e:
-                        logger.debug("print_access_user:%s",e)
-                        message['status']=1
-                        message['message']=str(e)
-                return HttpResponse(json.dumps(message),content_type="application/json")
+                if users:
+                    for u in users:
+                        try:
+                            if ins_print.used_print_num <= ins_print.print_num:
+                                u_ins = KxUser.objects.get(email=u)
+                                PrintAccess.objects.create(email=ins_print,access_user=u_ins,create_at=now,status=1)
+                                ins_print.used_print_num =len(users)
+                                ins_print.save()
+                                message['status']=0
+                                message['message']="ok"
+                            else:
+                                message['status']=3
+                                message['message']="do nothing"
+                        except Exception as e:
+                            logger.debug("print_access_user:%s",e)
+                            message['status']=1
+                            message['message']=str(e)
+                    return HttpResponse(json.dumps(message),content_type="application/json")
+                else:
+                    ins_print.used_print_num =len(users)
+                    ins_print.save()
+                    message['status']=0
+                    message['message']="ok"
+                    return HttpResponse(json.dumps(message),content_type="application/json")
             except Exception as e:
                 message['status']=1
                 message['message']=str(e)
@@ -225,23 +255,30 @@ def access_user(request):
             try:
                 ins_shared = Shared.objects.get(email=email)
                 SharedAccess.objects.filter(email=email).update(status=0)
-                for u in users:
-                    try:
-                        if ins_shared.used_shared_num <= ins_shared.shared_num:
-                            u_ins = KxUser.objects.get(email=u)
-                            SharedAccess.objects.create(email=ins_shared,access_user=u_ins,create_at=now,status=1)
-                            ins_shared.used_shared_num = len(users)
-                            ins_shared.save()
-                            message['status']=0
-                            message['message']="ok"
-                        else:
-                            message['status']=3
-                            message['message']="do nothing"
-                    except Exception as e:
-                        logger.debug("shared_access:%s",e)
-                        message['status']=1
-                        message['message']=str(e)
-                return HttpResponse(json.dumps(message),content_type="application/json")
+                if users:
+                    for u in users:
+                        try:
+                            if ins_shared.used_shared_num <= ins_shared.shared_num:
+                                u_ins = KxUser.objects.get(email=u)
+                                SharedAccess.objects.create(email=ins_shared,access_user=u_ins,create_at=now,status=1)
+                                ins_shared.used_shared_num = len(users)
+                                ins_shared.save()
+                                message['status']=0
+                                message['message']="ok"
+                            else:
+                                message['status']=3
+                                message['message']="do nothing"
+                        except Exception as e:
+                            logger.debug("shared_access:%s",e)
+                            message['status']=1
+                            message['message']=str(e)
+                    return HttpResponse(json.dumps(message),content_type="application/json")
+                else:
+                    ins_shared.used_shared_num = len(users)
+                    ins_shared.save()
+                    message['status']=0
+                    message['message']="ok"
+                    return HttpResponse(json.dumps(message),content_type="application/json")
             except Exception as e:
                 message['status']=1
                 message['message']=str(e)

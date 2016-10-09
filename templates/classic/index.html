@@ -54,8 +54,8 @@
 				<div class="span4" style="float:right">
 					<a href="#repo">
 					<span class="circle">
-						<i class="icon-home icon-4x icon-light" style="display:block;"></i>
-						<span>文件仓库</span>
+						<i class="icon-repeat icon-4x icon-light" style="display:block;"></i>
+						<span>文件自动同步</span>
 					</span>
 					</a>
 				</div>
@@ -109,14 +109,14 @@
 <div style="background-color:#FDFDFD;">
 	<br/><br/>
 <div class="container-narrow">
-	<div class="row-fluid text-center" id="repo" style="font-size:30px;margin-top:10px">文件仓库</div>
+	<div class="row-fluid text-center" id="repo" style="font-size:30px;margin-top:10px">文件自动同步</div>
 	<br/>
 	<div class="row">
 		<div class="span4">
 			<div style="line-height:28px">
-			用SimpleNect组建的文件服务器，可以在任何地方访问<br/>
-			<div style="text-center;margin-left:45px;margin-top:100px">
-			<span > <a href="{{DOWNLOAD}}/Install/{{repo_file}}" target="_blank" title="下载"><img src="{{ STATIC_URL }}images/download_btn2.jpg" class="mypng" /></a></span></div>
+			不同电脑之间的文件可以通过SimpleNect保持自动同步。<br/>
+		<!-- 	<div style="text-center;margin-left:45px;margin-top:100px">
+			<span > <a href="{{DOWNLOAD}}/Install/{{repo_file}}" target="_blank" title="下载"><img src="{{ STATIC_URL }}images/download_btn2.jpg" class="mypng" /></a></span></div> -->
 		</div>
 		</div>
 		<div class="span8">
@@ -130,7 +130,7 @@
 	<br/><br/>
 	<div class="row">
 			<div class="text-center">
-				<span style="font-size:28px;margin:50px 80px 10px 10px;padding:5px" >   免费试用15天</span>			
+				<span style="font-size:28px;margin:50px 80px 10px 10px;padding:5px" > 免费试用15天</span>			
 				<a href="{{DOWNLOAD}}/Install/{{ins_file}}"><img style="margin-bottom:10px" src="{{ STATIC_URL }}images/download.png" class="mypng" /></a>
 
 	</div>
@@ -309,7 +309,7 @@
 		</div>
 		
 		<div class="clear"></div>
-		<div id="msg_form" class="send_reply">
+<!-- 		<div id="msg_form" class="send_reply">
 		<form  action="{% url 'add_msg'%}" method="post" onsubmit="return checkMsg3();">
 			{% csrf_token %}
 			<textarea id="msg_content3" name="msg"></textarea>
@@ -321,7 +321,7 @@
 				<input type="button" name value="" class="btn_cancel btn_cancel_scroll"/>
 			</div>
 		</form>
-		</div>			
+		</div>	 -->		
 	</div>
 	<div class="clear"></div>
 </div>
