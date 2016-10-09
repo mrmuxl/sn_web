@@ -14,3 +14,4 @@ django-compresshtml
 django-compressor
 django-debug-toolbar==dev
 PIL
+django-pagination
