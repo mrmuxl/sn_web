@@ -28,7 +28,7 @@ class Operator(models.Model):
     qq = models.CharField(default='0',max_length=14, verbose_name=_(u'运营商名称'))
     tel = models.CharField(default='0',max_length=14,verbose_name=_(u'电话号码'))
     company_tel= models.CharField(default='0',max_length=14,verbose_name=_(u'公司电话'))
-    school  = models.CharField(max_length=260,verbose_name=_(u'学校名称'))
+    school  = models.CharField(max_length=255,blank=True,null=True,verbose_name=_(u'学校名称'))
     resource =  models.TextField(verbose_name=_(u'资源和优势'))
     created = models.DateTimeField(default=datetime.now(), verbose_name=_('创建时间'))
     modified = models.DateTimeField(default=datetime.now(), verbose_name=_('修改时间'))
