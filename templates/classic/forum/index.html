@@ -3,7 +3,7 @@
 {% block content %}
 {% load split %}
 <style type="text/css">
-.vote-list {
+.post-list {
 margin: 0;
 padding: 0;
 border: 0;
@@ -22,13 +22,13 @@ display: block;
 -webkit-margin-end: 0px;
 -webkit-padding-start: 40px;
 }
-.vote-body {
+.post-body {
 	margin: 0;
 	padding: 0;
 	border: 0;
 	color: #292c33;
 }
-.vote-title {
+.post-title {
 font-size: 18px;
 /*font-weight: bold;*/
 font-weight: normal;
@@ -36,7 +36,7 @@ line-height: 1em;
 margin-bottom: 10px;
 
 }
-.vote-item {
+.post-item {
 font-weight: normal;
 clear: both;
 margin: 0 0 60px 0!important;
@@ -48,14 +48,14 @@ margin-bottom: 8px;
 word-wrap: break-word;
 /*margin-bottom: 23px !important;*/
 }
-.vote-content {
+.post-content {
 	font-size: 13px;
 	margin-bottom: 10px;
 	line-height: 1.4em;
 	text-rendering: optimizeLegibility;
 	color: #292c33;
 }
-.vote-badge {
+.post-badge {
 	position: absolute;
 	top: 20px;
 	left: 0;
@@ -63,7 +63,7 @@ word-wrap: break-word;
 	vertical-align: baseline;
 	display: block;
 }
-.vote-count {
+.post-count {
 	background-color: #fcfdff;
 	border: 1px solid #cfd7e6;
 	-moz-border-radius: 3px;
@@ -80,24 +80,24 @@ word-wrap: break-word;
 	text-align: center;
 	vertical-align: baseline;
 }
-.vote-header {
+.post-header {
 padding-top: 11px;
 word-wrap: break-word;
 }
 
-.vote-count-post {
+.post-count-post {
 display: block;
 font-size: 24px;
 padding-top: 2px;
 color: #555;
 }
 
-.vote-up-off, .vote-up-on, .vote-down-off, .vote-down-on{
+.post-up-off, .post-up-on, .post-down-off, .post-down-on{
 background-image: url('{{STATIC_URL}}images/forum/sprites.png');
 background-repeat: no-repeat;
 overflow: hidden;
 }
-.vote-up-off, .vote-down-off, .vote-up-on, .vote-down-on{
+.post-up-off, .post-down-off, .post-up-on, .post-down-on{
 	text-indent: -9999em;
 	font-size: 1px;
 	cursor: pointer;
@@ -108,10 +108,10 @@ overflow: hidden;
 	/*vertical-align: baseline;*/
 	/*background: transparent;*/
 }
-.vote-up-off{
+.post-up-off{
 	background-position: 0px -265px;
 }
-.vote-down-off{
+.post-down-off{
 	background-position: 0px -300px;
 }
 
@@ -130,8 +130,9 @@ overflow: hidden;
 					  <button type="submit" class="btn">提交留言</button>
 				</fieldset>
 			</form> -->
-		<div class="send_content">
-		<form  action="{% url 'add_msg'%}" method="post" onsubmit="return checkMsg();">
+		<!-- <div class="send_content"> -->
+<!-- 		<div>
+		<form  action="{% url 'forum_add'%}" method="post" onsubmit="return checkMsg();">
 			{% csrf_token %}
 			<textarea id="msg_content" name="msg"></textarea>
 			<div class="comment_small_bg" id="top_comment"></div>
@@ -142,46 +143,36 @@ overflow: hidden;
 				<input type="button" name value="" class="btn_cancel btn_cancel_top"/>
 			</div>
 		</form>
+		</div> -->
 		
-		</div>
 		</div>
 
 		<div class="span12">
-		<div class="vote-body">
-			<ol class="vote-list">
-				<li class="vote-item">
-					<div class="vote-header">
-						<h2 class="vote-title"><a href="#">标题</a></h2>
-						<div class="vote-content">
-							<p>哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦噢噢噢噢噢噢噢噢哦哦哦哦哦哦哦哦哦哦哦哦 <a href="http://help.hipchat.com/forums/138883-suggestions/suggestions/3589512-make-yall-or-y-all-an-alias-for-all" rel="nofollow">http://help.hipchat.com/forums/138883-suggestions/suggestions/3589512-make-yall-or-y-all-an-alias-for-all</a> but would be nice to have that granularity when notifying certain groups.</p>
-							<p>Ryan</p>
+		<div class="post-body">
+			<ul class="post-list">
+				{% for post,num in posts.items %}
+				<li class="post-item">
+					<div class="post-header">
+						<!-- <h2 class="post-title"><a href="{{ post.get_absolute_url }}">{{post.title}}</a></h2> -->
+						<h2 class="post-title"><a href="{% url 'forum_post' post.id %}">{{post.title}}</a></h2>
+						<div class="post-content">
+							<p>{{post.content}}</p>
+							<p>{{post.author.nick}}&nbsp  <a href="{% url 'forum_post' post.id %}"> {{num}}条评论</a></p>
 						</div>
-						<div class="vote-badge">
-							<div class="vote-count">
-								<a class="vote-up-off" title="This question shows research effort; it is useful and clear">up vote</a>
-								<strong strong="color:#292c33;display:block;font-size:18px	;font-weight:bold;margin-bottom:5px;font:inherit;vertical-align:baseline">345</strong>
-								<!-- <span style="vertical-align: baseline;">票</span> -->
-								<a class="vote-down-off" title="This question does not show any research effort; it is unclear or not useful">down vote</a>     
+						<div class="post-badge">
+							<div class="post-count">
+								<a class="post-up-off" title="This question shows research effort; it is useful and clear">up post</a>
+								<strong strong="color:#292c33;display:block;font-size:18px	;font-weight:bold;margin-bottom:5px;font:inherit;vertical-align:baseline">
+									{% with a=post.id b=post.id %}
+									{{ a|add:-1 }}
+									{%endwith%}</strong>
+								<a class="post-down-off" title="This question does not show any research effort; it is unclear or not useful">down post</a>     
 							</div>
 						</div>
 					</div>
 				</li>
-				<li class="vote-item">
-					<div class="vote-header">
-						<h2 class="vote-title"><a href="#">标题</a></h2>
-						<div class="vote-content">
-							<p>The ability to subscribe to an alias. Instead of having to @all everyone in a room would be nice if you could subscribe to an alias so only certain people would get notified. For example if I posted @ninjas in a room it would only go to those that have subscribed to receive @ninjas notifications. Not sure if this is related to <a href="http://help.hipchat.com/forums/138883-suggestions/suggestions/3589512-make-yall-or-y-all-an-alias-for-all" rel="nofollow">http://help.hipchat.com/forums/138883-suggestions/suggestions/3589512-make-yall-or-y-all-an-alias-for-all</a> but would be nice to have that granularity when notifying certain groups.</p>
-							<p>Ryan</p>
-						</div>
-						<div class="vote-badge">
-							<div class="vote-count">
-								<strong strong="color:#292c33;display:block;font-size:18px	;font-weight:bold;margin-bottom:5px;font:inherit;vertical-align:baseline">33</strong>
-								<!-- <span style="vertical-align: baseline;">票</span>      -->
-							</div>
-						</div>
-					</div>
-				</li>
-			</ol>
+				{%endfor%}
+			</ul>
 		</div>
 		</div>
 	</div>

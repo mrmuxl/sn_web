@@ -50,10 +50,10 @@ def printer(request):
         data={"title":u"打印创业计划"}
         try:
             ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_V').order_by('-id')[0:1].get()
+            data.update(ins_file=ins_file.install_file)
         except Exception as e:
             data.update(ins_file='')
             logger.debug("ins_file:%s",e)
-        data.update(ins_file=ins_file.install_file)
         return render(request,"ad/print.html",data)
     if request.method == 'POST':
         data={"title":u"打印创业计划"}
@@ -66,10 +66,10 @@ def printer(request):
                 logger.debug("printer view:%s",e)
         try:
             ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_V').order_by('-id')[0:1].get()
+            data.update(ins_file=ins_file.install_file)
         except Exception as e:
             data.update(ins_file='')
             logger.debug("ins_file:%s",e)
-        data.update(ins_file=ins_file.install_file)
         return render(request,"ad/print_result.html",data)
 
 def fzu(request):
@@ -77,10 +77,10 @@ def fzu(request):
         data={"title":u"打印创业计划"}
         try:
             ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_V').order_by('-id')[0:1].get()
+            data.update(ins_file=ins_file.install_file)
         except Exception as e:
             data.update(ins_file='')
             logger.debug("ins_file:%s",e)
-        data.update(ins_file=ins_file.install_file)
         return render(request,"ad/fzu.html",data)
     if request.method == 'POST':
         data={"title":u"打印创业计划"}
@@ -93,9 +93,9 @@ def fzu(request):
                 logger.debug("printer view:%s",e)
         try:
             ins_file = KxPub.objects.filter(pub_time__isnull=False).filter(install_file__istartswith='SimpleNect_V').order_by('-id')[0:1].get()
+            data.update(ins_file=ins_file.install_file)
         except Exception as e:
             data.update(ins_file='')
             logger.debug("ins_file:%s",e)
-        data.update(ins_file=ins_file.install_file)
         return render(request,"ad/print_result.html",data)
 

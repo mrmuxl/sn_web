@@ -3,6 +3,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from models import KxForumPosts,KxForumMpost,KxForumForum
 from models import Blog
+from apps.wmd.widgets import MarkDownInput
 
 #attrs_dict = { 'class':'required' }
 class Posts(forms.ModelForm):
@@ -26,6 +27,7 @@ class Forums(forms.ModelForm):
         forums = KxForumForum
 
 class BlogForm(forms.ModelForm):
+    summary = forms.CharField(widget=MarkDownInput(attrs={'style':'width:300px;height:100px'}))
+    content = forms.CharField(widget=MarkDownInput())
     class Meta:
         blogform = Blog
-
