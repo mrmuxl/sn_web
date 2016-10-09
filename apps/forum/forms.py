@@ -1,9 +1,9 @@
 #_*_coding:utf-8_*_
 
 from django import forms
-from models import Forum
+from models import ForumPost
 
-class ForumForm(forms.Form):
+class ForumPostForm(forms.Form):
     class Meta:
-        f = Forum
+        f = ForumPost
 

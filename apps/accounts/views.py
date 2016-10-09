@@ -252,6 +252,7 @@ def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
 
+@login_required
 def chpasswd(request):
     if request.method =="POST":
         oldPwd = request.POST.get("oldPwd","")
