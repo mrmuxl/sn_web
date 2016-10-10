@@ -156,13 +156,13 @@
 </div>
 </div>
 
-<div class="comment">
+<!-- <div class="comment">
 	<div class="comment_in w1000">
 		<div class="send_area">
 			<div class="send_area_top">&nbsp;</div>
 			<div class="send_area_text">
 			如果你对Simplenect软件的使用有问题，欢 迎您留下宝贵的意见让我们一起成长！
-			<form  action="{% url 'add_msg' %}" method="post" onsubmit="return checkMsg();">
+			<form  action="{% url 'forum_add' %}" method="post" onsubmit="return checkMsg();">
 				{% csrf_token %}
 				<textarea id="msg_content" name="msg"></textarea>
 				<div class="send_area_btn">
@@ -321,14 +321,14 @@
 		</ul>
 		{% endif %}	
 	{% endif %}
-		<div class="board_more_title"><span class="board_more_text">共</span><a href="{% url 'msg_index' %}" target="_blank">
+		<div class="board_more_title"><span class="board_more_text">共</span><a href="{% url 'forum_index' %}" target="_blank">
 			<span class="board_more_count">{{ msg_count }}</span></a>
 			<span class="board_more_text">条留言</span></div>
 		</div>
 		
-		<div class="clear"></div>
+		<div class="clear"></div> -->
 <!-- 		<div id="msg_form" class="send_reply">
-		<form  action="{% url 'add_msg'%}" method="post" onsubmit="return checkMsg3();">
+		<form  action="{% url 'forum_add'%}" method="post" onsubmit="return checkMsg3();">
 			{% csrf_token %}
 			<textarea id="msg_content3" name="msg"></textarea>
 			<div class="comment_small_bg" id="scroll_comment"></div>
@@ -340,7 +340,7 @@
 			</div>
 		</form>
 		</div>	 -->		
-	</div>
+	<!-- </div>
 	<div class="clear"></div>
 </div>
 	
@@ -349,7 +349,7 @@
 	<span class="send_u" id="reply_u"> 回复“阡陌游客”：</span>
 	</div>
 	<div class="send_content2 send_bg" >
-	<form  action="{% url 'add_msg'%}" method="post" onsubmit="return checkMsg2();">
+	<form  action="{% url 'forum_add'%}" method="post" onsubmit="return checkMsg2();">
 		{% csrf_token %}
 		<textarea name="msg" id="msg_content2"></textarea>
 		<div class="reply_btn">
@@ -360,7 +360,8 @@
 		</div>
 	</form>
 	</div>
-	</div>
+	</div> -->
+	<br><br>
 
 <script src="{{ STATIC_URL }}js/lib/video.js"></script>
 

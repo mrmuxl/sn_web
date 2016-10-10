@@ -46,8 +46,8 @@ class BlogAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     pass
 
-#admin.site.register(KxForumPosts,PostsAdmin)
-#admin.site.register(KxForumMpost,MpostAdmin)
-#admin.site.register(KxForumForum,ForumsAdmin)
+admin.site.register(KxForumPosts,PostsAdmin)
+admin.site.register(KxForumMpost,MpostAdmin)
+admin.site.register(KxForumForum,ForumsAdmin)
 admin.site.register(Blog,BlogAdmin)
 admin.site.register(Category,CategoryAdmin)

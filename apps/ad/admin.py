@@ -4,6 +4,10 @@ from django.contrib import admin
 from models import KxSoftAd
 from forms import AdForm
 import datetime
+from models import Operator,OperatorAssistant,OperatorCategory
+
+class OperatorInline(admin.StackedInline):
+    model = Operator
 
 class AdAdmin(admin.ModelAdmin):
     now = datetime.datetime.now()
@@ -17,4 +21,17 @@ class AdAdmin(admin.ModelAdmin):
         obj.creater_id =request.user.uuid
         return super(AdAdmin, self).save_model(request, obj,ad, change)
 
+class OperatorAdmin(admin.ModelAdmin):
+    pass
+
+class OperatorCategoryAdmin(admin.ModelAdmin):
+    pass
+
+class OperatorAssistantAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(KxSoftAd,AdAdmin)
+admin.site.register(Operator,OperatorAdmin)
+admin.site.register(OperatorCategory,OperatorCategoryAdmin)
+admin.site.register(OperatorAssistant,OperatorAssistantAdmin)

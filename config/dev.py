@@ -54,6 +54,7 @@ TEMPLATE_CONTEXT_PROCESSORS =(
     'django.core.context_processors.static',
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
+    'django.core.context_processors.request',
     'apps.kx.context_processors.kx_settings',
 )
 # Absolute filesystem path to the directory that will hold user-uploaded files.
@@ -102,6 +103,7 @@ MIDDLEWARE_CLASSES = (
         # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'compresshtml.middleware.CompressHtmlMiddleware',
+    'pagination.middleware.PaginationMiddleware',
     #'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
@@ -110,8 +112,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'kx',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
-        'PASSWORD': 'abc123',                  # Not used with sqlite3.
-        'HOST': '192.168.18.200',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PASSWORD': 'mrmuxl',                  # Not used with sqlite3.
+        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -148,7 +150,7 @@ INSTALLED_APPS = (
     'apps.spool',
     'apps.forum',
     'apps.wmd',
-    'apps.operator',
+    'pagination',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
