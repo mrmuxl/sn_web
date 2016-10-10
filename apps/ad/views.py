@@ -108,8 +108,8 @@ def operator_add(request):
         return render(request,"ad/operator_add_form.html",{})
     elif request.method == 'POST':
         form = OperatorForm(request.POST)
-        dir(form)
         if form.is_valid():
-            print form
-            #form.save()
+            f = form.save(commit=False)
+            f.user_id = request.user.pk
+            f.save()
         return render(request,"ad/operator_add_form.html",{})
