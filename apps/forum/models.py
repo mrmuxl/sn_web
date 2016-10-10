@@ -70,7 +70,6 @@ class ForumComment(models.Model):
     content= models.TextField(verbose_name=_(u'正文'))
     ip = models.IPAddressField(null=True, blank=True, verbose_name=_('IP地址'))
     status  = models.IntegerField(verbose_name=_(u'评论状态'),default = 0,help_text=_(u'0=可见，1=隐藏'))
-    created = models.DateTimeField(default=datetime.now(), verbose_name='创建时间')
     created = models.DateTimeField(default=datetime.now(), verbose_name=_(u'创建时间'))
 
     class Meta:
