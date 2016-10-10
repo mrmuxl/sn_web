@@ -11,7 +11,7 @@ font-size: 100%;
 font: inherit;
 vertical-align: baseline;
 clear: both;
-font-size: 12px;
+/*font-size: 12px;*/
 font-weight: normal;
 line-height: 14px;
 display: block;
@@ -39,17 +39,17 @@ margin-bottom: 10px;
 .post-item {
 font-weight: normal;
 clear: both;
-margin: 0 0 60px 0!important;
+/*margin: 0 0 60px 0!important;*/
 min-height: 83px;
 padding-left: 100px;
 position: relative;
 line-height: 14px;
-margin-bottom: 8px;
+margin-bottom: 30px;
 word-wrap: break-word;
 /*margin-bottom: 23px !important;*/
 }
 .post-content {
-	font-size: 13px;
+	/*font-size: 13px;*/
 	margin-bottom: 10px;
 	line-height: 1.4em;
 	text-rendering: optimizeLegibility;
@@ -57,9 +57,9 @@ word-wrap: break-word;
 }
 .post-badge {
 	position: absolute;
-	top: 20px;
+	top: 10px;
 	left: 0;
-	width: 70px;
+	width: 65px;
 	vertical-align: baseline;
 	display: block;
 }
@@ -75,13 +75,13 @@ word-wrap: break-word;
 	color: #8f9bb3;
 	font-size: 12px;
 	line-height: 14px;
-	margin-bottom: 3px;
-	padding: 12px 0 9px 0;
+	/*margin-bottom: 3px;*/
+	padding: 4px 0 1px 0;
 	text-align: center;
 	vertical-align: baseline;
 }
 .post-header {
-	padding-top: 11px;
+	padding-top: 10px;
 	word-wrap: break-word;
 }
 
@@ -212,7 +212,6 @@ word-wrap: break-word;
 	min-height: 20px;
 	padding-left: 30px;
 	font-size: 12px;
-	margin-bottom: 30px;
 	min-height: 40px;
 	position: relative;
 	color: #666f80;
@@ -245,7 +244,7 @@ word-wrap: break-word;
 							<!-- <div class="vcard">
 							<span class="comment-badge" ><img class="comment_photo" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg"></span>
 							</div> -->
-							<p><span>{{post.user.nick}} &nbsp {{post.created}}</span></p>
+							<p><span>{{post.user.nick}} &nbsp {{post.created|date:"m-d H:i" }}</span></p>
 							<br>
 						<!-- </div> -->
 						<div class="span10">
@@ -272,7 +271,7 @@ word-wrap: break-word;
 					<li class="comment-item">
 						<div class="comment-header">
 							
-							<p>{{c.user.nick}} &nbsp {{ c.created }}</p>
+							<p>{{c.user.nick}} &nbsp {{ c.created|date:"m-d H:i" }}</p>
 							<span class="comment-badge"><img class="comment_photo" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg"></span>
 							<div class="comment-content">
 								

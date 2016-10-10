@@ -125,7 +125,7 @@ overflow: hidden;
 					 <div id="comment" style="none">
 					 	<textarea class="input-block-level" name="content" rows="4" placeholder="使用问题？/新产品建议..."></textarea>
 					 </div>
-					  <button type="submit" class="btn">提交留言</button>
+					  <button type="submit" class="btn" style="float:right;margin-right:20px">提交留言</button>
 				</fieldset>
 			</form>
 		</div>
@@ -140,7 +140,7 @@ overflow: hidden;
 						<!-- <h2 class="post-title"><a href="{% url 'forum_post' post.id %}">{{post.title}}</a></h2> -->
 						<div class="post-content">
 							<p>{{post.content}}</p>
-							<p style="padding-top:10px;">{{post.user.nick}}&nbsp  <a href="{% url 'forum_post' post.id %}"> {{num}}条评论</a>&nbsp<span style="color:#717379">{{ post.created }}</span></p>
+							<p style="padding-top:20px;color:#3d3a3a">{{post.user.nick}}&nbsp  <span style="float:right"> <a  href="{% url 'forum_post' post.id %}"> {{num}}条评论</a>&nbsp&nbsp<span style="float:right;color:#717379">{{ post.created|date:"m-d H:i" }}</span></span></p>
 						</div>
 						<div class="post-badge">
 							<div class="post-count">
@@ -157,7 +157,7 @@ overflow: hidden;
 			</ul>
 		</div>
 		</div>
-		<div class="span12">{% paginate %}</div>
+		<div class="span12 text-center">{% paginate %}</div>
 	</div>
 </div>
 {% endblock %}
