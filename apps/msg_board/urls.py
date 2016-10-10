@@ -1,6 +1,7 @@
 #_*_coding:utf-8_*_
 from django.conf.urls import patterns, include, url
 from django.views.generic import DetailView, ListView
+from django.views.generic.base import RedirectView
 
 #urlpatterns = patterns('',
 #    url(r'^$','apps.msg_board.views.msg_board',name ='msg_index'),
@@ -12,6 +13,7 @@ from django.views.generic import DetailView, ListView
 
 
 urlpatterns = patterns('',
+    url(r'^msg_index/?$',RedirectView.as_view(url='index'),name ='msg_index'),
     url(r'^$','apps.forum.views.index',name ='forum_index'),
     url(r'^index/?$','apps.forum.views.index',name ='forum_index'),
     url(r'^add/?$','apps.forum.views.add',name ='forum_add'),
