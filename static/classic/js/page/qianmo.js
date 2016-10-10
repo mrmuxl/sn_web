@@ -201,7 +201,7 @@ $(function(){
 
     function vote_up(pid){
         if(pid>0){
-            $.post("/forums/vote",{"id":pid,"v":0},function(data){
+            $.post("/MsgBoard/vote",{"id":pid,"v":0},function(data){
                 if(data.status==1){
                     var v = $("#vote_"+pid).text();
                     $("#vote_"+pid).text(parseInt(v)+1);
@@ -214,7 +214,7 @@ $(function(){
     }
     function vote_down(pid){
         if(pid>0){
-            $.post("/forums/vote",{"id":pid,"v":1},function(data){
+            $.post("/MsgBoard/vote",{"id":pid,"v":1},function(data){
                 if(data.status==1){
                     var v = $("#vote_"+pid).text();
                     $("#vote_"+pid).text(v-1);
