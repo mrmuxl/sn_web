@@ -144,7 +144,7 @@ overflow: hidden;
 									{% if  post.user.avatar %}
 										<span><img width=20px src="{{ MEDIA_URL }}{{ post.user.avatar|split:","|first|join:""|split:"="|last }}/snap_50X50_{{ post.user.avatar|split:","|slice:"2"|join:""|split:"="|last }}.jpg"></span>
 									{% else %}
-										<span><img class="comment_photo" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg"></span>
+										<span><img width=20px src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg"></span>
 									{% endif %}{{post.user.nick}}&nbsp 
 							 <span style="float:right"> <a  href="{% url 'forum_post' post.id %}"> {{num}}条评论</a>&nbsp&nbsp<span style="float:right;color:#717379">{{ post.created|date:"m-d H:i" }}</span></span></p>
 						</div>
