@@ -47,8 +47,8 @@ class ForumPost(models.Model):
     content= models.TextField(verbose_name=_(u'正文'))
     ip = models.IPAddressField(null=True, blank=True, verbose_name=_('IP地址'))
     status  = models.IntegerField(verbose_name=_(u'文章状态'),default = 0,choices=STATUS_CHOICES,help_text=_(u'0=已发布，1=隐藏'))
-    created = models.DateTimeField(default=datetime.now(), verbose_name='创建时间')
-    modified = models.DateTimeField(default=datetime.now(), verbose_name='修改时间')
+    created = models.DateTimeField(default=datetime.now, verbose_name='创建时间')
+    modified = models.DateTimeField(default=datetime.now, verbose_name='修改时间')
     hits = models.IntegerField(default=0, editable=False, verbose_name='点击次数')
 
     def __unicode__(self):
@@ -70,7 +70,7 @@ class ForumComment(models.Model):
     content= models.TextField(verbose_name=_(u'正文'))
     ip = models.IPAddressField(null=True, blank=True, verbose_name=_('IP地址'))
     status  = models.IntegerField(verbose_name=_(u'评论状态'),default = 0,help_text=_(u'0=可见，1=隐藏'))
-    created = models.DateTimeField(default=datetime.now(), verbose_name=_(u'创建时间'))
+    created = models.DateTimeField(default=datetime.now, verbose_name=_(u'创建时间'))
 
     class Meta:
         db_table = 'forum_comment'

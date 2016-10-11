@@ -33,6 +33,7 @@ def add(request):
     if form.is_valid():
         f = form.save(commit=False)
         f.user_id=request.user.pk
+        f.ip = request.META.get('REMOTE_ADDR','')
         f.save()
     return HttpResponseRedirect(reverse('forum_index'))  
 
