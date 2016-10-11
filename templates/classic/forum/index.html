@@ -7,12 +7,12 @@
 <style type="text/css">
 .post-list {
 font-size: 100%;
-font: inherit;
+/*font: inherit;*/
 vertical-align: baseline;
 clear: both;
-font-size: 12px;
+font-size: 14px;
 font-weight: normal;
-line-height: 14px;
+line-height: 20px;
 display: block;
 /*list-style-type: decimal;*/
 -webkit-margin-before: 1em;
@@ -48,7 +48,7 @@ word-wrap: break-word;
 /*margin-bottom: 23px !important;*/
 }
 .post-content {
-	font-size: 13px;
+	font-size: 14px;
 	margin-bottom: 10px;
 	line-height: 1.4em;
 	text-rendering: optimizeLegibility;
@@ -139,8 +139,14 @@ overflow: hidden;
 						<!-- <h2 class="post-title"><a href="{{ post.get_absolute_url }}">{{post.title}}</a></h2> -->
 						<!-- <h2 class="post-title"><a href="{% url 'forum_post' post.id %}">{{post.title}}</a></h2> -->
 						<div class="post-content">
-							<p>{{post.content}}</p>
-							<p style="padding-top:20px;color:#3d3a3a">{{post.user.nick}}&nbsp  <span style="float:right"> <a  href="{% url 'forum_post' post.id %}"> {{num}}条评论</a>&nbsp&nbsp<span style="float:right;color:#717379">{{ post.created|date:"m-d H:i" }}</span></span></p>
+							<p>{{post.content|linebreaksbr }}</p>
+							<p style="padding-top:20px;color:#3d3a3a">
+									{% if  post.user.avatar %}
+										<span><img width=20px src="{{ MEDIA_URL }}{{ post.user.avatar|split:","|first|join:""|split:"="|last }}/snap_50X50_{{ post.user.avatar|split:","|slice:"2"|join:""|split:"="|last }}.jpg"></span>
+									{% else %}
+										<span><img class="comment_photo" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg"></span>
+									{% endif %}{{post.user.nick}}&nbsp 
+							 <span style="float:right"> <a  href="{% url 'forum_post' post.id %}"> {{num}}条评论</a>&nbsp&nbsp<span style="float:right;color:#717379">{{ post.created|date:"m-d H:i" }}</span></span></p>
 						</div>
 						<div class="post-badge">
 							<div class="post-count">

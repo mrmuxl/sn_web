@@ -4,23 +4,23 @@
 {% load split %}
 <style type="text/css">
 .post-list {
-margin: 0;
-padding: 0;
-border: 0;
-font-size: 100%;
-font: inherit;
-vertical-align: baseline;
-clear: both;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+/*font: inherit;*/
+	vertical-align: baseline;
+	clear: both;
 /*font-size: 12px;*/
-font-weight: normal;
-line-height: 14px;
-display: block;
+	font-weight: normal;
+	line-height: 14px;
+	display: block;
 /*list-style-type: decimal;*/
--webkit-margin-before: 1em;
--webkit-margin-after: 1em;
--webkit-margin-start: 0px;
--webkit-margin-end: 0px;
--webkit-padding-start: 40px;
+	-webkit-margin-before: 1em;
+	-webkit-margin-after: 1em;
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+	-webkit-padding-start: 40px;
 }
 .post-body {
 	margin: 0;
@@ -44,9 +44,8 @@ min-height: 83px;
 padding-left: 100px;
 position: relative;
 line-height: 14px;
-margin-bottom: 30px;
+/*margin-bottom: 30px;*/
 word-wrap: break-word;
-/*margin-bottom: 23px !important;*/
 }
 .post-content {
 	/*font-size: 13px;*/
@@ -60,8 +59,8 @@ word-wrap: break-word;
 	top: 10px;
 	left: 0;
 	width: 65px;
-	vertical-align: baseline;
-	display: block;
+	/*vertical-align: baseline;*/
+	/*display: block;*/
 }
 .post-count {
 	background-color: #fcfdff;
@@ -116,18 +115,16 @@ word-wrap: break-word;
 }
 .comment-body{
 	color: #292c33;
-	margin-left: 160px;
+	margin-left: 180px;
 	padding: 0;
 	border: 0;
 	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
+	display: block;
 }
-}
+
 .comment-list {
 	list-style: none;
 	clear: both;	
-	font-size: 12px;
 	font-weight: normal;
 	line-height: 14px;
 	display: block;
@@ -137,15 +134,17 @@ word-wrap: break-word;
 	-webkit-margin-end: 0px;
 	-webkit-padding-start: 40px;
 	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
 }
 .comment-item {
-    line-height: 14px;
-    margin-bottom: 8px;
     word-wrap: break-word;
     display: list-item;
 	text-align: -webkit-match-parent;
+	font-size: 14px;
+	min-height: 40px;
+	color: #666f80;
+	line-height: 20px;
+	margin-top: 20px;
+	margin:0;
 }
 .comment-badge {
 	border: 1px solid #FFF;
@@ -155,18 +154,9 @@ word-wrap: break-word;
 	line-height: 1em;
 	margin: 0 0 0 -70px;
 	position: absolute;
-	top: 0;
-	left: 0;
-	width: 50px;
+	/*left: 0*/
 }
-.comment-header {
-	font-size: 14px;
-	margin-bottom: 30px;
-	min-height: 40px;
-	position: relative;
-	color: #666f80;
-	line-height: 20px;
-}
+
 .comment-photo {
 	display: block;
 	height: 50px;
@@ -176,47 +166,28 @@ word-wrap: break-word;
 }
 .comment_content {
 	color: #292c33;
-	font-size: 16px;
-	margin-bottom: 10px;
+	font-size: 14px;
+
 }
 
 .vcard {
-    	/*margin: -1px 0 0 !important;*/
     	width: 20px;
-    	height: 20px;
-    	max-height: 20px;
-    	max-width: 20px;
     	height: 20px;
     	color: #666f80;
 	line-height: 20px;
-	margin-bottom: 5px;
     	border: 1px solid #FFFFFF;
     	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
-    	left: 0;
     	line-height: 1em;
-    	margin: 0 0 0 0 !important;
-    	/*position: absolute;*/
-    	top: 0;
-    	vertical-align: baseline;
     	border: 0 none;
     	height: auto;
     	max-width: 100%;
     	clear: both;
-	/*margin-bottom: 30px;*/
 	display: block;
-    font-weight: normal !important;
-	font-size: 100%;
-	font: inherit;
 	vertical-align: baseline;
-	margin-bottom: 10px;
-	min-height: 20px;
-	padding-left: 30px;
-	font-size: 12px;
-	min-height: 40px;
-	position: relative;
+	/*position: relative;*/
 	color: #666f80;
-	line-height: 20px;
-	/*margin-bottom: 5px;*/
+	margin: 0 0 0 20px;
+	/*margin-left: 20px*/
 }
 </style>
 <div class="container-narrow">
@@ -226,11 +197,19 @@ word-wrap: break-word;
 			<ul class="post-list">
 				<li class="post-item">
 					<div class="post-header">
-						<h2 class="post-title">{{post.title}}</h2>
-							<div class="post-content">
-								<p>{{post.content}}</p>
-								<!-- <p>{{post.author.nick}}</p> -->
-							</div>
+						<!-- <h2 class="post-title">{{post.title}}</h2> -->
+						<div class="post-content">
+							<p>{{post.content|linebreaksbr}}</p>								
+								<div class="comment-badge vcard">
+									{% if  post.user.avatar %}
+										<span><img  src="{{ MEDIA_URL }}{{ post.user.avatar|split:","|first|join:""|split:"="|last }}/snap_50X50_{{ post.user.avatar|split:","|slice:"2"|join:""|split:"="|last }}.jpg"></span>
+									{% else %}
+										<span><img class="comment_photo" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg"></span>
+									{% endif %}
+								</div>
+								<span style="margin-left:50px;">{{post.user.nick}} &nbsp {{post.created|date:"m-d H:i" }}</span>
+						</div>
+							
 						<div class="post-badge">
 							<div class="post-count">
 								<a class="post-up-off" title="vote_up" href="javascript:vote_up({{ post.id }})">up post</a>
@@ -238,15 +217,8 @@ word-wrap: break-word;
 									{{ vote }}</strong>
 								<a class="post-down-off" title="vote_down" href="javascript:vote_down({{ post.id }})">down vote</a>     
 							</div>
-						</div>
-						<!-- <div class="comment_header"> -->
-							<br>
-							<!-- <div class="vcard">
-							<span class="comment-badge" ><img class="comment_photo" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg"></span>
-							</div> -->
-							<p><span>{{post.user.nick}} &nbsp {{post.created|date:"m-d H:i" }}</span></p>
-							<br>
-						<!-- </div> -->
+						</div>					
+
 						<div class="span10">
 							<form  action="{% url 'forum_reply' %}" method="post">{% csrf_token %}
 								<fieldset>
@@ -264,21 +236,22 @@ word-wrap: break-word;
 			</ul>
 		</div>
 	</div>
+
 	<div class="span12">
 			<div class="comment-body">
 				<ul class="comment-list">
 				{% for c in comments %}
 					<li class="comment-item">
-						<div class="comment-header">
-							
-							<p>{{c.user.nick}} &nbsp {{ c.created|date:"m-d H:i" }}</p>
-							<span class="comment-badge"><img class="comment_photo" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg"></span>
-							<div class="comment-content">
-								
-								<p>{{c.content}}</p>
-								
-							</div>
-						</div>
+						<!-- <div class="comment-header"> -->
+						{% if  c.user.avatar %}
+						<span class="comment-badge"><img class="comment_photo" src="{{ MEDIA_URL }}{{ c.user.avatar|split:","|first|join:""|split:"="|last }}/snap_50X50_{{ c.user.avatar|split:","|slice:"2"|join:""|split:"="|last }}.jpg"></span>
+						{% else %}
+						<span class="comment-badge">	<img class="comment_photo" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg"></span>
+						{% endif %}
+						<p>{{c.user.nick}} &nbsp {{ c.created|date:"m-d H:i" }}</p>					
+						<p>{{c.content|linebreaksbr }}</p>
+						
+						<!-- </div> -->
 					</li>
 					{%endfor%}
 				</ul>
