@@ -27,18 +27,18 @@
 		<div>
 			<ul class="nav nav-pills pull-right" style="color: #000000;margin-top: 35px;margin-right: 60px;">
 			{% if user.is_authenticated %}
-				<li class="divider" ><a href="{%url 'info'%}" style="text-decoration: underline;" title="个人中心">{{ user.nick }}</a>
+				<li class="disable" ><a href="{%url 'info'%}" style="text-decoration: underline;display:list-item" title="个人中心">{{ user.nick }}</a>
 				</li>
 			{% if user.status == 0 %}
-				<li class="divider"><a href="{% url 'to_active' %}">激活账号</a>
+				<li class="disable"><a href="{% url 'to_active' %}">激活账号</a>
 			{% endif %}
 			{%if user.is_superuser %}
 				<li class="disable"><a href="{% url 'tongji' %}" style="text-decoration: underline;">管理中心</a></li>
 			{% endif %}
-		 		<li class="divider`"><a href="{% url 'logout'%}">退出</a></li>
+		 		<li class="disable`"><a href="{% url 'logout'%}">退出</a></li>
 		{% else %}
-			<li class="divider"><a href="{% url 'login' %}">登录</a></li>
-			<li class="divider"><a href="{% url 'register'%}">注册</a></li>
+			<li class="disable"><a href="{% url 'login' %}">登录</a></li>
+			<li class="disable"><a href="{% url 'register'%}">注册</a></li>
 		{% endif %}
 			</ul>
 		</div>
