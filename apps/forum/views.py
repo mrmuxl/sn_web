@@ -70,7 +70,7 @@ def vote(request):
             ForumPost.objects.filter(pk=pid).update(vote_up=vote) 
         elif '1'== v:
             vote = p.vote_down + 1
-            ForumPost.objects.filter(pk=pid).update(vote_up=vote) 
+            ForumPost.objects.filter(pk=pid).update(vote_down=vote) 
         message['status']=1
         message['info']="投票成功!"
         message['data']=0
