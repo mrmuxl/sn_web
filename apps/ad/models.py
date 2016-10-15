@@ -42,7 +42,8 @@ class FZu(models.Model):
 
 class OperatorCategory(models.Model):
     id = models.AutoField(primary_key = True)
-    name = models.CharField(max_length=255, unique=True, verbose_name=_(u'分类名称'))
+    name = models.CharField(max_length=255,verbose_name=_(u'分类名称'))
+    cid = models.IntegerField(verbose_name=_(u'分类id'),help_text=_(u'1个人用户，2运营商，3企业主'))#识别角色用1是个人用户，2是运营商，3是企业主
     ordering = models.IntegerField(blank=True, null=True, verbose_name=_(u'排序序'))
     class Meta:
         db_table = 'operator_category'
@@ -58,7 +59,7 @@ class Operator(models.Model):
     name = models.CharField(max_length=255, verbose_name=_(u'运营商名称'))
     printer_num = models.IntegerField(default=0,verbose_name=_(u'运营商可以使用的打印机数'))
     used_num = models.IntegerField(default=0,verbose_name=_(u'已经使用的打印机数'))
-    qq = models.CharField(default='0',max_length=14, verbose_name=_(u'运营商名称'))
+    qq = models.CharField(default='0',max_length=14, verbose_name=_(u'QQ'))
     tel = models.CharField(default='0',max_length=14,verbose_name=_(u'电话号码'))
     school  = models.CharField(max_length=255,blank=True,null=True,verbose_name=_(u'学校名称'))
     resource =  models.TextField(verbose_name=_(u'资源和优势'))
@@ -76,9 +77,9 @@ class OperatorAssistant(models.Model):
     id = models.AutoField(primary_key = True)
     operator = models.ForeignKey(Operator,verbose_name = _(u'运营商'))
     user = models.OneToOneField(KxUser,verbose_name = _(u'运营专员邮箱'))
-    name = models.CharField(max_length=255, unique=True, verbose_name=_(u'运营专员名称'))
+    name = models.CharField(max_length=255,verbose_name=_(u'运营专员名称'))
     created = models.DateTimeField(default=datetime.now, verbose_name=_('创建时间'))
-    status = models.IntegerField(verbose_name=_(u'运营专员状态'),default=False)
+    status = models.IntegerField(verbose_name=_(u'运营专员状态'),default=0)
     class Meta:
         db_table = 'operator_assistant'
         verbose_name_plural = verbose_name = _(u'运营专员')

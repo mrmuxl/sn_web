@@ -2,7 +2,7 @@
 
 {% block header %}{% include "user/header.html" %}{% endblock %}
 {% block content %}
-
+{% load split %}
 <div class="main-container container-fluid">
 			<a class="menu-toggler" id="menu-toggler" href="#">
 				<span class="menu-text"></span>
@@ -22,7 +22,7 @@
 					<ul class="breadcrumb">
 						<li>
 							<i class="icon-home home-icon"></i>
-							<a href="/user/index">首页</a>
+							<a href="/User/index">首页</a>
 
 							<span class="divider">
 								<i class="icon-angle-right arrow-icon"></i>
@@ -35,7 +35,7 @@
 				<div class="page-content">
 					<h4 class="lighter">
 						<i class="icon-user"></i>
-						个人资料 <a href="/user/friendAdd" class="btn btn-small  btn-info">
+						个人资料 <a href="{% url 'chpasswd' %}" class="btn btn-small  btn-info">
 						<i class="icon-edit">修改密码</i></a>
 					</h4>
 
@@ -60,7 +60,7 @@
 									<div class="row-fluid">
 										<label for="form-field-8">邮箱：</label>
 
-										<input readonly type="text" id="form-field-1"  value="yang0@126.com"> <a href="">点击重发认证邮件</a>
+										<input readonly type="text" id="form-field-1"  value="yang0@126.com"> <!-- <a href="">点击重发认证邮件</a> -->
 									</div>
 
 									<div class="row-fluid">

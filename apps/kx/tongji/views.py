@@ -6,7 +6,7 @@ from django.views.decorators.csrf import requires_csrf_token
 from django.shortcuts import render_to_response,render
 from django.http import HttpResponse, HttpResponseRedirect
 from apps.kx.models import (KxUser,KxMsgBoard,KxSoftRecord,KxTongjiRecord,KxLoginRecord)
-from apps.kx.models import (KxPubTongji,KxLanDay,KxActTongji)
+from apps.kx.models import (KxPubTongji,KxLanDay,KxActTongji,KxUserFriend)
 from apps.alipay.models import OrderInfo
 from apps.publish.models import KxPub
 from apps.bug_report.models import KxSoftBug
@@ -21,6 +21,7 @@ import datetime,logging,os
 from dateutil.parser import parse
 from utils import CustomSQL,bug_chart_sql
 from django.conf import settings
+from apps.spool.models import Spool
 
 logger = logging.getLogger(__name__)
 
@@ -114,7 +115,7 @@ def tongji(request):
                 'max_login_num':max_login_num,
                 'order_num':order_num,
                 }
-        return render(request,"tongji.html",temp_var)
+        return render(request,"tongji/tongji.html",temp_var)
 
 
 @require_GET
@@ -670,3 +671,23 @@ def online_act_chart(request):
                 }
         return render(request,"online_act_chart.html",t_var)
         
+def operator_tongji(request):
+    if not request.user.is_superuser:
+        return HttpResponseRedirect(reverse('index'))
+    email = request.GET.get('email','')
+    friend_count = KxUserFriend.objects.filter(user=email).count()
+    print_count=0
+    page_count=0
+    spool_set = Spool.objects.filter(accept_email=email)
+    if spool_set:
+        print_count = spool_set.count()
+        for i in spool_set:
+            page_count += i.page_num
+
+    data={
+            "email":email,
+            "friend_count":friend_count,
+            "print_count":print_count,
+            "page_count":page_count,
+            }
+    return render(request,"tongji/operator_tongji.html",data)
