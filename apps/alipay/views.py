@@ -120,13 +120,16 @@ def notify_url_handler(request):
 
 @require_POST
 def create_order(request):
+    '''
+    #查询订单表获得付款时间,如果订单的创建时间大于购买产品过期，直接创建
+    #查询operator表获得过期时间#  
+    #如果无订单，直接创建,不需要查运营商表，
+    '''
     now = datetime.datetime.now()
     product_info = ProductInfo.objects.all()
     t = request.POST.get('type',None)
     num = request.POST.get('auth',None)
-    #查询订单表获得付款时间,如果订单的创建时间大于购买产品过期，直接创建
-    #查询operator表获得过期时间#  
-    #如果无订单，直接创建,不需要查运营商表，
+    remain_money = request.POST.get('remain_money',None)
     if t and  t is not None and t.isdigit():
         for i in product_info:
             if int(t)== int(i.id):
@@ -148,7 +151,7 @@ def create_order(request):
         email = request.user.email
         logger.info("email:%s",email)
         number =1
-        total_fee = number * price + money
+        total_fee = number * price + money -Decimal(remain_money)
         logger.info("buy_user:%s,order_id:%s,number:%s,total_fee:%s,num:%s",email,order_id,number,total_fee,num)
         OrderInfo.objects.create(order_id=order_id,create_at=now,buy_user=email,buy_product_id=pid,number=number,total_fee=total_fee,pay_status=0,trade_no='0000',auth_user_num=num)
     except Exception as e:
