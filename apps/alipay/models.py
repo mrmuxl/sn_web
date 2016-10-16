@@ -8,6 +8,7 @@ from apps.kx.models import KxUser
 from datetime import datetime
 
 PRODUCT_CHOICES = (
+    (0,u'未分类'),
     (1,u'打印共享'),
     #(2,u'打印共享'),
     #(3,u'打印共享用户授权'),
