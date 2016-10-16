@@ -28,6 +28,7 @@ class ProductInfo(models.Model):
     class Meta:
         db_table = 'product_info'
         verbose_name_plural = verbose_name = _(u'产品信息')
+        ordering = ['order_num',]
     def __unicode__(self):
         return self.name
 

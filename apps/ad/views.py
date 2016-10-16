@@ -143,7 +143,7 @@ def operator_select(request):
             message['is_owner']=True
             message['is_assistant']=False
             message['is_print']=True
-            message['dislplay']=u'你可以共享打印机'
+            message['dislplay']=u'你可以共享一台打印机'
             message['printer_access']=u'http://www.simplenect.cn/User/printer/auth' #授权页面
             message['show_printer_access']=True
             message['buy_link']=u'http://www.simplenect.cn/buy'
