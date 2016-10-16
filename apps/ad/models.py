@@ -77,11 +77,12 @@ class OperatorAssistant(models.Model):
     id = models.AutoField(primary_key = True)
     operator = models.ForeignKey(Operator,verbose_name = _(u'运营商'))
     user = models.OneToOneField(KxUser,verbose_name = _(u'运营专员邮箱'))
-    name = models.CharField(max_length=255,verbose_name=_(u'运营专员名称'))
+    #name = models.CharField(max_length=255,verbose_name=_(u'运营专员名称'))
     created = models.DateTimeField(default=datetime.now, verbose_name=_('创建时间'))
     status = models.IntegerField(verbose_name=_(u'运营专员状态'),default=0)
     class Meta:
         db_table = 'operator_assistant'
         verbose_name_plural = verbose_name = _(u'运营专员')
     def __unicode__(self):
-        return self.name
+        #return self.operator.user.email
+        return self.user.email

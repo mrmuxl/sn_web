@@ -44,23 +44,12 @@ def get_product(cursor,pid):
     one_line = fetchone(product_sql,cursor,data=data)
     return one_line
 
-def get_print(cursor,email):
-    print_sql ="""select * from print where email=%(email)s"""
-    email ={"email":email}
-    one_print = fetchone(print_sql,cursor,data=email)
-    return one_print
 
-def get_shared(cursor,email):
-    sql ="""select * from shared where email=%(email)s"""
-    email ={"email":email}
-    one_shared = fetchone(sql,cursor,data=email)
-    return one_shared
+def get_operator(cursor,email):
+    sql ="""select user_id,expire from operator INNER JOIN kx_user ON (`operator`.`user_id` = `kx_user`.`id`) where email=%(email)s"""
+    data ={"email":email}
+    return fetchone(sql,cursor,data=data)
 
-def get_vip(cursor,email):
-    sql ="""select * from vipuser where email=%(email)s"""
-    values ={'email':email}
-    one_vip = fetchone(sql,cursor,data=values)
-    return one_vip
 
 def insert_print(cursor,email,print_num,create_at,expire):
     sql="""insert into print values(%(id)s,%(email)s,%(is_print)s,%(print_num)s,%(used_print_num)s,%(create_at)s,%(expire)s)"""
@@ -95,8 +84,8 @@ def insert_vip(cursor,email,create_at,expire):
         print "insert vip execute error",e
         return False
 
-def update_print(cursor,email,print_num,expire):
-    sql="""update print set is_print=%(is_print)s,print_num=%(print_num)s, expire = %(expire)s where email=%(email)s"""
+def update_operagor(cursor,user_id,status,expire):
+    sql="""update operator set status=1,print_num=%(print_num)s, expire = %(expire)s where email=%(user_id)s"""
     data = {"email":email,"is_print":True,"print_num":print_num,"expire":expire}
     try:
         cursor.execute(sql,data)
@@ -157,30 +146,30 @@ def get_month_days(year, month):
         return (MONTH_DAYS[month])
 
 def set_expire(now,month,expire=None):
-    if expire is not None and expire > now:
-        m = expire.month + month
-        y = expire.year
-        d = expire.day
-        while m > 12:
-            m -=12
-            y += 1
-        days = get_month_days(y,m)
-        if d > days:
-            m += 1
-            d -= days
-        t = datetime(y,m,d)
-    else:
-        m = now.month + month
-        y = now.year
-        d = now.day
-        while m > 12:
-            m -= 12
-            y += 1
-        days = get_month_days(y,m)
-        if d > days:
-            m += 1
-            d -= days
-        t = datetime(y,m,d)
+    #if expire is not None and expire > now:
+    #    m = expire.month + month
+    #    y = expire.year
+    #    d = expire.day
+    #    while m > 12:
+    #        m -=12
+    #        y += 1
+    #    days = get_month_days(y,m)
+    #    if d > days:
+    #        m += 1
+    #        d -= days
+    #    t = datetime(y,m,d)
+    #else:
+    m = now.month + month
+    y = now.year
+    d = now.day
+    while m > 12:
+        m -= 12
+        y += 1
+    days = get_month_days(y,m)
+    if d > days:
+        m += 1
+        d -= days
+    t = datetime(y,m,d)
     return t
 
 def get_mac(cursor,email):
@@ -201,6 +190,9 @@ def write_pipe(email,cursor):
 
 
 if __name__ == '__main__':
+    '''
+    操
+    '''
     now = datetime.now()
     print now
     try:
@@ -214,80 +206,43 @@ if __name__ == '__main__':
             print i
             pdt = get_product(cursor,i['buy_product_id'])
             if  pdt['category'] == 1:
-                m = int(i['total_fee']/50)
-                month = new_month(m)
-                one_print = get_print(cursor,i['buy_user'])
-                one_shared = get_shared(cursor,i['buy_user'])
-                one_vip = get_vip(cursor,i['buy_user'])
-                try:
-                    if one_print:
-                        expire = set_expire(now,month,one_print['expire'])
-                        print "p",expire
-                        print_num = 999
-                        update_print(cursor,i['buy_user'],print_num,expire)
-                    else:
-                        expire = set_expire(now,month)
-                        print "pr",expire
-                        print_num = 999
-                        insert_print(cursor,i['buy_user'],print_num,now,expire)
-                    if one_shared:
-                        expire = set_expire(now,month,one_shared['expire'])
-                        print "s",expire
-                        shared_num = 999
-                        update_shared(cursor,i['buy_user'],shared_num,expire)
-                    else:
-                        expire = set_expire(now,month)
-                        print "sd",expire
-                        shared_num = 999
-                        insert_shared(cursor,i['buy_user'],shared_num,now,expire)
-                    if one_vip:
-                        expire = set_expire(now,month,one_shared['expire'])
-                        print "vip",expire
-                        update_vip(cursor,i['buy_user'],expire)
-                    else:
-                        expire = set_expire(now,month)
-                        print "vipd",expire
-                        insert_vip(cursor,i['buy_user'],now,expire)
-                    update_order(cursor,i['order_id'])
-                    write_pipe(i['buy_user'],cursor)
-                except Exception as e:
-                    print "vip process",e
-            elif pdt['category'] == 2:
-                m = int((i['total_fee']-i['auth_user_num']*5)/15)
-                month = new_month(m)
-                one_print = get_print(cursor,i['buy_user'])
-                if one_print:
-                    expire = set_expire(now,month,one_print['expire'])
-                    print_num = one_print['print_num'] + i['auth_user_num']
-                    update_print(cursor,i['buy_user'],print_num,expire)
-                    update_order(cursor,i['order_id'])
-                    write_pipe(i['buy_user'],cursor)
-                else:
-                    expire = set_expire(now,month)
-                    print_num = 5 + i['auth_user_num']
-                    insert_print(cursor,i['buy_user'],print_num,now,expire)
-                    update_order(cursor,i['order_id'])
-                    write_pipe(i['buy_user'],cursor)
-            elif pdt['category'] == 4:
-                m = int((i['total_fee']-i['auth_user_num']*5)/15)
-                month = new_month(m)
-                one_shared = get_shared(cursor,i['buy_user'])
-                if one_shared:
-                    expire = set_expire(now,month,one_shared['expire'])
-                    shared_num = one_shared['shared_num'] + i['auth_user_num']
-                    update_shared(cursor,i['buy_user'],shared_num,expire)
-                    print "update shared"
-                    update_order(cursor,i['order_id'])
-                    write_pipe(i['buy_user'],cursor)
-                else:
-                    expire = set_expire(now,month)
-                    shared_num = 5 + i['auth_user_num']
-                    insert_shared(cursor,i['buy_user'],shared_num,now,expire)
-                    print "instert shared"
-                    update_order(cursor,i['order_id'])
-                    write_pipe(i['buy_user'],cursor)
-            else:
-                print "no category"
+                month = int((i['total_fee']-(i['auth_user_num']*15))/15)
+                #month = new_month(m)#满半年送一个月
+                print month
+                one_operator = get_operator(cursor,i['buy_user'])
+                #try:
+                if one_operator:
+                    expire = set_expire(now,month,one_operator['expire'])
+                    print "p:",expire
+                    #print_num = 999
+                    #update_print(cursor,i['buy_user'],print_num,expire)
+                    #else:
+                    #    expire = set_expire(now,month)
+                    #    print "pr",expire
+                    #    print_num = 999
+                    #    insert_print(cursor,i['buy_user'],print_num,now,expire)
+                    #if one_shared:
+                    #    expire = set_expire(now,month,one_shared['expire'])
+                    #    print "s",expire
+                    #    shared_num = 999
+                    #    update_shared(cursor,i['buy_user'],shared_num,expire)
+                    #else:
+                    #    expire = set_expire(now,month)
+                    #    print "sd",expire
+                    #    shared_num = 999
+                    #    insert_shared(cursor,i['buy_user'],shared_num,now,expire)
+                    #if one_vip:
+                    #    expire = set_expire(now,month,one_shared['expire'])
+                    #    print "vip",expire
+                    #    update_vip(cursor,i['buy_user'],expire)
+                    #else:
+                    #    expire = set_expire(now,month)
+                    #    print "vipd",expire
+                    #    insert_vip(cursor,i['buy_user'],now,expire)
+                    #update_order(cursor,i['order_id'])
+                    #write_pipe(i['buy_user'],cursor)
+                #except Exception as e:
+                #    print "vip process",e
     cursor.close()
     print "cursor close"
     conn.commit()
