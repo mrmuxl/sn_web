@@ -624,9 +624,9 @@ def printer_auth(request):
         return render(request,"user/printer_auth.html",t)
 
 
-#@login_required()
-@require_POST
+@login_required()
 @csrf_exempt
+@require_POST
 def do_auth(request):
     message = {}
     now = datetime.datetime.now()
@@ -635,37 +635,60 @@ def do_auth(request):
     logger.info("uid:%s,pid:%s",uid,pid)
     if pid and uid:
         op_obj = Operator.objects.filter(user_id =uid)
-        op_id = op_obj.values('id')[0]['id']
-        name = op_obj.values('user__nick')[0]['user__nick']
-        used_num = op_obj.values()[0]['used_num']
-        printer_num = op_obj.values()[0]['printer_num']
-        op = OperatorAssistant.objects.filter(operator__user__id=uid).filter(operator__status__exact=1).filter(operator__expire__gt=now).filter(user_id=pid)
-        if not op:
-            oa = OperatorAssistant.objects.create(operator_id=op_id,user_id=pid,name=name,created=now,status=1)
-            oa.save()
-            if printer_num >= used_num and used_num >=0:
-                new = used_num+1
-                op_obj.update(used_num=new)
-            message['status']=1
-            message['info']=u"成功!"
+        if op_obj:
+            op_id = op_obj.values('id')[0]['id']
+            name = op_obj.values('user__nick')[0]['user__nick']
+            user_email = op_obj.values('user__email')[0]['user__email']
+            used_num = op_obj.values()[0]['used_num']
+            printer_num = op_obj.values()[0]['printer_num']
+            op = OperatorAssistant.objects.filter(operator__user__id=uid).filter(operator__status__exact=1).filter(operator__expire__gt=now).filter(user_id=pid)
+            my_friends = KxUserFriend.objects.filter(user=user_email).values_list('friend')
+            users = KxUser.objects.filter(id=pid).values_list('email')
+            if users and my_friends:
+                for i in users:
+                    if i in my_friends:
+                        if not op:
+                            oa = OperatorAssistant.objects.create(operator_id=op_id,user_id=pid,name=name,created=now,status=1)
+                            oa.save()
+                            if printer_num >= used_num and used_num >=0:
+                                new = used_num+1
+                                op_obj.update(used_num=new)
+                            message['status']=1
+                            message['info']=u"成功!"
+                            message['data']=0
+                            return HttpResponse(json.dumps(message),content_type="application/json")
+                        else:
+                            oa = OperatorAssistant.objects.filter(user_id =pid)
+                            if oa.filter(status__exact=1):
+                                if printer_num >= used_num and used_num >=0:
+                                    new = used_num-1
+                                    op_obj.update(used_num=new)
+                                oa.update(status=0)
+                            else:
+                                if printer_num >= used_num and used_num >=0:
+                                    new = used_num+1
+                                    op_obj.update(used_num=new)
+                                oa.update(status=1)
+                            message['status']=1
+                            message['info']=u"成功2!"
+                            message['data']=0
+                            return HttpResponse(json.dumps(message,ensure_ascii=False),content_type="application/json")
+                    else:
+                        message['status']=0
+                        message['info']=u"失败!"
+                        message['data']=0
+                        return HttpResponse(json.dumps(message),content_type="application/json")
+            else:
+                message['status']=0
+                message['info']=u"失败!"
+                message['data']=0
+                return HttpResponse(json.dumps(message),content_type="application/json")
+        else:
+            message['status']=0
+            message['info']=u"失败!"
             message['data']=0
             return HttpResponse(json.dumps(message),content_type="application/json")
-        else:
-            oa = OperatorAssistant.objects.filter(user_id =pid)
-            if oa.filter(status__exact=1):
-                if printer_num >= used_num and used_num >=0:
-                    new = used_num-1
-                    op_obj.update(used_num=new)
-                oa.update(status=0)
-            else:
-                if printer_num >= used_num and used_num >=0:
-                    new = used_num+1
-                    op_obj.update(used_num=new)
-                oa.update(status=1)
-            message['status']=1
-            message['info']=u"成功2!"
-            message['data']=0
-            return HttpResponse(json.dumps(message,ensure_ascii=False),content_type="application/json")
+
     else:
         message['status']=0
         message['info']=u"失败!"
