@@ -148,7 +148,8 @@ def operator_select(request):
             message['show_printer_access']=True
             message['buy_link']=u'http://www.simplenect.cn/buy'
             message['show_buy_link']=False
-        if opt:
+            return HttpResponse(json.dumps(message,ensure_ascii=False),content_type="application/json")
+        elif opt:
             message['status']=0
             message['is_owner']=False
             message['is_assistant']=True
