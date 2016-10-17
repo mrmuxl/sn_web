@@ -71,46 +71,74 @@
 	list-style:none;
 	margin: 5px
 }
+.another{
+	/*display:none;*/
+	margin-left:35px;
+
+}
 </style>
 </head>
 <body>
 <div class="container-narrow">
-	<div class="row-fluid" style="margin-top:100px;">
+	<div class="row" style="margin-top:100px;">
 		<div class="span2"></div>
 		<div class="span8"><span style="font-size:21px;">SimpleNect支付中心</span><span class="pull-right" style="font-size:18px">你好，{{user.nick}} <a href="{% url 'logout'%}">退出</a></span></div>
 	</div>
-	<div class="row-fluid" style="margin-top:20px;">
+
+	<div class="row" style="margin-top:20px;">
 		<div class="span2"></div>
 		<div class="span8">
-			<div class="row-fluid">
-				<div class="well" style="background-color:#FDFDFD;margin-bottom:10px;padding:20px;width:600px;"><span style="color:red;font-size:16px">你将开通的VIP帐号：{{user.email}}	</span></div>
+			<div class="row">
+				<div class="well" style="background-color:#FDFDFD;margin-bottom:10px;padding:20px;width:600px;"><span style="color:red;font-size:16px">你将开通的帐号：{{user.email}}	</span>
+			{% if order_info %}
+			<div style="margin-top:20px">
+					<p>您之前购买过套餐：<span style="color:red">{{order_info.0.buy_product_id__name}}</span></p>
+						<!-- <ul>默认只能共享一台打印机&nbsp&nbsp
+							(<a id="access_user" href="javascript:void(0)">我要更多授权</a>)
+						</ul> -->
+				</div>
+				{% endif %}
+				</div>
 			</div>
-			<div class="row-fluid">
-				<div class="hero	-unit pull-left" style="background-color:#FDFDFD;padding:40px;width:560px;">
+			<div class="row">
+				<div class="hero-unit pull-left" style="background-color:#FDFDFD;padding:40px;width:560px;">
 					<form action="{% url 'create_order' %}" method="post">{% csrf_token %}
 						<fieldset>
-					 	<legend>开通VIP：<span style="color:#999;font-size:12px"></span></legend>
+					 	<legend>开通打印共享：<span style="color:#999;font-size:12px"></span></legend>
 				<div class="product">
-					<ul><li style="color:#8e8e8e;margin:5px;list-style:none;float:left;" >价&nbsp格：</li><li style="list-style:none"><span id="price" style="color:#F80;margin-top:100px;font-size:24px" >50.00</span><span style="font-size:14px;margin-left:10px">元</span></li></ul>
+					<ul><li style="color:#8e8e8e;margin:5px;list-style:none;float:left;" >价&nbsp格：</li><li style="list-style:none"><span id="price" style="color:#F80;margin-top:100px;font-size:24px" >15.00</span>
+					<span style="font-size:14px;margin-left:10px">元</span>
+					<!-- <span id="hidden_price" style="display:none">15.00</span></li></ul> -->
 					<ul style="margin-top:10px"><li class="product_title" >周&nbsp期：</li>
-						{% for pdt in pdt_list %}						
-							{% if pdt.slug  %}
-							{%if forloop.first %}
+					{% for pdt in pdt_list %}						
+						{% if pdt.slug  %}
+							 {%if forloop.first %}
                                      <input id="product_type" type="hidden" name="type" value="{{pdt.id}}">
+                                     <input id="product_type" type="hidden" name="remain_money" value="{{remain_money}}">
                                      <li class="product_item"><a class="selected" id="{{pdt.id}}" href="javascript:void(0)">	<span id="{{pdt.price}}_{{pdt.id}}" >{{pdt.slug}}</span></a></li>
                                       {% else %}
 							<li class="product_item"><a  id="{{pdt.id}}" href="javascript:void(0)">	<span id="{{pdt.price}}_{{pdt.id}}" >{{pdt.slug}}</span></a></li>
-								{% endif%}
+								{% endif %}
 							{% endif %}
 						{%endfor%}
 					</ul>
 				</div>
 				<div class="clearfix"></div>
-					<!-- <input id="product_type" type="hidden" name="type" value="0"> -->
-					<input id="product_submit" type="submit" class="btn-primary pull-left  btn-large" style="margin-top:30px;margin-left:20px;" value="支付宝支付">
+				<br>
+
+				<div class="another">
+							<p>单&nbsp价：15.00元/台</p>
+							增&nbsp加：<input id="min" name="" type="button" value="-" />							
+							<input style="max-width:30px;margin-top:10px" readonly="" id="text_box" name="auth" type="text" value="1" />
+							<input id="add" name="" type="button" value="+" /> 台<br>
+							{% if remain_money %}
+							原套餐剩余<span style="color:red">{{remain_money}}</span>元，实际需支付<span style="color:red" id="money">0</span>元。
+							{% endif %}
+				</div>
+					<input id="product_submit" type="submit" class="btn-primary pull-left  btn-large" style="margin-top:20px;margin-left:20px;" value="支付宝支付">
 					</fieldset>
 					</form>
-					<div class="text-left" style="font-size:24px;margin-top:30px"><span style="color:red;font-size:30px">优惠活动：</span>每满六个月赠送一个月</div>
+					<!-- <div class="text-left" style="font-size:24px;margin-top:30px"><span style="color:red;font-size:30px">优惠活动：</span>每满六个月赠送一个月</div> -->
 					<br>
 						温馨提示：如有疑问，请加入我们的QQ群：205528924
 				</div>
@@ -125,8 +153,10 @@ $(function(){
 			$("ul a.selected").removeClass("selected");
 			$("a#{{pdt.id}}").addClass("selected");
 			$("#price").text({{pdt.price}});
-			$("#product_type").val({{pdt.id}})
-		})
+			$("#hidden_price").text({{pdt.price}});
+			$("#product_type").val({{pdt.id}});
+			$("#text_box").val(1);
+		});
 
 	{%endfor%}
 		$("#product_submit").click(function() {
@@ -137,7 +167,38 @@ $(function(){
 			}
 
 		});
-})
+});
+$(function(){
+	var t = $("#text_box");
+	$("#add").click(function(){
+		// alert(t.val());
+		t.val(parseInt(t.val())+1);
+		var p = parseInt($("#price").text());
+		$("#price").text(Number(p+15.00).toFixed(2));
+		var m = parseInt($("#price").text());
+		$("#money").text(Number(m-{{remain_money}}).toFixed(2))
+	})
+	$("#min").click(function(){
+		// alert(t.val());
+		if (parseInt(t.val()) > 1){
+			t.val(parseInt(t.val())-1);
+			var p = parseInt($("#price").text());
+			$("#price").text(Number(p-15.00).toFixed(2));
+			var m = parseInt($("#price").text());
+			$("#money").text(Number(m-{{remain_money}}).toFixed(2))
+
+		}
+		else{
+			alert("这个好像不能为0哦！");
+			}
+	})
+});
+$(function () {
+	$("#access_user").toggle(function(){
+		$(".another").animate({height: 'toggle',opacity: 'toggle'},"slow");
+	}, function() {});
+});
 </script>
 </body>
 </html>
+

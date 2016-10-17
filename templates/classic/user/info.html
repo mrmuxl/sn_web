@@ -2,7 +2,7 @@
 
 {% block header %}{% include "user/header.html" %}{% endblock %}
 {% block content %}
-
+{% load split %}
 <div class="main-container container-fluid">
 			<a class="menu-toggler" id="menu-toggler" href="#">
 				<span class="menu-text"></span>
@@ -22,7 +22,7 @@
 					<ul class="breadcrumb">
 						<li>
 							<i class="icon-home home-icon"></i>
-							<a href="/user/index">首页</a>
+							<a href="/User/index">首页</a>
 
 							<span class="divider">
 								<i class="icon-angle-right arrow-icon"></i>
@@ -35,7 +35,7 @@
 				<div class="page-content">
 					<h4 class="lighter">
 						<i class="icon-user"></i>
-						个人资料 <a href="/user/friendAdd" class="btn btn-small  btn-info">
+						个人资料 <a href="{% url 'chpasswd' %}" class="btn btn-small  btn-info">
 						<i class="icon-edit">修改密码</i></a>
 					</h4>
 
@@ -48,8 +48,6 @@
 
 						<div class="span10">
 							<div class="widget-box transparent">
-
-
 								<div class="widget-body">
 									<div class="row-fluid">
 										<label for="form-field-8">用户名：</label>
@@ -60,7 +58,7 @@
 									<div class="row-fluid">
 										<label for="form-field-8">邮箱：</label>
 
-										<input readonly type="text" id="form-field-1"  value="yang0@126.com"> <a href="">点击重发认证邮件</a>
+										<input readonly type="text" id="form-field-1"  value="yang0@126.com"> <!-- <a href="">点击重发认证邮件</a> -->
 									</div>
 
 									<div class="row-fluid">
@@ -71,31 +69,33 @@
 
 									<div class="row-fluid">
 										<label for="form-field-8">头像：</label>
-
-										
-										<img class="" src="/static/classic/assets/avatars/user.jpg">
+								{% if request.user.avatar %}
+								<img class="nav-user-photo" src="{{ MEDIA_URL }}{{ request.user.avatar|split:","|first|join:""|split:"="|last }}/snap_50X50_{{ request.user.avatar|split:","|slice:"2"|join:""|split:"="|last }}.jpg" alt="{{ request.user.nick }}">
+								{% else %}
+								 <img class="nav-user-photo" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg">
+								{% endif %}
 										<a href="" style="margin-left:10px;">修改</a>
+									
 									</div>
-
-
-
-
-									<div class="row-fluid" style="margin-top:15px;">
-										<button onclick="return false;" class="btn btn-info btn-small">
-															<i class="icon-save bigger-110"></i>
+	<form action="{% url 'avatar' %}" method="post" enctype="multipart/form-data" onsubmit="return checkForm();">
+		{% csrf_token %}
+		<div style="margin-left:20px;">
+			<input id="avatar_pic" type="file" name="avatar" value="" /><span id="msg" style="color:red;"></span>
+			<br>
+			支持JPG、PNG、GIF图片文件，文件大小小于1M
+			<br />
+			<br />
+			<input class="update_btn" type="submit" name="" value="" />
+		</div>
+	</form>
+			<div class="row-fluid" style="margin-top:15px;">
+									<!-- 	<button onclick="return false;" class="btn btn-info btn-small">
+											<i class="icon-save bigger-110"></i>
 															保存
-														</button>
+										</button> -->
 									</div>
 								</div><!--/widget-body-->
 							</div>
-
-
-
-
-
-
-
-
 
 							<!--PAGE CONTENT ENDS-->
 						</div><!--/.span-->

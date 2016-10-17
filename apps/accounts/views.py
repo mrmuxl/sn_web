@@ -18,12 +18,16 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST,require_GET
 from django.conf import settings
 from apps.kx.models import KxUser,KxEmailInvate,KxMailingAddfriend
+from apps.kx.models import KxUserFriend
 from django.http import Http404
 #from django.core.mail import send_mail,EmailMultiAlternatives
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 from utils import invite_register,invite_tip
 from django.utils.http import is_safe_url
+from apps.spool.models import Spool
+from apps.alipay.models import OrderInfo
+from apps.ad.models import OperatorAssistant,Operator
 
 logger = logging.getLogger(__name__)
 
@@ -130,7 +134,7 @@ def login(request,next_page="/",redirect_field_name=REDIRECT_FIELD_NAME):
         user = authenticate(username=email,password=password)
         if user and user.is_active:
             auth.login(request,user)
-            return HttpResponseRedirect(request.session.get('next_page','/'))    
+            return HttpResponseRedirect('/User/index')    
         else:
             data={"email":email}
             messages.add_message(request,messages.INFO,_(u'用户名或密码错误'))
@@ -571,3 +575,123 @@ def invite_msg(reqeust,ckey=''):
     else:
         message = """Key Error or No email to send !<A HREF="javascript:history.back()">返 回</A>"""
         return HttpResponse(message)
+
+@login_required
+@require_GET
+def index(request):
+    print_record = Spool.objects.filter(origin_email=request.user.email)
+    print_count = print_record.count()
+    #print_record = Spool.objects.filter(origin_email='falqs@foxmail.com')
+    buy_user = OrderInfo.objects.filter(buy_user=request.user.email)
+    my_friends = KxUserFriend.objects.filter(user=request.user.email).count()
+    t = {
+            "print_record":print_record,
+            "my_friends":my_friends,
+            "print_count":print_count,
+            }
+    return render(request,"user/index.html",t)
+
+@login_required
+@require_GET
+def new_info(request):
+    t = {}
+    return render(request,"user/info.html",t)
+
+@login_required
+@require_GET
+def printer_auth(request):
+    now = datetime.datetime.now()
+    #operator = Operator.objects.filter(user=request.user.pk).filter(status__exact=1).filter(expire__gt=now).filter(operatorassistant__status__exact=1)
+    operator = Operator.objects.filter(user=request.user.pk).filter(status__exact=1).filter(expire__gt=now)
+    num = operator.values('printer_num','used_num')
+    oa_user = operator.filter(operatorassistant__status__exact=1).values_list('operatorassistant__user__email')
+    my_friends = KxUserFriend.objects.filter(user=request.user.email).values('friend')
+    users = KxUser.objects.filter(email__in=my_friends)
+    oa = []
+    for i in oa_user:
+        oa.append(i[0])
+    if operator:
+            
+        t = {
+                "users":users,
+                "num":num[0],
+                "oa":oa,
+                }
+        return render(request,"user/printer_auth.html",t)
+    else:
+        t = {
+                "warning":u'没有浏览权限',
+                }
+        return render(request,"user/printer_auth.html",t)
+
+
+@login_required()
+#@csrf_exempt
+@require_POST
+def do_auth(request):
+    message = {}
+    now = datetime.datetime.now()
+    pid = request.POST.get("id","")
+    uid = request.POST.get("uid","")
+    logger.info("uid:%s,pid:%s",uid,pid)
+    if pid and uid:
+        op_obj = Operator.objects.filter(user_id =uid)
+        if op_obj:
+            op_id = op_obj.values('id')[0]['id']
+            #name = op_obj.values('user__nick')[0]['user__nick']
+            user_email = op_obj.values('user__email')[0]['user__email']
+            used_num = op_obj.values()[0]['used_num']
+            printer_num = op_obj.values()[0]['printer_num']
+            op = OperatorAssistant.objects.filter(operator__user__id=uid).filter(operator__status__exact=1).filter(operator__expire__gt=now).filter(user_id=pid)
+            my_friends = KxUserFriend.objects.filter(user=user_email).values_list('friend')
+            users = KxUser.objects.filter(id=pid).values_list('email')
+            if users and my_friends:
+                for i in users:
+                    if i in my_friends:
+                        if not op:
+                            oa = OperatorAssistant.objects.create(operator_id=op_id,user_id=pid,created=now,status=1)
+                            oa.save()
+                            if printer_num >= used_num and used_num >=0:
+                                new = used_num+1
+                                op_obj.update(used_num=new)
+                            message['status']=1
+                            message['info']=u"成功!"
+                            message['data']=0
+                            return HttpResponse(json.dumps(message),content_type="application/json")
+                        else:
+                            oa = OperatorAssistant.objects.filter(user_id =pid)
+                            if oa.filter(status__exact=1):
+                                if printer_num >= used_num and used_num >=0:
+                                    new = used_num-1
+                                    op_obj.update(used_num=new)
+                                oa.update(status=0)
+                            else:
+                                if printer_num >= used_num and used_num >=0:
+                                    new = used_num+1
+                                    op_obj.update(used_num=new)
+                                oa.update(status=1)
+                            message['status']=1
+                            message['info']=u"成功2!"
+                            message['data']=0
+                            return HttpResponse(json.dumps(message,ensure_ascii=False),content_type="application/json")
+                    else:
+                        message['status']=0
+                        message['info']=u"失败!"
+                        message['data']=0
+                        return HttpResponse(json.dumps(message),content_type="application/json")
+            else:
+                message['status']=0
+                message['info']=u"失败!"
+                message['data']=0
+                return HttpResponse(json.dumps(message),content_type="application/json")
+        else:
+            message['status']=0
+            message['info']=u"失败!"
+            message['data']=0
+            return HttpResponse(json.dumps(message),content_type="application/json")
+
+    else:
+        message['status']=0
+        message['info']=u"失败!"
+        message['data']=0
+        return HttpResponse(json.dumps(message),content_type="application/json")

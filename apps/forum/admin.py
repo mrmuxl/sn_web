@@ -18,7 +18,7 @@ class ForumTagsAdmin(admin.ModelAdmin):
     pass
 
 class ForumCommentAdmin(admin.ModelAdmin):
-    list_display =('id','user','content','ip','created')
+    list_display =('id','fid','user','content','ip','created')
     def save_model(self,request,obj,comment,change):
         obj.author =request.user
         return super(ForumCommentAdmin, self).save_model(request, obj,comment,change)

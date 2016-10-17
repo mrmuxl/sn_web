@@ -1,9 +1,11 @@
+
+{% load split %}
 <div class="navbar">
 			<div class="navbar-inner">
 				<div class="container-fluid">
-					<a href="#" class="brand">
+					<a href="{% url "index" %}" class="brand">
 						<small>
-							<i class="icon-leaf"></i>
+							<i class="icon-simplenect"></i>
 							SimpleNect
 						</small>
 					</a><!--/.brand-->
@@ -13,8 +15,12 @@
 
 					<ul class="nav ace-nav pull-right">
 						<li class="light-blue">
-							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-								<img class="nav-user-photo" src="{{STATIC_URL}}assets/avatars/user.jpg" alt="Jason's Photo">
+							<a data-toggle="dropdown" href="{% url "accounts_info" %}" class="dropdown-toggle">
+								{% if request.user.avatar %}
+								<img class="nav-user-photo" src="{{ MEDIA_URL }}{{ request.user.avatar|split:","|first|join:""|split:"="|last }}/snap_50X50_{{ request.user.avatar|split:","|slice:"2"|join:""|split:"="|last }}.jpg" alt="{{ request.user.nick }}">
+								{% else %}
+								 <img class="nav-user-photo" src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg">
+								{% endif %}
 
 								<i class="icon-caret-down"></i>
 							</a>
@@ -22,7 +28,7 @@
 							<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
 
 								<li>
-									<a href="#">
+									<a href="{% url "accounts_info" %}">
 										<i class="icon-user"></i>
 										个人资料
 									</a>
@@ -31,7 +37,7 @@
 								<li class="divider"></li>
 
 								<li>
-									<a href="#">
+									<a href="{% url "logout" %}">
 										<i class="icon-off"></i>
 										退出
 									</a>
@@ -43,7 +49,7 @@
 
 					<ul class="nav pull-right">
 						<li>
-							<a href="gallery.html">
+							<a href="{% url "forum_index" %}">
 								<i class="icon-comments-alt"></i>
 								<span class="menu-text">用户社区</span>
 							</a>
