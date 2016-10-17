@@ -77,7 +77,7 @@
 								<tbody>
 									{% for i in print_record %}
 									<tr>
-					                  		<td><i class="icon-file-alt"></i>{{ i.file_name }}</td>
+					                  		<td><i class="icon-file-alt"></i>&nbsp&nbsp{{ i.file_name|split:"/"|last }}</td>
 					                  		<td>{{ i.page_num }}</td>
 					                  		<td>{{ i.print_time }}</td>
 					                	</tr>
