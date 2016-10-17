@@ -168,31 +168,58 @@ $(function(){
 
 		});
 });
+
 $(function(){
 	var t = $("#text_box");
 	$("#add").click(function(){
-		// alert(t.val());
+		var pt = parseInt($("#product_type").val());
 		t.val(parseInt(t.val())+1);
-		var p = parseInt($("#price").text());
-		$("#price").text(Number(p+15.00).toFixed(2));
-		var m = parseInt($("#price").text());
-		$("#money").text(Number(m-{{remain_money}}).toFixed(2))
-	})
-	$("#min").click(function(){
-		// alert(t.val());
-		if (parseInt(t.val()) > 1){
-			t.val(parseInt(t.val())-1);
-			var p = parseInt($("#price").text());
-			$("#price").text(Number(p-15.00).toFixed(2));
+		if (pt == 5) {
+			$("#price").text(Number(parseInt(t.val())*15.00).toFixed(2));
 			var m = parseInt($("#price").text());
 			$("#money").text(Number(m-{{remain_money}}).toFixed(2))
+		}else if ( pt == 6) {
+			$("#price").text(Number(parseInt(t.val())*45.00).toFixed(2));
+			var m = parseInt($("#price").text());
+			$("#money").text(Number(m-{{remain_money}}).toFixed(2))
+		}else if (pt == 7) {
+			$("#price").text(Number(parseInt(t.val())*90.00).toFixed(2));
+			var m = parseInt($("#price").text());
+			$("#money").text(Number(m-{{remain_money}}).toFixed(2))
+		}else if ( pt == 8) {
+			$("#price").text(Number(parseInt(t.val())*180.00).toFixed(2));
+			var m = parseInt($("#price").text());
+			$("#money").text(Number(m-{{remain_money}}).toFixed(2))
+		};
+	});
 
-		}
-		else{
-			alert("这个好像不能为0哦！");
-			}
-	})
-});
+	$("#min").click(function(){
+		var pt = parseInt($("#product_type").val());
+		if (parseInt(t.val()) > 1){
+			t.val(parseInt(t.val())-1);
+			if (pt == 5 ){
+				$("#price").text(Number(parseInt(t.val())*15.00).toFixed(2));
+				var m = parseInt($("#price").text());
+				$("#money").text(Number(m-{{remain_money}}).toFixed(2))
+			}else if ( pt == 6) {
+				$("#price").text(Number(parseInt(t.val())*45.00).toFixed(2));
+				var m = parseInt($("#price").text());
+				$("#money").text(Number(m-{{remain_money}}).toFixed(2))
+			}else if (pt == 7) {
+				$("#price").text(Number(parseInt(t.val())*90.00).toFixed(2));
+				var m = parseInt($("#price").text());
+				$("#money").text(Number(m-{{remain_money}}).toFixed(2))
+			}else if ( pt == 8) {
+				$("#price").text(Number(parseInt(t.val())*180.00).toFixed(2));
+				var m = parseInt($("#price").text());
+				$("#money").text(Number(m-{{remain_money}}).toFixed(2))
+			};
+		}else{
+				alert("这个好像不能为0哦！");
+				};
+	});
+});	
+
 $(function () {
 	$("#access_user").toggle(function(){
 		$(".another").animate({height: 'toggle',opacity: 'toggle'},"slow");
