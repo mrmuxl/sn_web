@@ -1,6 +1,7 @@
 {% extends "user/base.html" %}
 {% block header %}{% include "user/header.html" %}{% endblock %}
 {% block content %}
+{% load split %}
 
 <div class="main-container container-fluid">
 			<a class="menu-toggler" id="menu-toggler" href="{% url "index" %}">
@@ -27,14 +28,13 @@
 				<!-- </div> --> 
 
 				<div class="page-content">
-					<!-- <div class="page-header position-relative text-center"> -->
-<!-- 
-						<a href="" class="btn btn-warning">
+					<div class="page-header position-relative text-center">
+
+						<a href="{{DOWNLOAD}}/Install/{{ins_file}}" class="btn btn-warning">
 							<i class="icon-download"></i>
 							下载Windows客户端
-						</a> -->
-					<!-- </div> -->
-					<!--/.page-header-->
+						</a>
+					</div><!--/.page-header-->
 
 					<div class="row-fluid">
 						<div class="span12">
@@ -159,9 +159,10 @@
 													<tbody>
 										                <tr>
 										                  <td>打印共享方案</td>
-										                  <td>5人</td>
-										                  <td>5人 [ <a href="/User/printer/auth">修改</a> ]</td>
-										                  <td>55天 	[ <a href="{% url 'buy' %}">续费</a> ]</td>
+										                  <td>{{printer_num}}人</td>
+										                  <td>{{used_num}}人 [ <a href="/User/printer/auth">修改</a> ]</td>
+										                  <td>
+										                  	{% if remain_days %}{{remain_days}}{% else%}0{% endif %}天[ <a href="{% url 'buy' %}">续费</a> ]</td>
 										                </tr>
 													</tbody>
 												</table>
@@ -190,13 +191,13 @@
 										</div>
 
 										<div class="infobox-data">
-											<span class="infobox-data-number">0个</span>
+											<span class="infobox-data-number">{% if share_folder %}{{share_folder}}{% else %}0{% endif %}个</span>
 											<div class="infobox-content">我的共享文件夹</div>
 										</div>
 									</div>
 
 									
-
+<!-- 
 									<div class="infobox infobox-blue2  ">
 										<div class="infobox-icon">
 											<i class="icon-print"></i>
@@ -206,9 +207,9 @@
 											<span class="infobox-data-number">0台</span>
 											<div class="infobox-content">好友的共享打印机</div>
 										</div>
-									</div>
+									</div> -->
 
-									<div class="infobox infobox-green  ">
+<!-- 									<div class="infobox infobox-green  ">
 										<div class="infobox-icon">
 											<i class="icon-comment-alt"></i>
 										</div>
@@ -217,9 +218,9 @@
 											<span class="infobox-data-number">0条</span>
 											<div class="infobox-content">30天内聊天记录</div>
 										</div>
-									</div>
+									</div> -->
 
-									<div class="infobox infobox-blue  ">
+<!-- 									<div class="infobox infobox-blue  ">
 										<div class="infobox-icon">
 											<i class="icon-exchange"></i>
 										</div>
@@ -228,7 +229,7 @@
 											<span class="infobox-data-number">0次</span>
 											<div class="infobox-content">30天内文件传输</div>
 										</div>
-									</div>
+									</div> -->
 
 									<div class="infobox infobox-pink  ">
 										<div class="infobox-icon">
@@ -372,7 +373,7 @@
 											<tbody>
 												{% for i in print_record %}
 												<tr>
-								                  		<td><i class="icon-file-alt"></i>{{ i.file_name }}</td>
+								                  		<td><i class="icon-file-alt"></i>&nbsp&nbsp{{ i.file_name|split:"\\"|last }}</td>
 								                  		<td>{{ i.page_num }}</td>
 								                  		<td>{{ i.print_time }}</td>
 								                	</tr>
@@ -389,8 +390,8 @@
 
 
 
-<!-- <div class="hr hr32 hr-dotted"></div> -->
-<!-- 
+<div class="hr hr32 hr-dotted"></div>
+						{%if my_printer %}
 							<div class="widget-box transparent">
 								<div class="widget-header widget-header-flat">
 									<h4 class="lighter">
@@ -398,7 +399,7 @@
 										我的共享打印机
 										
 									</h4>
-									<div class="widget-toolbar no-border">
+<!-- 									<div class="widget-toolbar no-border">
 										<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown">
 											fx xxxxxxx打印机
 											<i class="icon-angle-down icon-on-right"></i>
@@ -417,7 +418,7 @@
 												<a href="#">三星打印机</a>
 											</li>
 										</ul>
-									</div>
+									</div> -->
 
 									<div class="widget-toolbar">
 										<a href="#" data-action="collapse">
@@ -456,26 +457,23 @@
 											</thead>
 
 											<tbody>
-												<tr>
-								                  <td><i class="icon-file-alt"></i>  这是一个测试资料</td>
-								                  <td>张三</td>
-								                  <td>50张</td>
-								                  <td>13-09-09 12:12</td>
+												{% for i in my_printer %}
+											<tr>
+								                  <td><i class="icon-file-alt"></i>&nbsp&nbsp{{ i.file_name|split:"\\"|last }}</td>
+            										<td>{{ i.accept_email }}</td>
+            										<td>{{ i.page_num }}</td>
+								                  	<td>{{ i.print_time }}</td>
 								                </tr>
+								                	{% endfor %}
 								                <tr>
-								                  <td><i class="icon-file-alt"></i>  这是一个测试资料</td>
-								                  <td>张三</td>
-								                  <td>50张</td>
-								                  <td>13-09-09 12:12</td>
-								                </tr>
-								                <tr>
-								                	<td colspan="4" style="text-align:center"><a href="">查看更多记录</a></td>
+								                	<td colspan="4" style="text-align:center"><a href="{% url 'my_printer' %}" target="_blank">查看更多记录</a></td>
 								                </tr>
 											</tbody>
 										</table>
-									</div>/widget-main
-								</div>/widget-body
-							</div> -->
+									</div><!-- /widget-main -->
+								</div><!-- /widget-body -->
+							</div>
+							{% endif %}
 
 
 
@@ -485,7 +483,7 @@
 					</div><!--/.row-fluid-->
 				</div><!--/.page-content-->
 
-				<div class="ace-settings-container" id="ace-settings-container">
+<!-- 				<div class="ace-settings-container" id="ace-settings-container">
 					<div class="btn btn-app btn-mini btn-warning ace-settings-btn" id="ace-settings-btn">
 						<i class="icon-cog bigger-150"></i>
 					</div>
@@ -523,7 +521,8 @@
 							<label class="lbl" for="ace-settings-rtl"> Right To Left (rtl)</label>
 						</div>
 					</div>
-				</div><!--/#ace-settings-container-->
+				</div> -->
+				<!--/#ace-settings-container-->
 			</div><!--/.main-content-->
 		</div>
 
