@@ -734,7 +734,8 @@ def do_auth(request):
 @require_GET
 def print_record(request):
     print_record = Spool.objects.filter(origin_email=request.user.email).order_by("-print_time")
-    return render(request,"user/print_record.html",{"print_record":print_record})
+    pages = print_record.Sum(pages__page_num)
+    return render(request,"user/print_record.html",{"print_record":print_record,"pages":pages})
 
 @login_required()
 @require_GET
