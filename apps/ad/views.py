@@ -166,7 +166,7 @@ def operator_select(request):
             message['is_owner']=False
             message['is_assistant']=False
             message['is_print']=True
-            message['dislplay']=u'你可以共享一台打印机,试用期还有'+ (15-remainder_days) + u'天'
+            message['dislplay']=u'你可以共享一台打印机,试用期还有'+ str(15-remainder_days) + u'天'
             message['access']=u'http://www.simplenect.cn/User/printer/auth' #授权页面
             message['show_access']=False
             message['buy_link']=u'http://www.simplenect.cn/buy'
