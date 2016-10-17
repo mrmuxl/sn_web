@@ -390,7 +390,7 @@
 
 
 <div class="hr hr32 hr-dotted"></div>
-
+						{%if my_printer %}
 							<div class="widget-box transparent">
 								<div class="widget-header widget-header-flat">
 									<h4 class="lighter">
@@ -458,8 +458,8 @@
 											<tbody>
 												{% for i in my_printer %}
 											<tr>
-								                  <td><i class="icon-file-alt"></i>{{i.file_name}}</td>
-            										<td>{{i.accept_email}}</td>
+								                  <td><i class="icon-file-alt"></i>&nbsp&nbsp{{i.file_name}}</td>
+            										<td>{{ i.accept_email }}</td>
             										<td>{{ i.page_num }}</td>
 								                  	<td>{{ i.print_time }}</td>
 								                </tr>
@@ -472,6 +472,7 @@
 									</div><!-- /widget-main -->
 								</div><!-- /widget-body -->
 							</div>
+							{% endif %}
 
 
 

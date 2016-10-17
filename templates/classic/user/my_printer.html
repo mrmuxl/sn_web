@@ -30,7 +30,7 @@
 						<i class="icon-angle-right arrow-icon"></i>
 					</span>
 				</li>
-				<li class="active">我的打印记录</li>
+				<li class="active">我的共享打印机</li>
 			</ul>
 		</div>
 
@@ -59,7 +59,7 @@
 											<i class="icon-caret-right blue"></i>
 											资料名称
 										</th>
-										
+
 										<th class="span3">
 											<i class="icon-caret-right blue"></i>
 											数据来源
@@ -82,7 +82,7 @@
 								<tbody>
 									{% for i in print_record %}
 									<tr>
-					                  		<td><i class="icon-file-alt"></i>{{ i.file_name }}</td>
+					                  		<td><i class="icon-file-alt"></i>&nbsp&nbsp{{ i.file_name }}</td>
 					                  		<td>{{i.accept_email}}</td>
 					                  		<td>{{ i.page_num }}</td>
 					                  		<td>{{ i.print_time }}</td>
