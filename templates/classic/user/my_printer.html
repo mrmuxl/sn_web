@@ -1,0 +1,112 @@
+{% extends "user/base.html" %}
+
+{% block header %}{% include "user/header.html" %}{% endblock %}
+{% block content %}
+{% load split %}
+{% load pagination_tags %}
+{% autopaginate print_record 50 %}
+<div class="main-container container-fluid">
+	<a class="menu-toggler" id="menu-toggler" href="#">
+		<span class="menu-text"></span>
+	</a>
+
+	<div class="sidebar" id="sidebar">
+
+		{% include "user/menu.html" %}
+
+		<div class="sidebar-collapse" id="sidebar-collapse">
+			<i class="icon-double-angle-left"></i>
+		</div>
+	</div>
+
+	<div class="main-content">
+		<div class="breadcrumbs" id="breadcrumbs">
+			<ul class="breadcrumb">
+				<li>
+					<i class="icon-home home-icon"></i>
+					<a href="/User/index">首页</a>
+
+					<span class="divider">
+						<i class="icon-angle-right arrow-icon"></i>
+					</span>
+				</li>
+				<li class="active">我的打印记录</li>
+			</ul>
+		</div>
+
+		<div class="page-content">
+			<div class="widget-box transparent">
+					<div class="widget-header widget-header-flat">
+						<h4 class="lighter">
+							<i class="icon-reorder orange"></i>
+							我的打印记录(共{{paginator.count}}条)
+							
+						</h4>
+
+						<div class="widget-toolbar">
+							<a href="#" data-action="collapse">
+								<i class="icon-chevron-up"></i>
+							</a>
+						</div>
+					</div>
+
+					<div class="widget-body">
+						<div class="widget-main no-padding">
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th class="span6">
+											<i class="icon-caret-right blue"></i>
+											资料名称
+										</th>
+										
+										<th class="span3">
+											<i class="icon-caret-right blue"></i>
+											数据来源
+										</th>
+
+										<th class="span3">
+											<i class="icon-caret-right blue"></i>
+											用纸数量
+										</th>
+
+										<th class="span3">
+											<i class="icon-caret-right blue"></i>
+											最后完成时间
+										</th>
+
+
+									</tr>
+								</thead>
+
+								<tbody>
+									{% for i in print_record %}
+									<tr>
+					                  		<td><i class="icon-file-alt"></i>{{ i.file_name }}</td>
+					                  		<td>{{i.accept_email}}</td>
+					                  		<td>{{ i.page_num }}</td>
+					                  		<td>{{ i.print_time }}</td>
+					                	</tr>
+					                	{% endfor %}
+					                <tr>
+					                	<td colspan="4" style="text-align:center">{% paginate %}</td>
+					                </tr>
+								</tbody>
+							</table>
+						</div><!--/widget-main-->
+					</div><!--/widget-body-->
+				</div>
+
+		</div>
+
+
+	</div><!--/.main-content-->
+</div>
+
+<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-small btn-inverse">
+	<i class="icon-double-angle-up icon-only bigger-110"></i>
+</a>
+
+
+{% endblock %}
+{% block footer %}{% include "user/footer.html" %}{% endblock %}
