@@ -633,13 +633,14 @@ def printer_auth(request):
 
 
 @login_required()
-#@csrf_exempt
+@csrf_exempt
 @require_POST
 def do_auth(request):
     message = {}
     now = datetime.datetime.now()
     pid = request.POST.get("id","")
     uid = request.POST.get("uid","")
+    flag = request.POST.get("flag","")
     logger.info("uid:%s,pid:%s",uid,pid)
     if pid and uid:
         op_obj = Operator.objects.filter(user_id =uid)
@@ -655,35 +656,52 @@ def do_auth(request):
             if users and my_friends:
                 for i in users:
                     if i in my_friends:
-                        if not op:
-                            oa = OperatorAssistant.objects.create(operator_id=op_id,user_id=pid,created=now,status=1)
-                            oa.save()
-                            if printer_num >= used_num and used_num >=0:
-                                new = used_num+1
-                                op_obj.update(used_num=new)
-                            message['status']=1
-                            message['info']=u"成功!"
-                            message['data']=0
-                            return HttpResponse(json.dumps(message),content_type="application/json")
-                        else:
-                            oa = OperatorAssistant.objects.filter(user_id =pid)
-                            if oa.filter(status__exact=1):
-                                if printer_num >= used_num and used_num >=0:
-                                    new = used_num-1
-                                    op_obj.update(used_num=new)
-                                oa.update(status=0)
-                            else:
-                                if printer_num >= used_num and used_num >=0:
+                        if flag == u'1':
+                            if  used_num >=0 and used_num >= printer_num:
+                                #打印机数大于已经使用的数量不允许授权
+                                message['status']=1
+                                message['info']=u"您的授权人数达到上限,请升级套餐！"
+                                message['data']=0
+                                return HttpResponse(json.dumps(message),content_type="application/json")
+                            elif not op :
+                                try:
+                                    oa = OperatorAssistant.objects.create(operator_id=op_id,user_id=pid,created=now,status=1)
+                                    oa.save()
                                     new = used_num+1
                                     op_obj.update(used_num=new)
-                                oa.update(status=1)
+                                    message['status']=1
+                                    message['info']=u"添加授权成功!"
+                                    message['data']=0
+                                    return HttpResponse(json.dumps(message),content_type="application/json")
+                                except Exception as e:
+                                    message['status']=1
+                                    message['info']=u"授权出现错误，请重试!"
+                                    message['data']=0
+                                    return HttpResponse(json.dumps(message),content_type="application/json")
+                            else:
+                                new = used_num+1
+                                op_obj.update(used_num=new)
+                                op.update(status=1)
+                                message['status']=1
+                                message['info']=u"授权成功！"
+                                message['data']=0
+                                return HttpResponse(json.dumps(message,ensure_ascii=False),content_type="application/json")
+                        elif flag == u'0' and used_num >=0:
+                            new = used_num-1
+                            op_obj.update(used_num=new)
+                            op.update(status=0)
                             message['status']=1
-                            message['info']=u"成功2!"
+                            message['info']=u"取消授权成功！"
+                            message['data']=0
+                            return HttpResponse(json.dumps(message,ensure_ascii=False),content_type="application/json")
+                        else:
+                            message['status']=1
+                            message['info']=u"取消授权失败！"
                             message['data']=0
                             return HttpResponse(json.dumps(message,ensure_ascii=False),content_type="application/json")
                     else:
                         message['status']=0
-                        message['info']=u"失败!"
+                        message['info']=u"授权失败!"
                         message['data']=0
                         return HttpResponse(json.dumps(message),content_type="application/json")
             else:
@@ -702,7 +720,7 @@ def do_auth(request):
         message['info']=u"失败!"
         message['data']=0
         return HttpResponse(json.dumps(message),content_type="application/json")
-
+    
 
 @login_required()
 @require_GET
