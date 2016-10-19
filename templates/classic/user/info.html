@@ -42,13 +42,16 @@
 
 			<div class="row-fluid">
 
-				<div class="span2">{{msg}}</div>
+				<div class="span2"></div>
 
 
 
 				<div class="span10">
 					<div class="widget-box transparent">
 						<div class="widget-body">
+							{% if msg %}
+							<div class="msg_tip">{{msg}}</div>
+							{% endif %}
 							<form id="infoForm" action="{% url 'accounts_info' %}" method="post" enctype="multipart/form-data">
 							{% csrf_token %}
 							<div class="row-fluid">
@@ -118,6 +121,15 @@ $(document).ready(function(){
 	$(".infoSave").click(function(){
 		$("#infoForm").submit();
 	});
+	{% if status %}
+	var msgStatus={{status}}
+	if(msgStatus){
+		$(".msg_tip").css({"color":"green"});
+		$(".msg_tip").fadeOut(5000);
+	}else{
+		$(".msg_tip").css({"color":"red"});
+	}
+	{% endif %}
 });
 
 </script>

@@ -38,32 +38,49 @@
 				<li class="active">头像</li>
 			</ul>
 		</div>
-		<div>{{msg}}</div>
-		<div class="widget-box transparent">
-			<form id="avatarForm" action="{% url 'avatar' %}" method="post" enctype="multipart/form-data">
-				{% csrf_token %}
-				<div class="user_pic" style="margin:24px 0 0 20px;float:none;">
-				{% if avatar %}
-					<img class="nav-user-photo" src="{{ MEDIA_URL }}{{ avatar|split:","|first|join:""|split:"="|last }}/snap_60X60_{{ avatar|split:","|slice:"2"|join:""|split:"="|last }}.jpg" alt="{{ user.nick }}">
-				{% else %}
-					<img class="nav-user-photo" src="{{ STATIC_URL }}images/default_head.jpg" />
-				{% endif %}
-				</div>
-				<br />
-				<div style="margin-left:20px;">
-					<input id="avatar_pic" type="file" name="avatar" value="" /><span id="msg" style="color:red;"></span>
-					<br>
-					支持JPG、PNG、GIF图片文件，文件大小小于1M
-					<br />
-					<br />
-					<div class="row-fluid" style="margin-top:15px;">
-						<button  class="avatarSave btn btn-info btn-small">
-							<i class="icon-save bigger-110"></i>
-							保存
-						</button> 
+		<div class="page-content">
+			<h4 class="lighter">
+				<i class="icon-user"></i>
+				个人资料 <a href="{% url 'accounts_info' %}" class="btn btn-small  btn-info">
+				<i class="icon-edit">个人资料</i></a>
+			</h4>
+			<div class="row-fluid">
+				<div class="span2">{{msg}}</div>
+
+				<div class="span10">
+					<div class="widget-box transparent">
+						{% if status %}
+						<div style="color:green;">{{msg}}</div>
+						{% elif status == 0 %}
+						<div style="color:red;">{{msg}}</div>
+						{% endif %}
+						<form id="avatarForm" action="{% url 'avatar' %}" method="post" enctype="multipart/form-data">
+							{% csrf_token %}
+							<div class="user_pic" style="margin:24px 0 0 20px;float:none;">
+							{% if avatar %}
+								<img class="nav-user-photo" src="{{ MEDIA_URL }}{{ avatar|split:","|first|join:""|split:"="|last }}/snap_60X60_{{ avatar|split:","|slice:"2"|join:""|split:"="|last }}.jpg" alt="{{ user.nick }}">
+							{% else %}
+								<img class="nav-user-photo" src="{{ STATIC_URL }}images/default_head.jpg" />
+							{% endif %}
+							</div>
+							<br />
+							<div style="margin-left:20px;">
+								<input id="avatar_pic" type="file" name="avatar" value="" /><span id="msg" style="color:red;"></span>
+								<br>
+								支持JPG、PNG、GIF图片文件，文件大小小于1M
+								<br />
+								<br />
+								<div class="row-fluid" style="margin-top:15px;">
+									<button  class="avatarSave btn btn-info btn-small">
+										<i class="icon-save bigger-110"></i>
+										保存
+									</button> 
+								</div>
+							</div>
+						</form>
 					</div>
 				</div>
-			</form>
+			</div>
 		</div>
 	</div>
 </div>
