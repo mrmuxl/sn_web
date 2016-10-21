@@ -85,3 +85,6 @@ class GroupManager(models.Model):
     id = models.AutoField(primary_key=True)
     group_id = models.IntegerField()
     user_id = models.IntegerField()
+
+    class Meta:
+        db_table = "group_manager"
