@@ -151,6 +151,7 @@ INSTALLED_APPS = (
     'apps.forum',
     'apps.wmd',
     'pagination',
+    'apps.group',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
