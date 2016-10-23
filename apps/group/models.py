@@ -61,6 +61,7 @@ class GroupPrintAuth(models.Model):
     print_user_id = models.CharField(max_length=32)  # 共享打印机的用户ID
     user_id = models.CharField(max_length=32)  # 使用者用户ID
     status = models.IntegerField()  # 审核状态 0=审核中，1=审核通过，2=拒绝
+    answer = models.CharField(null=True,max_length=30)
     create_time = models.DateTimeField()
 
     class Meta:

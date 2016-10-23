@@ -182,7 +182,12 @@ LOGGING = {
             'handlers': ['console','file' ],
             'level': 'ERROR',
             'propagate': False,
-        }
+        },
+         'apps.group': {
+            'handlers': ['console','file','mail_admins' ],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
     }
 }
 
