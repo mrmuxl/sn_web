@@ -188,14 +188,13 @@ def order_info(request):
     if c and  c.isdigit():
         if c == u'1':#VIP
             pdt_list = ProductInfo.objects.filter(category=c).filter(slug__isnull=False).order_by('order_num').values()
-            #return render(request,"alipay/printer.html",{"pdt_list":pdt_list,"remain_money":remain_money,"order_info":order_info})
             return render(request,"alipay/printer.html",{"pdt_list":pdt_list,"remain_money":remain_money,"order_info":order_info})
         else:
             return HttpResponse(u'没有此类产品')
     else:
         return HttpResponse(u'参数错误')
 
-def access_user_buy(request):
-    return render(request,"alipay/return_url.html",{})
+#def access_user_buy(request):
+#    return render(request,"alipay/return_url.html",{})
     #return HttpResponseRedirect(reverse('buy'))
 
