@@ -2,7 +2,16 @@
 
 import datetime,logging,json,os
 from apps.accounts.models import UserAuthIssue
+from apps.kx.models import KxUser
 logger = logging.getLogger(__name__)
+
+
+def getUserCountByCondition(condition):
+	if isinstance(condition, dict):
+		return KxUser.objects.filter(**condition).count()
+	else:
+		logger.error("the param of condition  must be the class dict")
+		return None
 
 def getUserAuthIssueByUser(uid):
 	try:
@@ -15,7 +24,11 @@ def insertUserAuthIssue(userAuth):
 		userAuth.save()
 		return userAuth.id
 	else:
-		logger.error("the object's class must be UserAuthIssue")
+		logger.error("the param's class must be UserAuthIssue")
 		return None
 def updateUserAuthIssueByCondition(condition,data):
-		return UserAuthIssue.objects.filter(**condition).update(**data)
+		if isinstance(condition, dict) and isinstance(data,dict):
+			return UserAuthIssue.objects.filter(**condition).update(**data)
+		else:
+			logger.error("the param of condition and data must be the class dict")
+			return None
