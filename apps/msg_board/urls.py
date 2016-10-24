@@ -20,5 +20,6 @@ urlpatterns = patterns('',
     url(r'^post/(?P<pid>\d+)/?$', 'apps.forum.views.post',name='forum_post'),
     url(r'^reply/?$','apps.forum.views.reply',name ='forum_reply'),
     url(r'^vote/?$','apps.forum.views.vote',name ='forum_vote'),
+    url(r'^check_msg/?$','apps.msg_board.views.check_msg',name ='check_msg'),
 )
 
