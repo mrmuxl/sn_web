@@ -51,3 +51,6 @@ urlpatterns += patterns('',
     url(r'^user/my_issue/?$','apps.accounts.views.my_issue',name='my_issue'),
 
 )
+urlpatterns += patterns('',
+#    url(r'^group/show_group_users/?$','apps.accounts.views.show_group_users',name='show_group_users'),
+)
