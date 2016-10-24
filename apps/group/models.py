@@ -79,13 +79,22 @@ class GroupPrintAuth(models.Model):
         verbose_name_plural = verbose_name = _(u'群用户打印权限')
 
 
+# 打印机
+class UserPrinter(models.Model):
+    id = models.AutoField(primary_key=True)
+    print_user_id = models.CharField(max_length=32,verbose_name=_(u'打印机用户ID'))
+    print_name = models.CharField(max_length=30,verbose_name=_(u'打印机名称'))  # 打印机名称
+    print_code = models.CharField(max_length=260,verbose_name=_(u'打印机序列号'))  # 打印机序列号
+    create_time = models.DateTimeField()
+
+    class Meta:
+        db_table = "user_printer"
+
 # 群打印机
 class GroupPrint(models.Model):
     id = models.AutoField(primary_key=True)
     group_id = models.IntegerField()
-    print_user_id = models.CharField(max_length=32,verbose_name=_(u'打印机用户ID'))
-    print_name = models.CharField(max_length=30,verbose_name=_(u'打印机名称'))  # 打印机名称
-    print_code = models.CharField(max_length=260,verbose_name=_(u'打印机序列号'))  # 打印机序列号
+    printer_id = models.IntegerField()
     create_time = models.DateTimeField()
 
     class Meta:
