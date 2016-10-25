@@ -30,6 +30,12 @@ def getGroupUserObjByCondition(condition):
 	else:
 		logger.error("the param of condition  must be the class dict")
 		return None
+def getGroupUserCountByCondition(condition):
+	if isinstance(condition, dict):
+		return GroupUser.objects.filter(**condition).count()
+	else:
+		logger.error("the param of condition  must be the class dict")
+		return None
 
 def getGroupPrintCountByCondition(condition):
 	"""根据condition获取打印机数量"""
@@ -38,6 +44,15 @@ def getGroupPrintCountByCondition(condition):
 	else:
 		logger.error("the param of condition  must be the class dict")
 		return None
+
+def getGroupsCountByCondition(condition):
+	"""根据condition获取群的数量"""
+	if isinstance(condition, dict):
+		return Groups.objects.filter(**condition).count()
+	else:
+		logger.error("the param of condition  must be the class dict")
+		return None
+
 
 def insertUserPrinter(userPrinter):
 	"""新增用户打印机"""
@@ -55,6 +70,15 @@ def insertGroupPrint(groupPrint):
 		return groupPrint.id
 	else:
 		logger.error("the param's class must be GroupPrint")
+		return None
+
+def insertGroupUser(groupUser):
+	"""新增群用户"""
+	if isinstance(groupUser, GroupUser):
+		groupUser.save()
+		return groupUser.id
+	else:
+		logger.error("the param's class must be GroupUser")
 		return None
 
 def updateUserPrinterByCondition(condition,data):
