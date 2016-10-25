@@ -52,5 +52,5 @@ urlpatterns += patterns('',
 
 )
 urlpatterns += patterns('',
-#    url(r'^group/show_group_users/?$','apps.accounts.views.show_group_users',name='show_group_users'),
+    url(r'^group/show_group_users/?$','apps.accounts.views.show_group_users',name='show_group_users'),
 )
