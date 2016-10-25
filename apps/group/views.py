@@ -166,15 +166,16 @@ def edit_group_print(json_data,uid,name,code,remark):
 			json_data['status']=1
 	return json_data
 
+@require_POST
 def del_print(request):
 	"""接口：删除群打印机"""
-	uid=request.GET.get("uid","").strip()
-	code=request.GET.get("code","").strip()
+	uid=request.POST.get("uid","").strip()
+	code=request.POST.get("code","").strip()
 	gid=0
 	json_data={}
 	json_data['status']=0
 	try:
-		gid=int(request.GET.get("gid",0))
+		gid=int(request.POST.get("gid",0))
 	except Exception,e:
 		json_data['info']="param err01"
 		return json_return(json_data)
