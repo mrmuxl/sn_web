@@ -37,12 +37,12 @@ class Groups(models.Model):
 # 群用户
 class GroupUser(models.Model):
     id = models.AutoField(primary_key=True)
-    group_id = models.ManyToManyField(Groups,verbose_name=_(u'群ID'),related_name='group_id')
-    user_id = models.OneToOneField(KxUser,verbose_name=_(u'群用户Email'),related_name='user_id')# 谁被加进来的
+    group_id = models.IntegerField(verbose_name=_(u'群ID'))
+    user_id = models.CharField(max_length=32,verbose_name=_(u'群用户Email')) # 谁被加进来的
     user_remark = models.CharField(max_length=20,null=True,blank=True,verbose_name=_(u'用户备注名'))  # 用户备注名
     share_print = models.BooleanField(verbose_name=_(u'是否可以共享打印机到群'),help_text=_(u'0:不能添加共享打印机到群'))  # 是否可以共享打印机到群 0=否
     join_time = models.DateTimeField(default=datetime.now,verbose_name=_(u'加入群的时间'))
-    joiner_id = models.OneToOneField(KxUser,verbose_name=_(u'加群的人的Email'),editable=False,related_name='joiner_id')# 谁被加进来的
+    joiner_id = models.CharField(max_length=32) # 谁被加进来的
 
     class Meta:
         db_table = "group_user"
@@ -85,7 +85,9 @@ class UserPrinter(models.Model):
     print_user_id = models.CharField(max_length=32,verbose_name=_(u'打印机用户ID'))
     print_name = models.CharField(max_length=30,verbose_name=_(u'打印机名称'))  # 打印机名称
     print_code = models.CharField(max_length=260,verbose_name=_(u'打印机序列号'))  # 打印机序列号
-    create_time = models.DateTimeField()
+    remark = models.CharField(null=True,max_length=100) #打印机备注
+    create_time = models.DateTimeField(auto_now_add=True)
+    update_time = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "user_printer"
@@ -95,7 +97,7 @@ class GroupPrint(models.Model):
     id = models.AutoField(primary_key=True)
     group_id = models.IntegerField()
     printer_id = models.IntegerField()
-    create_time = models.DateTimeField()
+    create_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = "group_print"
