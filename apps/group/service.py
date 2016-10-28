@@ -4,7 +4,7 @@ from apps.group.models import *
 logger = logging.getLogger(__name__)
 
 def getGroupPrintAuthListByCondition(condition):
-	"""获取打印权限列表"""
+	"""获取用户打印权限列表"""
 	if isinstance(condition, dict):
 		return GroupPrintAuth.objects.filter(**condition)
 	else:
@@ -26,7 +26,6 @@ def getGroupUserObjByCondition(condition):
 		except Exception,e:
 			logger.warn("GroupUser not exists：condition="+str(condition)+"  %s",e)
 			return None
-
 	else:
 		logger.error("the param of condition  must be the class dict")
 		return None
@@ -49,6 +48,18 @@ def getGroupsCountByCondition(condition):
 	"""根据condition获取群的数量"""
 	if isinstance(condition, dict):
 		return Groups.objects.filter(**condition).count()
+	else:
+		logger.error("the param of condition  must be the class dict")
+		return None
+
+def getGroupPrintAuthObjByCondition(condition):
+	"""根据condition群用户打印权限"""
+	if isinstance(condition, dict):
+		try:
+			return GroupPrintAuth.objects.get(**condition)
+		except Exception,e:
+			logger.warn("GroupPrintAuth not exists：condition="+str(condition)+"  %s",e)
+			return None
 	else:
 		logger.error("the param of condition  must be the class dict")
 		return None
@@ -81,6 +92,15 @@ def insertGroupUser(groupUser):
 		logger.error("the param's class must be GroupUser")
 		return None
 
+def insertGroupPrintAuth(printAuth):
+	"""新增 群用户打印权限"""
+	if isinstance(printAuth, GroupPrintAuth):
+		printAuth.save()
+		return printAuth.id
+	else:
+		logger.error("the param's class must be GroupPrintAuth")
+		return None
+
 def updateUserPrinterByCondition(condition,data):
 	"""更新打印机信息"""
 	if isinstance(condition, dict) and isinstance(data,dict):
@@ -88,7 +108,13 @@ def updateUserPrinterByCondition(condition,data):
 	else:
 		logger.error("the param of condition and data must be the class dict")
 		return None
-
+def updateGroupPrintAuthByCondition(condition,data):
+	"""更新群用户打印权限信息"""
+	if isinstance(condition, dict) and isinstance(data,dict):
+		return GroupPrintAuth.objects.filter(**condition).update(**data)
+	else:
+		logger.error("the param of condition and data must be the class dict")
+		return None
 def delGroupPrintByCondition(condition):
 	if isinstance(condition, dict) :
 		return GroupPrint.objects.filter(**condition).delete()

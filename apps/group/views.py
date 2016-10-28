@@ -262,8 +262,115 @@ def add_user(request):
 	return json_return(json_data)
 
 
+@require_POST
 def go_auth(request):
 	"""接口:用户提交打印机审核"""
 	json_data={}
 	json_data['status']=0
 	uid=request.POST.get("uid","").strip()
+	puid=request.POST.get("puid","").strip()
+	answer=request.POST.get("answer","").strip()
+	try:
+		gid=int(request.POST.get("gid",0))
+	except Exception,e:
+		json_data['info']="param err01"
+		return json_return(json_data)
+	if uid=="" or puid=="" or gid<=0 :
+		json_data['info']="param err02"
+		return json_return(json_data)
+	num=getGroupUserCountByCondition({"user_id":puid,"share_print":1})
+	if not num>0:
+		json_data['info']="the printer is not exists or allowed to share"
+		return json_return(json_data)
+	gpObj=getGroupPrintAuthObjByCondition({"group_id":gid,"print_user_id":puid,"user_id":uid})
+	if not gpObj is None:
+		json_data['info']="the user is already submitted"
+	result=insertGroupPrintAuth(GroupPrintAuth(group_id=gid,print_user_id=puid,user_id=uid,status=0,answer=answer))
+	if result>0:
+		json_data['status']=1
+		json_data['info']="ok"
+	else:
+		json_data['info']="add auth error"
+	return json_return(json_data)
+
+
+@require_POST
+def my_auth(request):
+	"""接口:用户获取审核状态"""
+	json_data={}
+	json_data['status']=0
+	uid=request.POST.get("uid","").strip()
+	try:
+		gid=int(request.POST.get("gid",0))
+	except Exception,e:
+		json_data['info']="param err01"
+		return json_return(json_data)
+	if uid=="" or gid<=0:
+		json_data['info']="param err02"
+		return json_return(json_data)
+	gpList=getGroupPrintAuthListByCondition({"group_id":gid,"user_id":uid})
+	json_data['status']=1
+	json_data['info']="ok"
+	json_data['auth_list']=[]
+	for gp in gpList:
+		json_data['auth_list'].append({"puid":gp.print_user_id,"verify":gp.status})
+	return json_return(json_data)
+
+
+@require_POST
+def list_auth(request):
+	"""接口:用户获取审核状态"""
+	json_data={}
+	json_data['status']=0
+	puid=request.POST.get("puid","").strip()
+	try:
+		gid=int(request.POST.get("gid",0))
+	except Exception,e:
+		json_data['info']="param err01"
+		return json_return(json_data)
+	num=getGroupUserCountByCondition({"user_id":puid,"share_print":1})
+	if not num>0:
+		json_data['info']="this printer is not exists or allowed to share"
+		return json_return(json_data)
+	sql="select a.*,u.email,u.nick from group_print_auth a left join kx_user u on a.user_id=u.uuid where a.status=0 and"\
+		" a.group_id=%s and a.print_user_id=%s"
+	gpList=query_sql(sql,[gid,puid])
+	json_data['status']=1
+	json_data['info']="ok"
+	json_data['auth_list']=[]
+	for gp in gpList:
+		json_data['auth_list'].append({"uid":gp['user_id'],"email":gp['email'],"nick":gp['nick'],"answer":gp['answer'],
+									   "time":str(gp['create_time'])})
+	return json_return(json_data)
+
+
+@require_POST
+def deal_auth(request):
+	"""接口：处理审核状态"""
+	json_data={}
+	json_data['status']=0
+	uid=request.POST.get("uid","").strip()
+	puid=request.POST.get("puid","").strip()
+	try:
+		gid=int(request.POST.get("gid",0))
+		status=int(request.POST.get("verify",-1))
+	except Exception,e:
+		json_data['info']="param err01"
+		return json_return(json_data)
+	if uid=="" or puid=="" or gid<=0 or status<0 or status>2:
+		json_data['info']="param err02"
+		return json_return(json_data)
+	num=getGroupUserCountByCondition({"user_id":puid,"share_print":1})
+	if not num>0:
+		json_data['info']="this printer is not exists or allowed to share"
+		return json_return(json_data)
+	result=updateGroupPrintAuthByCondition({"group_id":gid,"print_user_id":puid,"user_id":uid},
+											{"status":status})
+	if not result>0:
+		json_data['info']="update  group print auth err01"
+	else:
+		json_data['info']="ok"
+		json_data['status']=1
+	return json_return(json_data)
+
+
