@@ -16,7 +16,11 @@
 					<i class="icon-angle-right arrow-icon"></i>
 				</span>
 			</li>
+			{% if not gid %}
 			<li class="active">新增群</li>
+			{% else %}
+			<li class="active">编辑群</li>
+			{% endif %}
 		</ul>
 	</div>
 	<div class="page-content">
@@ -31,9 +35,14 @@
 			<div class="span10">
 				<div class="widget-box transparent">
 					<div class="widget-body">
-
+						{% if tip_error %}
+						<div style="color:#D16E6C">{{tip_error}}</div>
+						{% endif %}
 						<form id="infoForm" action="{% url 'group_group_add' %}" method="post" enctype="multipart/form-data">
 						{% csrf_token %}
+						{% if gid %}
+						<input type="hidden" name="gid" value="{{gid}}" />
+						{% endif %}
 						{% if error.group_name %}
 						<div class="control-group error">
 						{% else %}
@@ -72,14 +81,23 @@
 							<label for="g_type" class="control-label">群类型:</label>
 							<div class="controls">
 								<div class="span12 clear">
-									<label class="pull-left" style="margin-right:5px;">
-										<input type="radio" name="g_type" value="1" checked/><span class="lbl">普通群</span>
-									</label>
-									<label class="pull-left">
-										<input type="radio" name="g_type" value="2" /><span class="lbl">高校群</span>
-									</label>
-									{% if error.g_type %}
-									<span for="g_type" class="help-inline">{{error.g_type}}</span>
+									{% if gid %}
+										{% if g_type == 1 %}
+			                  			<span class="label label-warning">普通群</span>
+			                  			{% else %}
+										<span class="label label-important">高校群</span>
+			                  			{% endif %}
+										<input type="hidden" name="g_type" value="{{g_type}}" />
+									{% else %}
+										<label class="pull-left" style="margin-right:5px;">
+											<input type="radio" name="g_type" value="1" checked/><span class="lbl">普通群</span>
+										</label>
+										<label class="pull-left">
+											<input type="radio" name="g_type" value="2" /><span class="lbl">高校群</span>
+										</label>
+										{% if error.g_type %}
+										<span for="g_type" class="help-inline">{{error.g_type}}</span>
+										{% endif %}
 									{% endif %}
 								</div>
 							</div>

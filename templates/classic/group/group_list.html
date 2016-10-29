@@ -7,7 +7,7 @@
 		<ul class="breadcrumb">
 			<li>
 				<i class="icon-home home-icon"></i>
-				<a href="/User/index">首页</a>
+				<a href="{% url 'accounts_index' %}">首页</a>
 
 				<span class="divider">
 					<i class="icon-angle-right arrow-icon"></i>
@@ -43,9 +43,13 @@
 										<i class="icon-caret-right blue"></i>
 										群名称
 									</th>
-									<th class="span3">
+									<th class="span4">
 										<i class="icon-caret-right blue"></i>
 										群主
+									</th>
+									<th class="span2">
+										<i class="icon-caret-right blue"></i>
+										群类型
 									</th>
 									<th class="span3">
 										<i class="icon-caret-right blue"></i>
@@ -53,13 +57,15 @@
 									</th>
 									<th class="span3">
 										<i class="icon-caret-right blue"></i>
-										群用户数上限
+										用户上限
 									</th>
 									<th class="span3">
 										<i class="icon-caret-right blue"></i>
 										创建时间
 									</th>
-
+									<th class="span5">
+										&nbsp;
+									</th>
 
 								</tr>
 							</thead>
@@ -70,9 +76,26 @@
 										<td>{{ group.id}}</td>
 				                  		<td>{{ group.name}}</td>
 				                  		<td>{{ group.owner_id }}</td>
+				                  		<td>
+				                  			{% if group.g_type == 1 %}
+				                  			<span class="label label-warning">普通群</span>
+				                  			{% else %}
+											<span class="label label-important">高校群</span>
+				                  			{% endif %}
+				                  		</td>
 				                  		<td>{{ group.user_num }}</td>
 				                  		<td>{{ group.max_num }}</td>
 				                  		<td>{{ group.create_time }}</td>
+				                  		<td>
+				                  			<a class="btn btn-mini btn-info" href="{% url 'group_group_add' %}?gid={{group.id}}">
+												<i class="icon-edit bigger-120"></i>
+												编辑
+											</a>
+											<a class="btn btn-mini btn-warning" href="{% url 'group_group_user' %}?gid={{group.id}}" target="_blank">
+												<i class="icon-group bigger-120"></i>
+												群用户
+											</a>
+										</td>
 				                	</tr>
 				                	{% endfor %}
 							</tbody>
