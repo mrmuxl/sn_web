@@ -1,7 +1,7 @@
 {% load compress %}
-
-<!DOCTYPE html>
-<head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
 		<meta charset="utf-8" />
 		<title>simplenect</title>
 
@@ -47,11 +47,16 @@
 
 <body>
 
-	{% block header %}{% endblock %}
-	{% block content %}{% endblock %}
+	{% block header %}{% include "user/header.html" %}{% endblock %}
+	<div class="main-container container-fluid">
+		{% block menu %}{% include "user/menu.html" %}{% endblock %}
+		{% block content %}{% endblock %}
+	</div>
+	<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-small btn-inverse">
+		<i class="icon-double-angle-up icon-only bigger-110"></i>
+	</a>
 	<div class="clear"></div>
-	{% block footer %}{% endblock %}
-
+	{% block footer %}{% include "user/footer.html" %}{% endblock %}
 </body>
 </html>
 

@@ -1,0 +1,166 @@
+{% extends "user/base.html" %}
+{% block content %}
+<div class="main-content">
+	<div class="breadcrumbs" id="breadcrumbs">
+		<ul class="breadcrumb">
+			<li>
+				<i class="icon-home home-icon"></i>
+				<a href="{% url 'accounts_index' %}">首页</a>
+				<span class="divider">
+					<i class="icon-angle-right arrow-icon"></i>
+				</span>
+			</li>
+			<li>
+				<a href="{% url 'group_group_list' %}">群</a>
+				<span class="divider">
+					<i class="icon-angle-right arrow-icon"></i>
+				</span>
+			</li>
+			<li class="active">新增群</li>
+		</ul>
+	</div>
+	<div class="page-content">
+		<h4 class="lighter">
+			<i class="icon-group"></i>
+			群 <a href="{% url 'group_group_list' %}" class="btn btn-small  btn-info">
+			<i class="icon-list">群列表</i></a>
+		</h4>
+
+		<div class="row-fluid">
+			<div class="span2"></div>
+			<div class="span10">
+				<div class="widget-box transparent">
+					<div class="widget-body">
+
+						<form id="infoForm" action="{% url 'group_group_add' %}" method="post" enctype="multipart/form-data">
+						{% csrf_token %}
+						{% if error.group_name %}
+						<div class="control-group error">
+						{% else %}
+						<div class="control-group">
+						{% endif %}
+							<label for="group_name" class="control-label">群名:</label>
+							<div class="controls">
+								<div class="span12">
+									<input type="text" id="group_name" data-maxlength="30" maxlength="30" class="span6 valid" name="group_name" placeholder="群名" value="{{group_name}}">
+									{% if error.group_name %}
+									<span for="group_name" class="help-inline">{{error.group_name}}</span>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						{% if error.owner_email %}
+						<div class="control-group error">
+						{% else %}
+						<div class="control-group">
+						{% endif %}
+							<label for="owner_email" class="control-label">群主邮箱:</label>
+							<div class="controls">
+								<div class="span12">
+									<input type="text" id="owner_email" class="span6 valid" name="owner_email" placeholder="群主邮箱" value="{{owner_email}}">
+									{% if error.owner_email %}
+									<span for="owner_email" class="help-inline">{{error.owner_email}}</span>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						{% if error.g_type %}
+						<div class="control-group error">
+						{% else %}
+						<div class="control-group">
+						{% endif %}
+							<label for="g_type" class="control-label">群类型:</label>
+							<div class="controls">
+								<div class="span12 clear">
+									<label class="pull-left" style="margin-right:5px;">
+										<input type="radio" name="g_type" value="1" checked/><span class="lbl">普通群</span>
+									</label>
+									<label class="pull-left">
+										<input type="radio" name="g_type" value="2" /><span class="lbl">高校群</span>
+									</label>
+									{% if error.g_type %}
+									<span for="g_type" class="help-inline">{{error.g_type}}</span>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						{% if error.max_num %}
+						<div class="control-group error">
+						{% else %}
+						<div class="control-group">
+						{% endif %}
+							<label for="max_num" class="control-label">群用户上限:</label>
+							<div class="controls">
+								<div class="span12">
+									<input type="text" id="max_num" class="span3 valid"  placeholder="群用户上限数" name="max_num" value="{{max_num}}" >
+									{% if error.max_num %}
+									<span for="max_num" class="help-inline">{{error.max_num}}</span>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+	
+						<div class="row-fluid" style="margin-top:15px;">
+							<input type="submit" name="" class="btn btn-info btn-small" value="保存" />
+						</div>
+					</form>
+					</div><!--/widget-body-->
+				</div>
+
+				<!--PAGE CONTENT ENDS-->
+			</div><!--/.span-->
+
+		</div><!--/.row-fluid-->
+	</div><!--/.page-content-->
+</div>
+<script>
+$("input.valid").blur(function(){
+	var val=$.trim($(this).val());
+	var vindex=$("input.valid").index($(this));
+	if (vindex>=2){
+		vindex=vindex+1;
+	}
+	if (val==""){
+		$(".control-group").eq(vindex).addClass("error");
+		var cont="";
+		if($(this).next(".help-inline").length==0){
+			if(vindex==0){
+				cont='<span for="group_name" class="help-inline">请填写群名称！</span>';
+			}else if(vindex==1){
+				cont='<span for="owner_email" class="help-inline">请填写群主邮箱！</span>';
+			}else if(vindex==3){
+				cont='<span for="max_num" class="help-inline">请填写群用户上限数！</span>';
+			}
+			$(this).after(cont);
+		}else{
+			if(vindex==0){
+				cont='请填写群名称！';
+			}else if(vindex==1){
+				cont='请填写群主邮箱！';
+			}else if(vindex==3){
+				cont='请填写群用户上限数！';
+			}
+			$(this).next(".help-inline").html(cont);
+		}
+	}else{
+
+		if(vindex==3&&isNaN(val)){
+			vindex=vindex+1;
+			var cont="";
+			$(".control-group").eq(vindex).addClass("error");
+			if($(this).next(".help-inline").length==0){
+				cont='<span for="max_num" class="help-inline">群用户上限数必须是整数！</span>';
+				$(this).after(cont);
+			}else{
+				cont="群用户上限数必须是整数！";
+				$(this).next(".help-inline").html(cont);
+			}
+			return;
+		}
+		$(".control-group").eq(vindex).removeClass("error");
+		$(this).next(".help-inline").remove();
+	}
+
+})
+</script>
+{% endblock %}

@@ -3,6 +3,9 @@ import logging
 from apps.group.models import *
 logger = logging.getLogger(__name__)
 
+def getGroupsListAll():
+	return Groups.objects.all().order_by("-id")
+
 def getGroupPrintAuthListByCondition(condition):
 	"""获取用户打印权限列表"""
 	if isinstance(condition, dict):
@@ -11,10 +14,10 @@ def getGroupPrintAuthListByCondition(condition):
 		logger.error("the param of condition  must be the class dict")
 		return None
 
-def getUserPrinterObj(uid,code):
-	"""根据用户ID，打印据序列号code 获取单个用户打印机"""
+def getUserPrinterObj(uid,code,mid):
+	"""根据用户ID，打印据序列号code 机器码mid 获取单个用户打印机"""
 	try:
-		return UserPrinter.objects.get(print_user_id=uid,print_code=code)
+		return UserPrinter.objects.get(print_user_id=uid,print_code=code,print_mid=mid)
 	except Exception, e:
 		logger.warn("UserPrint not exists：uid="+str(uid)+"  code="+str(code)+"  %s",e)
 		return None
@@ -99,6 +102,15 @@ def insertGroupPrintAuth(printAuth):
 		return printAuth.id
 	else:
 		logger.error("the param's class must be GroupPrintAuth")
+		return None
+
+def insertGroups(group):
+	"""新增 群"""
+	if isinstance(group, Groups):
+		group.save()
+		return group.id
+	else:
+		logger.error("the param's class must be Groups")
 		return None
 
 def updateUserPrinterByCondition(condition,data):

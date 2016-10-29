@@ -20,12 +20,12 @@ from apps.kx.models import KxUser
 class Groups(models.Model):
     id = models.AutoField(primary_key=True)  # 高校群ID 10001~19999 普通群 >=20000
     name = models.CharField(max_length=30,verbose_name=_(u'群名称'))
-    owner_id = models.OneToOneField(KxUser,verbose_name=_(u'群所有者Email'),related_name='owner_in')
+    owner_id = models.CharField(max_length=32,verbose_name=_(u'群所有者Email'))
     user_num = models.IntegerField(default=0,verbose_name=_(u'群用户人数'),editable=False)
     max_num = models.IntegerField(verbose_name=_(u'群最大用户数'))
     g_type = models.IntegerField(verbose_name=_(u'群类型'),default=1,help_text=_(u'1=普通群，2=高校群'))  # 1=普通群 2=高校群
     create_time = models.DateTimeField(default=datetime.now,verbose_name=_(u'创建时间'))
-    creater_id = models.OneToOneField(KxUser,verbose_name=_(u'创建群的人'),editable=False,related_name='create_id')# 谁被加进来的
+    creater_id = models.CharField(max_length=32,verbose_name=_(u'创建群的人'),editable=False)# 谁被加进来的
 
     class Meta:
         db_table = 'groups'
@@ -86,6 +86,7 @@ class UserPrinter(models.Model):
     print_user_id = models.CharField(max_length=32,verbose_name=_(u'打印机用户ID'))
     print_name = models.CharField(max_length=30,verbose_name=_(u'打印机名称'))  # 打印机名称
     print_code = models.CharField(max_length=260,verbose_name=_(u'打印机序列号'))  # 打印机序列号
+    print_mid = models.CharField(max_length=50) #机器码
     remark = models.CharField(null=True,max_length=100) #打印机备注
     create_time = models.DateTimeField(auto_now_add=True)
     update_time = models.DateTimeField(auto_now=True)

@@ -13,6 +13,17 @@ def getUserCountByCondition(condition):
 		logger.error("the param of condition  must be the class dict")
 		return None
 
+def getUserObjByCondition(condition):
+	if isinstance(condition, dict):
+		try:
+			return KxUser.objects.get(**condition)
+		except Exception,e:
+			logger.warn("KxUser not exists：condition="+str(condition)+"  %s",e)
+			return None
+	else:
+		logger.error("the param of condition  must be the class dict")
+		return None
+
 def getUserAuthIssueByUser(uid):
 	try:
 		return UserAuthIssue.objects.get(user_id=uid)

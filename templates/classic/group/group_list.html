@@ -1,0 +1,87 @@
+{% extends "user/base.html" %}
+{% block content %}
+{% load pagination_tags %}
+{% autopaginate groupList 2 %}
+<div class="main-content">
+	<div class="breadcrumbs" id="breadcrumbs">
+		<ul class="breadcrumb">
+			<li>
+				<i class="icon-home home-icon"></i>
+				<a href="/User/index">首页</a>
+
+				<span class="divider">
+					<i class="icon-angle-right arrow-icon"></i>
+				</span>
+			</li>
+			<li class="active">群</li>
+		</ul>
+	</div>
+
+	<div class="page-content">
+		<div class="widget-box transparent">
+				<div class="widget-header widget-header-flat">
+					<h4 class="lighter">
+						<i class="icon-reorder orange"></i>
+						群列表(共{{paginator.count}}条)
+					</h4>
+					<div class="pull-right" style="margin-right:20px;">
+						<a href="{% url 'group_group_add' %}" class=""><i class="icon-plus"></i>新增群</a>
+					</div>
+		
+				</div>
+
+				<div class="widget-body">
+					<div class="widget-main no-padding">
+						<table class="table table-bordered table-striped">
+							<thead>
+								<tr>
+									<th class="span2">
+										<i class="icon-caret-right blue"></i>
+										群ID
+									</th>
+									<th class="span3">
+										<i class="icon-caret-right blue"></i>
+										群名称
+									</th>
+									<th class="span3">
+										<i class="icon-caret-right blue"></i>
+										群主
+									</th>
+									<th class="span3">
+										<i class="icon-caret-right blue"></i>
+										群用户数
+									</th>
+									<th class="span3">
+										<i class="icon-caret-right blue"></i>
+										群用户数上限
+									</th>
+									<th class="span3">
+										<i class="icon-caret-right blue"></i>
+										创建时间
+									</th>
+
+
+								</tr>
+							</thead>
+
+							<tbody>
+									{% for group in groupList %}
+									<tr>
+										<td>{{ group.id}}</td>
+				                  		<td>{{ group.name}}</td>
+				                  		<td>{{ group.owner_id }}</td>
+				                  		<td>{{ group.user_num }}</td>
+				                  		<td>{{ group.max_num }}</td>
+				                  		<td>{{ group.create_time }}</td>
+				                	</tr>
+				                	{% endfor %}
+							</tbody>
+						</table>
+						<div style="text-align:center;">{% paginate %}</div>
+					</div><!--/widget-main-->
+				</div><!--/widget-body-->
+			</div>
+
+	</div>
+</div><!--/.main-content-->
+{% endblock %}
