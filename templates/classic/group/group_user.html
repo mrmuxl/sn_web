@@ -1,7 +1,8 @@
 {% extends "user/base.html" %}
 {% block content %}
 {% load pagination_tags %}
-
+{% autopaginate guList 2 %}
+{% load my_filter %}
 <div class="main-content">
 	<div class="breadcrumbs" id="breadcrumbs">
 		<ul class="breadcrumb">
@@ -21,29 +22,161 @@
 			<li class="active">群用户</li>
 		</ul>
 	</div>
+	{% if error %}
 	<div class="page-content">
-		<div class="page-header position-relative" style="clear:both">
+	{{error}}
+	</div>
+	{% else %}
+	<div class="page-content">
+		<div class="page-header position-relative">
 			<h1 class="pull-left">新增群用户<small><i class="icon-double-angle-right"></i></small></h1>
-			<div class="control-group pull-left">
-					<label for="form-field-1" class="control-label">Text Field</label>
+			<div class="form-horizontal">
+				<div class="control-group" style="margin-bottom:0;padding-top:5px;">
+					<label for="form-field-1" class="control-label" style="width:50px;">邮箱：</label>
 					<div class="controls">
-						<input type="text" placeholder="Username" id="form-field-1">
-						<button type="button" class="btn btn-info btn-small">
+						<input type="text" placeholder="邮箱" id="form-field-1" name="gu_email" value="" />
+						<button type="button" id="add_user" class="btn btn-info btn-small">
 							<i class="icon-ok bigger-110"></i>
-							Submit
+							确定
 						</button>
 					</div>
 				</div>
+			</div>	
 		</div><!--/.page-header-->
 		<div class="row-fluid">
 			<div class="span12">
 			<!--PAGE CONTENT BEGINS-->
 				<div class="row-fluid"> 
+					<div class="span6 widget-container-span ui-sortable" style="width:100%">
+						<div class="widget-box">
+							<div class="widget-header header-color-blue">
+								<h5 class="bigger lighter">
+									<i class="icon-table"></i>
+									群用户
+								</h5>
+
+								<div class="widget-toolbar widget-toolbar-light no-border">
+							
+								</div>
+							</div>
+
+							<div class="widget-body">
+								<div class="widget-main no-padding">
+									<table class="table table-striped table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>
+													<i class="icon-user"></i>
+													昵称
+												</th>
+
+												<th>
+													<i>@</i>
+													邮箱
+												</th>
+												<th>
+													<i class="icon-credit-card"></i>
+													备注名
+												</th>
+												<th class="span3">
+													<i class="icon-print"></i>
+													打印机共享到群
+												</th>
+												<th class="hidden-480">&nbsp;</th>
+											</tr>
+										</thead>
+
+										<tbody>
+											{% for gu in guList %}
 	
+											<tr>
+												<td class="">{{userMap|getDict:gu.user_id|getDict:'email'}}</td>
+
+												<td>
+													{{userMap|getDict:gu.user_id|getDict:'nick'}}
+												</td>
+												<td>
+													{% if gu.user_remark %}
+													{{gu.user_remark}}
+													{% else %}
+													--	
+													{% endif %}
+												</td>
+												<td>
+													<label>
+													{% if gu.share_print == 1 %}	
+													<input type="checkbox" class="ace-switch ace-switch-5" name="p_share" checked>
+													{% else %}
+													<input type="checkbox" class="ace-switch ace-switch-5" name="p_share">
+													{% endif %}
+													<span class="lbl"></span>
+													</label>
+												</td>
+												<td class="hidden-480">
+													<button class="btn btn-mini btn-danger del_user">
+														<i class="icon-trash bigger-120"></i>
+														删除
+													</button>
+												</td>
+											</tr>
+											
+											{% endfor %}
+											
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
+	{% endif %}
 </div>
+<script>
+var gid={{group.id}}
+$("#add_user").click(function(){
+	var uemail=$.trim($("input[name=gu_email]").val());
+	if(uemail==""){
+		alert("请填写用户邮箱！");
+		return false;
+	}
+	$.post("{% url 'group_guser_add' %}",{"gid":gid,"email":uemail},function(data){
+		if(data.status){
+
+		}else{
+			alert(data.info)
+		}
+	},"json");
+});
+$(".del_user").click(function(){
+	var email=$(this).parent("td").parent("tr").children("td").eq(0).html();
+	if (confirm("确定删除群用户："+email+" 吗？")){
+		$.post("{% url 'group_guser_del' %}",{"gid":gid,"email":email},function(data){
+			if(data.status){
+				$(this).parent("td").parent("tr").remove();
+			}else{
+				alert(data.info);
+			}
+		},"json");
+	}
+	return false;
+});
+$("input[name=p_share]").click(function(){
+	var email=$(this).parent().parent("td").parent("tr").children("td").eq(0).html();
+	var checked=$(this).is(":checked");
+	var obj=$(this);
+	$.post("{% url 'group_print_share' %}",{"gid":gid,"email":email},function(data){
+		if(data.status){
+			
+			return true;
+		}else{
+		
+			alert(data.info);
+		}
+	},"json");
+	//return false;
+});
+</script>
 {% endblock %}

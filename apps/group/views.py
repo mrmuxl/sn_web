@@ -115,7 +115,7 @@ def list_print(request):
 					"code":pt['print_code'],"mid":pt['print_mid'],"auth":status,"auth_type":auth_type,"issue":issue})
 		else:	
 			json_data['print_list'].append({"puid":puid,"name":pt['print_name'],"code":pt['print_code'],"mid":pt['print_mid'],"auth":status})
-	return json_return(json_data)	
+	return json_return(json_data,False)	
 
 @csrf_exempt
 @require_POST
@@ -358,7 +358,7 @@ def list_auth(request):
 	for gp in gpList:
 		json_data['auth_list'].append({"uid":gp['user_id'],"email":gp['email'],"nick":gp['nick'],"answer":gp['answer'],
 									   "time":str(gp['create_time'])})
-	return json_return(json_data)
+	return json_return(json_data,False)
 
 @csrf_exempt
 @require_POST
@@ -502,5 +502,126 @@ def edit_group(request,gid,res):
 
 def group_user(request):
 	res={}
-
+	try:
+		gid=int(request.GET.get("gid",0))
+	except Exception,e:
+		logger.error("invalid gid %s",e)
+		gid=0
+	if gid <=0:
+		res['error']="请选择一个群！"
+		return render(request,"group/group_user.html",res)
+	group=getGroupsObjById(gid)
+	if group is None:
+		res['error']="您查看的群不存在！"
+		return render(request,"group/group_user.html",res)
+	if (not request.user.is_superuser) and (group.owner_id!=request.user.uuid):
+		res['error']="您无法查看该群成员信息！"
+		return render(request,"group/group_user.html",res)
+	res['group']=group
+   	guList=getGroupUserListByCondition({"group_id":gid})
+   	perNum=2
+   	page=1
+   	try:
+   		page=int(request.GET.get("page"))
+   	except Exception,e:
+   		page=1
+   	uids=[]
+   	for gu in guList[(page-1)*perNum:page*perNum]:
+   		#uids+=",'"+gu.user_id+"'"
+   		uids.append(gu.user_id)
+   	if len(uids)>0:
+   		userList=KxUser.objects.filter(uuid__in=uids)
+   		userMap={}
+   		for user in userList:
+   			userMap[user.uuid]={}
+   			userMap[user.uuid]['uuid']=user.uuid
+   			userMap[user.uuid]['nick']=user.nick
+   			userMap[user.uuid]['email']=user.email
+   		res['userMap']=userMap
+	res['guList']=guList
 	return render(request,"group/group_user.html",res)
+
+@require_POST
+def guser_add(request):
+	"""Ajax 增加群用户"""
+	json_data={}
+	json_data['status']=0
+	json_data,group,user=valid_group_user(request,json_data)
+	if user is None:
+		return json_return(json_data)
+	count=getGroupUserCountByCondition({"group_id":gid,"user_id":user.uuid})
+	if count>0:
+		json_data['info']="该用户已加入群里！"
+		return json_return(json_data)
+	guId=insertGroupUser(GroupUser(group_id=group.id,user_id=user.uuid,joiner_id=request.user.uuid))
+	if guId>0:
+		json_data['status']=1
+		json_data['info']="ok"
+		json_data['guid']=guId
+	else:
+		json_data['info']="添加群用户失败！"
+	return json_return(json_data)
+
+def valid_group_user(request,json_data):
+	#判断用户是否登录
+	if not request.user.is_authenticated():
+		json_data['info']="请先登录!"
+		return json_data,None,None
+	email=request.POST.get("email","").strip()
+	if email=="":
+		json_data['info']="请填写用户邮箱！"
+		return json_data,None,None
+	try:
+		gid=int(request.POST.get("gid"))
+	except Exception,e:
+		gid=0
+		logger.error("invalid gid  %s",e)
+	if gid<=0:
+		json_data['info']="无效的群"
+		return json_data,None,None
+	group=getGroupsObjById(gid)
+	if group is None:
+		json_data['info']="该群不存在或已删除！"
+		return json_data,None,None
+	if (not request.user.is_superuser) and (group.owner_id!=request.user.uuid):
+		json_data['info']="您无权限添加群用户！"
+		return json_data,None,None
+	user=getUserObjByCondition({"email":email})
+	if user is None:
+		json_data['info']="该用户邮箱不存在！"
+		return json_data,None,None
+	return json_data,group,user
+
+@require_POST
+def print_share(request):
+	"""Ajax 更改群用户打印权限"""
+	json_data={}
+	json_data['status']=0
+	json_data,group,user=valid_group_user(request,json_data)
+	if user is None:
+		return json_return(json_data)
+	gu=getGroupUserObjByCondition({"group_id":group.id,"user_id":user.uuid})
+	if gu is None:
+		json_data['info']="该群用户不存在！"
+		return json_return(json_data)
+	share_print=0
+	if gu.share_print==0:
+		share_print=1
+	result=updateGroupUserByCondition({"group_id":group.id,"user_id":user.uuid},{"share_print":share_print})
+	if result:
+		json_data['status']=1
+		json_data['info']="ok"
+	else:
+		json_data['info']="更改共享打印机权限失败！"
+	return json_return(json_data)
+
+@require_POST
+def guser_del(request):
+	"""Ajax 更改群用户打印权限"""
+	json_data={}
+	json_data['status']=0
+	json_data,group,user=valid_group_user(request,json_data)
+	if user is None:
+		return json_return(json_data)
+	
+	return json_return(json_data)

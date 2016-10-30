@@ -47,5 +47,3 @@ def naturaltime(value):
             count = delta.seconds // 60 // 60
             return "%i小时前" % count
 
-
-
