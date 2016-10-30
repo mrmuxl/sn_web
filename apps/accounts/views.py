@@ -816,7 +816,7 @@ def my_issue(request):
     else:
         json_data['status']=0
         json_data['info']="param err02"
-    return json_return(json_data)
+    return json_return(json_data,False)
 
 
 def show_group_users(request):

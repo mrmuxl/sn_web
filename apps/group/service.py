@@ -165,3 +165,11 @@ def delGroupPrintByCondition(condition):
 	else:
 		logger.error("the param of condition must be the class dict")
 		return None
+
+def delGroupUserByCondition(condition):
+	"""删除群用户"""
+	if isinstance(condition, dict) :
+		return GroupUser.objects.filter(**condition).delete()
+	else:
+		logger.error("the param of condition must be the class dict")
+		return None
