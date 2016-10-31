@@ -147,13 +147,13 @@ def save_print(request):
 		return json_return(json_data)
 	#添加群打印机 或编辑打印机的类型
 	if flag=="1":
-		if gid<=0 or pType<=0 or pType>2 or cType<0 or cType>1:
+		if gid<=0 or pType<=0 or pType>10 or cType<0 or cType>10:
 			json_data['info']="param err03"
 			return json_return(json_data)
 		json_data=add_group_print(json_data,gid,uid,name,code,mid,remark,pType,cType)
 	elif flag=="2" : 
 		#修改群打印机名称备注等
-		if cType<0 or cType>1:
+		if cType<0 or cType>10:
 			json_data['info']="param err04"
 			return json_return(json_data)
 		json_data=edit_group_print(json_data,uid,name,code,mid,remark,cType,pType,gid)	
@@ -214,7 +214,7 @@ def edit_group_print(json_data,uid,name,code,mid,remark,cType,pType,gid):
 		if not result>0:
 			json_data['info']="update user printer err01"
 			return json_data
-		if gid>0 and pType>0 and pType<=2:
+		if gid>0 and pType>0 and pType<=10:
 			userPrint=getUserPrinterObj(uid,code,mid)
 			if userPrint is None:
 				json_data['info']="update user printer err02"
@@ -547,7 +547,7 @@ def group_user(request):
    			userMap[user.uuid]['nick']=user.nick
    			userMap[user.uuid]['email']=user.email
    		res['userMap']=userMap
-  
+  		print userMap
 	res['guList']=guList
 	return render(request,"group/group_user.html",res)
 
