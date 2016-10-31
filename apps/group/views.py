@@ -71,7 +71,7 @@ def list_print(request):
 		json_data['info']="param err02"
 		return json_return(json_data)
 	sql="select g.id,g.printer_id,g.p_type,p.print_name,p.print_user_id,p.print_code,p.print_mid,p.remark,p.c_type from group_print g"\
-		" left join user_printer p on g.printer_id=p.id and g.group_id=%s"	
+		" left join user_printer p on g.printer_id=p.id where g.group_id=%s"	
 	
 	printList=query_sql(sql,[gid])
 	authList=getPrintAuthListByCondition({"user_id":uid})
