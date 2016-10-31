@@ -87,6 +87,24 @@
 										</thead>
 
 										<tbody>
+											<tr id="user_clone" style="display:none;">
+												<td class=""></td>
+												<td></td>
+												<td></td>
+												<td>
+													<label>
+													<input type="checkbox" class="ace-switch ace-switch-5" name="p_share">
+													<span class="lbl"></span>
+													</label>
+												</td>
+												<td class="hidden-480">
+													<button class="btn btn-mini btn-danger del_user">
+														<i class="icon-trash bigger-120"></i>
+														删除
+													</button>
+												</td>
+											</tr>
+											{% if guList %}
 											{% for gu in guList %}
 	
 											<tr>
@@ -121,9 +139,10 @@
 											</tr>
 											
 											{% endfor %}
-											
+											{% endif %}
 										</tbody>
 									</table>
+									<div style="text-align:center;">{% paginate %}</div>
 								</div>
 							</div>
 						</div>
@@ -144,7 +163,13 @@ $("#add_user").click(function(){
 	}
 	$.post("{% url 'group_guser_add' %}",{"gid":gid,"email":uemail},function(data){
 		if(data.status){
-
+			var userTr=$("#user_clone").clone(true);
+			userTr.attr("id","");
+			userTr.show();
+			userTr.children("td").eq(0).text(data.nick);
+			userTr.children("td").eq(1).text(data.email);
+			userTr.children("td").eq(2).text(data.remark);
+			$("#user_clone").after(userTr);
 		}else{
 			alert(data.info)
 		}
@@ -152,10 +177,12 @@ $("#add_user").click(function(){
 });
 $(".del_user").click(function(){
 	var email=$(this).parent("td").parent("tr").children("td").eq(0).html();
+	var delTr=$(this).parent("td").parent("tr");
 	if (confirm("确定删除群用户："+email+" 吗？")){
 		$.post("{% url 'group_guser_del' %}",{"gid":gid,"email":email},function(data){
 			if(data.status){
-				$(this).parent("td").parent("tr").remove();
+				alert("删除成功！");
+				delTr.remove();
 			}else{
 				alert(data.info);
 			}
@@ -168,11 +195,9 @@ $("input[name=p_share]").click(function(){
 	var checked=$(this).is(":checked");
 	var obj=$(this);
 	$.post("{% url 'group_print_share' %}",{"gid":gid,"email":email},function(data){
-		if(data.status){
-			
+		if(data.status){	
 			return true;
 		}else{
-		
 			alert(data.info);
 		}
 	},"json");

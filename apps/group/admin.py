@@ -3,7 +3,7 @@
 from django.contrib import admin
 from django.conf import settings
 from django.db.models import Max
-from models import Groups,GroupUser,GroupUserVerify,GroupPrintAuth
+from models import Groups,GroupUser,GroupUserVerify,PrintAuth
 from models import GroupPrint,GroupManager
 
 
@@ -36,7 +36,7 @@ class GroupUserAdmin(admin.ModelAdmin):
 class GroupUserVerifyAdmin(admin.ModelAdmin):
     pass
 
-class GroupPrintAuthAdmin(admin.ModelAdmin):
+class PrintAuthAdmin(admin.ModelAdmin):
     pass
 
 class GroupPrintAdmin(admin.ModelAdmin):

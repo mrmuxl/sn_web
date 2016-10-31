@@ -14,10 +14,10 @@ def getGroupsObjById(gid):
 	except Exception,e:
 		logger.warn("Groups not exists：gid="+str(gid)+" %s",e)
 		return None
-def getGroupPrintAuthListByCondition(condition):
+def getPrintAuthListByCondition(condition):
 	"""获取用户打印权限列表"""
 	if isinstance(condition, dict):
-		return GroupPrintAuth.objects.filter(**condition)
+		return PrintAuth.objects.filter(**condition)
 	else:
 		logger.error("the param of condition  must be the class dict")
 		return None
@@ -70,13 +70,13 @@ def getGroupsCountByCondition(condition):
 		logger.error("the param of condition  must be the class dict")
 		return None
 
-def getGroupPrintAuthObjByCondition(condition):
+def getPrintAuthObjByCondition(condition):
 	"""根据condition群用户打印权限"""
 	if isinstance(condition, dict):
 		try:
-			return GroupPrintAuth.objects.get(**condition)
+			return PrintAuth.objects.get(**condition)
 		except Exception,e:
-			logger.warn("GroupPrintAuth not exists：condition="+str(condition)+"  %s",e)
+			logger.warn("PrintAuth not exists：condition="+str(condition)+"  %s",e)
 			return None
 	else:
 		logger.error("the param of condition  must be the class dict")
@@ -110,13 +110,13 @@ def insertGroupUser(groupUser):
 		logger.error("the param's class must be GroupUser")
 		return None
 
-def insertGroupPrintAuth(printAuth):
+def insertPrintAuth(printAuth):
 	"""新增 群用户打印权限"""
-	if isinstance(printAuth, GroupPrintAuth):
+	if isinstance(printAuth, PrintAuth):
 		printAuth.save()
 		return printAuth.id
 	else:
-		logger.error("the param's class must be GroupPrintAuth")
+		logger.error("the param's class must be PrintAuth")
 		return None
 
 def insertGroups(group):
@@ -135,10 +135,10 @@ def updateUserPrinterByCondition(condition,data):
 	else:
 		logger.error("the param of condition and data must be the class dict")
 		return None
-def updateGroupPrintAuthByCondition(condition,data):
+def updatePrintAuthByCondition(condition,data):
 	"""更新群用户打印权限信息"""
 	if isinstance(condition, dict) and isinstance(data,dict):
-		return GroupPrintAuth.objects.filter(**condition).update(**data)
+		return PrintAuth.objects.filter(**condition).update(**data)
 	else:
 		logger.error("the param of condition and data must be the class dict")
 		return None
@@ -155,6 +155,14 @@ def updateGroupUserByCondition(condition,data):
 	"""更新群用户"""
 	if isinstance(condition, dict) and isinstance(data,dict):
 		return GroupUser.objects.filter(**condition).update(**data)
+	else:
+		logger.error("the param of condition and data must be the class dict")
+		return None
+
+def updateGroupPrintByCondition(condition,data):
+	"""更新群打印机"""
+	if isinstance(condition, dict) and isinstance(data,dict):
+		return GroupPrint.objects.filter(**condition).update(**data)
 	else:
 		logger.error("the param of condition and data must be the class dict")
 		return None
