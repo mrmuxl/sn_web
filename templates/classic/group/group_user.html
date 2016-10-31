@@ -32,9 +32,9 @@
 			<h1 class="pull-left">新增群用户<small><i class="icon-double-angle-right"></i></small></h1>
 			<div class="form-horizontal">
 				<div class="control-group" style="margin-bottom:0;padding-top:5px;">
-					<label for="form-field-1" class="control-label" style="width:50px;">邮箱：</label>
 					<div class="controls">
 						<input type="text" placeholder="邮箱" id="form-field-1" name="gu_email" value="" />
+						<input type="text" placeholder="备注名" id="form-field-1" name="gu_remark" value="" />
 						<button type="button" id="add_user" class="btn btn-info btn-small">
 							<i class="icon-ok bigger-110"></i>
 							确定
@@ -114,11 +114,18 @@
 													{{userMap|getDict:gu.user_id|getDict:'nick'}}
 												</td>
 												<td>
+													<span>
 													{% if gu.user_remark %}
 													{{gu.user_remark}}
 													{% else %}
 													--	
 													{% endif %}
+													</span> 
+													<div class="action-buttons pull-right">
+													<a class="green remark_user" style="cursor:pointer;">
+														<i class="icon-pencil bigger-120"></i>
+													</a>
+													</div>
 												</td>
 												<td>
 													<label>
@@ -161,7 +168,8 @@ $("#add_user").click(function(){
 		alert("请填写用户邮箱！");
 		return false;
 	}
-	$.post("{% url 'group_guser_add' %}",{"gid":gid,"email":uemail},function(data){
+	var uremark=$.trim($("input[name=gu_remark]").val());
+	$.post("{% url 'group_guser_add' %}",{"gid":gid,"email":uemail,"remark":uremark},function(data){
 		if(data.status){
 			var userTr=$("#user_clone").clone(true);
 			userTr.attr("id","");
@@ -202,6 +210,11 @@ $("input[name=p_share]").click(function(){
 		}
 	},"json");
 	//return false;
+});
+
+$(".remark_user").click(function(){
+	var obj=$(this);
+	remark
 });
 </script>
 {% endblock %}
