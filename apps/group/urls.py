@@ -19,4 +19,5 @@ urlpatterns = patterns('',
     url(r'^guser_add/?$','apps.group.views.guser_add', name='group_guser_add'),
     url(r'^guser_del/?$','apps.group.views.guser_del', name='group_guser_del'),
     url(r'^print_share/?$','apps.group.views.print_share', name='group_print_share'),
+    url(r'^guser_remark/?$','apps.group.views.guser_remark', name='group_guser_remark'),
 )
