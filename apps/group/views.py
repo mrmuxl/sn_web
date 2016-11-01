@@ -488,7 +488,6 @@ def group_list(request):
 	return render(request,"group/group_list.html",{"groupList":groupList,"userMap":userMap})
 
 @login_required
-@require_GET
 def group_add(request):
 	if not request.user.is_superuser:
 		return HttpResponseRedirect(reverse("login"))
