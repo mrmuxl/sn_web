@@ -324,6 +324,7 @@ def go_auth(request):
 	gpObj=getPrintAuthObjByCondition({"print_user_id":puid,"user_id":uid})
 	if not gpObj is None:
 		json_data['info']="the user is already submitted"
+		return json_return(json_data)
 	result=insertPrintAuth(PrintAuth(print_user_id=puid,user_id=uid,status=0,answer=answer))
 	if result>0:
 		json_data['status']=1
@@ -366,7 +367,7 @@ def list_auth(request):
 		json_data['info']="this printer is not exists or allowed to share"
 		return json_return(json_data)
 	sql="select a.*,u.email,u.nick from group_print_auth a left join kx_user u on a.user_id=u.uuid where a.status=0 and"\
-		"a.print_user_id=%s"
+		" a.print_user_id=%s"
 	gpList=query_sql(sql,[puid])
 	json_data['status']=1
 	json_data['info']="ok"
@@ -427,6 +428,7 @@ def group_list(request):
 	return render(request,"group/group_list.html",{"groupList":groupList,"userMap":userMap})
 
 @login_required
+@require_GET
 def group_add(request):
 	if not request.user.is_superuser:
 		return HttpResponseRedirect(reverse("login"))
@@ -525,7 +527,8 @@ def edit_group(request,gid,res):
 			res['max_num']=group.max_num	
 	return res	
 
-
+@login_required
+@require_GET
 def group_user(request):
 	res={}
 	try:
@@ -654,6 +657,8 @@ def print_share(request):
 		share_print=1
 	result=updateGroupUserByCondition({"group_id":group.id,"user_id":user.uuid},{"share_print":share_print})
 	if result:
+		#if share_print==0:
+			#delGroupPrintByCondition({"group_id":group.id})
 		json_data['status']=1
 		json_data['info']="ok"
 	else:
