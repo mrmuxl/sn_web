@@ -151,6 +151,7 @@ def login(request,next_page="/User/index",redirect_field_name=REDIRECT_FIELD_NAM
     elif request.method == "POST":
         email = strip_tags(request.POST.get("email",'').lower().strip())
         password = request.POST.get("password").strip()
+        refer = request.POST.get("refer","")
         user = authenticate(username=email,password=password)
         if user and user.is_active:
             auth.login(request,user)
