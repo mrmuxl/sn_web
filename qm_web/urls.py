@@ -17,6 +17,7 @@ urlpatterns = patterns('',
     url(r'^buy/?$',RedirectView.as_view(url='alipay/order_info?c=1'),name ='buy'),
     url(r'^printer/?$','apps.ad.views.printer',name='printer'),
     url(r'^fzu/?$','apps.ad.views.fzu',name='fzu'),
+    url(r'^jxxy/?$','apps.ad.views.jxxy',name='ad_jxxy'),
     url(r'^admin/', include(admin.site.urls)),
 )
 urlpatterns += patterns('',
