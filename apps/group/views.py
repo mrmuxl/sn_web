@@ -657,8 +657,10 @@ def print_share(request):
 		share_print=1
 	result=updateGroupUserByCondition({"group_id":group.id,"user_id":user.uuid},{"share_print":share_print})
 	if result:
-		#if share_print==0:
-			#delGroupPrintByCondition({"group_id":group.id})
+		if share_print==0:
+			#取消共享权限时，删除对应群里的用户打印机
+			sql="delete from group_print where group_id=%s and printer_id in (select id from user_printer where print_user_id=%s)"
+			result=execute_sql(sql,[group.id,user.uuid])
 		json_data['status']=1
 		json_data['info']="ok"
 	else:
