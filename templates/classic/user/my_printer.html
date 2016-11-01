@@ -1,23 +1,9 @@
 {% extends "user/base.html" %}
-
-{% block header %}{% include "user/header.html" %}{% endblock %}
 {% block content %}
 {% load split %}
 {% load pagination_tags %}
 {% autopaginate print_record 50 %}
-<div class="main-container container-fluid">
-	<a class="menu-toggler" id="menu-toggler" href="#">
-		<span class="menu-text"></span>
-	</a>
 
-	<div class="sidebar" id="sidebar">
-
-		{% include "user/menu.html" %}
-
-		<div class="sidebar-collapse" id="sidebar-collapse">
-			<i class="icon-double-angle-left"></i>
-		</div>
-	</div>
 
 	<div class="main-content">
 		<div class="breadcrumbs" id="breadcrumbs">
@@ -108,12 +94,5 @@
 
 
 	</div><!--/.main-content-->
-</div>
-
-<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-small btn-inverse">
-	<i class="icon-double-angle-up icon-only bigger-110"></i>
-</a>
-
 
 {% endblock %}
-{% block footer %}{% include "user/footer.html" %}{% endblock %}
