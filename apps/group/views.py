@@ -300,7 +300,7 @@ def add_user(request):
 	return json_return(json_data)
 
 @csrf_exempt
-@require_GET
+@require_POST
 def go_auth(request):
 	"""接口:用户提交打印机审核"""
 	json_data={}
