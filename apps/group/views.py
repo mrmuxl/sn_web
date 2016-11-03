@@ -200,7 +200,7 @@ def add_group_print(json_data,gid,uid,name,code,mid,remark,pType,cType):
 
 
 def edit_group_print(json_data,uid,name,code,mid,remark,cType,pType,gid):
-	userPrint=getUserPrinterObj(uid,code)
+	userPrint=getUserPrinterObj(uid,code,mid)
 	if userPrint is None:
 		json_data['info']="the user printer not exists"
 	else:
@@ -210,16 +210,15 @@ def edit_group_print(json_data,uid,name,code,mid,remark,cType,pType,gid):
 			json_data['info']="update user printer err01"
 			return json_data
 		if gid>0 and pType>0 and pType<=10:
-			userPrint=getUserPrinterObj(uid,code,mid)
-			if userPrint is None:
-				json_data['info']="update user printer err02"
-				return json_data
 			result=updateGroupPrintByCondition({"group_id":gid,"printer_id":userPrint.id},{"p_type":pType})
 			if not result>0:
-				json_data['info']="update user printer err03"
+				json_data['info']="update user printer err02"
 				return json_data
-		json_data['info']="ok"
-		json_data['status']=1
+			json_data['info']="ok"
+			json_data['status']=1
+		else:
+			json_data['info']="update user printer err03"
+		
 	return json_data
 
 @csrf_exempt
