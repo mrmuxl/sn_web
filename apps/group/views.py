@@ -470,9 +470,13 @@ def print_verify(request):
 @require_GET
 @login_required
 def group_list(request):
-	if not request.user.is_superuser:
+	if not request.user.is_superuser and not request.session.get("group_owner",0):
 		return HttpResponseRedirect(reverse("login"))
-	groupList=getGroupsListAll()
+	groupList=[]
+	if request.user.is_superuser:
+		groupList=getGroupsListAll()
+	else:
+		groupList=getGroupsListByCondition({"owner_id":request.user.uuid})
 	perNum=50
    	page=1
    	try:
@@ -480,9 +484,12 @@ def group_list(request):
    	except Exception:
    		page=1
    	uids=[]
-   	for group in groupList[(page-1)*perNum:page*perNum]:
-   		#uids+=",'"+gu.user_id+"'"
-   		uids.append(group.owner_id)
+   	if request.user.is_superuser:
+	   	for group in groupList[(page-1)*perNum:page*perNum]:
+	   		#uids+=",'"+gu.user_id+"'"
+	   		uids.append(group.owner_id)
+	else:
+		uids.append(request.user.uuid)
    	userMap=getUserMapByIds(uids)
 	return render(request,"group/group_list.html",{"groupList":groupList,"userMap":userMap})
 

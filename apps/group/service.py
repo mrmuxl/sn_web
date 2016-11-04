@@ -14,6 +14,23 @@ def getGroupsObjById(gid):
 	except Exception,e:
 		logger.warn("Groups not exists：gid="+str(gid)+" %s",e)
 		return None
+
+def getGroupsListByCondition(condition):
+	"""根据condition获取群列表"""
+	if isinstance(condition, dict):
+		return Groups.objects.filter(**condition).order_by("-create_time")
+	else:
+		logger.error("the param of condition  must be the class dict")
+		return None
+
+def getGroupsCountByCondition(condition):
+	"""根据condition获取群的数量"""
+	if isinstance(condition, dict):
+		return Groups.objects.filter(**condition).count()
+	else:
+		logger.error("the param of condition  must be the class dict")
+		return None
+
 def getPrintAuthListByCondition(condition):
 	"""获取用户打印权限列表"""
 	if isinstance(condition, dict):
@@ -58,14 +75,6 @@ def getGroupPrintCountByCondition(condition):
 	"""根据condition获取打印机数量"""
 	if isinstance(condition, dict):
 		return GroupPrint.objects.filter(**condition).count()
-	else:
-		logger.error("the param of condition  must be the class dict")
-		return None
-
-def getGroupsCountByCondition(condition):
-	"""根据condition获取群的数量"""
-	if isinstance(condition, dict):
-		return Groups.objects.filter(**condition).count()
 	else:
 		logger.error("the param of condition  must be the class dict")
 		return None

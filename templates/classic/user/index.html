@@ -32,7 +32,7 @@
 
 								<i class="icon-lightbulb green"></i>  
 
-								您的注册邮箱yang0@126.com尚未认证，请在收件箱或垃圾箱查收邮件，或者
+								您的注册邮箱{{user.email}}尚未认证，请在收件箱或垃圾箱查收邮件，或者
 								<a href="{% url 'to_active' %}" target="_blank">点击重发认证邮件</a>
 							</div>
 							{% endif %}
@@ -145,13 +145,20 @@
 <div class="hr hr32 hr-dotted"></div>
 							
 							<div class="widget-box transparent">
-								<div class="widget-header widget-header-flat">
+								<div class="widget-header widget-header-flat clearfix">
 									<h4 class="lighter">
 										<i class="icon-reorder orange"></i>
 										我的打印记录
-										
 									</h4>
-
+									<!--
+									<h5 class="lighter pull-left" style="margin-left:10px;">
+										<i class="icon-twitter blue"></i>
+										配送地址 我的配送地址
+										<a href="#" data-rel="tooltip" data-original-title="需要打印店配送资料的请填写！">
+											<i class="icon-bullhorn  orange2"></i>
+										</a>
+									</h5>
+									-->
 									<div class="widget-toolbar">
 										<a href="#" data-action="collapse">
 											<i class="icon-chevron-up"></i>
@@ -317,4 +324,8 @@
 				</div> -->
 				<!--/#ace-settings-container-->
 			</div><!--/.main-content-->
+
+<script type="text/javascript">
+	//$('[data-rel=tooltip]').tooltip();
+</script>
 {% endblock %}
