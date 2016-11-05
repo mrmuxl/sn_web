@@ -830,6 +830,20 @@ def my_issue(request):
     return json_return(json_data,False)
 
 
-def show_group_users(request):
-    t={}
-    return render(request,"user/printer_auth.html",t)
+@require_POST
+def change_dep(request):
+    """AJAX更新用户配送地址"""
+    json_data={}
+    json_data['status']=0
+    json_data['info']=""
+    dep=request.POST.get("dep","")
+    if not request.user.is_authenticated:
+        json_data['info']="未登录！"
+    else:
+        result=updateUserByCondition({"uuid":request.user.uuid},{"department":dep})
+        if not result is None:
+            json_data['status']=1
+            json_data['info']="ok"
+        else:
+            json_data['info']="更改配送地址失败！"
+    return json_return(json_data)

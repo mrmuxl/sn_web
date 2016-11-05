@@ -44,3 +44,10 @@ def updateUserAuthIssueByCondition(condition,data):
 	else:
 		logger.error("the param of condition and data must be the class dict")
 		return None
+
+def updateUserByCondition(condition,data):
+	if isinstance(condition, dict) and isinstance(data,dict):
+		return KxUser.objects.filter(**condition).update(**data)
+	else:
+		logger.error("the param of condition and data must be the class dict")
+		return None
