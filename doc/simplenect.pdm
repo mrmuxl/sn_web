@@ -16686,9 +16686,10 @@ charset = UTF8</a:PhysicalOptions>
 <a:Code>creater_id</a:Code>
 <a:CreationDate>1383875125</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1383875125</a:ModificationDate>
+<a:ModificationDate>1383900527</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
-<a:DataType>integer</a:DataType>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 <o:Column Id="o986">
