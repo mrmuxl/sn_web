@@ -11,7 +11,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.utils.html import strip_tags
-import datetime,logging,json
+import logging,json
+from datetime import datetime,date,timedelta
 from utils import uniqid,str_reverse,uniq
 
 logger = logging.getLogger(__name__)
@@ -19,8 +20,8 @@ logger = logging.getLogger(__name__)
 def msg_board(request):
     data={"title":u"留言板"}
     time_tag  = ' 23:59:59'
-    today = datetime.date.today()
-    last_month =str(today-datetime.timedelta(days=30))
+    today = date.today()
+    last_month =str(today-timedelta(days=30))
     #left_create_time = last_month + time_tag
     left_create_time = '2013-01-1 23:59:59'
     right_create_time = str(today) + time_tag
@@ -63,7 +64,7 @@ def msg_board(request):
 def add_msg(request):
     msg = strip_tags(request.POST.get("msg").strip()).strip()
     ip = request.META.get('REMOTE_ADDR','')
-    create_time = datetime.datetime.now()
+    create_time = datetime.now()
     reply = request.POST.get("reply")
     send_from = request.POST.get("send_from")
     logger.info("%s",send_from)

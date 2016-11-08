@@ -1,6 +1,7 @@
 #_*_coding:utf-8_*_
 
-import datetime,logging,json,os
+import logging,json,os
+from datetime import datetime
 from django.http import Http404
 from models import KxPub,PublishUser
 from apps.kx.models import KxUser
@@ -13,7 +14,7 @@ from forms import PublishAdd
 from utils import handle_uploaded_file,update_download_link
 from django.conf import settings
 from utils import publish_message
-from apps.utils.db_util import *
+from apps.utils.db import *
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +35,7 @@ def publish_index(request):
         return render(request,"publish/index.html",t_var)
 
 def publish_add(request):
-    now = datetime.datetime.now()
+    now = datetime.now()
     if not request.user.is_superuser:
         return HttpResponseRedirect(reverse('login'))
     else:
@@ -124,7 +125,7 @@ def publish_edit(request):
 
 @require_POST
 def do_pub(request):
-    now = datetime.datetime.now()
+    now = datetime.now()
     message={}
     if request.user.is_superuser:
         pub_id = request.POST.get("id","")
@@ -226,7 +227,7 @@ def del_pub(request):
 @require_POST
 def published(request):
     message = {}
-    Dday = datetime.datetime(2013,8,20) #1944-06-06
+    Dday = datetime(2013,8,20) #1944-06-06
     email = request.POST.get('email','')
     ver = request.POST.get('ver','')
     logger.info("email:%s,ver:%s",email,ver)

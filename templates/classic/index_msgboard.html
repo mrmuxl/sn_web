@@ -1,0 +1,205 @@
+<!-- <div class="comment">
+	<div class="comment_in w1000">
+		<div class="send_area">
+			<div class="send_area_top">&nbsp;</div>
+			<div class="send_area_text">
+			如果你对Simplenect软件的使用有问题，欢 迎您留下宝贵的意见让我们一起成长！
+			<form  action="{% url 'forum_add' %}" method="post" onsubmit="return checkMsg();">
+				{% csrf_token %}
+				<textarea id="msg_content" name="msg"></textarea>
+				<div class="send_area_btn">
+					<input type="hidden" id="form1" name="send_from" value="1" />
+					<input type="submit" name value="" class="btn_send2"/>
+				</div>
+			</form>	
+			</div>
+		</div>
+		<div class="list_comment">
+		<ul class="msg_board">
+		{% if msg_list %}
+			{% if user.is_superuser %}
+				{% for msg in msg_list %}
+			<li id="msg_id_{{ msg.id }}">
+				<div class="board_left">
+					<div class="board_img">
+						{% if msg.user_id in user_list.keys %}
+							{% for user in user_list.values %}
+								{% if msg.user_id == user.uuid %}
+									<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
+								{% endif %}
+							{% endfor %}		
+						{% else %}
+							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
+						{% endif %}
+					</div>
+				</div>
+				<div class="board_area">
+					<div class="board_user"><span class="board_uname" id="user_{{ msg.id }}">
+						{% if msg.user_id and msg.user_id  != '0'  %}
+							{{ msg.user_nick }}
+						{% else %}
+							  {{ msg.ip|split:"."|slice:"2"|join:"."|add:".*.*"}}
+						{% endif %}
+						</span><span class="board_time">{{ msg.create_time|date:"Y-m-d H:i:s" }}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({{ msg.id }});"></a></span><span> | <a href="javascript:delMsg({{ msg.id }});">删除</a></span></span></div>
+					
+					<div class="board_right">
+					
+						<div class="board_content">
+							<div class="board_body">
+							{{ msg.msg }}
+							</div>
+						</div>
+						<div class="reply_area">
+						{% for reply in reply_list.values %}
+							{% if  reply.reply_id == msg.id %}
+								<div class="board_body dashed_border">答：{{ reply.msg }}</div>
+							{% endif %}			
+						{% endfor %}
+						</div>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</li>
+					{% endfor %}
+				{% elif user.is_authenticated %}
+					{% for msg in msg_list %}
+
+			<li>
+				<div class="board_left">
+					<div class="board_img">
+						{% if msg.user_id in user_list.keys %}
+							{% for user in user_list.values %}
+								{% if msg.user_id == user.uuid %}
+									<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
+								{% endif %}
+							{% endfor %}		
+						{% else %}
+							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
+						{% endif %}
+					</div>
+				</div>
+	
+				<div class="board_area">
+					<div class="board_user"><span class="board_uname" id="user_{{ msg.id }}">
+						{% if msg.user_id and msg.user_id  != '0'  %}
+							{{ msg.user_nick }}
+						{% else %}
+						  {{ msg.ip|split:"."|slice:"2"|join:"."|add:".*.*"}}
+						{% endif %}
+                </span><span class="board_time">{{ msg.create_time|date:"Y-m-d H:i:s" }}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({{ msg.id }});"></a></span></span></div>
+					<div class="board_right">
+						<div class="board_content">
+							<div class="board_body">
+							{{ msg.msg }}
+							</div>
+						</div>
+	
+						<div class="reply_area">
+							{% for reply in reply_list.values %}
+								{% if  reply.reply_id == msg.id %}					
+									<div class="board_body dashed_border">
+										答：{{ reply.msg }}
+									</div>
+								{% endif %}			
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</li>
+
+				{% endfor %}
+			{% else %}
+			{% for msg in msg_list %}
+			<li>
+			
+				<div class="board_left">
+					<div class="board_img">
+						{% if msg.user_id in user_list.keys %}
+							{% for user in user_list.values %}
+								{% if msg.user_id == user.uuid %}
+									<img src="{{ MEDIA_URL }}{{ user.folder }}/snap_50X50_{{ user.uid }}.{{ user.ext }}" />
+								{% endif %}
+							{% endfor %}		
+						{% else %}
+							<img src="{{ STATIC_URL }}images/snap_50X50_default_head.jpg" />
+						{% endif %}
+					</div>
+				</div>
+			
+				<div class="board_area">
+					<div class="board_user">
+                        <span class="board_uname" id="user_{{ msg.id }}">
+                        	{% if msg.user_id and msg.user_id  != '0'  %}
+							{{ msg.user_nick }}
+						{% else %}
+							  {{ msg.ip|split:"."|slice:"2"|join:"."|add:".*.*"}}
+						{% endif %}
+						</span><span class="board_time">{{ msg.create_time|date:"Y-m-d H:i:s" }}</span><span class="board_reply"><span class="reply_small"><a href="javascript:replyMsg({{ msg.id }});"></a></span></span>
+					</div>
+					<div class="board_right">
+					<div class="board_content">
+						<div class="board_body">
+						{{ msg.msg }}
+						</div>
+					</div>
+					<div class="reply_area">
+						{% for reply in reply_list.values %}
+							{% if  reply.reply_id == msg.id %}					
+								<div class="board_body dashed_border">
+								答：{{ reply.msg }}
+								</div>
+							{% endif %}			
+						{% endfor %}
+					</div>
+			
+					</div>
+				
+				</div>
+				<div class="clear"></div>
+			</li>
+		{% endfor %}
+		
+		</ul>
+		{% endif %}	
+	{% endif %}
+		<div class="board_more_title"><span class="board_more_text">共</span><a href="{% url 'forum_index' %}" target="_blank">
+			<span class="board_more_count">{{ msg_count }}</span></a>
+			<span class="board_more_text">条留言</span></div>
+		</div>
+		
+		<div class="clear"></div> -->
+<!-- 		<div id="msg_form" class="send_reply">
+		<form  action="{% url 'forum_add'%}" method="post" onsubmit="return checkMsg3();">
+			{% csrf_token %}
+			<textarea id="msg_content3" name="msg"></textarea>
+			<div class="comment_small_bg" id="scroll_comment"></div>
+			<div class="clear"></div>
+			<div class="send_btn send_btn_scroll">
+				<input type="hidden" id="form3" name="send_from" value="1" />
+				<input type="submit" name value="" class="btn_send"/>
+				<input type="button" name value="" class="btn_cancel btn_cancel_scroll"/>
+			</div>
+		</form>
+		</div>	 -->		
+	<!-- </div>
+	<div class="clear"></div>
+</div>
+	
+	<div class="reply_form" style="display:none;">
+	<div class="send_board">
+	<span class="send_u" id="reply_u"> 回复“阡陌游客”：</span>
+	</div>
+	<div class="send_content2 send_bg" >
+	<form  action="{% url 'forum_add'%}" method="post" onsubmit="return checkMsg2();">
+		{% csrf_token %}
+		<textarea name="msg" id="msg_content2"></textarea>
+		<div class="reply_btn">
+		<input type="hidden" id="form2" name="send_from" value="1" />
+		<input id="reply_msg" type="hidden" name="reply" value="" />
+		<input type="submit" value="" class="send_button"/>
+		<input type="button" name="" onclick="javascript:replyClose();" class="reply_close"/>
+		</div>
+	</form>
+	</div>
+	</div> -->

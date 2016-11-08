@@ -91,6 +91,31 @@ def getPrintAuthObjByCondition(condition):
 		logger.error("the param of condition  must be the class dict")
 		return None
 
+def getGroupUserInviteListByCondition(condition):
+	"""根据condition群用户邀请列表"""
+	if isinstance(condition, dict):
+		return GroupUserInvite.objects.filter(**condition).order_by("-id")
+	else:
+		logger.error("the param of condition  must be the class dict")
+		return None
+
+def getGroupUserInviteObjByCondition(condition):
+	if isinstance(condition, dict):
+		try:
+			return GroupUserInvite.objects.get(**condition)
+		except Exception,e:
+			logger.warn("GroupUserInvite not exists：condition="+str(condition)+"  %s",e)
+			return None
+	else:
+		logger.error("the param of condition  must be the class dict")
+		return None
+
+def getGroupUserInviteCountByCondition(condition):
+	if isinstance(condition, dict):
+		return GroupUserInvite.objects.filter(**condition).count()
+	else:
+		logger.error("the param of condition  must be the class dict")
+		return None
 
 def insertUserPrinter(userPrinter):
 	"""新增用户打印机"""
@@ -176,6 +201,14 @@ def updateGroupPrintByCondition(condition,data):
 		logger.error("the param of condition and data must be the class dict")
 		return None
 
+def updateGroupUserInviteByCondition(condition,data):
+	"""更新邀请信息"""
+	if isinstance(condition, dict) and isinstance(data,dict):
+		return GroupUserInvite.objects.filter(**condition).update(**data)
+	else:
+		logger.error("the param of condition and data must be the class dict")
+		return None
+
 def delGroupPrintByCondition(condition):
 	if isinstance(condition, dict) :
 		return GroupPrint.objects.filter(**condition).delete()
@@ -187,6 +220,15 @@ def delGroupUserByCondition(condition):
 	"""删除群用户"""
 	if isinstance(condition, dict) :
 		return GroupUser.objects.filter(**condition).delete()
+	else:
+		logger.error("the param of condition must be the class dict")
+		return None
+
+
+def delGroupUserInviteByCondition(condition):
+	"""删除群邀请用户"""
+	if isinstance(condition, dict) :
+		return GroupUserInvite.objects.filter(**condition).delete()
 	else:
 		logger.error("the param of condition must be the class dict")
 		return None

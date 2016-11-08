@@ -1,6 +1,7 @@
 #_*_coding:utf-8_*_
 
-import datetime,logging,json,os
+import logging,json,os
+from datetime import datetime
 from models import KxSoftAd,PrinterPop,FZu
 from forms import PrinterPopForm
 from apps.publish.models import KxPub
@@ -37,7 +38,7 @@ def ad_list(request):
 def ad_api(request):
     message = {}
     ad_dict = {}
-    now = datetime.datetime.now()
+    now = datetime.now()
     ad_list =list(KxSoftAd.objects.extra(where=['DATE(exp_day)>=CURDATE()']).order_by('-id').values('id','title','ad_url'))
     for i in ad_list:
         i.update(adUrl=i.pop('ad_url'))
@@ -142,7 +143,7 @@ def operator_add(request):
 def operator_select(request):
     '''运营专员接口'''
     message = {}
-    now = datetime.datetime.now()
+    now = datetime.now()
     email = request.POST.get('email','')
     logger.info("email:%s",email)
     remainder_days = get_remainder_days(email)
@@ -172,12 +173,12 @@ def operator_select(request):
             message['buy_link']=u'http://www.simplenect.cn/buy'
             message['show_buy_link']=False
             return HttpResponse(json.dumps(message,ensure_ascii=False),content_type="application/json")
-        elif remainder_days <= 15:
+        elif remainder_days <= 90:
             message['status']=0
             message['is_owner']=False
             message['is_assistant']=False
             message['is_print']=True
-            message['dislplay']=u'你可以共享一台打印机,试用期还有'+ str(15-remainder_days) + u'天'
+            message['dislplay']=u'你可以共享一台打印机' #,试用期还有'+ str(90-remainder_days) + u'天'
             message['access']=u'http://www.simplenect.cn/User/printer/auth' #授权页面
             message['show_access']=False
             message['buy_link']=u'http://www.simplenect.cn/buy'
@@ -202,7 +203,7 @@ def operator_select(request):
 @require_POST
 def operator_show(request):
     message = {}
-    now = datetime.datetime.now()
+    now = datetime.now()
     email = request.POST.get('email','')
     logger.info("email:%s",email)
     friends=KxUserFriend.objects.filter(user=email).values('friend')

@@ -22,4 +22,7 @@ urlpatterns = patterns('',
     url(r'^guser_del/?$','apps.group.views.guser_del', name='group_guser_del'),
     url(r'^print_share/?$','apps.group.views.print_share', name='group_print_share'),
     url(r'^guser_remark/?$','apps.group.views.guser_remark', name='group_guser_remark'),
+    url(r'^invite_del/?$','apps.group.views.invite_del', name='group_invite_del'),
+    url(r'^invite_active/?$','apps.group.views.invite_active', name='group_invite_active'),
+    url(r'^invite_again/?$','apps.group.views.invite_again', name='group_invite_again'),
 )
