@@ -71,13 +71,13 @@
 						<div class="widget-box">
 							<ul id="myTab" class="nav nav-tabs">
 								<li class="">
-									<a href="{% url 'group_group_user' %}" data-toggle="tab" style="padding-left:20px;padding-right:20px;">
+									<a href="{% url 'group_group_user' %}?gid={{group.id}}"  style="padding-left:20px;padding-right:20px;">
 										已邀请
 									</a>
 								</li>
 
 								<li>
-									<a href="{% url 'group_group_user' %}?flag=out" data-toggle="tab" style="padding-left:20px;padding-right:20px;">
+									<a href="{% url 'group_group_user' %}?gid={{group.id}}&flag=out"  style="padding-left:20px;padding-right:20px;">
 										邀请中
 									</a>
 								</li>
