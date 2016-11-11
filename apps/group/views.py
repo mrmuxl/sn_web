@@ -956,3 +956,22 @@ def invite_again(request):
 	json_data['status']=1
 	json_data['info']="ok"
 	return json_return(json_data)
+
+
+def reply_invite(request):
+	"""接口：处理邀请信息"""
+	json_data={}
+	json_data['status']=0
+	json_data['info']=""
+	uid=request.POST.get("uid","").strip() #被邀请人的UID
+	gid=0
+	try:
+		gid=int(request.POST.get("gid","0"))
+	except Exception,e:
+		logger.error("invalid gid %s",e)
+		gid=0
+	if gid<=0 or uid=="":
+		json_data['info']="param error"
+		return json_return(json_data)
+
+
