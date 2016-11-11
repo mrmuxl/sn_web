@@ -17,7 +17,8 @@ from django.utils.html import strip_tags
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET
 from django.db.models import Count,Max,Min
-import datetime,logging,os
+import logging,os
+from datetime import datetime,date,timedelta
 from dateutil.parser import parse
 from utils import CustomSQL,bug_chart_sql
 from django.conf import settings
@@ -27,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 @require_GET
 def tongji(request):
-    today = datetime.date.today()
+    today = date.today()
     tp = request.GET.get('type',1)
     day = request.GET.get('day',today)
     logger.info('type:%s day:%s',tp,day)
@@ -120,7 +121,7 @@ def tongji(request):
 
 @require_GET
 def login_tongji(request):
-    today = datetime.date.today()
+    today = date.today()
     day = request.GET.get('day',today)
     if day is not None and isinstance(day,unicode):
         try:
@@ -131,8 +132,8 @@ def login_tongji(request):
     if not request.user.is_superuser:
         return HttpResponseRedirect(reverse('index'))
     else:
-        old_day = day-datetime.timedelta(days=29)
-        day_list =[day-datetime.timedelta(days=d) for d in range(29,-1,-1)]
+        old_day = day-timedelta(days=29)
+        day_list =[day-timedelta(days=d) for d in range(29,-1,-1)]
         #day_list = []
         #for d in range(29,-1,-1):
         #    day_list.append(day-datetime.timedelta(days=d))
@@ -162,7 +163,7 @@ def login_tongji(request):
 
 @require_GET
 def uninstall_chart(request):
-    today = datetime.date.today()
+    today = date.today()
     day = request.GET.get('day',today)
     if day is not None and isinstance(day,unicode):
         try:
@@ -205,7 +206,7 @@ def uninstall_chart(request):
 
 @require_GET
 def bug_chart(request):
-    today = datetime.date.today()
+    today = date.today()
     day = request.GET.get('day',today)
     if day is not None and isinstance(day,unicode):
         try:
@@ -217,8 +218,8 @@ def bug_chart(request):
         return HttpResponseRedirect(reverse('index'))
     else:
         #day = parse('2013-03-22').date()
-        old_day = day-datetime.timedelta(days=29)
-        day_list =[day-datetime.timedelta(days=d) for d in range(29,-1,-1)]
+        old_day = day-timedelta(days=29)
+        day_list =[day-timedelta(days=d) for d in range(29,-1,-1)]
         #day_list = []
         #for d in range(29,-1,-1):
         #    day_list.append(day-datetime.timedelta(days=d))
@@ -295,7 +296,7 @@ def bug_chart(request):
 
 @require_GET
 def bug_msg(request):
-    today = datetime.date.today()
+    today = date.today()
     day =str(request.GET.get('day',today))
     if not request.user.is_superuser:
         return HttpResponseRedirect(reverse('index'))
@@ -330,7 +331,7 @@ def bug_msg(request):
 
 @require_GET
 def bug_log(request):
-    today = datetime.date.today()
+    today = date.today()
     day =str(request.GET.get('day',today))
     if not request.user.is_superuser:
         return HttpResponseRedirect(reverse('index'))
@@ -400,7 +401,7 @@ def reg_chart(request):
 
 @require_GET
 def bug_ratio_chart(request):
-    today = datetime.date.today()
+    today = date.today()
     day = request.GET.get('day',today)
     if day is not None and isinstance(day,unicode):
         try:
@@ -411,8 +412,8 @@ def bug_ratio_chart(request):
     if not request.user.is_superuser:
         return HttpResponseRedirect(reverse('index'))
     else:
-        old_day = day-datetime.timedelta(days=29)
-        day_list =[day-datetime.timedelta(days=d) for d in range(29,-1,-1)]
+        old_day = day-timedelta(days=29)
+        day_list =[day-timedelta(days=d) for d in range(29,-1,-1)]
         try:
             bug_list = KxTongjiRecord.objects.filter(tongji_day__range=(old_day,day)).order_by('id').values('id','seven_new_num','seven_un_num','tongji_day')
         except Exception as e:
@@ -440,7 +441,7 @@ def lan_stack_chart(request):
     if not request.user.is_superuser:
         return HttpResponseRedirect(reverse('index'))
     else:
-        today = datetime.date.today()
+        today = date.today()
         day = request.GET.get('day',today)
         if day is not None and isinstance(day,unicode):
             try:
@@ -448,8 +449,8 @@ def lan_stack_chart(request):
             except Exception as e:
                 day = today
                 logger.debug("%s",e)
-        old_day = day-datetime.timedelta(days=29)
-        day_list =[day-datetime.timedelta(days=d) for d in range(29,-1,-1)]
+        old_day = day-timedelta(days=29)
+        day_list =[day-timedelta(days=d) for d in range(29,-1,-1)]
         lan_list = KxLanDay.objects.filter(tongji_day__range=(old_day,day)).order_by('id').values()
         tp = request.GET.get('type',u'1')
         num1 = []
@@ -520,7 +521,7 @@ def lan_stack_chart(request):
 
 @require_GET
 def lan_line_chart(request):
-    today = datetime.date.today()
+    today = date.today()
     day = request.GET.get('day',today)
     if day is not None and isinstance(day,unicode):
         try:
@@ -531,8 +532,8 @@ def lan_line_chart(request):
     if not request.user.is_superuser:
         return HttpResponseRedirect(reverse('index'))
     else:
-        old_day = day-datetime.timedelta(days=29)
-        day_list =[day-datetime.timedelta(days=d) for d in range(29,-1,-1)]
+        old_day = day-timedelta(days=29)
+        day_list =[day-timedelta(days=d) for d in range(29,-1,-1)]
         try:
             lan_list = KxLanDay.objects.filter(tongji_day__range=(old_day,day)).order_by('id').values('id','lan_num','tongji_day')
         except Exception as e:
@@ -558,7 +559,7 @@ def lan_line_chart(request):
 
 @require_GET
 def silence_ratio_chart(request):
-    today = datetime.date.today()
+    today = date.today()
     day = request.GET.get('day',today)
     if day is not None and isinstance(day,unicode):
         try:
@@ -569,8 +570,8 @@ def silence_ratio_chart(request):
     if not request.user.is_superuser:
         return HttpResponseRedirect(reverse('index'))
     else:
-        old_day = day-datetime.timedelta(days=29)
-        day_list =[day-datetime.timedelta(days=d) for d in range(29,-1,-1)]
+        old_day = day-timedelta(days=29)
+        day_list =[day-timedelta(days=d) for d in range(29,-1,-1)]
         users =KxUser.objects.all()
         active_users = users.filter(status__exact=1).count()
         no_active_users = users.filter(status__exact=0).count()
@@ -597,7 +598,7 @@ def silence_ratio_chart(request):
 
 @require_GET
 def remain_ratio_chart(request):
-    today = datetime.date.today()
+    today = date.today()
     day = request.GET.get('day',today)
     if day is not None and isinstance(day,unicode):
         try:
@@ -608,8 +609,8 @@ def remain_ratio_chart(request):
     if not request.user.is_superuser:
         return HttpResponseRedirect(reverse('index'))
     else:
-        old_day = day-datetime.timedelta(days=29)
-        day_list =[day-datetime.timedelta(days=d) for d in range(29,-1,-1)]
+        old_day = day-timedelta(days=29)
+        day_list =[day-timedelta(days=d) for d in range(29,-1,-1)]
         bug_list = KxTongjiRecord.objects.filter(tongji_day__range=(old_day,day)).order_by('id').values('id','cur_mon_num','last_mon_num','tongji_day')
         remain_ratio = []
         if len(bug_list) < 30:
@@ -631,7 +632,7 @@ def remain_ratio_chart(request):
 
 @require_GET
 def online_act_chart(request):
-    today = datetime.date.today()
+    today = date.today()
     day = request.GET.get('day',today)
     if day is not None and isinstance(day,unicode):
         try:
@@ -642,8 +643,8 @@ def online_act_chart(request):
     if not request.user.is_superuser:
         return HttpResponseRedirect(reverse('index'))
     else:
-        old_day = day-datetime.timedelta(days=29)
-        day_list =[day-datetime.timedelta(days=d) for d in range(29,-1,-1)]
+        old_day = day-timedelta(days=29)
+        day_list =[day-timedelta(days=d) for d in range(29,-1,-1)]
         online_list = KxActTongji.objects.filter(tongji_day__range=(old_day,day)).order_by('id').values('id','tongji_day','on_num','act_num','un_num')
         on_num = []
         act_num = []

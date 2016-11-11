@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 @require_POST
 def upload_bug(request):
     message = {} 
-    date =date.strftime(date.today(),"%Y/%m/%d")
+    datePath =date.strftime(date.today(),"%Y/%m/%d")
     now = datetime.now()
     mac = request.POST.get('mac','')
     upload_file = request.FILES.get("file",None)
@@ -29,7 +29,7 @@ def upload_bug(request):
         #mac = upload_file.name.encode('utf-8')
         mac = mac.strip()
         mac_file =mac.replace(':','_') + ".dmp"
-        folder = "/BugReport/"+str(date) + "/"
+        folder = "/BugReport/"+str(datePath) + "/"
         path_root = settings.MEDIA_ROOT
         path_folder = path_root + folder
         path_upload = path_folder + mac_file
@@ -61,6 +61,10 @@ def upload_bug(request):
             message['message']=u"dump upload fail 2 文件上传失败!"
             message['create_time']=str(now)
             return HttpResponse(json.dumps(message),content_type="application/json")
+    else:
+        message['message']=u"dump upload fail 3 文件上传失败!"
+        message['create_time']=str(now)
+        return HttpResponse(json.dumps(message),content_type="application/json")
     
     
 @csrf_exempt
@@ -102,11 +106,11 @@ def soft_bug(request):
 def bug_log(request):
     message = {} 
     now = datetime.now()
-    date =date.strftime(date.today(),"%Y-%m-%d")
+    datePath =date.strftime(date.today(),"%Y-%m-%d")
     path_root = settings.MEDIA_ROOT
     folder = "/BugLog/"  
     path_folder = path_root + folder
-    file_name = "soft_bug_" + str(date)
+    file_name = "soft_bug_" + str(datePath)
     if not os.path.isdir(path_folder):
         os.makedirs(path_folder)
     mac = request.POST.get('clientIdentifie','').encode('utf8')
