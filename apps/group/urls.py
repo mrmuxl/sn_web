@@ -25,4 +25,6 @@ urlpatterns = patterns('',
     url(r'^invite_del/?$','apps.group.views.invite_del', name='group_invite_del'),
     url(r'^invite_active/?$','apps.group.views.invite_active', name='group_invite_active'),
     url(r'^invite_again/?$','apps.group.views.invite_again', name='group_invite_again'),
+    url(r'^reply_invite/?$','apps.group.views.reply_invite', name='group_reply_invite'),
+    url(r'^my_invite/?$','apps.group.views.my_invite', name='group_my_invite'),
 )

@@ -427,11 +427,13 @@ class KxUserOrg(models.Model):
         db_table = 'kx_user_org'
 
 class KxUserlogin(models.Model):
-    email   = models.CharField(max_length = 50L,unique = True)
+    id      = models.IntegerField(primary_key = True)
+    email   = models.CharField(max_length = 50L)
     mac     = models.CharField(max_length = 100L)
     lan_ip  = models.CharField(max_length=50L, blank=True)
     wlan_ip = models.CharField(max_length=50L, blank=True)
     class Meta:
+        unique_together = ("email", "mac")
         db_table = 'kx_userlogin'
 
 class UserMsg(models.Model):

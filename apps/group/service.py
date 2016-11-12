@@ -232,3 +232,17 @@ def delGroupUserInviteByCondition(condition):
 	else:
 		logger.error("the param of condition must be the class dict")
 		return None
+
+def invitePipe(inviteList):
+	"""在线用户的群邀请信息发送到消息管道"""
+	""" 1001 表示群用户邀请;inviteList [{"uid":"dfe136","gid":10001,"gname":'abc',"create_time":'2013-05-06'}] """
+	wfPath = "/home/admin/sn_web_fifo" #wfPath = "F:\sn_web\sn_web_fifo"
+	wp = open(wfPath, 'a')
+	msgList=[]
+	for inv in inviteList:
+		msg="1001#" + inv['uid'] + "," + inv['mac'] +"," + str(inv['gid']) + "," + inv['gname']+","+inv['create_time']+"\n"
+		msgList.append(msg.encode("utf-8"))
+		#msg= inv['gname'].encode("utf-8")
+		logger.debug(msg)
+	wp.writelines(msgList)
+	wp.close()

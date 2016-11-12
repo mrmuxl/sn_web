@@ -2,7 +2,7 @@
 
 import logging,json,os
 from apps.accounts.models import UserAuthIssue
-from apps.kx.models import KxUser
+from apps.kx.models import KxUser,KxUserlogin
 logger = logging.getLogger(__name__)
 
 
@@ -30,6 +30,14 @@ def getUserAuthIssueByUser(uid):
 	except Exception, e:
 		logger.warn("UserAuthIssue not exists uid："+str(uid)+" %s",e)
 		return None
+
+def getUserLoginListByEmails(emaiList):
+	"""获取在线登录用户"""
+	if len(emaiList)>0:
+		return KxUserlogin.objects.filter(email__in=emaiList)
+	else:
+		return []
+
 
 def insertUserAuthIssue(userAuth):
 	if isinstance(userAuth, UserAuthIssue):

@@ -17,7 +17,7 @@ from apps.utils.db import *
 from apps.utils.verify import check_email
 from apps.utils.sendmail import send_mail_thread
 from apps.group.service import *
-from apps.accounts.service import getUserCountByCondition,getUserObjByCondition
+from apps.accounts.service import getUserCountByCondition,getUserObjByCondition,getUserLoginListByEmails
 
 logger = logging.getLogger(__name__)
 
@@ -727,6 +727,7 @@ def guser_add(request):
 				if not userObj is None:
 					userName=userObj.nick
 			send_invite_email(userName,group.name,group.id,emailMap)
+			send_invite_pipe(group.id,group.name,guiObjs,regEmailMap)
 		else:
 			json_data['info']="邀请群用户是失败！请重试！"
 	return json_return(json_data)
@@ -747,6 +748,31 @@ def send_invite_email(userName,groupName,gid,emailMap):
 			u"SimpleNect是一款团队协同软件，安装完成后您可以在家直接使用公司或者打印店的打印服务，还可以和社团内的"\
 			u"其他成员进行聊天及文件共享。"
 		send_mail_thread(subject,body,from_email,[email],html=body)
+
+def send_invite_pipe(gid,gname,guiObjs,regEmailMap):
+	"""发送给在线用户邀请消息管道"""
+	eList=[]
+	for gui in guiObjs:
+		if gui.is_reg:
+			eList.append(gui.email)
+	if len(eList)==0:
+		return
+	onlineList=getUserLoginListByEmails(eList)
+	if len(onlineList)==0:
+		return
+	inviteList=[]
+	onlineMap={}
+	for online in onlineList:
+		onlineMap[online.email]=online.mac
+	for gui in guiObjs:
+		if gui.email in onlineMap.keys():
+			email=gui.email
+			uid=regEmailMap[email]
+			mac=onlineMap[email]
+			inviteList.append({"gid":gid,"gname":gname,"uid":uid,"mac":mac,"create_time":gui.create_time.strftime('%Y-%m-%d %H:%M:%S')})
+	if len(inviteList)>0:
+		invitePipe(inviteList)
+
 
 
 def valid_group(request,json_data):
@@ -953,17 +979,23 @@ def invite_again(request):
 		if not userObj is None:
 			userName=userObj.nick
 	send_invite_email(userName,group.name,group.id,{email:gui.is_reg})	
+	if gui.is_reg:
+		userObj=getUserObjByCondition({"email":gui.email})
+		if not userObj is None:
+			send_invite_pipe(group.id,group.name,[gui],{userObj.email:userObj.uuid})
 	json_data['status']=1
 	json_data['info']="ok"
 	return json_return(json_data)
 
-
+@csrf_exempt
+@require_POST
 def reply_invite(request):
 	"""接口：处理邀请信息"""
 	json_data={}
 	json_data['status']=0
 	json_data['info']=""
 	uid=request.POST.get("uid","").strip() #被邀请人的UID
+	reply=request.POST.get("reply","").strip()
 	gid=0
 	try:
 		gid=int(request.POST.get("gid","0"))
@@ -973,5 +1005,45 @@ def reply_invite(request):
 	if gid<=0 or uid=="":
 		json_data['info']="param error"
 		return json_return(json_data)
+	if not (reply=="yes" or reply=="no"):
+		json_data['info']="param error02"
+		return json_return(json_data)
+	user=getUserObjByCondition({"uuid":uid})
+	if user is None:
+		json_data['info']="the user not exists"
+		return json_return(json_data)
+	status=2
+	if reply=="yes":
+		status=1
+	now=datetime.now()
+	result=updateGroupUserInviteByCondition({"group_id":gid,"email":user.email,"status":0},{"status":status,"deal_time":now})
+	if result>0:
+		json_data['status']=1
+		json_data['info']="ok"
+	else:
+		json_data['info']=u"处理邀请信息失败"
+	return json_return(json_data)
 
-
+@csrf_exempt
+@require_POST
+def my_invite(request):
+	"""接口：我的邀请信息"""
+	json_data={}
+	json_data['status']=0
+	json_data['info']=""
+	uid=request.POST.get("uid","").strip() #被邀请人的UID
+	if uid=="":
+		json_data['info']="param error"
+		return json_return(json_data)
+	userObj=getUserObjByCondition({"uuid":uid})
+	if userObj is None:
+		json_data['info']=" the user is not exists"
+		return json_return(json_data)
+	sql="select u.group_id,u.create_time,g.name from group_user_invite u left join groups g on u.group_id=g.id where u.email=%s and u.status=0"
+	guiList=query_sql(sql,[userObj.email])
+	json_data['status']=1
+	json_data['info']="ok"
+	json_data['invites']=[]
+	for gui in guiList:
+		json_data['invites'].append({"gid":gui['group_id'],"gname":gui['name'],"create_time":gui['create_time'].strftime('%Y-%m-%d %H:%M:%S')})
+	return json_return(json_data)
