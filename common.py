@@ -18,13 +18,13 @@ SHORT_DATE_FORMAT = 'Y-m-d'
 SHORT_DATETIME_FORMAT = 'Y-m-d H:i:s'
 MANAGERS = ADMINS
 
-ALLOWED_HOSTS = ['simplenect.cn','www.simplenect.cn','www.qianmo.cc','qianmo.cc','localhost']
+ALLOWED_HOSTS = ['zhiwo.net','localhost']
 
 #THEME = '/default/'
 THEME = '/classic/'
 
-DOMAIN = 'http://www.simplenect.cn'
-DOWNLOAD='http://download.simplenect.cn'
+DOMAIN = 'http://www.zhiwo.net'
+DOWNLOAD='http://download.zhiwo.net'
 
 LOGIN_URL = '/User/login/'
 LOGOUT_URL='/User/logout/'
