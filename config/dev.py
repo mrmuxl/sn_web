@@ -29,8 +29,8 @@ COMPRESS_JS_FILTERS = ['compressor.filters.jsmin.SlimItFilter']
 #email
 EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_PORT = 25
-EMAIL_HOST_USER ='postmaster@simplenect.com'
-EMAIL_HOST_PASSWORD = '2tuexhqw24h2'
+EMAIL_HOST_USER ='postmaster@zhiwo.net'
+EMAIL_HOST_PASSWORD = 'password'
 #EMAIL_BACKEND ='apps.backends.esmtp.EmailBackend'
 
 

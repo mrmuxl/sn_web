@@ -10,14 +10,14 @@ ALIPAY_KEY = 'oetkskqbsg5axtmo9snlflstdv02zqw1'
 ALIPAY_SELLER_EMAIL = 'admin@simplenect.com'
 
 # 交易过程中服务器通知的页面 要用 http://格式的完整路径，不允许加?id=123这类自定义参数
-ALIPAY_NOTIFY_URL = 'http://www.simplenect.cn/alipay/notify_url'
+ALIPAY_NOTIFY_URL = 'http://www.zhiwo.net/alipay/notify_url'
 
 # 付完款后跳转的页面 要用 http://格式的完整路径，不允许加?id=123这类自定义参数
 # return_url的域名不能写成http://localhost/js_php_utf8/return_url.php ，否则会导致return_url执行无效
-ALIPAY_RETURN_URL = 'http://www.simplenect.cn/alipay/return_url'
+ALIPAY_RETURN_URL = 'http://www.zhiwo.net/alipay/return_url'
 
 # 网站商品的展示地址，不允许加?id=123这类自定义参数
-ALIPAY_SHOW_URL = 'http://www.simplenect.cn'
+ALIPAY_SHOW_URL = 'http://www.zhiwo.net'
 
 # 签名方式 不需修改
 ALIPAY_SIGN_TYPE = 'MD5'
