@@ -24,9 +24,9 @@ def index(request):
     # today = datetime.date.today()
     # last_month =str(today-datetime.timedelta(days=30))
     # left_create_time = last_month + time_tag
-    #left_create_time = '2013-02-1 23:59:59'
+    #left_create_time = '2016-02-1 23:59:59'
     # right_create_time = str(today) + time_tag
-    #right_create_time = '2013-03-1 23:59:59'
+    #right_create_time = '2016-03-1 23:59:59'
     # try:
     #     msg_count = KxMsgBoard.objects.filter(is_del__exact=0).count()
     #     msg_list = KxMsgBoard.objects.filter(reply_id__exact=0,is_del__exact=0,create_time__gte=left_create_time,create_time__lte=right_create_time).order_by("-create_time").values()[:5]

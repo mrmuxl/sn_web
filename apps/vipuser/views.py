@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 def get_remainder_days(email):
     now = datetime.now()
-    Dday = datetime(2013,8,20) #1944-06-06
+    Dday = datetime(2016,8,20) #1944-06-06
     ctime = KxUser.objects.filter(email=email).values('create_time')
     if ctime:
         ctime = ctime[0]['create_time']

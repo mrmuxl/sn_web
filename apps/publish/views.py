@@ -227,7 +227,7 @@ def del_pub(request):
 @require_POST
 def published(request):
     message = {}
-    Dday = datetime(2013,8,20) #1944-06-06
+    Dday = datetime(2016,8,20) #1944-06-06
     email = request.POST.get('email','')
     ver = request.POST.get('ver','')
     logger.info("email:%s,ver:%s",email,ver)
@@ -239,7 +239,7 @@ def published(request):
         except Exception as e:
             logger.debug("define publish:%s",e)
             try:
-                # 2013-11-11 发布免费，更新所有版本（包括3.3.5.7)
+                # 2016-11-11 发布免费，更新所有版本（包括3.3.5.7)
                 # user_obj = KxUser.objects.get(email=email)
                 # 
                 # if user_obj.create_time >= Dday:
@@ -256,7 +256,7 @@ def published(request):
             message = publish_message(publish_info)
         return HttpResponse(json.dumps(message),content_type="application/json")
     else:
-        # 2013-11-13 因特殊原因
+        # 2016-11-13 因特殊原因
         # message['status']="error"
         # message['message']='please POST to me a email'
         publish_info = KxPub.objects.get(pk=50)

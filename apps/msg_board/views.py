@@ -23,9 +23,9 @@ def msg_board(request):
     today = date.today()
     last_month =str(today-timedelta(days=30))
     #left_create_time = last_month + time_tag
-    left_create_time = '2013-01-1 23:59:59'
+    left_create_time = '2016-01-1 23:59:59'
     right_create_time = str(today) + time_tag
-    #right_create_time = '2013-03-1 23:59:59'
+    #right_create_time = '2016-03-1 23:59:59'
     msg_list = KxMsgBoard.objects.filter(reply_id__exact=0,is_del__exact=0,create_time__gte=left_create_time,create_time__lte=right_create_time).order_by("-create_time").values()[:20]
     data.update(msg_list=msg_list)
     reply_ids = []

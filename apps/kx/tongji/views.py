@@ -217,7 +217,7 @@ def bug_chart(request):
     if not request.user.is_superuser:
         return HttpResponseRedirect(reverse('index'))
     else:
-        #day = parse('2013-03-22').date()
+        #day = parse('2016-03-22').date()
         old_day = day-timedelta(days=29)
         day_list =[day-timedelta(days=d) for d in range(29,-1,-1)]
         #day_list = []

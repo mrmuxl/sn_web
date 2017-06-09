@@ -6,7 +6,7 @@ def query_sql(sql,params=None):
     """
     ----------------------------------------------
     Function:    执行原始的SQL 查询操作
-    DateTime:    2013/10/24
+    DateTime:    2016/10/24
     ----------------------------------------------
     """
     cursor = connection.cursor() #获得一个游标(cursor)对象 

@@ -148,7 +148,7 @@ def lan_record(request):
                     ip = request.META.get('REMOTE_ADDR','')
                     tongji_day = date.today()
                     #ip = '118.77.168.132'
-                    #tongji_day = '2013-04-12'
+                    #tongji_day = '2016-04-12'
                     try:
                         lan_tj = KxLanTongji.objects.get(ip=ip,tongji_day=tongji_day)
                         if pc > lan_tj.pc_num:
